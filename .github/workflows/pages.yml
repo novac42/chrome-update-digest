@@ -3,6 +3,8 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: ["main"]
+    paths:
+      - 'digest_markdown/**'
   workflow_dispatch:
 
 permissions:
