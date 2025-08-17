@@ -1,6 +1,7 @@
 title: Upstream Digest Server
 description: Chrome Release Notes Digest Collection
-theme: minima
+# theme: jekyll-theme-cayman
+remote_theme: pages-themes/cayman@v0.2.0
 baseurl: "/upstream-digest-server"
 url: "https://novac42.github.io"
 
@@ -12,6 +13,7 @@ kramdown:
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
+  - jekyll-remote-theme
 
 collections:
   digests:
