@@ -1,0 +1,308 @@
+version: '134'
+channel: stable
+area: graphics-webgpu
+extraction_timestamp: '2025-08-17T21:27:01.346491'
+extraction_method: deterministic
+statistics:
+  total_features: 8
+  total_links: 27
+  primary_tags:
+    webgpu: 8
+    deprecation: 2
+    multimedia: 1
+  cross_cutting:
+    privacy: 3
+    webgpu: 4
+features:
+- title: Support `ImageSmoothingQuality` in `PaintCanvas`
+  content: 'Add support for the `imageSmoothingQuality` attribute on Paint Canvas. This lets you choose the quality or performance
+    tradeoff when scaling images. There are three options in total for `imageSmoothingQuality`: `low`, `medium` and `high`.
+
+
+    [Tracking bug #None](https://issues.chromium.org/issues/None) | [ChromeStatus.com entry](https://chromestatus.com/feature/4666019443113984)
+    | [Spec](https://drafts.css-houdini.org/css-paint-api-1/#paintrenderingcontext2d)'
+  heading_path:
+  - Chrome 134
+  - Rendering and graphics
+  - Support `ImageSmoothingQuality` in `PaintCanvas`
+  links:
+  - url: https://issues.chromium.org/issues/None
+    link_type: other
+    title: 'Tracking bug #None'
+  - url: https://chromestatus.com/feature/4666019443113984
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://drafts.css-houdini.org/css-paint-api-1/#paintrenderingcontext2d
+    link_type: other
+    title: Spec
+  line_number: 172
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: WebGPU subgroups
+  content: 'Adds subgroup functionality to WebGPU. Subgroup operations perform SIMT operations to provide efficient communication
+    and data sharing among groups of invocations. These operations can be used to accelerate applications by reducing memory
+    overheads incurred by inter-invocation communication.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5126409856221184) | [Spec](https://github.com/gpuweb/gpuweb/pull/4963)'
+  heading_path:
+  - Chrome 134
+  - Rendering and graphics
+  - WebGPU subgroups
+  links:
+  - url: https://chromestatus.com/feature/5126409856221184
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/gpuweb/gpuweb/pull/4963
+    link_type: github
+    title: Spec
+  line_number: 178
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Improve machine-learning workloads with subgroups
+  content: "After a year of development and trials, the subgroups WebGPU feature enabling SIMD-level parallelism is now available.\
+    \ It allows threads in a workgroup to communicate and execute collective math operations, such as calculating a sum of\
+    \ numbers, and offers an efficient method for cross-thread data sharing. See the [original proposal](https://github.com/gpuweb/gpuweb/blob/main/proposals/subgroups.md)\
+    \ and [chromestatus entry](https://chromestatus.com/feature/5126409856221184).\n\nFor reference, Google Meet saw 2.3-2.9\
+    \ times speed increases when benchmarking subgroups against [packed integer dot products](/blog/io24-webassembly-webgpu-2#packed_integer_dot_products)\
+    \ for matrix-vector multiply shaders on some devices during the [origin trial](https://developer.chrome.com/origintrials/#/view_trial/4130363808252166145).\n\
+    \nWhen the `\"subgroups\"` feature is available in a `GPUAdapter`, request a `GPUDevice` with this feature to get subgroups\
+    \ support in WGSL. It's helpful to check `subgroupMinSize` and `subgroupMaxSize` adapter info values—for example, if you\
+    \ have a hardcoded algorithm that requires a subgroup of a certain size.\n\nYou also need to explicitly enable this extension\
+    \ in your WGSL code with `enable subgroups;` to get access to the following built-in values in both compute and fragment\
+    \ shaders stages:\n\n  * `subgroup_invocation_id`: A built-in value for the index of the thread within the subgroup.\n\
+    \n  * `subgroup_size`: A built-in value for subgroup size access.\n\nThe numerous [subgroup built-in functions](https://gpuweb.github.io/gpuweb/wgsl/#subgroup-builtin-functions)\
+    \ (for example, `subgroupAdd()`, `subgroupBallot()`, `subgroupBroadcast()`, `subgroupShuffle()`) enable efficient communication\
+    \ and computation between invocations within a subgroup. These subgroup operations are classified as single-instruction\
+    \ multiple-thread (SIMT) operations. Additionally, the [quad built-in functions](https://gpuweb.github.io/gpuweb/wgsl/#quad-builtin-functions),\
+    \ which operate on a [quad](https://gpuweb.github.io/gpuweb/wgsl/#quad) of invocations facilitate data communication within\
+    \ the quad.\n\nYou can use f16 values with subgroups when you request a `GPUDevice` with both `\"shader-f16\"` and `\"\
+    subgroups\"` features.\n\nThe following sample is a good starting point for exploring subgroups: it shows a shader that\
+    \ uses the `subgroupExclusiveMul()` built-in function to compute factorials without reading or writing memory to communicate\
+    \ intermediate results.\n\nSee the Pen [WebGPU subgroups](https://codepen.io/web-dot-dev/pen/emOqWQJ)."
+  heading_path:
+  - What's New in WebGPU (Chrome 134)
+  - Improve machine-learning workloads with subgroups
+  links:
+  - url: https://github.com/gpuweb/gpuweb/blob/main/proposals/subgroups.md
+    link_type: github
+    title: original proposal
+  - url: https://chromestatus.com/feature/5126409856221184
+    link_type: chromestatus
+    title: chromestatus entry
+  - url: https://developer.chrome.com/origintrials/#/view_trial/4130363808252166145
+    link_type: other
+    title: origin trial
+  - url: https://gpuweb.github.io/gpuweb/wgsl/#subgroup-builtin-functions
+    link_type: github
+    title: subgroup built-in functions
+  - url: https://gpuweb.github.io/gpuweb/wgsl/#quad-builtin-functions
+    link_type: github
+    title: quad built-in functions
+  - url: https://gpuweb.github.io/gpuweb/wgsl/#quad
+    link_type: github
+    title: quad
+  - url: https://codepen.io/web-dot-dev/pen/emOqWQJ
+    link_type: other
+    title: WebGPU subgroups
+  line_number: 200
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Remove float filterable texture types support as blendable
+  content: Now that the [32-bit float textures blending](/blog/new-in-webgpu-132#32-bit_float_textures_blending) is available
+    with the `"float32-blendable"` feature, the incorrect support for float filterable texture types as blendable is removed.
+    See [issue 364987733](https://issues.chromium.org/issues/364987733).
+  heading_path:
+  - What's New in WebGPU (Chrome 134)
+  - Remove float filterable texture types support as blendable
+  links:
+  - url: https://issues.chromium.org/issues/364987733
+    link_type: other
+    title: issue 364987733
+  line_number: 222
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Dawn updates
+  content: "Dawn now requires macOS 11 and iOS 14 and only supports Metal 2.3+. See [issue 381117827](https://crbug.com/381117827).\n\
+    \nThe new `GetWGSLLanguageFeatures()` method of the `wgpu::Instance` now replaces `EnumerateWGSLLanguageFeatures()`. See\
+    \ [issue 368672124](https://issues.chromium.org/issues/368672124).\n\nThe following binding types have an `Undefined`\
+    \ value and their default values in binding layout have been changed. See [issue 377820810](https://issues.chromium.org/issues/377820810).\n\
+    \n  * `wgpu::BufferBindingType::Undefined` is now `Uniform`\n  * `wgpu::SamplerBindingType::Undefined` is now `Filtering`\n\
+    \  * `wgpu::TextureSampleType::Undefined` is now `Float`\n  * `wgpu::StorageTextureAccess::Undefined`is now `WriteOnly`\n\
+    \nThis covers only some of the key highlights. Check out the exhaustive [list of commits](https://dawn.googlesource.com/dawn/+log/chromium/6943..chromium/6998?n=1000)."
+  heading_path:
+  - What's New in WebGPU (Chrome 134)
+  - Dawn updates
+  links:
+  - url: https://crbug.com/381117827
+    link_type: tracking_bug
+    title: issue 381117827
+  - url: https://issues.chromium.org/issues/368672124
+    link_type: other
+    title: issue 368672124
+  - url: https://issues.chromium.org/issues/377820810
+    link_type: other
+    title: issue 377820810
+  - url: https://dawn.googlesource.com/dawn/+log/chromium/6943..chromium/6998?n=1000
+    link_type: other
+    title: list of commits
+  line_number: 226
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Digital Credential API
+  content: 'Websites can and do get credentials from mobile wallet apps through a variety of mechanisms today, for example,
+    custom URL handlers and QR code scanning. This feature lets sites request identity information from wallets using Android''s
+    `IdentityCredential` `CredMan` system. It is extensible to support multiple credential formats (for example, ISO mDoc
+    and W3C verifiable credential) and allows multiple wallet apps to be used. Mechanisms are being added to help reduce the
+    risk of ecosystem-scale abuse of real-world identity.
+
+
+    The origin trial starting in Chrome 134 adds support for this API on desktop platform, where Chrome on Desktop will securely
+    communicate with the digital wallet on the Android phone to fetch the requested credentials.
+
+
+    [Origin Trial](/origintrials#/view_trial/3139571890230657025) | [Tracking bug #40257092](https://issues.chromium.org/issues/40257092)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5166035265650688) | [Spec](https://wicg.github.io/digital-credentials)'
+  heading_path:
+  - What's New in WebGPU (Chrome 134)
+  - Origin trials
+  - Digital Credential API
+  links:
+  - url: https://issues.chromium.org/issues/40257092
+    link_type: other
+    title: 'Tracking bug #40257092'
+  - url: https://chromestatus.com/feature/5166035265650688
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/digital-credentials
+    link_type: spec
+    title: Spec
+  line_number: 243
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Deprecation trial for `SelectParserRelaxation`
+  content: 'This is a deprecation trial, which re-enables the old parser behavior for parsing `<select>` tags. Under that
+    old behavior, non-supported content is silently discarded and not included in the DOM content underneath the `<select>`.
+    This trial can be used in case the new behavior enabled from Chrome 135 breaks a site.
+
+
+    [Origin Trial](/origintrials#/view_trial/182958734861926401) | [ChromeStatus.com entry](https://chromestatus.com/feature/5145948356083712)'
+  heading_path:
+  - What's New in WebGPU (Chrome 134)
+  - Origin trials
+  - Deprecation trial for `SelectParserRelaxation`
+  links:
+  - url: https://chromestatus.com/feature/5145948356083712
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 251
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: Remove nonstandard `getUserMedia` audio constraints
+  content: 'Blink supports a number of nonstandard `goog`-prefixed constraints for `getUserMedia` from some time before constraints
+    were properly standardized.
+
+
+    Usage has gone down significantly to between 0.000001% to 0.0009% (depending on the constraint) and some of them don''t
+    even have an effect due to changes in the Chromium audio-capture stack. Soon none of them will have any effect due to
+    other upcoming changes.
+
+
+    We don''t expect any major regressions due to this change. Applications using these constraints will continue to work,
+    but will get audio with default settings (as if no constraints were passed). They can opt to migrate to standard constraints.
+
+
+    [Tracking bug #377131184](https://issues.chromium.org/issues/377131184) | [ChromeStatus.com entry](https://chromestatus.com/feature/5097536380207104)
+    | [Spec](https://w3c.github.io/mediacapture-main/#media-track-constraints)
+
+
+    Except as otherwise noted, the content of this page is licensed under the [Creative Commons Attribution 4.0 License](https://creativecommons.org/licenses/by/4.0/),
+    and code samples are licensed under the [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0). For details,
+    see the [Google Developers Site Policies](https://developers.google.com/site-policies). Java is a registered trademark
+    of Oracle and/or its affiliates.
+
+
+    Last updated 2025-03-04 UTC.
+
+
+    [[["Easy to understand","easyToUnderstand","thumb-up"],["Solved my problem","solvedMyProblem","thumb-up"],["Other","otherUp","thumb-up"]],[["Missing
+    the information I need","missingTheInformationINeed","thumb-down"],["Too complicated / too many steps","tooComplicatedTooManySteps","thumb-down"],["Out
+    of date","outOfDate","thumb-down"],["Samples / code issue","samplesCodeIssue","thumb-down"],["Other","otherDown","thumb-down"]],["Last
+    updated 2025-03-04 UTC."],[],[]]'
+  heading_path:
+  - What's New in WebGPU (Chrome 134)
+  - Deprecations and removals
+  - Remove nonstandard `getUserMedia` audio constraints
+  links:
+  - url: https://issues.chromium.org/issues/377131184
+    link_type: other
+    title: 'Tracking bug #377131184'
+  - url: https://chromestatus.com/feature/5097536380207104
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://w3c.github.io/mediacapture-main/#media-track-constraints
+    link_type: spec
+    title: Spec
+  - url: https://creativecommons.org/licenses/by/4.0/
+    link_type: other
+    title: Creative Commons Attribution 4.0 License
+  - url: https://www.apache.org/licenses/LICENSE-2.0
+    link_type: other
+    title: Apache 2.0 License
+  - url: https://developers.google.com/site-policies
+    link_type: other
+    title: Google Developers Site Policies
+  line_number: 259
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: multimedia
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy

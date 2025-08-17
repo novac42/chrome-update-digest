@@ -181,6 +181,20 @@ WebGPU implementations can also optimize the creation of low level resources and
 
 ## WebGPU
 
+  * [ Blog ](https://developer.chrome.com/blog)
+
+#  What's New in WebGPU (Chrome 132)
+
+Stay organized with collections  Save and categorize content based on your preferences. 
+
+![François Beaufort](https://web.dev/images/authors/beaufortfrancois.jpg)
+
+François Beaufort 
+
+[ GitHub ](https://github.com/beaufortfrancois)
+
+Published: January 8, 2025 
+
 ### Texture view usage
 
 GPU texture views currently inherit all usage flags from their source GPU texture. This can be problematic as some view formats are incompatible with certain usages. To address this issue, calling [`createView()`](https://developer.mozilla.org/docs/Web/API/GPUTexture/createView) with the optional [`usage`](https://gpuweb.github.io/gpuweb/#dom-gputextureviewdescriptor-usage) member lets you explicitly specify a subset of the source texture's usage flags that are compatible with the chosen view format.

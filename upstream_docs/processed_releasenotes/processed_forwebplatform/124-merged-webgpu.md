@@ -168,6 +168,92 @@ Shared Workers allow multiple tabs or extension contexts to coordinate and share
 
 [Tracking bug #41494731](https://issues.chromium.org/issues/41494731) | [ChromeStatus.com entry](https://chromestatus.com/feature/4875951026733056) | [Spec](https://gpuweb.github.io/gpuweb/#navigator-gpu)
 
+## WebGPU
+
+  * [ Blog ](https://developer.chrome.com/blog)
+
+#  What's New in WebGPU (Chrome 124)
+
+Stay organized with collections  Save and categorize content based on your preferences. 
+
+![François Beaufort](https://web.dev/images/authors/beaufortfrancois.jpg)
+
+François Beaufort 
+
+[ GitHub ](https://github.com/beaufortfrancois)
+
+### Read-only and read-write storage textures
+
+The storage texture binding type allows shaders to read from storage textures without adding the `TEXTURE_BINDING` usage, and perform mixed reads and writes on certain formats. When the `"readonly_and_readwrite_storage_textures"` WGSL [language extension](https://gpuweb.github.io/gpuweb/wgsl/#language-extension) is present in [`navigator.gpu.wgslLanguageFeatures`](https://developer.mozilla.org/docs/Web/API/WGSLLanguageFeatures), you can now set `GPUStorageTexture` access to either `"read-write"` or `"read-only"` when creating a bind group layout. Previously this was restricted to `"write-only"`.
+
+Then, your WGSL shader code can use `read_write` and `read` access qualifier for storage textures, the `textureLoad()` and `textureStore()` built-in functions behave accordingly, and a new `textureBarrier()` built-in function is available to synchronize texture memory accesses in a workgroup.
+
+It's recommended to use a [requires-directive](https://gpuweb.github.io/gpuweb/wgsl/#requires-directive) to signal the potential for non-portability with `requires readonly_and_readwrite_storage_textures;` at the top of your WGSL shader code. See the following example and [issue dawn:1972](https://bugs.chromium.org/p/dawn/issues/detail?id=1972).
+    
+    
+    if (!navigator.gpu.wgslLanguageFeatures.has("readonly_and_readwrite_storage_textures")) {
+      throw new Error("Read-only and read-write storage textures are not available");
+    }
+    
+    const adapter = await navigator.gpu.requestAdapter();
+    const device = await adapter.requestDevice();
+    
+    const bindGroupLayout = device.createBindGroupLayout({
+      entries: [{
+        binding: 0,
+        visibility: GPUShaderStage.COMPUTE,
+        storageTexture: {
+          access: "read-write", // <-- New!
+          format: "r32uint",
+        },
+      }],
+    });
+    
+    const shaderModule = device.createShaderModule({ code: `
+      requires readonly_and_readwrite_storage_textures;
+    
+      @group(0) @binding(0) var tex : texture_storage_2d<r32uint, read_write>;
+    
+      @compute @workgroup_size(1, 1)
+      fn main(@builtin(local_invocation_id) local_id: vec3u) {
+        var data = textureLoad(tex, vec2i(local_id.xy));
+        data.x *= 2;
+        textureStore(tex, vec2i(local_id.xy), data);
+      }`
+    });
+    
+    // You can now create a compute pipeline with this shader module and
+    // send the appropriate commands to the GPU.
+    
+
+### Service workers and shared workers support
+
+WebGPU in Chrome takes web workers support to the next level, now offering support for both [service workers](https://developer.mozilla.org/docs/Web/API/Service_Worker_API) and [shared workers](https://developer.mozilla.org/docs/Web/API/SharedWorker). You can use service workers to enhance background tasks and offline capabilities, and shared workers for efficient resource sharing across scripts. See [issue chromium:41494731](https://issues.chromium.org/issues/41494731).
+
+Check out the [chrome extension sample](https://github.com/GoogleChrome/chrome-extensions-samples/tree/main/functional-samples/sample.webgpu) and [WebLLM chrome extension](https://github.com/mlc-ai/web-llm/tree/main/examples/chrome-extension-webgpu-service-worker) to see how to use WebGPU in an extension service worker.
+
+![Screenshot of the WebLLM chrome extension.](/static/blog/new-in-webgpu-124/image/webllm-chrome-extension.jpg) WebLLM chrome extension.
+
+### New adapter information attributes
+
+Non-standard `d3dShaderModel` and `vkDriverVersion` adapter info attributes are now available upon calling [`requestAdapterInfo()`](https://developer.mozilla.org/docs/Web/API/GPUAdapter/requestAdapterInfo) if the user has enabled the "WebGPU Developer Features" [flag](/docs/web-platform/chrome-flags#chromeflags) at `chrome://flags/#enable-webgpu-developer-features`. When supported:
+
+  * The `d3dShaderModel` is the maximum supported D3D shader model number. For example, the value 62 indicates that the current driver supports HLSL SM 6.2. See [documentation](https://dawn.googlesource.com/dawn/+/refs/heads/main/docs/dawn/features/adapter_properties.md#d3d) and [issue dawn:1254](https://bugs.chromium.org/p/dawn/issues/detail?id=1254).
+
+  * The `vkDriverVersion` is the vendor-specified version number of the Vulkan driver. See [documentation](https://dawn.googlesource.com/dawn/+/refs/heads/main/docs/dawn/features/adapter_properties.md#vulkan) and [issue chromium:327457605](https://issues.chromium.org/issues/327457605).
+
+![Screenshot of https://webgpureport.org featuring vkDriverVersion in adapter info.](/static/blog/new-in-webgpu-124/image/webgpureport.jpg) Adapter info `vkDriverVersion` shown on <https://webgpureport.org>.
+
+### Bug fixes
+
+Creating two pipelines with matching bindgroups using [`layout: "auto"`](https://gpuweb.github.io/gpuweb/#dom-gpuautolayoutmode-auto), then creating a bindgroup with the first pipeline, and using it on the second pipeline now raises a [GPUValidationError](https://developer.mozilla.org/docs/Web/API/GPUValidationError/GPUValidationError). Allowing it was an implementation bug which is now fixed with proper [tests](https://gpuweb.github.io/cts/standalone/?compatibility=1&runnow=1&q=webgpu:api,validation,encoding,programmable,pipeline_bind_group_compat:default_bind_group_layouts_never_match,*). See [issue dawn:2402](https://bugs.chromium.org/p/dawn/issues/detail?id=2402).
+
+### Dawn updates
+
+In the Dawn API, the uncaptured error callback set with `wgpuDeviceSetUncapturedErrorCallback` is now not called after the GPU device is lost. This fix aligns Dawn with the JavaScript API specification and Blink's implementation. See [issue dawn:2459](https://bugs.chromium.org/p/dawn/issues/detail?id=2459).
+
+This covers only some of the key highlights. Check out the exhaustive [list of commits](https://dawn.googlesource.com/dawn/+log/chromium/6312..chromium/6367?n=1000).
+
 ## Origin trials in progress
 
 In Chrome 124 you can opt into the following new [origin trials](/docs/web-platform/origin-trials).

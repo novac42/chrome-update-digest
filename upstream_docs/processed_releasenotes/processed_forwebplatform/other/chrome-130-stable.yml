@@ -1,0 +1,72 @@
+version: '130'
+channel: stable
+area: other
+extraction_timestamp: '2025-08-17T21:27:00.949570'
+extraction_method: deterministic
+statistics:
+  total_features: 2
+  total_links: 3
+  primary_tags:
+    privacy: 2
+  cross_cutting:
+    privacy: 1
+features:
+- title: Attribution Reporting API feature (Attribution Scopes)
+  content: 'This change is based on ad tech feedback and the need for more fine grained filtering controls before the attribution
+    process takes place. It lets API callers specify a field called "attribution scopes" which will be used for filtering
+    before starting the regular attribution flow. This allows API callers more fine grained control over the attribution granularity
+    and the ability to receive proper attribution reports when there are multiple different advertisers or campaigns that
+    all convert on the same destination site.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5096560068395008)'
+  heading_path:
+  - Chrome 130
+  - Privacy
+  - Attribution Reporting API feature (Attribution Scopes)
+  links:
+  - url: https://chromestatus.com/feature/5096560068395008
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 140
+  primary_tags:
+  - name: privacy
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: Attribution Reporting API feature (debug key privacy improvement)
+  content: 'This change helps to mitigate a potential privacy gap with debug keys.
+
+
+    Currently the API allows a source debug key or a trigger debug key to be specified if third-party cookies are available
+    and can be set by API callers. If either a source or trigger debug key is specified then it will be included in the attribution
+    report. This may lead to a privacy leak if third-party cookies are only allowed on either the publisher or the advertiser
+    site but not both.
+
+
+    This change mitigates this issue by enforcing that source debug keys and trigger debug keys are only included in the attribution
+    report if they''re present on both the source and trigger, which would mean that third-party cookies were available on
+    both the publisher and advertiser site. This change will apply to both event-level reports and aggregatable reports.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/6257907243679744) | [Spec](https://wicg.github.io/attribution-reporting-api/#attribution-debugging)'
+  heading_path:
+  - Chrome 130
+  - Privacy
+  - Attribution Reporting API feature (debug key privacy improvement)
+  links:
+  - url: https://chromestatus.com/feature/6257907243679744
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/attribution-reporting-api/#attribution-debugging
+    link_type: spec
+    title: Spec
+  line_number: 146
+  primary_tags:
+  - name: privacy
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy

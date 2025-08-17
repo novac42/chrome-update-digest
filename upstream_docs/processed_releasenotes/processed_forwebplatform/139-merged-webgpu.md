@@ -211,6 +211,20 @@ This feature ensures developers receive only crash reports by specifying the end
 
 ## WebGPU
 
+  * [ Blog ](https://developer.chrome.com/blog)
+
+#  What's New in WebGPU (Chrome 139)
+
+Stay organized with collections  Save and categorize content based on your preferences. 
+
+![François Beaufort](https://web.dev/images/authors/beaufortfrancois.jpg)
+
+François Beaufort 
+
+[ GitHub ](https://github.com/beaufortfrancois)
+
+Published: July 30, 2025 
+
 ### 3D texture support for BC and ASTC compressed formats
 
 The `"texture-compression-bc-sliced-3d"` and `"texture-compression-astc-sliced-3d"` WebGPU features add support for 3D textures using Block Compression (BC) and Adaptive Scalable Texture Compression (ASTC) formats. This lets you take advantage of the efficient compression capabilities of BC and ASTC formats for volumetric texture data, offering significant reductions in memory footprint and bandwidth requirements without substantial loss in visual quality. This is particularly valuable in fields such as scientific visualization, medical imaging, and advanced rendering techniques.

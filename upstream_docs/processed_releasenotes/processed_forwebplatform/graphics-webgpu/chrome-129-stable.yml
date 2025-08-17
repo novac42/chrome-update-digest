@@ -1,0 +1,379 @@
+version: '129'
+channel: stable
+area: graphics-webgpu
+extraction_timestamp: '2025-08-17T21:27:00.846798'
+extraction_method: deterministic
+statistics:
+  total_features: 10
+  total_links: 30
+  primary_tags:
+    webgpu: 10
+    deprecation: 4
+    network: 1
+  cross_cutting:
+    webgpu: 4
+    privacy: 6
+features:
+- title: WebGPU extended range (HDR) support
+  content: 'Adds tone mapping parameters to the WebGPU canvas configuration, and adds options of `standard` (the current behavior
+    of restricting content to the SDR range of the display) as the default, and `extended` (not imposing this restriction)
+    as a new behavior. This allows WebGPU content to use the full range of a display.
+
+
+    [Demo](https://ccameron-chromium.github.io/webgpu-hdr/example.html) | [Tracking bug #333967627](https://issues.chromium.org/issues/333967627)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/6196313866895360) | [Spec](https://github.com/ccameron-chromium/webgpu-hdr/blob/main/EXPLAINER.md)'
+  heading_path:
+  - Chrome 129
+  - Rendering and graphics
+  - WebGPU extended range (HDR) support
+  links:
+  - url: https://ccameron-chromium.github.io/webgpu-hdr/example.html
+    link_type: github
+    title: Demo
+  - url: https://issues.chromium.org/issues/333967627
+    link_type: other
+    title: 'Tracking bug #333967627'
+  - url: https://chromestatus.com/feature/6196313866895360
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/ccameron-chromium/webgpu-hdr/blob/main/EXPLAINER.md
+    link_type: github
+    title: Spec
+  line_number: 99
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+  - privacy
+- title: HDR support with canvas tone mapping mode
+  content: "Web developers have limited options for delivering HDR content, relying primarily on `<img>` and `<video>` elements.\
+    \ The `<canvas>` element, however, remains restricted to SDR. Generating dynamic HDR content within a canvas requires\
+    \ encoding its contents as an HDR image before displaying it (for an example see this [demo](https://gkjohnson.github.io/three-gpu-pathtracer/example/bundle/hdr.html)).\n\
+    \nThe new [`GPUCanvasToneMappingMode`](https://www.w3.org/TR/webgpu/#gpucanvastonemappingmode) parameter in the WebGPU\
+    \ canvas configuration now allows WebGPU to draw colors brighter than white (`#FFFFFF`). It does so through the following\
+    \ modes:\n\n  * `\"standard\"`: The default behavior restricts content to the SDR range of the screen. This mode is accomplished\
+    \ by clamping all color values in the color space of the screen to the `[0, 1]` interval.\n\n  * `\"extended\"`: Unlocks\
+    \ the full HDR range of the screen. This mode matches `\"standard\"` in the `[0, 1]` range of the screen. Clamping or\
+    \ projection is done to the extended dynamic range of the screen but not `[0, 1]`.\n\nThe following code snippet shows\
+    \ you to configure a canvas for high dynamic range.\n    \n    \n    const adapter = await navigator.gpu.requestAdapter();\n\
+    \    const device = await adapter.requestDevice();\n    \n    const canvas = document.querySelector(\"canvas\");\n   \
+    \ const context = canvas.getContext(\"webgpu\");\n    \n    context.configure({\n      device,\n      format: \"rgba16float\"\
+    ,\n      toneMapping: { mode: \"extended\" },\n    });\n    \n\nExplore HDR with WebGPU by checking out the [Particles\
+    \ (HDR) sample](https://webgpu.github.io/webgpu-samples/?sample=particles) and [WebGPU HDR example](https://ccameron-chromium.github.io/webgpu-hdr/example.html),\
+    \ and see the [chromestatus entry](https://chromestatus.com/feature/6196313866895360).\n\n![A laptop with an HDR screen\
+    \ displaying a vibrant image.](/static/blog/new-in-webgpu-129/image/particles.jpg) The Particles (HDR) sample displayed\
+    \ on a HDR screen."
+  heading_path:
+  - What's New in WebGPU (Chrome 129)
+  - HDR support with canvas tone mapping mode
+  links:
+  - url: https://gkjohnson.github.io/three-gpu-pathtracer/example/bundle/hdr.html
+    link_type: github
+    title: demo
+  - url: https://www.w3.org/TR/webgpu/#gpucanvastonemappingmode
+    link_type: spec
+    title: '`GPUCanvasToneMappingMode`'
+  - url: https://webgpu.github.io/webgpu-samples/?sample=particles
+    link_type: github
+    title: Particles (HDR) sample
+  - url: https://ccameron-chromium.github.io/webgpu-hdr/example.html
+    link_type: github
+    title: WebGPU HDR example
+  - url: https://chromestatus.com/feature/6196313866895360
+    link_type: chromestatus
+    title: chromestatus entry
+  line_number: 119
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Expanded subgroups support
+  content: "Following the announcement of [subgroups experimentation](/blog/new-in-webgpu-128#experimenting_with_subgroups),\
+    \ the subgroup built-ins functions are now available for use in both compute shaders and fragment shaders. They are no\
+    \ longer restricted to just compute shaders. See [issue 354738715](https://issues.chromium.org/issues/354738715).\n\n\
+    Note that the `subgroup_size` built-in value is currently [buggy](https://issues.chromium.org/issues/361593660) in fragment\
+    \ shaders. Avoid it for now.\n\nFurthermore, the following subgroup built-ins functions have been added:\n\n  * `subgroupAdd(value)`:\
+    \ Returns the summation of all active invocations `value`s across the subgroup.\n  * `subgroupExclusiveAdd(value)`: Returns\
+    \ the exclusive scan summation of all active invocations `value`s across the subgroup.\n  * `subgroupMul(value)`: Returns\
+    \ the multiplication of all active invocations `value`s across the subgroup.\n  * `subgroupExclusiveMul(value)`: Returns\
+    \ the exclusive scan multiplication of all active invocations `value`s across the subgroup.   \n  \n\n  * `subgroupAnd(value)`:\
+    \ Returns the binary AND of all active invocations `value`s across the subgroup.\n  * `subgroupOr(value)`: Returns the\
+    \ binary OR of all active invocations `value`s across the subgroup.\n  * `subgroupXor(value)`: Returns the binary XOR\
+    \ of all active invocations `value`s across the subgroup.   \n  \n\n  * `subgroupMin(value)`: Returns the minimal value\
+    \ of all active invocations `value`s across the subgroup.\n  * `subgroupMax(value)`: Returns the maximal value of all\
+    \ active invocations `value`s across the subgroup.   \n  \n\n  * `subgroupAll(value)`: Returns true if `value` is true\
+    \ for all active invocations in the subgroup.\n  * `subgroupAny(value)`: Returns true if `value` is true for any active\
+    \ invocation in the subgroup.   \n  \n\n  * `subgroupElect()`: Returns true if this invocation has the lowest `subgroup_invocation_id`\
+    \ among active invocations in the subgroup.\n  * `subgroupBroadcastFirst(value)`: Broadcasts `value` from the active invocation\
+    \ with the lowest `subgroup_invocation_id` in the subgroup to all other active invocations.   \n  \n\n  * `subgroupShuffle(value,\
+    \ id)`: Returns `value` from the active invocation whose `subgroup_invocation_id` matches `id`.\n  * `subgroupShuffleXor(value,\
+    \ mask)`: Returns `value` from the active invocation whose `subgroup_invocation_id` matches `subgroup_invocation_id ^\
+    \ mask`. `mask` must be dynamically uniform.\n  * `subgroupShuffleUp(value, delta)`: Returns `value` from the active invocation\
+    \ whose `subgroup_invocation_id` matches `subgroup_invocation_id - delta`.\n  * `subgroupShuffleDown(value, delta)`: Returns\
+    \ `value` from the active invocation whose `subgroup_invocation_id` matches `subgroup_invocation_id + delta`.   \n  \n\
+    \n  * `quadBroadcast(value, id)`: Broadcasts `value` from the quad invocation with id equal to `id`. `id` must be a constant-expression.\n\
+    \  * `quadSwapX(value)`: Swaps `value` between invocations in the quad in the X direction.\n  * `quadSwapY(value)`: Swaps\
+    \ `value` between invocations in the quad in the Y direction.\n  * `quadSwapDiagonal(value)`: Swaps `value` between invocations\
+    \ in the quad diagonally."
+  heading_path:
+  - What's New in WebGPU (Chrome 129)
+  - Expanded subgroups support
+  links:
+  - url: https://issues.chromium.org/issues/354738715
+    link_type: other
+    title: issue 354738715
+  - url: https://issues.chromium.org/issues/361593660
+    link_type: other
+    title: buggy
+  line_number: 149
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Dawn updates
+  content: "The `wgpu::PrimitiveState` struct now directly includes depth clip control setting, eliminating the need for a\
+    \ separate `wgpu::PrimitiveDepthClipControl` struct. To learn more, see the following code snippet and the [webgpu-headers\
+    \ PR](https://github.com/webgpu-native/webgpu-headers/pull/311).\n    \n    \n    // Before\n    wgpu::PrimitiveState\
+    \ primitive = {};\n    wgpu::PrimitiveDepthClipControl depthClipControl;\n    depthClipControl.unclippedDepth = true;\n\
+    \    primitive.nextInChain = &depthClipControl;\n    \n    \n    \n    // Now\n    wgpu::PrimitiveState primitive = {};\n\
+    \    primitive.unclippedDepth = true;\n    \n\nThis covers only some of the key highlights. Check out the exhaustive [list\
+    \ of commits](https://dawn.googlesource.com/dawn/+log/chromium/6613..chromium/6668?n=1000)."
+  heading_path:
+  - What's New in WebGPU (Chrome 129)
+  - Dawn updates
+  links:
+  - url: https://github.com/webgpu-native/webgpu-headers/pull/311
+    link_type: github
+    title: webgpu-headers PR
+  - url: https://dawn.googlesource.com/dawn/+log/chromium/6613..chromium/6668?n=1000
+    link_type: other
+    title: list of commits
+  line_number: 191
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: FileSystemObserver interface
+  content: 'The FileSystemObserver interface notifies websites of changes to the file system. Sites observe changes to files
+    and directories in the user''s local device (as specified in WICG/file-system-access) or in the Bucket File System (as
+    specified in whatwg/fs), and are notified of basic change info, such as the change type.
+
+
+    [Docs](https://docs.google.com/document/d/1d6YoPvk0rdNBQaZcoFP-V5u4CBjgahvmnVsZpbn0Gmo/edit?usp=sharing) | [Tracking bug
+    #40105284](https://issues.chromium.org/issues/40105284) | [ChromeStatus.com entry](https://chromestatus.com/feature/4622243656630272)
+    | [Spec](https://github.com/whatwg/fs/pull/165)'
+  heading_path:
+  - What's New in WebGPU (Chrome 129)
+  - Origin trials
+  - FileSystemObserver interface
+  links:
+  - url: https://docs.google.com/document/d/1d6YoPvk0rdNBQaZcoFP-V5u4CBjgahvmnVsZpbn0Gmo/edit?usp=sharing
+    link_type: other
+    title: Docs
+  - url: https://issues.chromium.org/issues/40105284
+    link_type: other
+    title: 'Tracking bug #40105284'
+  - url: https://chromestatus.com/feature/4622243656630272
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/whatwg/fs/pull/165
+    link_type: github
+    title: Spec
+  line_number: 213
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Mesh2D Canvas API
+  content: 'A high-performance Canvas 2D triangle mesh API that can be used to batch-render a large number of textured triangles.
+
+
+    This will enable advanced texture mapping and geometry deformation effects in a 2D context.
+
+
+    [Demo](https://demos.skia.org/demo/mesh2d) | [Tracking bug #40282920](https://issues.chromium.org/issues/40282920) | [ChromeStatus.com
+    entry](https://chromestatus.com/feature/6247948082216960) | [Spec](https://github.com/fserb/canvas2D/blob/master/spec/mesh2d.md)'
+  heading_path:
+  - What's New in WebGPU (Chrome 129)
+  - Origin trials
+  - Mesh2D Canvas API
+  links:
+  - url: https://demos.skia.org/demo/mesh2d
+    link_type: other
+    title: Demo
+  - url: https://issues.chromium.org/issues/40282920
+    link_type: other
+    title: 'Tracking bug #40282920'
+  - url: https://chromestatus.com/feature/6247948082216960
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/fserb/canvas2D/blob/master/spec/mesh2d.md
+    link_type: github
+    title: Spec
+  line_number: 219
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Deprecate 0.0.0.0 for Private Network Access
+  content: 'Chrome will block access to IP address `0.0.0.0` in advance of Private Network Access (PNA) completely rolling
+    out.
+
+
+    Chrome is deprecating direct access to private network endpoints from public websites as part of the [PNA specification](/blog/private-network-access-preflight).
+    Services listening on localhost (`127.0.0.0/8`) are considered private according to the specification. Chrome''s PNA protection
+    can be bypassed using the IP address `0.0.0.0` to access services listening on the localhost on macOS and Linux.
+
+
+    This can also be abused in DNS rebinding attacks targeting a web application listening on the localhost.
+
+
+    This release of Chrome removes three features.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5106143060033536) | [Spec](https://wicg.github.io/private-network-access)'
+  heading_path:
+  - What's New in WebGPU (Chrome 129)
+  - Deprecations and removals
+  - Deprecate 0.0.0.0 for Private Network Access
+  links:
+  - url: https://chromestatus.com/feature/5106143060033536
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/private-network-access
+    link_type: spec
+    title: Spec
+  line_number: 229
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: network
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: Remove the includeShadowRoots argument on DOMParser
+  content: "The `includeShadowRoots` argument was a never-standardized argument to the `DOMParser.parseFromString()` function,\
+    \ which was there to allow imperative parsing of HTML content that contains declarative shadow DOM. This was shipped in\
+    \ Chrome 90 as part of the initial shipment of declarative shadow DOM.\n\nNow that a standardized version of this feature\
+    \ is available with the `setHTMLUnsafe()` and `parseHTMLUnsafe()` methods, the non-standard `includeShadowRoots` argument\
+    \ will be removed. Code should be updated as follows:\n\nInstead of:\n    \n    \n    ((new DOMParser()).parseFromString(html,'text/html',{includeShadowRoots:\
+    \ true});\n    \n\nUse:\n    \n    \n    Document.parseHTMLUnsafe(html);\n    \n\n[Tracking bug #329330085](https://issues.chromium.org/issues/329330085)\
+    \ | [ChromeStatus.com entry](https://chromestatus.com/feature/5116094370283520)"
+  heading_path:
+  - What's New in WebGPU (Chrome 129)
+  - Deprecations and removals
+  - Remove the includeShadowRoots argument on DOMParser
+  links:
+  - url: https://issues.chromium.org/issues/329330085
+    link_type: other
+    title: 'Tracking bug #329330085'
+  - url: https://chromestatus.com/feature/5116094370283520
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 241
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Remove non-standard declarative shadow DOM serialization
+  content: 'The prototype implementation of declarative shadow DOM contained a method called `getInnerHTML()` used to serialize
+    DOM trees containing shadow roots. That part of the prototype was not standardized with the rest of declarative shadow
+    dom, and instead a replacement was designed—`getHTML()`.
+
+
+    Therefore the old `getInnerHTML()` method is now being removed from Chrome, you should use [`getHTML()`](https://developer.mozilla.org/docs/Web/API/Element/getHTML)
+    as a replacement, which will soon be interoperable across browsers.
+
+
+    [Tracking bug #41492947](https://issues.chromium.org/issues/41492947) | [ChromeStatus.com entry](https://chromestatus.com/feature/5081733588582400)'
+  heading_path:
+  - What's New in WebGPU (Chrome 129)
+  - Deprecations and removals
+  - Remove non-standard declarative shadow DOM serialization
+  links:
+  - url: https://developer.mozilla.org/docs/Web/API/Element/getHTML
+    link_type: mdn
+    title: '`getHTML()`'
+  - url: https://issues.chromium.org/issues/41492947
+    link_type: other
+    title: 'Tracking bug #41492947'
+  - url: https://chromestatus.com/feature/5081733588582400
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 261
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Remove PointerEvent.getCoalescedEvents() from insecure contexts
+  content: 'The Pointer Events Working Group made `PointerEvent.getCoalescedEvents()` restricted to secure contexts over four
+    years ago, which removed the API from insecure contexts. Chrome originally shipped the old behavior and didn''t follow
+    the spec change immediately because of compat concerns.
+
+
+    We are now removing it from insecure contexts because Chrome usage in insecure contexts turned out to be very low.
+
+
+    [Tracking bug #40928769](https://issues.chromium.org/issues/40928769) | [ChromeStatus.com entry](https://chromestatus.com/feature/4941651093749760)'
+  heading_path:
+  - What's New in WebGPU (Chrome 129)
+  - Deprecations and removals
+  - Remove PointerEvent.getCoalescedEvents() from insecure contexts
+  links:
+  - url: https://issues.chromium.org/issues/40928769
+    link_type: other
+    title: 'Tracking bug #40928769'
+  - url: https://chromestatus.com/feature/4941651093749760
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 269
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy

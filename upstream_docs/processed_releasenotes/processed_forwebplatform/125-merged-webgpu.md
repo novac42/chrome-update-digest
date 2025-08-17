@@ -177,6 +177,71 @@ This update helps ease the transition of specialized apps from Chrome Apps to Is
 
 [ChromeStatus.com entry](https://chromestatus.com/feature/5168654087094272) | [Spec](https://wicg.github.io/direct-sockets)
 
+## WebGPU
+
+  * [ Blog ](https://developer.chrome.com/blog)
+
+#  What's New in WebGPU (Chrome 125)
+
+Stay organized with collections  Save and categorize content based on your preferences. 
+
+![François Beaufort](https://web.dev/images/authors/beaufortfrancois.jpg)
+
+François Beaufort 
+
+[ GitHub ](https://github.com/beaufortfrancois)
+
+The number of WebGPU features might feel a bit sparse this time, but some major advancements are just around the corner! Future releases will include features like shader compilation speed improvements, and changes to the async model of the implementation using WGPUFuture.
+
+### Subgroups (feature in development)
+
+The subgroups feature enables SIMD-level parallelism, allowing threads within a group to communicate and perform collective math operations (for example, calculating the sum of 16 numbers). This provides a highly efficient form of cross-thread data sharing.
+
+Subgroup operations are supported by modern GPU APIs, but naming and implementation details vary. The Chrome team has identified the commonalities and is now working to standardize this feature. Check out the [proposal](https://github.com/gpuweb/gpuweb/blob/main/proposals/subgroups.md) and [comment](https://github.com/gpuweb/gpuweb/issues/4306) if you have questions.
+
+There's a minimal and unstandardized implementation of subgroups behind the "Experimental Web Platform Features" flag at `chrome://flags/#enable-experimental-web-platform-features` so that developers can give it a try and share feedback as real-world benefits have not been proven yet in the context of WebGPU.
+
+When the `"chromium-experimental-subgroups"` feature is available in a `GPUAdapter`, request a `GPUDevice` with this feature to get experimental subgroups support in WGSL and check its `minSubgroupSize` and `maxSubgroupSize` limits.
+
+You also need to explicitly enable this extension in your WGSL code with `enable chromium_experimental_subgroups`. When enabled, you get access to the following additions:
+
+  * `subgroup_invocation_id`: A built-in value for the index of the thread within the subgroup.
+  * `subgroup_size`: A built-in value for subgroup size access.
+  * `subgroupBallot(value):` Returns a set of bit fields where the bit corresponding to `subgroup_invocation_id` is 1 if `value` is true for that active invocation and 0 otherwise.
+  * `subgroupBroadcast(value, id)`: Broadcasts the `value` from the invocation with `subgroup_invocation_id` matching `id` to all invocations within the subgroup. Note: `id` must be a compile-time constant.
+
+The following code snippet provides a base to tinker with and discover the potential of subgroups.
+    
+    
+    const adapter = await navigator.gpu.requestAdapter();
+    if (!adapter.features.has("chromium-experimental-subgroups")) {
+      throw new Error("Experimental subgroups support is not available");
+    }
+    // Explicitly request experimental subgroups support.
+    const device = await adapter.requestDevice({
+      requiredFeatures: ["chromium-experimental-subgroups"],
+    });
+    
+    const shaderModule = device.createShaderModule({ code: `
+      enable chromium_experimental_subgroups;
+    
+      @compute @workgroup_size(64) fn main(
+          @builtin(global_invocation_id) global_id : vec3u,
+          @builtin(subgroup_size) sg_size : u32,
+          @builtin(subgroup_invocation_id) sg_id : u32) {
+        // TODO: Use subgroupBallot() and subgroupBroadcast().
+      }`,
+    });
+    
+
+### Render to slice of 3D texture
+
+You can now render directly to slice(s) of 3D textures within render passes, expanding its capabilities beyond common 2D texture rendering, with the new [`depthSlice`](https://gpuweb.github.io/gpuweb/#dom-gpurenderpasscolorattachment-depthslice) member in a [`GPURenderPassColorAttachment`](https://gpuweb.github.io/gpuweb/#dictdef-gpurenderpasscolorattachment). This addition allows you for example to create voxel-based scenes and effects by rendering directly into 3D texture volumes. See [issue dawn:1020](https://bugs.chromium.org/p/dawn/issues/detail?id=1020).
+
+### Dawn updates
+
+Check out the exhaustive [list of commits](https://dawn.googlesource.com/dawn/+log/chromium/6367..chromium/6422?n=1000).
+
 ## New origin trials
 
 ### FedCM Button Mode API and Use Other Account API

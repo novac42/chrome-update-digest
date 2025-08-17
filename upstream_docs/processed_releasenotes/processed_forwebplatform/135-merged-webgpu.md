@@ -252,6 +252,20 @@ The highlightsFromPoint API lets developers interact with custom highlights by d
 
 ## WebGPU
 
+  * [ Blog ](https://developer.chrome.com/blog)
+
+#  What's New in WebGPU (Chrome 135)
+
+Stay organized with collections  Save and categorize content based on your preferences. 
+
+![François Beaufort](https://web.dev/images/authors/beaufortfrancois.jpg)
+
+François Beaufort 
+
+[ GitHub ](https://github.com/beaufortfrancois)
+
+Published: March 26, 2025 
+
 **Experimental:** WebGPU integration with WebXR is now available for developer testing on Windows and Android. Learn more at[ Experimenting with WebGPU in WebXR](https://toji.dev/2025/03/03/experimenting-with-webgpu-in-webxr.html).
 
 ### Allow creating pipeline layout with null bind group layout

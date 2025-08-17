@@ -1,0 +1,71 @@
+version: '131'
+channel: stable
+area: other
+extraction_timestamp: '2025-08-17T21:27:01.050081'
+extraction_method: deterministic
+statistics:
+  total_features: 2
+  total_links: 3
+  primary_tags:
+    privacy: 2
+  cross_cutting:
+    privacy: 2
+features:
+- title: 'Attribution-Reporting API: Remove aggregation key identifier size limit for trigger registrations'
+  content: 'Previously the aggregation key identifier length limit was checked in both source and trigger registrations. As
+    this limit is not for privacy and it''s not persisted in the storage, it''s being removed in trigger registrations.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5131578140000256)'
+  heading_path:
+  - Chrome 131
+  - Privacy
+  - 'Attribution-Reporting API: Remove aggregation key identifier size limit for trigger registrations'
+  links:
+  - url: https://chromestatus.com/feature/5131578140000256
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 147
+  primary_tags:
+  - name: privacy
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: 'Private Aggregation API: Increase contribution limit to 100 for Protected Audience callers'
+  content: 'Enables Protected Audience script runners to make up to 100 contributions per Private Aggregation report, compared
+    to the current limit of 20.
+
+
+    Private Aggregation limits the number of histogram contributions that can be embedded in a single aggregatable report,
+    dropping any additional contributions. Shared Storage callers can work around the limit by invoking another Shared Storage
+    operation. However, Protected Audience callers have no persistent storage, so they lose their excess contributions at
+    the end of their auction. Note that this change is privacy neutral as the API''s contributions are still limited by the
+    same privacy budget.
+
+
+    Due to padding, each Protected Audience report will have a larger payload, even if it did not need the larger contribution
+    limit. We expect that these larger reports will increase the cost of operating the Aggregation Service.
+
+
+    [Tracking bug #360160864](https://issues.chromium.org/issues/360160864) | [ChromeStatus.com entry](https://chromestatus.com/feature/5114676393017344)'
+  heading_path:
+  - Chrome 131
+  - Privacy
+  - 'Private Aggregation API: Increase contribution limit to 100 for Protected Audience callers'
+  links:
+  - url: https://issues.chromium.org/issues/360160864
+    link_type: other
+    title: 'Tracking bug #360160864'
+  - url: https://chromestatus.com/feature/5114676393017344
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 153
+  primary_tags:
+  - name: privacy
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy

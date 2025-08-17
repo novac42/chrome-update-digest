@@ -1,0 +1,261 @@
+version: '125'
+channel: stable
+area: webapi
+extraction_timestamp: '2025-08-17T21:27:00.473857'
+extraction_method: deterministic
+statistics:
+  total_features: 8
+  total_links: 22
+  primary_tags:
+    webapi: 8
+    storage: 1
+  cross_cutting:
+    privacy: 6
+    security: 2
+features:
+- title: Additions to the Attribution Reporting API
+  content: 'Features have been added to the Attribution Reporting API to create additional debugging capabilities by supporting
+    parsing failure debug reports, improve API ergonomics by supporting a field to specify preferred registration platform,
+    and improve privacy.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5146883686400000)'
+  heading_path:
+  - Chrome 125
+  - Web APIs
+  - Additions to the Attribution Reporting API
+  links:
+  - url: https://chromestatus.com/feature/5146883686400000
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 96
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: The Compute Pressure API
+  content: 'The [Compute Pressure API](/docs/web-platform/compute-pressure) offers high-level states that represent the CPU
+    load on the system. It allows the implementation to use the right underlying hardware metrics to ensure that users can
+    take advantage of all the processing power available to them as long as the system is not under unmanageable stress.
+
+
+    Intel led the design and implementation work for this API, which will let video conferencing apps dynamically balance
+    features and performance.
+
+
+    [Compute Pressure API](/docs/web-platform/compute-pressure) | [Tracking bug #40683064](https://issues.chromium.org/issues/40683064)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5597608644968448) | [Spec](https://html.spec.whatwg.org/#dom-element-gethtml)'
+  heading_path:
+  - Chrome 125
+  - Web APIs
+  - The Compute Pressure API
+  links:
+  - url: https://issues.chromium.org/issues/40683064
+    link_type: other
+    title: 'Tracking bug #40683064'
+  - url: https://chromestatus.com/feature/5597608644968448
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://html.spec.whatwg.org/#dom-element-gethtml
+    link_type: spec
+    title: Spec
+  line_number: 102
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Extending Storage Access API (SAA) to non-cookie storage
+  content: 'This launches the proposed extension of the Storage Access API (backwards compatible and has been in origin trial)
+    to allow access to unpartitioned cookie and non-cookie storage in a third-party context. The current API only provides
+    access to cookies, which have different use-cases than non-cookie storage.
+
+
+    [Tracking bug #40282415](https://issues.chromium.org/issues/40282415) | [ChromeStatus.com entry](https://chromestatus.com/feature/5175585823522816)
+    | [Spec](https://privacycg.github.io/saa-non-cookie-storage)'
+  heading_path:
+  - Chrome 125
+  - Web APIs
+  - Extending Storage Access API (SAA) to non-cookie storage
+  links:
+  - url: https://issues.chromium.org/issues/40282415
+    link_type: other
+    title: 'Tracking bug #40282415'
+  - url: https://chromestatus.com/feature/5175585823522816
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://privacycg.github.io/saa-non-cookie-storage
+    link_type: github
+    title: Spec
+  line_number: 110
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: storage
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: FedCM CORS requirement on ID assertion endpoint
+  content: 'The fetches in the FedCM API are hard to reason about because of the properties required of them. While there
+    is ongoing discussion regarding the accounts endpoint, there is also largely consensus that the ID assertion endpoint
+    should use CORS. This update aligns security properties of this fetch more closely to other fetches in the web platform.
+
+
+    [FedCM updates: Button Mode API origin trial, CORS and SameSite](https://developers.google.com/privacy-sandbox/blog/fedcm-chrome-125-updates#cors-and-samesite)
+    | [Tracking bug #40284123](https://issues.chromium.org/issues/40284123) | [ChromeStatus.com entry](https://chromestatus.com/feature/5094763339710464)'
+  heading_path:
+  - Chrome 125
+  - Web APIs
+  - FedCM CORS requirement on ID assertion endpoint
+  links:
+  - url: https://developers.google.com/privacy-sandbox/blog/fedcm-chrome-125-updates#cors-and-samesite
+    link_type: other
+    title: 'FedCM updates: Button Mode API origin trial, CORS and SameSite'
+  - url: https://issues.chromium.org/issues/40284123
+    link_type: other
+    title: 'Tracking bug #40284123'
+  - url: https://chromestatus.com/feature/5094763339710464
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 116
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - security
+  - privacy
+- title: FedCM credentialed request no longer sends SameSite=Strict cookie
+  content: 'FedCM now sends ID assertion requests with CORS. That change means that Chrome no longer send `SameSite=Strict`
+    cookies to the ID assertion endpoint, though Chrome stills send `SameSite=None`. Since it does not make sense to send
+    a different set of cookies to the accounts endpoint and the ID assertion endpoint, this change makes them consistent.
+
+
+    Not sending `SameSite=Strict` cookies is also consistent with [`requestStorageAccess` behavior](https://developers.google.com/privacy-sandbox/3pcd/related-website-sets-integration#cookie_requirements)
+    and cross-site requests in general.
+
+
+    [Tracking bug #329145816](https://issues.chromium.org/issues/329145816) | [ChromeStatus.com entry](https://chromestatus.com/feature/5092883024838656)
+    | [Spec](https://fedidcg.github.io/FedCM/#fetch-identity-assertion)'
+  heading_path:
+  - Chrome 125
+  - Web APIs
+  - FedCM credentialed request no longer sends SameSite=Strict cookie
+  links:
+  - url: https://developers.google.com/privacy-sandbox/3pcd/related-website-sets-integration#cookie_requirements
+    link_type: other
+    title: '`requestStorageAccess` behavior'
+  - url: https://issues.chromium.org/issues/329145816
+    link_type: other
+    title: 'Tracking bug #329145816'
+  - url: https://chromestatus.com/feature/5092883024838656
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://fedidcg.github.io/FedCM/#fetch-identity-assertion
+    link_type: github
+    title: Spec
+  line_number: 122
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - security
+  - privacy
+- title: Interoperable mousemove default action
+  content: 'Chrome allowed canceling mousemove events to prevent other APIs like text selection (and even drag-and-drop in
+    the past). This does not match other major browsers; nor does it conform to the UI Event spec. Now text selection will
+    no longer be the default action of mousemove. Text selection and drag-and-drop can still be prevented through canceling
+    `selectstart` and `dragstart` events respectively.
+
+
+    This feature will be rolled out slowly starting from Chrome 125, and is expected to be available to all users by Chrome
+    126.
+
+
+    [Demo](https://codepen.io/mustaqahmed/full/wvNYGEP) | [Tracking bug #40078978](https://issues.chromium.org/issues/40078978)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5145305056280576) | [Spec](https://w3c.github.io/uievents/#event-type-mousemove)'
+  heading_path:
+  - Chrome 125
+  - Web APIs
+  - Interoperable mousemove default action
+  links:
+  - url: https://codepen.io/mustaqahmed/full/wvNYGEP
+    link_type: other
+    title: Demo
+  - url: https://issues.chromium.org/issues/40078978
+    link_type: other
+    title: 'Tracking bug #40078978'
+  - url: https://chromestatus.com/feature/5145305056280576
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://w3c.github.io/uievents/#event-type-mousemove
+    link_type: spec
+    title: Spec
+  line_number: 130
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Regular expression modifiers
+  content: "Regular expression modifiers adds the ability to locally modify the `i`, `m`, and `s`' flags inside a pattern.\n\
+    \nTo enable a flag for a subexpression, use `(?X:subexpr)` where `X` is one of `i`, `m`, or `s`. To disable a flag for\
+    \ a subexpression, use `(-X:subexpr)`.\n\nFor example, for the case-insensitivity `i` flag:\n    \n    \n    const re1\
+    \ = /^[a-z](?-i:[a-z])$/i;\n    re1.test(\"ab\"); // true\n    re1.test(\"Ab\"); // true\n    re1.test(\"aB\"); // false\n\
+    \    \n    const re2 = /^(?i:[a-z])[a-z]$/;\n    re2.test(\"ab\"); // true\n    re2.test(\"Ab\"); // true\n    re2.test(\"\
+    aB\"); // false\n    \n\n[ChromeStatus.com entry](https://chromestatus.com/feature/5100254548721664) | [Spec](https://tc39.es/proposal-regexp-modifiers)"
+  heading_path:
+  - Chrome 125
+  - Web APIs
+  - Regular expression modifiers
+  links:
+  - url: https://chromestatus.com/feature/5100254548721664
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://tc39.es/proposal-regexp-modifiers
+    link_type: other
+    title: Spec
+  line_number: 138
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: Regular expression duplicate named capture groups
+  content: "Duplicate named capture groups lets you use the same capturing group name across alternatives. For example\n \
+    \   \n    \n    const re = /(?<year>[0-9]{4})-[0-9]{2}|[0-9]{2}-(?<year>[0-9]{4})/;\n    \n\nIn this case, `year` is valid\
+    \ for either the 1st alternative (`(?<year>[0-9]{4})-[0-9]{2}`), or the 2nd alternative (`[0-9]{2}-(?<year>[0-9]{4})`).\n\
+    \n[ChromeStatus.com entry](https://chromestatus.com/feature/5149208388829184) | [Spec](https://github.com/tc39/ecma262/pull/2721)"
+  heading_path:
+  - Chrome 125
+  - Web APIs
+  - Regular expression duplicate named capture groups
+  links:
+  - url: https://chromestatus.com/feature/5149208388829184
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/tc39/ecma262/pull/2721
+    link_type: github
+    title: Spec
+  line_number: 160
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []

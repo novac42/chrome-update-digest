@@ -160,6 +160,177 @@ Due to padding, each Protected Audience report will have a larger payload, even 
 
 [Tracking bug #360160864](https://issues.chromium.org/issues/360160864) | [ChromeStatus.com entry](https://chromestatus.com/feature/5114676393017344)
 
+## WebGPU
+
+  * [ Blog ](https://developer.chrome.com/blog)
+
+#  What's New in WebGPU (Chrome 131)
+
+Stay organized with collections  Save and categorize content based on your preferences. 
+
+![François Beaufort](https://web.dev/images/authors/beaufortfrancois.jpg)
+
+François Beaufort 
+
+[ GitHub ](https://github.com/beaufortfrancois)
+
+### Clip distances in WGSL
+
+Clip distances allow you to restrict [primitives' clip volume](https://gpuweb.github.io/gpuweb/#clip-volume) with user-defined half-spaces in the output of vertex stage. Defining your own clipping planes gives greater control over what's visible in your WebGPU scenes. This technique is particularly useful for applications like CAD software, where precise control over visualization is crucial.
+
+When the `"clip-distances"` feature is available in a GPUAdapter, request a GPUDevice with this feature to get clip distances support in WGSL, and explicitly enable this extension in your WGSL code with `enable clip_distances;`. Once enabled, you can use the `clip_distances` built-in array in your vertex shader. This array holds distances to a user-defined clip plane:
+
+  * A clip distance of 0 means the vertex lies on the plane.
+  * A positive distance means the vertex is inside the clip half-space (the side you want to keep).
+  * A negative distance means the vertex is outside the clip half-space (the side you want to discard).
+
+See the following snippet, the [chromestatus entry](https://chromestatus.com/feature/5141929256550400), and [issue 358408571](https://issues.chromium.org/issues/358408571).
+    
+    
+    const adapter = await navigator.gpu.requestAdapter();
+    if (!adapter.features.has("clip-distances")) {
+      throw new Error("Clip distances support is not available");
+    }
+    // Explicitly request clip distances support.
+    const device = await adapter.requestDevice({
+      requiredFeatures: ["clip-distances"],
+    });
+    
+    const vertexShaderModule = device.createShaderModule({ code: `
+      enable clip_distances;
+    
+      struct VertexOut {
+        @builtin(clip_distances) my_clip_distances : array<f32, 1>,
+        @builtin(position) my_position : vec4f,
+      }
+      @vertex fn main() -> VertexOut {
+        var output : VertexOut;
+        output.my_clip_distances[0] = 1;
+        output.my_position = vec4f(0, 0, 0, 1);
+        return output;
+      }
+    `,
+    });
+    
+    // Send the appropriate commands to the GPU...
+    
+
+### GPUCanvasContext getConfiguration()
+
+Once GPUCanvasContext `configure()` has been called with a configuration dictionary, the GPUCanvasContext [`getConfiguration()`](https://gpuweb.github.io/gpuweb/#dom-gpucanvascontext-getconfiguration) method lets you check the canvas context configuration. It includes `device`, `format`, `usage`, `viewFormats`, `colorSpace`, `toneMapping`, and `alphaMode` members. This is useful for tasks like checking if the browser supports HDR canvas, as shown in the [Particles (HDR) sample](https://webgpu.github.io/webgpu-samples/?sample=particles). See the following snippet, the [chromestatus entry](https://chromestatus.com/feature/6195110870777856), and [issue 370109829](https://issues.chromium.org/issues/370109829).
+    
+    
+    const adapter = await navigator.gpu.requestAdapter();
+    const device = await adapter.requestDevice();
+    
+    const canvas = document.querySelector("canvas");
+    const context = canvas.getContext("webgpu");
+    
+    // Configure the canvas for HDR.
+    context.configure({
+      device,
+      format: "rgba16float",
+      toneMapping: { mode: "extended" },
+    });
+    
+    const configuration = context.getConfiguration();
+    if (configuration.toneMapping.mode === "extended") {
+      // The browser supports HDR canvas.
+      // Warning! The user still needs a HDR display to enjoy HDR content.
+    }
+    
+
+### Point and line primitives must not have depth bias
+
+As announced [previously](/blog/new-in-webgpu-128#deprecate_setting_depth_bias_for_lines_and_points), the WebGPU spec now makes it a validation error to set `depthBias`, `depthBiasSlopeScale`, and `depthBiasClamp` to a non-zero value when the topology for a render pipeline is a line or point type. See [issue 352567424](https://issues.chromium.org/issues/352567424).
+
+### Inclusive scan built-in functions for subgroups
+
+As part of the [subgroups experimentation](/blog/new-in-webgpu-128#experimenting_with_subgroups), the following subgroup built-in functions have been added in [issue 361330160](https://g-issues.chromium.org/issues/361330160):
+
+  * `subgroupInclusiveAdd(value)`: Returns the inclusive scan summation of all active invocations `value`s across the subgroup.
+  * `subgroupInclusiveMul(value)`: Returns the inclusive scan multiplication of all active invocations `value`s across the subgroup.
+
+### Experimental support for multi-draw indirect
+
+The multi-draw indirect GPU feature lets you issue multiple draw calls with a single GPU command. This is particularly useful in situations where a large number of objects need to be rendered, such as particle systems, instancing, and large scenes. The `drawIndirect()` and `drawIndexedIndirect()` GPURenderPassEncoder methods can only issue a single draw call at a time from a certain region of a GPU buffer.
+
+Until this experimental feature is [standardized](https://github.com/gpuweb/gpuweb/pull/2315), enable the "Unsafe WebGPU Support" flag at `chrome://flags/#enable-unsafe-webgpu` to make it available in Chrome.
+
+With the `"chromium-experimental-multi-draw-indirect"` non-standard GPU feature available in a GPUAdapter, request a GPUDevice with this feature. Then create a GPUBuffer with the `GPUBufferUsage.INDIRECT` usage to store the draw calls. You can use it later in the new `multiDrawIndirect()` and `multiDrawIndexedIndirect()` GPURenderPassEncoder methods to issue draw calls inside a render pass. See the following snippet and [issue 356461286](https://issues.chromium.org/issues/356461286).
+    
+    
+    const adapter = await navigator.gpu.requestAdapter();
+    if (!adapter.features.has("chromium-experimental-multi-draw-indirect")) {
+      throw new Error("Experimental multi-draw indirect support is not available");
+    }
+    // Explicitly request experimental multi-draw indirect support.
+    const device = await adapter.requestDevice({
+      requiredFeatures: ["chromium-experimental-multi-draw-indirect"],
+    });
+    
+    // Draw call have vertexCount, instanceCount, firstVertex, and firstInstance parameters.
+    const drawData = new Uint32Array([
+      3, 1, 0, 0, // First draw call
+      3, 1, 3, 0, // Second draw call
+    ]);
+    // Create a buffer to store the draw calls.
+    const drawBuffer = device.createBuffer({
+      size: drawData.byteLength,
+      usage: GPUBufferUsage.INDIRECT | GPUBufferUsage.COPY_DST,
+    });
+    device.queue.writeBuffer(drawBuffer, 0, drawData);
+    
+    // Create a render pipeline, a vertex buffer, and a render pass encoder...
+    
+    // Inside a render pass, issue the draw calls.
+    myPassEncoder.setPipeline(myPipeline);
+    myPassEncoder.setVertexBuffer(0, myVertexBuffer);
+    myPassEncoder.multiDrawIndirect(drawBuffer, /*offset=*/ 0, /*maxDrawCount=*/ 2);
+    myPassEncoder.end();
+    
+
+### Shader module compilation option strict math
+
+A boolean `strictMath` developer option has been added to GPUShaderModuleDescriptor to let you enable or disable strict math during shader module compilation. It is available behind the "WebGPU Developer Features" flag at `chrome://flags/#enable-webgpu-developer-features`, which means it is a feature intended only for use during development. See [issue 42241455](https://issues.chromium.org/issues/42241455).
+
+This option is currently supported on Metal and Direct3D. When strict math is disabled, the compiler may optimize your shaders by:
+
+  * Ignoring the possibility of NaN and Infinity values.
+  * Treating -0 as +0.
+  * Replacing division with faster multiplication by the reciprocal.
+  * Rearranging operations based on associative and distributive properties.
+
+    
+    
+    const adapter = await navigator.gpu.requestAdapter();
+    const device = await adapter.requestDevice();
+    
+    const code = `
+      // Examines the bit pattern of the floating-point number to
+      // determine if it represents a NaN according to the IEEE 754 standard.
+      fn isNan(x : f32) -> bool {
+        bool ones_exp = (bitcast<u32>(x) & 0x7f8) == 0x7f8;
+        bool non_zero_sig = (bitcast<u32>(x) & 0x7ffff) != 0;
+        return ones_exp && non_zero_sig;
+      }
+      // ...
+    `;
+    
+    // Enable strict math during shader compilation.
+    const shaderModule = device.createShaderModule({ code, strictMath: true });
+    
+
+### Remove GPUAdapter requestAdapterInfo()
+
+The GPUAdapter `requestAdapterInfo()` asynchronous method is redundant as you can already get GPUAdapterInfo synchronously using the GPUAdapter `info` attribute. Hence, the non-standard GPUAdapter `requestAdapterInfo()` method is now removed. See the [intent to remove](https://groups.google.com/a/chromium.org/g/blink-dev/c/HxOgGf4NzQ4).
+
+### Dawn updates
+
+The `tint_benchmark` executable measures the cost of translating shaders from WGSL to each backend language. Check out the new [documentation](https://dawn.googlesource.com/dawn/+/main/docs/tint/benchmark.md) to learn more about it.
+
+This covers only some of the key highlights. Check out the exhaustive [list of commits](https://dawn.googlesource.com/dawn/+log/chromium/6723..chromium/6778?n=1000).
+
 ## Origin trials
 
 ### Playout Statistics API for WebAudio

@@ -1,0 +1,299 @@
+version: '128'
+channel: stable
+area: graphics-webgpu
+extraction_timestamp: '2025-08-17T21:27:00.751091'
+extraction_method: deterministic
+statistics:
+  total_features: 9
+  total_links: 22
+  primary_tags:
+    webgpu: 9
+    css: 1
+  cross_cutting:
+    webgpu: 6
+    privacy: 1
+features:
+- title: Experimenting with subgroups
+  content: "The subgroups feature enables SIMD-level parallelism, allowing threads within a group to communicate and perform\
+    \ collective math operations (for example, calculating the sum of 16 numbers). This provides a highly efficient form of\
+    \ cross-thread data sharing.\n\nA minimal implementation of the [subgroups proposal](https://github.com/gpuweb/gpuweb/blob/main/proposals/subgroups.md)\
+    \ is available for local testing behind the \"Unsafe WebGPU Support\" flag at `chrome://flags/#enable-unsafe-webgpu`.\n\
+    \nYou can also try subgroups on your site with real users by [signing up for the origin trial](/origintrials#/view_trial/4130363808252166145).\
+    \ Read [Get started with origin trials](/docs/web-platform/origin-trials) for instructions on how to prepare your site\
+    \ to use origin trials. The origin trial will run from Chrome 128 to 131 (ending February 19, 2025). See [Intent to Experiment](https://groups.google.com/a/chromium.org/g/blink-dev/c/9SPlKwQRxxc/).\n\
+    \nWhen the `\"subgroups\"` feature is available in a `GPUAdapter`, request a `GPUDevice` with this feature to get subgroups\
+    \ support in WGSL and check its `minSubgroupSize` and `maxSubgroupSize` limits.\n\nYou also need to explicitly enable\
+    \ this extension in your WGSL code with `enable subgroups;`. When enabled, you get access to the following additions:\n\
+    \n  * `subgroup_invocation_id`: A built-in value for the index of the thread within the subgroup.\n  * `subgroup_size`:\
+    \ A built-in value for subgroup size access.\n  * `subgroupBallot(value)`: Returns a set of bit fields where the bit corresponding\
+    \ to `subgroup_invocation_id` is 1 if `value` is true for that active invocation and 0 otherwise.\n  * `subgroupBroadcast(value,\
+    \ id)`: Broadcasts the `value` from the invocation with `subgroup_invocation_id` matching `id` to all invocations within\
+    \ the subgroup. Note: `id` must be a compile-time constant.\n\nMore built-in functions such as `subgroupAdd`, `subgroupAll`,\
+    \ `subgroupElect`, `subgroupShuffle` will be added in the future. See [issue 354738715](https://issues.chromium.org/issues/354738715).\n\
+    \nTo allow f16 in subgroups operations, request a `GPUDevice` with the `\"subgroups\"`, `\"subgroups-f16\"`, and `\"shader-f16\"\
+    ` features, then enable it in your WGSL code with `enable f16, subgroups, subgroups_f16;`.\n\nThe following code snippet\
+    \ provides a base to tinker with and discover the potential of subgroups.\n    \n    \n    const adapter = await navigator.gpu.requestAdapter();\n\
+    \    if (!adapter.features.has(\"subgroups\")) {\n      throw new Error(\"Subgroups support is not available\");\n   \
+    \ }\n    // Explicitly request subgroups support.\n    const device = await adapter.requestDevice({\n      requiredFeatures:\
+    \ [\"subgroups\"],\n    });\n    \n    const shaderModule = device.createShaderModule({ code: `\n      enable subgroups;\n\
+    \    \n      var<workgroup> wgmem : u32;\n    \n      @group(0) @binding(0)\n      var<storage, read> inputs : array<u32>;\n\
+    \    \n      @group(0) @binding(1)\n      var<storage, read_write> output : array<u32>;\n    \n      @compute @workgroup_size(64)\n\
+    \      fn main(@builtin(subgroup_size) subgroupSize : u32,\n              @builtin(subgroup_invocation_id) id : u32,\n\
+    \              @builtin(local_invocation_index) lid : u32) {\n        // One thread per workgroup writes the value to\
+    \ workgroup memory.\n        if (lid == 0) {\n          wgmem = inputs[lid];\n        }\n        workgroupBarrier();\n\
+    \        var v = 0u;\n    \n        // One thread per subgroup reads the value from workgroup memory\n        // and shares\
+    \ that value with every other thread in the subgroup\n        // to reduce local memory bandwidth.\n        if (id ==\
+    \ 0) {\n          v = wgmem;\n        }\n        v = subgroupBroadcast(v, 0);\n        output[lid] = v;\n      }`,\n \
+    \   });\n    \n    // Send the appropriate commands to the GPU..."
+  heading_path:
+  - What's New in WebGPU (Chrome 128)
+  - Experimenting with subgroups
+  links:
+  - url: https://github.com/gpuweb/gpuweb/blob/main/proposals/subgroups.md
+    link_type: github
+    title: subgroups proposal
+  - url: https://groups.google.com/a/chromium.org/g/blink-dev/c/9SPlKwQRxxc/
+    link_type: other
+    title: Intent to Experiment
+  - url: https://issues.chromium.org/issues/354738715
+    link_type: other
+    title: issue 354738715
+  line_number: 148
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Deprecate setting depth bias for lines and points
+  content: A [WebGPU spec change](https://github.com/gpuweb/gpuweb/pull/4743) makes it a validation error to set `depthBias`,
+    `depthBiasSlopeScale`, and `depthBiasClamp` to a non-zero value when the topology for a render pipeline is a line or point
+    type. To give developers enough time to update their code, a warning in the DevTools Console is shown about this upcoming
+    validation while also forcing the values to 0 in these circumstances. See [issue 352567424](https://issues.chromium.org/issues/352567424).
+  heading_path:
+  - What's New in WebGPU (Chrome 128)
+  - Deprecate setting depth bias for lines and points
+  links:
+  - url: https://github.com/gpuweb/gpuweb/pull/4743
+    link_type: github
+    title: WebGPU spec change
+  - url: https://issues.chromium.org/issues/352567424
+    link_type: other
+    title: issue 352567424
+  line_number: 217
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Hide uncaptured error DevTools warning if preventDefault
+  content: "In the DevTools Console, warnings for [`uncapturederror` events](https://gpuweb.github.io/gpuweb/#eventdef-gpudevice-uncapturederror)\
+    \ are no longer displayed if an event listener for `uncapturederror` has been registered and the Event [`preventDefault()`](https://developer.mozilla.org/docs/Web/API/Event/preventDefault)\
+    \ method has been called within the event listener callback. This behaviour matches event handling in JavaScript. See\
+    \ the following example and [issue 40263619](https://issues.chromium.org/issues/40263619).\n    \n    \n    const adapter\
+    \ = await navigator.gpu.requestAdapter();\n    const device = await adapter.requestDevice();\n    \n    device.addEventListener(\"\
+    uncapturederror\", (event) => {\n      // Prevents browser warning to show up in the DevTools Console.\n      event.preventDefault();\n\
+    \    \n      // TODO: Handle event.error\n    });"
+  heading_path:
+  - What's New in WebGPU (Chrome 128)
+  - Hide uncaptured error DevTools warning if preventDefault
+  links:
+  - url: https://gpuweb.github.io/gpuweb/#eventdef-gpudevice-uncapturederror
+    link_type: github
+    title: '`uncapturederror` events'
+  - url: https://developer.mozilla.org/docs/Web/API/Event/preventDefault
+    link_type: mdn
+    title: '`preventDefault()`'
+  - url: https://issues.chromium.org/issues/40263619
+    link_type: other
+    title: issue 40263619
+  line_number: 221
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: WGSL interpolate sampling first and either
+  content: 'WGSL `interpolate` attribute lets you manage user-defined IO data interpolation. Now, new interpolate sampling
+    parameters `first` (default) and `either` give you additional control: `first` uses the value from the primitive''s first
+    vertex, while `either` allows either the first or last vertex. See [issue 340278447](https://issues.chromium.org/issues/340278447).'
+  heading_path:
+  - What's New in WebGPU (Chrome 128)
+  - WGSL interpolate sampling first and either
+  links:
+  - url: https://issues.chromium.org/issues/340278447
+    link_type: other
+    title: issue 340278447
+  line_number: 237
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Dawn updates
+  content: 'The implementation of Dawn''s WGPUFuture to handle asynchronous operations is now complete. Key concepts include
+    [wgpuInstanceProcessEvents](https://webgpu-native.github.io/webgpu-headers/Asynchronous-Operations.html#Process-Events)
+    for opportunistic event processing and [WGPUCallbackMode](https://webgpu-native.github.io/webgpu-headers/group__Enumerations.html#gaf6f2496c9c727391ba83e928a8d4e63e)
+    for defining callback locations. WGPUFuture signifies one-time events with an infinite lifetime, and [wgpuInstanceWaitAny](https://webgpu-native.github.io/webgpu-headers/Asynchronous-Operations.html#Wait-Any)
+    awaits completion of any future or a timeout. See [issue 42240932](https://issues.chromium.org/issues/42240932).
+
+
+    The `CompositeAlphaMode::Auto` value is now not reported by `Surface::GetCapabilities()`. It''s still valid, and equivalent
+    to `Surface::GetCapabilities().alphaMode[0]`. See [issue 292](https://github.com/webgpu-native/webgpu-headers/issues/292).
+
+
+    The OpenGL backend now supports `Surface` with a y-flip blit for each `Present()` call. See [issue 344814083](https://issues.chromium.org/issues/344814083).
+
+
+    The `Adapter::GetProperties()` method is deprecated in favor of using `Adapter::GetInfo()`.
+
+
+    Jaswant, an external contributor, has rewritten all the CMake files, making them easier to update and allowing for pre-builds.
+    Check out the [quickstart guide](https://dawn.googlesource.com/dawn/+/main/docs/quickstart-cmake.md) for using Dawn in
+    CMake projects.
+
+
+    This covers only some of the key highlights. Check out the exhaustive [list of commits](https://dawn.googlesource.com/dawn/+log/chromium/6533..chromium/6613?n=1000).'
+  heading_path:
+  - What's New in WebGPU (Chrome 128)
+  - Dawn updates
+  links:
+  - url: https://webgpu-native.github.io/webgpu-headers/Asynchronous-Operations.html#Process-Events
+    link_type: github
+    title: wgpuInstanceProcessEvents
+  - url: https://webgpu-native.github.io/webgpu-headers/group__Enumerations.html#gaf6f2496c9c727391ba83e928a8d4e63e
+    link_type: github
+    title: WGPUCallbackMode
+  - url: https://webgpu-native.github.io/webgpu-headers/Asynchronous-Operations.html#Wait-Any
+    link_type: github
+    title: wgpuInstanceWaitAny
+  - url: https://issues.chromium.org/issues/42240932
+    link_type: other
+    title: issue 42240932
+  - url: https://github.com/webgpu-native/webgpu-headers/issues/292
+    link_type: github
+    title: issue 292
+  - url: https://issues.chromium.org/issues/344814083
+    link_type: other
+    title: issue 344814083
+  - url: https://dawn.googlesource.com/dawn/+/main/docs/quickstart-cmake.md
+    link_type: other
+    title: quickstart guide
+  - url: https://dawn.googlesource.com/dawn/+log/chromium/6533..chromium/6613?n=1000
+    link_type: other
+    title: list of commits
+  line_number: 241
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Digital Credentials API
+  content: 'Websites can request credentials from mobile wallet apps through a variety of mechanisms today, for example custom
+    URL handlers and QR code scanning. This feature lets sites request identity information from digital credentials inside
+    wallets using Android''s IdentityCredential CredMan system. It''s extensible to support multiple credential formats (for
+    example, ISO mDoc and W3C verifiable credential) and allows multiple wallet apps to be used. The API also includes mechanisms
+    to reduce the risk of ecosystem-scale abuse of sensitive identity information.
+
+
+    [Origin Trial](/origintrials#/view_trial/3139571890230657025) | [Tracking bug #40257092](https://issues.chromium.org/issues/40257092)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5166035265650688) | [Spec](https://wicg.github.io/digital-credentials)'
+  heading_path:
+  - What's New in WebGPU (Chrome 128)
+  - New origin trials
+  - Digital Credentials API
+  links:
+  - url: https://issues.chromium.org/issues/40257092
+    link_type: other
+    title: 'Tracking bug #40257092'
+  - url: https://chromestatus.com/feature/5166035265650688
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/digital-credentials
+    link_type: spec
+    title: Spec
+  line_number: 257
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: FedCM multiple identity providers in single `get()` call
+  content: 'Allows FedCM to show multiple identity providers in the same dialog. This gives developers a convenient way to
+    present all supported identity providers to users. We are planning to first tackle the case of having all providers in
+    the same `get()` call.
+
+
+    [Origin Trial](/origintrials#/view_trial/1280578044871901185) | [ChromeStatus.com entry](https://chromestatus.com/feature/5067784766095360)'
+  heading_path:
+  - What's New in WebGPU (Chrome 128)
+  - New origin trials
+  - FedCM multiple identity providers in single `get()` call
+  links:
+  - url: https://chromestatus.com/feature/5067784766095360
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 263
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: Disable standardized CSS zoom
+  content: 'The implementation of the previously non-standard CSS `zoom` property has been updated to align with the new standard.
+    This changes various JavaScript APIs to align with the specification, changes `zoom` to apply to iframe content documents,
+    and changes it to apply to all inherited length properties where previously it only changed the inherited `font-size`.
+
+
+    This trial lets you opt back into the previous behavior to have more time to adjust your code.
+
+
+    [Origin Trial](/origintrials#/view_trial/3499859860420296705)'
+  heading_path:
+  - What's New in WebGPU (Chrome 128)
+  - New origin trials
+  - Disable standardized CSS zoom
+  links: []
+  line_number: 269
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: WebGPU Subgroups experimentation
+  content: "Adds subgroup functionality to WebGPU. Subgroup operations perform SIMT operations to provide efficient communication\
+    \ and data sharing among groups of invocations. These operations can be used to accelerate applications by reducing memory\
+    \ overheads incurred by inter-invocation communication. \n\n[ChromeStatus.com entry](https://chromestatus.com/feature/5126409856221184)"
+  heading_path:
+  - What's New in WebGPU (Chrome 128)
+  - New origin trials
+  - WebGPU Subgroups experimentation
+  links:
+  - url: https://chromestatus.com/feature/5126409856221184
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 277
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu

@@ -1,0 +1,509 @@
+version: '131'
+channel: stable
+area: graphics-webgpu
+extraction_timestamp: '2025-08-17T21:27:01.035657'
+extraction_method: deterministic
+statistics:
+  total_features: 17
+  total_links: 34
+  primary_tags:
+    webgpu: 17
+    serviceworker: 1
+    deprecation: 3
+    css: 1
+  cross_cutting:
+    webgpu: 11
+    privacy: 5
+    ai: 2
+    enterprise: 1
+    security: 1
+features:
+- title: WebGPU clip distances
+  content: 'Adds the optional GPU feature `clip-distances` that allows setting user-defined clip distances in vertex shader
+    outputs. This technique is particularly useful for the applications that need to clip all vertices in a scene that are
+    beyond a user-defined plane, such as many CAD applications.
+
+
+    [Tracking bug #358408571](https://issues.chromium.org/issues/358408571) | [ChromeStatus.com entry](https://chromestatus.com/feature/5141929256550400)
+    | [Spec](https://gpuweb.github.io/gpuweb/#dom-gpufeaturename-clip-distances)'
+  heading_path:
+  - Chrome 131
+  - Rendering and graphics
+  - WebGPU clip distances
+  links:
+  - url: https://issues.chromium.org/issues/358408571
+    link_type: other
+    title: 'Tracking bug #358408571'
+  - url: https://chromestatus.com/feature/5141929256550400
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://gpuweb.github.io/gpuweb/#dom-gpufeaturename-clip-distances
+    link_type: github
+    title: Spec
+  line_number: 133
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+  - privacy
+- title: 'WebGPU: GPUCanvasContext `getConfiguration()`'
+  content: 'Once `GPUCanvasContext configure()` has been called with a configuration dictionary, you can use the `GPUCanvasContext
+    getConfiguration()` method to check the canvas context configuration. It includes GPU `device`, `format`, `usage`, `viewFormats`,
+    `colorSpace`, `toneMapping`, and `alphaMode` members. [As discussed in issue 4828](https://github.com/gpuweb/gpuweb/issues/4828),
+    web apps can use it to detect whether HDR canvas is supported in WebGPU.
+
+
+    [Tracking bug #370109829](https://issues.chromium.org/issues/370109829) | [ChromeStatus.com entry](https://chromestatus.com/feature/6195110870777856)
+    | [Spec](https://gpuweb.github.io/gpuweb/#dom-gpucanvascontext-getconfiguration)'
+  heading_path:
+  - Chrome 131
+  - Rendering and graphics
+  - 'WebGPU: GPUCanvasContext `getConfiguration()`'
+  links:
+  - url: https://github.com/gpuweb/gpuweb/issues/4828
+    link_type: github
+    title: As discussed in issue 4828
+  - url: https://issues.chromium.org/issues/370109829
+    link_type: other
+    title: 'Tracking bug #370109829'
+  - url: https://chromestatus.com/feature/6195110870777856
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://gpuweb.github.io/gpuweb/#dom-gpucanvascontext-getconfiguration
+    link_type: github
+    title: Spec
+  line_number: 139
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+  - privacy
+- title: Clip distances in WGSL
+  content: "Clip distances allow you to restrict [primitives' clip volume](https://gpuweb.github.io/gpuweb/#clip-volume) with\
+    \ user-defined half-spaces in the output of vertex stage. Defining your own clipping planes gives greater control over\
+    \ what's visible in your WebGPU scenes. This technique is particularly useful for applications like CAD software, where\
+    \ precise control over visualization is crucial.\n\nWhen the `\"clip-distances\"` feature is available in a GPUAdapter,\
+    \ request a GPUDevice with this feature to get clip distances support in WGSL, and explicitly enable this extension in\
+    \ your WGSL code with `enable clip_distances;`. Once enabled, you can use the `clip_distances` built-in array in your\
+    \ vertex shader. This array holds distances to a user-defined clip plane:\n\n  * A clip distance of 0 means the vertex\
+    \ lies on the plane.\n  * A positive distance means the vertex is inside the clip half-space (the side you want to keep).\n\
+    \  * A negative distance means the vertex is outside the clip half-space (the side you want to discard).\n\nSee the following\
+    \ snippet, the [chromestatus entry](https://chromestatus.com/feature/5141929256550400), and [issue 358408571](https://issues.chromium.org/issues/358408571).\n\
+    \    \n    \n    const adapter = await navigator.gpu.requestAdapter();\n    if (!adapter.features.has(\"clip-distances\"\
+    )) {\n      throw new Error(\"Clip distances support is not available\");\n    }\n    // Explicitly request clip distances\
+    \ support.\n    const device = await adapter.requestDevice({\n      requiredFeatures: [\"clip-distances\"],\n    });\n\
+    \    \n    const vertexShaderModule = device.createShaderModule({ code: `\n      enable clip_distances;\n    \n      struct\
+    \ VertexOut {\n        @builtin(clip_distances) my_clip_distances : array<f32, 1>,\n        @builtin(position) my_position\
+    \ : vec4f,\n      }\n      @vertex fn main() -> VertexOut {\n        var output : VertexOut;\n        output.my_clip_distances[0]\
+    \ = 1;\n        output.my_position = vec4f(0, 0, 0, 1);\n        return output;\n      }\n    `,\n    });\n    \n    //\
+    \ Send the appropriate commands to the GPU..."
+  heading_path:
+  - What's New in WebGPU (Chrome 131)
+  - Clip distances in WGSL
+  links:
+  - url: https://gpuweb.github.io/gpuweb/#clip-volume
+    link_type: github
+    title: primitives' clip volume
+  - url: https://chromestatus.com/feature/5141929256550400
+    link_type: chromestatus
+    title: chromestatus entry
+  - url: https://issues.chromium.org/issues/358408571
+    link_type: other
+    title: issue 358408571
+  line_number: 177
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: GPUCanvasContext getConfiguration()
+  content: "Once GPUCanvasContext `configure()` has been called with a configuration dictionary, the GPUCanvasContext [`getConfiguration()`](https://gpuweb.github.io/gpuweb/#dom-gpucanvascontext-getconfiguration)\
+    \ method lets you check the canvas context configuration. It includes `device`, `format`, `usage`, `viewFormats`, `colorSpace`,\
+    \ `toneMapping`, and `alphaMode` members. This is useful for tasks like checking if the browser supports HDR canvas, as\
+    \ shown in the [Particles (HDR) sample](https://webgpu.github.io/webgpu-samples/?sample=particles). See the following\
+    \ snippet, the [chromestatus entry](https://chromestatus.com/feature/6195110870777856), and [issue 370109829](https://issues.chromium.org/issues/370109829).\n\
+    \    \n    \n    const adapter = await navigator.gpu.requestAdapter();\n    const device = await adapter.requestDevice();\n\
+    \    \n    const canvas = document.querySelector(\"canvas\");\n    const context = canvas.getContext(\"webgpu\");\n  \
+    \  \n    // Configure the canvas for HDR.\n    context.configure({\n      device,\n      format: \"rgba16float\",\n  \
+    \    toneMapping: { mode: \"extended\" },\n    });\n    \n    const configuration = context.getConfiguration();\n    if\
+    \ (configuration.toneMapping.mode === \"extended\") {\n      // The browser supports HDR canvas.\n      // Warning! The\
+    \ user still needs a HDR display to enjoy HDR content.\n    }"
+  heading_path:
+  - What's New in WebGPU (Chrome 131)
+  - GPUCanvasContext getConfiguration()
+  links:
+  - url: https://gpuweb.github.io/gpuweb/#dom-gpucanvascontext-getconfiguration
+    link_type: github
+    title: '`getConfiguration()`'
+  - url: https://webgpu.github.io/webgpu-samples/?sample=particles
+    link_type: github
+    title: Particles (HDR) sample
+  - url: https://chromestatus.com/feature/6195110870777856
+    link_type: chromestatus
+    title: chromestatus entry
+  - url: https://issues.chromium.org/issues/370109829
+    link_type: other
+    title: issue 370109829
+  line_number: 218
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Point and line primitives must not have depth bias
+  content: As announced [previously](/blog/new-in-webgpu-128#deprecate_setting_depth_bias_for_lines_and_points), the WebGPU
+    spec now makes it a validation error to set `depthBias`, `depthBiasSlopeScale`, and `depthBiasClamp` to a non-zero value
+    when the topology for a render pipeline is a line or point type. See [issue 352567424](https://issues.chromium.org/issues/352567424).
+  heading_path:
+  - What's New in WebGPU (Chrome 131)
+  - Point and line primitives must not have depth bias
+  links:
+  - url: https://issues.chromium.org/issues/352567424
+    link_type: other
+    title: issue 352567424
+  line_number: 243
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Inclusive scan built-in functions for subgroups
+  content: "As part of the [subgroups experimentation](/blog/new-in-webgpu-128#experimenting_with_subgroups), the following\
+    \ subgroup built-in functions have been added in [issue 361330160](https://g-issues.chromium.org/issues/361330160):\n\n\
+    \  * `subgroupInclusiveAdd(value)`: Returns the inclusive scan summation of all active invocations `value`s across the\
+    \ subgroup.\n  * `subgroupInclusiveMul(value)`: Returns the inclusive scan multiplication of all active invocations `value`s\
+    \ across the subgroup."
+  heading_path:
+  - What's New in WebGPU (Chrome 131)
+  - Inclusive scan built-in functions for subgroups
+  links:
+  - url: https://g-issues.chromium.org/issues/361330160
+    link_type: other
+    title: issue 361330160
+  line_number: 247
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Experimental support for multi-draw indirect
+  content: "The multi-draw indirect GPU feature lets you issue multiple draw calls with a single GPU command. This is particularly\
+    \ useful in situations where a large number of objects need to be rendered, such as particle systems, instancing, and\
+    \ large scenes. The `drawIndirect()` and `drawIndexedIndirect()` GPURenderPassEncoder methods can only issue a single\
+    \ draw call at a time from a certain region of a GPU buffer.\n\nUntil this experimental feature is [standardized](https://github.com/gpuweb/gpuweb/pull/2315),\
+    \ enable the \"Unsafe WebGPU Support\" flag at `chrome://flags/#enable-unsafe-webgpu` to make it available in Chrome.\n\
+    \nWith the `\"chromium-experimental-multi-draw-indirect\"` non-standard GPU feature available in a GPUAdapter, request\
+    \ a GPUDevice with this feature. Then create a GPUBuffer with the `GPUBufferUsage.INDIRECT` usage to store the draw calls.\
+    \ You can use it later in the new `multiDrawIndirect()` and `multiDrawIndexedIndirect()` GPURenderPassEncoder methods\
+    \ to issue draw calls inside a render pass. See the following snippet and [issue 356461286](https://issues.chromium.org/issues/356461286).\n\
+    \    \n    \n    const adapter = await navigator.gpu.requestAdapter();\n    if (!adapter.features.has(\"chromium-experimental-multi-draw-indirect\"\
+    )) {\n      throw new Error(\"Experimental multi-draw indirect support is not available\");\n    }\n    // Explicitly\
+    \ request experimental multi-draw indirect support.\n    const device = await adapter.requestDevice({\n      requiredFeatures:\
+    \ [\"chromium-experimental-multi-draw-indirect\"],\n    });\n    \n    // Draw call have vertexCount, instanceCount, firstVertex,\
+    \ and firstInstance parameters.\n    const drawData = new Uint32Array([\n      3, 1, 0, 0, // First draw call\n      3,\
+    \ 1, 3, 0, // Second draw call\n    ]);\n    // Create a buffer to store the draw calls.\n    const drawBuffer = device.createBuffer({\n\
+    \      size: drawData.byteLength,\n      usage: GPUBufferUsage.INDIRECT | GPUBufferUsage.COPY_DST,\n    });\n    device.queue.writeBuffer(drawBuffer,\
+    \ 0, drawData);\n    \n    // Create a render pipeline, a vertex buffer, and a render pass encoder...\n    \n    // Inside\
+    \ a render pass, issue the draw calls.\n    myPassEncoder.setPipeline(myPipeline);\n    myPassEncoder.setVertexBuffer(0,\
+    \ myVertexBuffer);\n    myPassEncoder.multiDrawIndirect(drawBuffer, /*offset=*/ 0, /*maxDrawCount=*/ 2);\n    myPassEncoder.end();"
+  heading_path:
+  - What's New in WebGPU (Chrome 131)
+  - Experimental support for multi-draw indirect
+  links:
+  - url: https://github.com/gpuweb/gpuweb/pull/2315
+    link_type: github
+    title: standardized
+  - url: https://issues.chromium.org/issues/356461286
+    link_type: other
+    title: issue 356461286
+  line_number: 254
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Shader module compilation option strict math
+  content: "A boolean `strictMath` developer option has been added to GPUShaderModuleDescriptor to let you enable or disable\
+    \ strict math during shader module compilation. It is available behind the \"WebGPU Developer Features\" flag at `chrome://flags/#enable-webgpu-developer-features`,\
+    \ which means it is a feature intended only for use during development. See [issue 42241455](https://issues.chromium.org/issues/42241455).\n\
+    \nThis option is currently supported on Metal and Direct3D. When strict math is disabled, the compiler may optimize your\
+    \ shaders by:\n\n  * Ignoring the possibility of NaN and Infinity values.\n  * Treating -0 as +0.\n  * Replacing division\
+    \ with faster multiplication by the reciprocal.\n  * Rearranging operations based on associative and distributive properties.\n\
+    \n    \n    \n    const adapter = await navigator.gpu.requestAdapter();\n    const device = await adapter.requestDevice();\n\
+    \    \n    const code = `\n      // Examines the bit pattern of the floating-point number to\n      // determine if it\
+    \ represents a NaN according to the IEEE 754 standard.\n      fn isNan(x : f32) -> bool {\n        bool ones_exp = (bitcast<u32>(x)\
+    \ & 0x7f8) == 0x7f8;\n        bool non_zero_sig = (bitcast<u32>(x) & 0x7ffff) != 0;\n        return ones_exp && non_zero_sig;\n\
+    \      }\n      // ...\n    `;\n    \n    // Enable strict math during shader compilation.\n    const shaderModule = device.createShaderModule({\
+    \ code, strictMath: true });"
+  heading_path:
+  - What's New in WebGPU (Chrome 131)
+  - Shader module compilation option strict math
+  links:
+  - url: https://issues.chromium.org/issues/42241455
+    link_type: other
+    title: issue 42241455
+  line_number: 293
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Remove GPUAdapter requestAdapterInfo()
+  content: The GPUAdapter `requestAdapterInfo()` asynchronous method is redundant as you can already get GPUAdapterInfo synchronously
+    using the GPUAdapter `info` attribute. Hence, the non-standard GPUAdapter `requestAdapterInfo()` method is now removed.
+    See the [intent to remove](https://groups.google.com/a/chromium.org/g/blink-dev/c/HxOgGf4NzQ4).
+  heading_path:
+  - What's New in WebGPU (Chrome 131)
+  - Remove GPUAdapter requestAdapterInfo()
+  links:
+  - url: https://groups.google.com/a/chromium.org/g/blink-dev/c/HxOgGf4NzQ4
+    link_type: other
+    title: intent to remove
+  line_number: 324
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Dawn updates
+  content: 'The `tint_benchmark` executable measures the cost of translating shaders from WGSL to each backend language. Check
+    out the new [documentation](https://dawn.googlesource.com/dawn/+/main/docs/tint/benchmark.md) to learn more about it.
+
+
+    This covers only some of the key highlights. Check out the exhaustive [list of commits](https://dawn.googlesource.com/dawn/+log/chromium/6723..chromium/6778?n=1000).'
+  heading_path:
+  - What's New in WebGPU (Chrome 131)
+  - Dawn updates
+  links:
+  - url: https://dawn.googlesource.com/dawn/+/main/docs/tint/benchmark.md
+    link_type: other
+    title: documentation
+  - url: https://dawn.googlesource.com/dawn/+log/chromium/6723..chromium/6778?n=1000
+    link_type: other
+    title: list of commits
+  line_number: 328
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Playout Statistics API for WebAudio
+  content: 'The `AudioContext.playoutStats` API allows an application to measure the quality and latency of audio playout
+    using WebAudio.
+
+
+    [Origin Trial](/origintrials#/view_trial/2409988750596636673) | [ChromeStatus.com entry](https://chromestatus.com/feature/5172818344148992)
+    | [Spec](https://wicg.github.io/web_audio_playout)'
+  heading_path:
+  - What's New in WebGPU (Chrome 131)
+  - Origin trials
+  - Playout Statistics API for WebAudio
+  links:
+  - url: https://chromestatus.com/feature/5172818344148992
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/web_audio_playout
+    link_type: spec
+    title: Spec
+  line_number: 336
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: '`ServiceWorkerStaticRouterTimingInfo`'
+  content: 'Adds timing information for ServiceWorker Static routing API, exposed in navigation timing API and resource timing
+    API for developer use.
+
+
+    Service Worker provides timing information to mark certain points in time. We add two Static routing API-relevant timing
+    information: RouterEvaluationStart, time to start matching a request with registered router rules, and CacheLookupStart,
+    time to start looking up the cache storage if the source is "cache". In addition, we also add two router source information,
+    the matched router source and the final router source.
+
+
+    [Origin Trial](/origintrials#/view_trial/1689412810217357313) | [ChromeStatus.com entry](https://chromestatus.com/feature/6309742380318720)'
+  heading_path:
+  - What's New in WebGPU (Chrome 131)
+  - Origin trials
+  - '`ServiceWorkerStaticRouterTimingInfo`'
+  links:
+  - url: https://chromestatus.com/feature/6309742380318720
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 342
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: serviceworker
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: Summarization API
+  content: 'A JavaScript API for producing summaries of input text, backed by an AI language model.
+
+
+    [Origin Trial](/origintrials#/view_trial/1923599990840623105) | [Summarization API documentation](/docs/ai/summarizer-api)
+    | [Tracking bug #351744634](https://issues.chromium.org/issues/351744634) | [ChromeStatus.com entry](https://chromestatus.com/feature/5193953788559360)'
+  heading_path:
+  - What's New in WebGPU (Chrome 131)
+  - Origin trials
+  - Summarization API
+  links:
+  - url: https://issues.chromium.org/issues/351744634
+    link_type: other
+    title: 'Tracking bug #351744634'
+  - url: https://chromestatus.com/feature/5193953788559360
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 350
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - ai
+  - privacy
+- title: Translator API
+  content: 'A JavaScript API to provide language translation capabilities to web pages.
+
+
+    [Origin Trial](/origintrials#/view_trial/4445615782168100865) | [Translator API documentation](/docs/ai/translator-api)
+    | [Tracking bug #322229993](https://issues.chromium.org/issues/322229993) | [ChromeStatus.com entry](https://chromestatus.com/feature/5172811302961152)'
+  heading_path:
+  - What's New in WebGPU (Chrome 131)
+  - Origin trials
+  - Translator API
+  links:
+  - url: https://issues.chromium.org/issues/322229993
+    link_type: other
+    title: 'Tracking bug #322229993'
+  - url: https://chromestatus.com/feature/5172811302961152
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 356
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - ai
+  - privacy
+- title: Remove the CSS Anchor Positioning property `inset-area`
+  content: 'With the CSS Working Group resolution on renaming the `inset-area` property to `position-area`, this removal cleans
+    up the implementation in Chromium for a standards compliant feature.
+
+
+    [Tracking bug #352360007](https://issues.chromium.org/issues/352360007) | [ChromeStatus.com entry](https://chromestatus.com/feature/5944933945704448)'
+  heading_path:
+  - What's New in WebGPU (Chrome 131)
+  - Deprecations and removals
+  - Remove the CSS Anchor Positioning property `inset-area`
+  links:
+  - url: https://issues.chromium.org/issues/352360007
+    link_type: other
+    title: 'Tracking bug #352360007'
+  - url: https://chromestatus.com/feature/5944933945704448
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 364
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Remove the ability to disable `BeforeunloadEventCancelByPreventDefault`
+  content: 'Feature `BeforeunloadEventCancelByPreventDefault` was shipped in Chrome 117, but there is an enterprise policy
+    that allows this flag to be force-disabled. The enterprise policy will be removed in Chrome 131.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5129927993851904)'
+  heading_path:
+  - What's New in WebGPU (Chrome 131)
+  - Deprecations and removals
+  - Remove the ability to disable `BeforeunloadEventCancelByPreventDefault`
+  links:
+  - url: https://chromestatus.com/feature/5129927993851904
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 370
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - enterprise
+- title: Remove non-standard GPUAdapter `requestAdapterInfo()` method
+  content: 'The WebGPU Working Group decided it was impractical for `requestAdapterInfo()` to trigger a permission prompt
+    so they''ve removed that option and replaced it with the GPUAdapter `info` attribute so that web developers can get the
+    same `GPUAdapterInfo` value synchronously.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5140787340509184) | [Spec](https://gpuweb.github.io/gpuweb/#dom-gpuadapter-info)'
+  heading_path:
+  - What's New in WebGPU (Chrome 131)
+  - Deprecations and removals
+  - Remove non-standard GPUAdapter `requestAdapterInfo()` method
+  links:
+  - url: https://chromestatus.com/feature/5140787340509184
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://gpuweb.github.io/gpuweb/#dom-gpuadapter-info
+    link_type: github
+    title: Spec
+  line_number: 376
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+  - security

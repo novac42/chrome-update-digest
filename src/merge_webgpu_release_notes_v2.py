@@ -32,15 +32,28 @@ class WebGPUMergerV2:
         lines = webgpu_content.split('\n')
         cleaned_lines = []
         in_content = False
+        skip_next_empty = False
         
         for i, line in enumerate(lines):
-            # Start capturing after we see "Published:"
-            if 'Published:' in line and not in_content:
+            # Skip the main title line - handles both patterns:
+            # "# What's New in WebGPU" and "# WebGPU XXX Release Notes"
+            if line.startswith('# What\'s New in WebGPU') or (line.startswith('# WebGPU') and 'Release Notes' in line):
                 in_content = True
+                skip_next_empty = True  # Skip the empty line after title
                 continue
             
-            # Stop capturing when we hit the version history section
-            if line.strip() == '## What\'s New in WebGPU':
+            # Skip one empty line after the title
+            if skip_next_empty and not line.strip():
+                skip_next_empty = False
+                continue
+            
+            # Skip source and navigation lines
+            if in_content and (line.startswith('Source:') or '* [' in line and 'Chrome for Developers' in line):
+                continue
+            
+            # Stop capturing when we hit the version history section (at the end of some files)
+            # This section lists previous Chrome versions
+            if line.strip() == '## What\'s New in WebGPU' or 'Chrome 1' in line and '##' in line:
                 break
             
             # Add lines if we're in the content section

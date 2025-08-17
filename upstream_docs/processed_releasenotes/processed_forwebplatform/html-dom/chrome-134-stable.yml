@@ -1,0 +1,100 @@
+version: '134'
+channel: stable
+area: html-dom
+extraction_timestamp: '2025-08-17T21:27:01.331080'
+extraction_method: deterministic
+statistics:
+  total_features: 3
+  total_links: 9
+  primary_tags: {}
+  cross_cutting:
+    privacy: 3
+    enterprise: 1
+features:
+- title: Customizable `<select>` Element
+  content: 'Customizable `<select>` allows developers to take complete control of the rendering of `<select>` elements by
+    adding the `appearance: base-select` CSS property and value.
+
+
+    This feature relies on the `SelectParserRelaxation` flag, which changes the HTML parser to allow more tags within the
+    `<select>` tag.
+
+
+    [Tracking bug #40146374](https://issues.chromium.org/issues/40146374) | [ChromeStatus.com entry](https://chromestatus.com/feature/5737365999976448)
+    | [Spec](https://github.com/whatwg/html/issues/9799)'
+  heading_path:
+  - Chrome 134
+  - HTML and DOM
+  - Customizable `<select>` Element
+  links:
+  - url: https://issues.chromium.org/issues/40146374
+    link_type: other
+    title: 'Tracking bug #40146374'
+  - url: https://chromestatus.com/feature/5737365999976448
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/whatwg/html/issues/9799
+    link_type: github
+    title: Spec
+  line_number: 21
+  primary_tags: []
+  cross_cutting_concerns:
+  - privacy
+- title: Select parser relaxation
+  content: 'This change makes the HTML parser allow additional tags in `<select>` besides `<option>`, `<optgroup>`, and `<hr>`.
+
+
+    This feature is gated by the temporary policy (`SelectParserRelaxationEnabled`). This is a temporary transition period,
+    and the policy will stop working from Chrome 141.
+
+
+    If you are experiencing problems that you believe are caused by this change, there''s a reverse origin trial to disable
+    the parser relaxation.
+
+
+    [Tracking bug #335456114](https://issues.chromium.org/issues/335456114) | [ChromeStatus.com entry](https://chromestatus.com/feature/5145948356083712)
+    | [Spec](https://github.com/whatwg/html/pull/10557)'
+  heading_path:
+  - Chrome 134
+  - HTML and DOM
+  - Select parser relaxation
+  links:
+  - url: https://issues.chromium.org/issues/335456114
+    link_type: other
+    title: 'Tracking bug #335456114'
+  - url: https://chromestatus.com/feature/5145948356083712
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/whatwg/html/pull/10557
+    link_type: github
+    title: Spec
+  line_number: 29
+  primary_tags: []
+  cross_cutting_concerns:
+  - privacy
+  - enterprise
+- title: Dialog light dismiss
+  content: "One of the nice features of the Popover API is its light dismiss behavior. This behavior is now part of `<dialog>`,\
+    \ with a new `closedby` attribute controlling the behavior:\n\n  * `<dialog closedby=\"none\">`: No user-triggered closing\
+    \ of dialogs at all.\n  * `<dialog closedby=\"closerequest\">`: Pressing `Esc` (or other close trigger) closes the dialog\n\
+    \  * `<dialog closedby=\"any\">`: Clicking outside the dialog, or pressing `Esc`, closes the dialog. Akin to `popover=\"\
+    auto\"` behavior.\n\n[Tracking bug #376516550](https://issues.chromium.org/issues/376516550) | [ChromeStatus.com entry](https://chromestatus.com/feature/5097714453577728)\
+    \ | [Spec](https://html.spec.whatwg.org/#attr-dialog-closedby)"
+  heading_path:
+  - Chrome 134
+  - HTML and DOM
+  - Dialog light dismiss
+  links:
+  - url: https://issues.chromium.org/issues/376516550
+    link_type: other
+    title: 'Tracking bug #376516550'
+  - url: https://chromestatus.com/feature/5097714453577728
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://html.spec.whatwg.org/#attr-dialog-closedby
+    link_type: spec
+    title: Spec
+  line_number: 39
+  primary_tags: []
+  cross_cutting_concerns:
+  - privacy

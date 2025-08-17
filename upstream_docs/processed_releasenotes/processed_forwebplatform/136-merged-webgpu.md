@@ -184,6 +184,20 @@ This feature modernizes the Chromium scrollbars (both overlay and non-overlay) o
 
 ## WebGPU
 
+  * [ Blog ](https://developer.chrome.com/blog)
+
+#  What's New in WebGPU (Chrome 136)
+
+Stay organized with collections  Save and categorize content based on your preferences. 
+
+![François Beaufort](https://web.dev/images/authors/beaufortfrancois.jpg)
+
+François Beaufort 
+
+[ GitHub ](https://github.com/beaufortfrancois)
+
+Published: April 23, 2025 
+
 ### GPUAdapterInfo isFallbackAdapter attribute
 
 The GPUAdapterInfo `isFallbackAdapter` boolean attribute indicates whether a GPUAdapter has significant performance limitations in exchange for wider compatibility, more predictable behavior, or improved privacy. This addition was necessary because libraries that take user-provided GPUDevice objects couldn't access this information through the `adapterInfo` attribute on GPUDevice. See the following example and [issue 403172841](https://issues.chromium.org/issues/403172841).

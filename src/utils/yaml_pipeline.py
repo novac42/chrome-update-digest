@@ -377,7 +377,61 @@ class YAMLPipeline:
                 area_features[area] = []
             area_features[area].append(feature)
         
+        # Deduplicate features in WebGPU area
+        if 'graphics-webgpu' in area_features:
+            area_features['graphics-webgpu'] = self._deduplicate_webgpu_features(
+                area_features['graphics-webgpu']
+            )
+        
         return area_features
+    
+    def _deduplicate_webgpu_features(self, features: List[Dict]) -> List[Dict]:
+        """
+        Deduplicate WebGPU features, preferring the more detailed version.
+        
+        When the same feature appears both from Chrome release notes (with "WebGPU:" prefix)
+        and from WebGPU-specific notes, keep the WebGPU-specific version as it's usually
+        more detailed.
+        
+        Args:
+            features: List of WebGPU feature dictionaries
+            
+        Returns:
+            Deduplicated list of features
+        """
+        seen_features = {}
+        deduplicated = []
+        
+        for feature in features:
+            title = feature.get('title', '')
+            # Normalize title by removing "WebGPU:" prefix for comparison
+            normalized_title = title.replace('WebGPU: ', '').strip()
+            
+            if normalized_title not in seen_features:
+                # First time seeing this feature
+                seen_features[normalized_title] = feature
+                deduplicated.append(feature)
+            else:
+                # Duplicate found - keep the more detailed one
+                existing = seen_features[normalized_title]
+                existing_content_len = len(existing.get('content', ''))
+                new_content_len = len(feature.get('content', ''))
+                
+                # Also check if one is from WebGPU-specific notes (usually more detailed)
+                existing_is_webgpu_specific = 'What\'s New in WebGPU' in str(existing.get('heading_path', []))
+                new_is_webgpu_specific = 'What\'s New in WebGPU' in str(feature.get('heading_path', []))
+                
+                # Prefer WebGPU-specific version or longer content
+                if (new_is_webgpu_specific and not existing_is_webgpu_specific) or \
+                   (new_is_webgpu_specific == existing_is_webgpu_specific and new_content_len > existing_content_len):
+                    # Replace with the new version
+                    deduplicated[deduplicated.index(existing)] = feature
+                    seen_features[normalized_title] = feature
+                    print(f"  Deduplication: Replaced '{existing.get('title')}' with '{feature.get('title')}' (more detailed)")
+                else:
+                    print(f"  Deduplication: Kept '{existing.get('title')}', skipped duplicate '{feature.get('title')}'")
+        
+        return deduplicated
     
     def validate_yaml_data(self, yaml_data: Dict) -> List[str]:
         """

@@ -1,0 +1,173 @@
+version: '127'
+channel: stable
+area: other
+extraction_timestamp: '2025-08-17T21:27:00.651865'
+extraction_method: deterministic
+statistics:
+  total_features: 5
+  total_links: 16
+  primary_tags:
+    multimedia: 2
+    privacy: 1
+    accessibility: 1
+  cross_cutting:
+    privacy: 4
+    enterprise: 1
+features:
+- title: Video chapter in `MediaMetadata`
+  content: 'You can now [add individual chapter information](https://web.dev/articles/media-session#:%7E:text=add%20also%20individual-,chapter%20information,-%2C%20such%20as%20the),
+    such as the title of the section, its timestamp, and a screenshot image to media metadata. This allows users to navigate
+    through the content of the media.
+
+
+    This will currently only show up in ChromeOS media notifications, and not in Chrome Browser global media controls.
+
+
+    [Demo](https://googlechrome.github.io/samples/media-session/video.html) | [ChromeStatus.com entry](https://chromestatus.com/feature/6682585059295232)
+    | [Spec](https://www.w3.org/TR/mediasession/#the-chapterinformation-interface/)'
+  heading_path:
+  - Chrome 127
+  - Media
+  - Video chapter in `MediaMetadata`
+  links:
+  - url: https://web.dev/articles/media-session#:%7E:text=add%20also%20individual-,chapter%20information,-%2C%20such%20as%20the
+    link_type: other
+    title: add individual chapter information
+  - url: https://googlechrome.github.io/samples/media-session/video.html
+    link_type: github
+    title: Demo
+  - url: https://chromestatus.com/feature/6682585059295232
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://www.w3.org/TR/mediasession/#the-chapterinformation-interface/
+    link_type: spec
+    title: Spec
+  line_number: 90
+  primary_tags:
+  - name: multimedia
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: 'Document picture-in-picture: propagate user activation'
+  content: 'This makes user activations in a document picture-in-picture window usable inside its opener window and the other
+    way around. This makes it more ergonomic to use user-activation-gated APIs, since often event handlers in the document
+    picture-in-picture window are actually run in the opener''s context, so the opener''s context needs access to the user
+    gesture.
+
+
+    [Demo](https://steimelchrome.github.io/document-pip/user-gesture.html) | [Tracking bug #331246719](https://issues.chromium.org/issues/331246719)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5185710702460928)'
+  heading_path:
+  - Chrome 127
+  - Media
+  - 'Document picture-in-picture: propagate user activation'
+  links:
+  - url: https://steimelchrome.github.io/document-pip/user-gesture.html
+    link_type: github
+    title: Demo
+  - url: https://issues.chromium.org/issues/331246719
+    link_type: other
+    title: 'Tracking bug #331246719'
+  - url: https://chromestatus.com/feature/5185710702460928
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 98
+  primary_tags:
+  - name: multimedia
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Aggregate Debug Reporting in Attribution Reporting API
+  content: 'This change is so the API can continue to provide some form of debugging information after third-party cookie
+    deprecation. This is a new report type that is not tied to third-party cookies and provides similar debug information.
+    This feature allows API callers to request and receive debug signals in aggregate form. This feature is very similar to
+    current Aggregate Reports supported by the API, except these new reports will be specifically for debug signals.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5086433709916160) | [Spec](https://wicg.github.io/attribution-reporting-api/#aggregatable-debug-reporting-config)'
+  heading_path:
+  - Chrome 127
+  - Privacy
+  - Aggregate Debug Reporting in Attribution Reporting API
+  links:
+  - url: https://chromestatus.com/feature/5086433709916160
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/attribution-reporting-api/#aggregatable-debug-reporting-config
+    link_type: spec
+    title: Spec
+  line_number: 124
+  primary_tags:
+  - name: privacy
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Keyboard focusable scroll containers
+  content: "This feature introduces the following changes:\n\nScrollers are click-focusable and programmatically-focusable\
+    \ by default. Scrollers without focusable children are keyboard-focusable by default.\n\nThis is an important improvement\
+    \ to help make scrollers and contents within scrollers more accessible to all users. You can read more about its benefits\
+    \ in the post [Keyboard focusable scrollers](/blog/keyboard-focusable-scrollers). Keyboard focusable scrollers will be\
+    \ enabled by default starting in Chrome 127. If websites need time to adjust to this new feature, there are a few options:\n\
+    \n  * The [Keyboard focusable scrollers opt out deprecation trial](/origintrials#/view_trial/2455024746870341633\\)) can\
+    \ be used to opt back out of the feature for a limited time on a given site. This can be used through Chrome 132, ending\
+    \ March 18, 2025.\n  * The [KeyboardFocusableScrollersEnabled enterprise policy](https://chromeenterprise.google/policies/#KeyboardFocusableScrollersEnabled)\
+    \ will be available in Chrome 127, and can be used for the same purpose.\n\n[Keyboard focusable scrollers](/blog/keyboard-focusable-scrollers)\
+    \ | [Tracking bug #1040141](https://issues.chromium.org/issues/1040141) | [ChromeStatus.com entry](https://chromestatus.com/feature/5231964663578624)\
+    \ | [Spec](https://drafts.csswg.org/css-overflow-3/#scroll-container)"
+  heading_path:
+  - Chrome 127
+  - Accessibility
+  - Keyboard focusable scroll containers
+  links:
+  - url: https://chromeenterprise.google/policies/#KeyboardFocusableScrollersEnabled
+    link_type: other
+    title: KeyboardFocusableScrollersEnabled enterprise policy
+  - url: https://issues.chromium.org/issues/1040141
+    link_type: other
+    title: 'Tracking bug #1040141'
+  - url: https://chromestatus.com/feature/5231964663578624
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://drafts.csswg.org/css-overflow-3/#scroll-container
+    link_type: other
+    title: Spec
+  line_number: 132
+  primary_tags:
+  - name: accessibility
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+  - enterprise
+- title: '`No-Vary-Search` support for prerender'
+  content: 'Extends `No-Vary-Search` support to prerender on top of [the previous prefetch support](/docs/web-platform/prerender-pages#no-vary-search).
+    This enables a prerender entry to match even if certain URL query parameters change. The No-Vary-Search HTTP response
+    header declares that some or all parts of a URL''s query can be ignored for cache matching purposes.
+
+
+    [Tracking bug #41494389](https://issues.chromium.org/issues/41494389) | [ChromeStatus.com entry](https://chromestatus.com/feature/5099218903760896)
+    | [Spec](https://wicg.github.io/nav-speculation/no-vary-search.html)'
+  heading_path:
+  - Chrome 127
+  - Loading
+  - '`No-Vary-Search` support for prerender'
+  links:
+  - url: https://issues.chromium.org/issues/41494389
+    link_type: other
+    title: 'Tracking bug #41494389'
+  - url: https://chromestatus.com/feature/5099218903760896
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/nav-speculation/no-vary-search.html
+    link_type: spec
+    title: Spec
+  line_number: 147
+  primary_tags: []
+  cross_cutting_concerns:
+  - privacy

@@ -131,6 +131,127 @@ On all other supported platforms, `image/svg+xml` is serialized into UTF-8 befor
 
 [Demo](https://webdbg.com/test/svg) | [Tracking bug #338250106](https://issues.chromium.org/issues/338250106) | [ChromeStatus.com entry](https://chromestatus.com/feature/5417299782926336) | [Spec](https://w3c.github.io/clipboard-apis/#optional-data-types-x)
 
+## WebGPU
+
+  * [ Blog ](https://developer.chrome.com/blog)
+
+#  What's New in WebGPU (Chrome 128)
+
+Stay organized with collections  Save and categorize content based on your preferences. 
+
+![François Beaufort](https://web.dev/images/authors/beaufortfrancois.jpg)
+
+François Beaufort 
+
+[ GitHub ](https://github.com/beaufortfrancois)
+
+### Experimenting with subgroups
+
+The subgroups feature enables SIMD-level parallelism, allowing threads within a group to communicate and perform collective math operations (for example, calculating the sum of 16 numbers). This provides a highly efficient form of cross-thread data sharing.
+
+A minimal implementation of the [subgroups proposal](https://github.com/gpuweb/gpuweb/blob/main/proposals/subgroups.md) is available for local testing behind the "Unsafe WebGPU Support" flag at `chrome://flags/#enable-unsafe-webgpu`.
+
+You can also try subgroups on your site with real users by [signing up for the origin trial](/origintrials#/view_trial/4130363808252166145). Read [Get started with origin trials](/docs/web-platform/origin-trials) for instructions on how to prepare your site to use origin trials. The origin trial will run from Chrome 128 to 131 (ending February 19, 2025). See [Intent to Experiment](https://groups.google.com/a/chromium.org/g/blink-dev/c/9SPlKwQRxxc/).
+
+When the `"subgroups"` feature is available in a `GPUAdapter`, request a `GPUDevice` with this feature to get subgroups support in WGSL and check its `minSubgroupSize` and `maxSubgroupSize` limits.
+
+You also need to explicitly enable this extension in your WGSL code with `enable subgroups;`. When enabled, you get access to the following additions:
+
+  * `subgroup_invocation_id`: A built-in value for the index of the thread within the subgroup.
+  * `subgroup_size`: A built-in value for subgroup size access.
+  * `subgroupBallot(value)`: Returns a set of bit fields where the bit corresponding to `subgroup_invocation_id` is 1 if `value` is true for that active invocation and 0 otherwise.
+  * `subgroupBroadcast(value, id)`: Broadcasts the `value` from the invocation with `subgroup_invocation_id` matching `id` to all invocations within the subgroup. Note: `id` must be a compile-time constant.
+
+More built-in functions such as `subgroupAdd`, `subgroupAll`, `subgroupElect`, `subgroupShuffle` will be added in the future. See [issue 354738715](https://issues.chromium.org/issues/354738715).
+
+To allow f16 in subgroups operations, request a `GPUDevice` with the `"subgroups"`, `"subgroups-f16"`, and `"shader-f16"` features, then enable it in your WGSL code with `enable f16, subgroups, subgroups_f16;`.
+
+The following code snippet provides a base to tinker with and discover the potential of subgroups.
+    
+    
+    const adapter = await navigator.gpu.requestAdapter();
+    if (!adapter.features.has("subgroups")) {
+      throw new Error("Subgroups support is not available");
+    }
+    // Explicitly request subgroups support.
+    const device = await adapter.requestDevice({
+      requiredFeatures: ["subgroups"],
+    });
+    
+    const shaderModule = device.createShaderModule({ code: `
+      enable subgroups;
+    
+      var<workgroup> wgmem : u32;
+    
+      @group(0) @binding(0)
+      var<storage, read> inputs : array<u32>;
+    
+      @group(0) @binding(1)
+      var<storage, read_write> output : array<u32>;
+    
+      @compute @workgroup_size(64)
+      fn main(@builtin(subgroup_size) subgroupSize : u32,
+              @builtin(subgroup_invocation_id) id : u32,
+              @builtin(local_invocation_index) lid : u32) {
+        // One thread per workgroup writes the value to workgroup memory.
+        if (lid == 0) {
+          wgmem = inputs[lid];
+        }
+        workgroupBarrier();
+        var v = 0u;
+    
+        // One thread per subgroup reads the value from workgroup memory
+        // and shares that value with every other thread in the subgroup
+        // to reduce local memory bandwidth.
+        if (id == 0) {
+          v = wgmem;
+        }
+        v = subgroupBroadcast(v, 0);
+        output[lid] = v;
+      }`,
+    });
+    
+    // Send the appropriate commands to the GPU...
+    
+
+### Deprecate setting depth bias for lines and points
+
+A [WebGPU spec change](https://github.com/gpuweb/gpuweb/pull/4743) makes it a validation error to set `depthBias`, `depthBiasSlopeScale`, and `depthBiasClamp` to a non-zero value when the topology for a render pipeline is a line or point type. To give developers enough time to update their code, a warning in the DevTools Console is shown about this upcoming validation while also forcing the values to 0 in these circumstances. See [issue 352567424](https://issues.chromium.org/issues/352567424).
+
+### Hide uncaptured error DevTools warning if preventDefault
+
+In the DevTools Console, warnings for [`uncapturederror` events](https://gpuweb.github.io/gpuweb/#eventdef-gpudevice-uncapturederror) are no longer displayed if an event listener for `uncapturederror` has been registered and the Event [`preventDefault()`](https://developer.mozilla.org/docs/Web/API/Event/preventDefault) method has been called within the event listener callback. This behaviour matches event handling in JavaScript. See the following example and [issue 40263619](https://issues.chromium.org/issues/40263619).
+    
+    
+    const adapter = await navigator.gpu.requestAdapter();
+    const device = await adapter.requestDevice();
+    
+    device.addEventListener("uncapturederror", (event) => {
+      // Prevents browser warning to show up in the DevTools Console.
+      event.preventDefault();
+    
+      // TODO: Handle event.error
+    });
+    
+
+### WGSL interpolate sampling first and either
+
+WGSL `interpolate` attribute lets you manage user-defined IO data interpolation. Now, new interpolate sampling parameters `first` (default) and `either` give you additional control: `first` uses the value from the primitive's first vertex, while `either` allows either the first or last vertex. See [issue 340278447](https://issues.chromium.org/issues/340278447).
+
+### Dawn updates
+
+The implementation of Dawn's WGPUFuture to handle asynchronous operations is now complete. Key concepts include [wgpuInstanceProcessEvents](https://webgpu-native.github.io/webgpu-headers/Asynchronous-Operations.html#Process-Events) for opportunistic event processing and [WGPUCallbackMode](https://webgpu-native.github.io/webgpu-headers/group__Enumerations.html#gaf6f2496c9c727391ba83e928a8d4e63e) for defining callback locations. WGPUFuture signifies one-time events with an infinite lifetime, and [wgpuInstanceWaitAny](https://webgpu-native.github.io/webgpu-headers/Asynchronous-Operations.html#Wait-Any) awaits completion of any future or a timeout. See [issue 42240932](https://issues.chromium.org/issues/42240932).
+
+The `CompositeAlphaMode::Auto` value is now not reported by `Surface::GetCapabilities()`. It's still valid, and equivalent to `Surface::GetCapabilities().alphaMode[0]`. See [issue 292](https://github.com/webgpu-native/webgpu-headers/issues/292).
+
+The OpenGL backend now supports `Surface` with a y-flip blit for each `Present()` call. See [issue 344814083](https://issues.chromium.org/issues/344814083).
+
+The `Adapter::GetProperties()` method is deprecated in favor of using `Adapter::GetInfo()`.
+
+Jaswant, an external contributor, has rewritten all the CMake files, making them easier to update and allowing for pre-builds. Check out the [quickstart guide](https://dawn.googlesource.com/dawn/+/main/docs/quickstart-cmake.md) for using Dawn in CMake projects.
+
+This covers only some of the key highlights. Check out the exhaustive [list of commits](https://dawn.googlesource.com/dawn/+log/chromium/6533..chromium/6613?n=1000).
+
 ## New origin trials
 
 ### Digital Credentials API

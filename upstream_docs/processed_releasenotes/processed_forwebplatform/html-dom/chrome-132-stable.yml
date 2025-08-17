@@ -1,0 +1,97 @@
+version: '132'
+channel: stable
+area: html-dom
+extraction_timestamp: '2025-08-17T21:27:01.124333'
+extraction_method: deterministic
+statistics:
+  total_features: 3
+  total_links: 10
+  primary_tags: {}
+  cross_cutting:
+    privacy: 3
+features:
+- title: Throw exception for popovers and dialogs in non-active documents
+  content: 'Previously calling `showPopover()` or `showModal()` on a popover or dialog that resides within an inactive document
+    would silently fail. No exception would be thrown, but as the document is inactive, no popover or dialog would be shown.
+    As of Chrome 132, these situations now throw `InvalidStateError`.
+
+
+    [Tracking bug #373684393](https://issues.chromium.org/issues/373684393) | [ChromeStatus.com entry](https://chromestatus.com/feature/6352111728852992)
+    | [Spec](https://github.com/whatwg/html/pull/10705)'
+  heading_path:
+  - Chrome 132
+  - HTML and DOM
+  - Throw exception for popovers and dialogs in non-active documents
+  links:
+  - url: https://issues.chromium.org/issues/373684393
+    link_type: other
+    title: 'Tracking bug #373684393'
+  - url: https://chromestatus.com/feature/6352111728852992
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/whatwg/html/pull/10705
+    link_type: github
+    title: Spec
+  line_number: 21
+  primary_tags: []
+  cross_cutting_concerns:
+  - privacy
+- title: Dialog toggle events
+  content: 'It''s useful to know when `<dialog>` elements open and close, and `popover` already has `ToggleEvent` which is
+    dispatched when a popover opens or closes. Previously, to detect when a `<dialog>` opens you had to register a mutation
+    observer to check for open, however, this is quite a lot of work where an event would be easier.
+
+
+    This change incorporates the same `ToggleEvent` that popovers dispatch, but for `<dialog>` elements: when `showModal`
+    or `show` is called, `<dialog>` dispatches a `ToggleEvent` with `newState=open`. When a `<dialog>` is closed (using the
+    form, button, or closewatcher) it should dispatch a `ToggleEvent` with `newState=closed`.
+
+
+    [Tracking bug #41494780](https://issues.chromium.org/issues/41494780) | [ChromeStatus.com entry](https://chromestatus.com/feature/5078613609938944)
+    | [Spec](https://github.com/whatwg/html/pull/10091)'
+  heading_path:
+  - Chrome 132
+  - HTML and DOM
+  - Dialog toggle events
+  links:
+  - url: https://issues.chromium.org/issues/41494780
+    link_type: other
+    title: 'Tracking bug #41494780'
+  - url: https://chromestatus.com/feature/5078613609938944
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/whatwg/html/pull/10091
+    link_type: github
+    title: Spec
+  line_number: 27
+  primary_tags: []
+  cross_cutting_concerns:
+  - privacy
+- title: Fix selection `isCollapsed` in Shadow DOM
+  content: 'Selection isCollapsed should return true if and only if the anchor and focus are the same. This should be true
+    whether the selection starts or ends inside a light or a shadow tree.
+
+
+    [Demo](https://codepen.io/Di-Zhang/pen/jOjdeoX) | [Tracking bug #40400558](https://issues.chromium.org/issues/40400558)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5175599392620544) | [Spec](https://w3c.github.io/selection-api/#dom-selection-iscollapsed)'
+  heading_path:
+  - Chrome 132
+  - HTML and DOM
+  - Fix selection `isCollapsed` in Shadow DOM
+  links:
+  - url: https://codepen.io/Di-Zhang/pen/jOjdeoX
+    link_type: other
+    title: Demo
+  - url: https://issues.chromium.org/issues/40400558
+    link_type: other
+    title: 'Tracking bug #40400558'
+  - url: https://chromestatus.com/feature/5175599392620544
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://w3c.github.io/selection-api/#dom-selection-iscollapsed
+    link_type: spec
+    title: Spec
+  line_number: 35
+  primary_tags: []
+  cross_cutting_concerns:
+  - privacy

@@ -1,0 +1,89 @@
+version: '124'
+channel: stable
+area: browser
+extraction_timestamp: '2025-08-17T21:27:00.364128'
+extraction_method: deterministic
+statistics:
+  total_features: 3
+  total_links: 7
+  primary_tags: {}
+  cross_cutting:
+    privacy: 2
+    security: 1
+features:
+- title: Universal install
+  content: Make any page installable even those not meeting the current PWA installability criteria.
+  heading_path:
+  - Chrome 124
+  - Browser Changes and Developer Tools
+  - Universal install
+  links: []
+  line_number: 19
+  primary_tags: []
+  cross_cutting_concerns: []
+- title: Keyboard-focusable scroll containers
+  content: 'Improves accessibility by making scroll containers focusable using sequential focus navigation. Prior to this
+    change, the tab key doesn''t focus scrollers unless `tabIndex` is explicitly set to 0 or more.
+
+
+    By making scrollers focusable by default, users who can''t (or don''t want to) use a mouse will be able to focus clipped
+    content using a keyboard''s tab and arrow keys. This behavior is enabled only if the scroller does not contain any keyboard
+    focusable children.
+
+
+    This feature will be rolled out slowly starting from Chrome 124, and available to all users by Chrome 125.
+
+
+    [Keyboard focusable scrollers](/blog/keyboard-focusable-scrollers) | [Tracking bug #40113891](https://issues.chromium.org/issues/40113891)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5231964663578624) | [Spec](https://html.spec.whatwg.org/multipage/interaction.html#attr-tabindex)'
+  heading_path:
+  - Chrome 124
+  - Browser Changes and Developer Tools
+  - Keyboard-focusable scroll containers
+  links:
+  - url: https://issues.chromium.org/issues/40113891
+    link_type: other
+    title: 'Tracking bug #40113891'
+  - url: https://chromestatus.com/feature/5231964663578624
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://html.spec.whatwg.org/multipage/interaction.html#attr-tabindex
+    link_type: spec
+    title: Spec
+  line_number: 23
+  primary_tags: []
+  cross_cutting_concerns:
+  - privacy
+- title: Permissions Prompt for Web MIDI API
+  content: 'This feature gates access to the [Web MIDI API](https://developer.mozilla.org/docs/Web/API/Web_MIDI_API) behind
+    a permissions prompt. Previously, the use of SysEx messages with the Web MIDI API requires an explicit user permission.From
+    Chrome 125, all access to the Web MIDI API requires a user permission.
+
+
+    This feature will be rolled out slowly starting from Chrome 124, and available to all users by Chrome 125.
+
+
+    [Tracking bug #40063295](https://issues.chromium.org/issues/40063295) | [ChromeStatus.com entry](https://chromestatus.com/feature/5087054662205440)
+    | [Spec](https://www.w3.org/TR/webmidi/#methods)'
+  heading_path:
+  - Chrome 124
+  - Browser Changes and Developer Tools
+  - Permissions Prompt for Web MIDI API
+  links:
+  - url: https://developer.mozilla.org/docs/Web/API/Web_MIDI_API
+    link_type: mdn
+    title: Web MIDI API
+  - url: https://issues.chromium.org/issues/40063295
+    link_type: other
+    title: 'Tracking bug #40063295'
+  - url: https://chromestatus.com/feature/5087054662205440
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://www.w3.org/TR/webmidi/#methods
+    link_type: spec
+    title: Spec
+  line_number: 33
+  primary_tags: []
+  cross_cutting_concerns:
+  - security
+  - privacy

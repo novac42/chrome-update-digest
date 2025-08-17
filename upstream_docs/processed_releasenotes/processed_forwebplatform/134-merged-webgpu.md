@@ -183,6 +183,20 @@ Adds subgroup functionality to WebGPU. Subgroup operations perform SIMT operatio
 
 ## WebGPU
 
+  * [ Blog ](https://developer.chrome.com/blog)
+
+#  What's New in WebGPU (Chrome 134)
+
+Stay organized with collections  Save and categorize content based on your preferences. 
+
+![François Beaufort](https://web.dev/images/authors/beaufortfrancois.jpg)
+
+François Beaufort 
+
+[ GitHub ](https://github.com/beaufortfrancois)
+
+Published: February 26, 2025 
+
 ### Improve machine-learning workloads with subgroups
 
 After a year of development and trials, the subgroups WebGPU feature enabling SIMD-level parallelism is now available. It allows threads in a workgroup to communicate and execute collective math operations, such as calculating a sum of numbers, and offers an efficient method for cross-thread data sharing. See the [original proposal](https://github.com/gpuweb/gpuweb/blob/main/proposals/subgroups.md) and [chromestatus entry](https://chromestatus.com/feature/5126409856221184).

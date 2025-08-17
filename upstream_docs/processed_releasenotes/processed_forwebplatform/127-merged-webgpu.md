@@ -150,6 +150,80 @@ Extends `No-Vary-Search` support to prerender on top of [the previous prefetch s
 
 [Tracking bug #41494389](https://issues.chromium.org/issues/41494389) | [ChromeStatus.com entry](https://chromestatus.com/feature/5099218903760896) | [Spec](https://wicg.github.io/nav-speculation/no-vary-search.html)
 
+## WebGPU
+
+  * [ Blog ](https://developer.chrome.com/blog)
+
+#  What's New in WebGPU (Chrome 127)
+
+Stay organized with collections  Save and categorize content based on your preferences. 
+
+![François Beaufort](https://web.dev/images/authors/beaufortfrancois.jpg)
+
+François Beaufort 
+
+[ GitHub ](https://github.com/beaufortfrancois)
+
+### Experimental support for OpenGL ES on Android
+
+You can now access a `GPUAdapter` from the OpenGL ES backend when requesting the experimental [WebGPU compatibility mode](/blog/new-in-webgpu-122#expand_reach_with_compatibility_mode_feature_in_development) in Chrome for Android. This is especially useful for Android devices lacking support for Vulkan 1.1 or greater. See the following example and [issue dawn:1545](https://bugs.chromium.org/p/dawn/issues/detail?id=1545).
+    
+    
+    // Request a GPUAdapter in compatibility mode
+    const adapter = await navigator.gpu.requestAdapter({ compatibilityMode: true });
+    
+
+![WebGPU report page shows GPUAdapter info from the OpenGL ES backend on Android device.](/static/blog/new-in-webgpu-127/image/opengl-es-android.jpg) OpenGL ES adapter info in [webgpureport.org](https://webgpureport.org)
+
+As this feature is still in an experimental stage, you will need to perform the following steps:
+
+  1. Enable the following Chrome flags: "Unsafe WebGPU Support", "WebGPU Developer Features", and "Enable command line on non-rooted devices".
+  2. Enable USB Debugging on your Android Device.
+  3. Connect your Android device to your workstation, run `adb shell 'echo "_ --use-webgpu-adapter=opengles" > /data/local/tmp/chrome-command-line'` to prefer the OpenGL ES backend over Vulkan, and restart Chrome.
+
+### GPUAdapter info attribute
+
+Getting identifying information about an adapter can now be done in a synchronous way with the GPUAdapter `info` attribute. Previously, calling the asynchronous GPUAdapter `requestAdapterInfo()` method was the only way to get adapter info. However, `requestAdapterInfo()` has been removed from the WebGPU spec and will be removed in Chrome later this year to give enough time to web developers to make the necessary transition. See the following example, [Chrome Status](https://chromestatus.com/feature/5087914701881344), and [issue 335383516](https://issues.chromium.org/issues/335383516).
+    
+    
+    const adapter = await navigator.gpu.requestAdapter();
+    const info = adapter.info;
+    
+    // During the transition period, you can use the following:
+    // const info = adapter.info || await adapter.requestAdapterInfo();
+    
+    console.log(`Vendor: ${info.vendor}`); // "arm"
+    console.log(`Architecture: ${info.architecture}`); // "valhall"
+    
+
+### WebAssembly interop improvements
+
+To accommodate for WebAssembly heaps being passed directly to WebGPU, the sizes of the following BufferSource arguments are no longer restricted to 2 GB: `dynamicOffsetsData` in [`setBindGroup()`](https://gpuweb.github.io/gpuweb/#dom-gpubindingcommandsmixin-setbindgroup-index-bindgroup-dynamicoffsetsdata-dynamicoffsetsdatastart-dynamicoffsetsdatalength-dynamicoffsetsdata), source `data` in [`writeBuffer()`](https://gpuweb.github.io/gpuweb/#dom-gpuqueue-writebuffer), and source `data` Pin [`writeTexture()`](https://gpuweb.github.io/gpuweb/#dom-gpuqueue-writetexture). See [issue 339049388](https://issues.chromium.org/issues/339049388).
+
+### Improved command encoder errors
+
+Some validation errors raised from command encoders will now have improved contextual information. For example, attempting to start a compute pass while a render pass was still open resulted in the following error.
+    
+    
+    Command cannot be recorded while [CommandEncoder (unlabeled)] is locked and [RenderPassEncoder (unlabeled)] is currently open.
+        at CheckCurrentEncoder (..\..\third_party\dawn\src\dawn\native\EncodingContext.h:106)
+    
+
+This does describe the reason for the error, however it doesn't indicate which call actually caused the validation error. The following error shows the improved messaging which includes the command that triggered the error. See [change 192245](https://dawn-review.googlesource.com/c/dawn/+/192245).
+    
+    
+    Command cannot be recorded while [CommandEncoder (unlabeled)] is locked and [RenderPassEncoder (unlabeled)] is currently open.
+     - While encoding [CommandEncoder (unlabeled)].BeginComputePass([ComputePassDescriptor]).
+    
+
+### Dawn updates
+
+The [webgpu.h](https://github.com/webgpu-native/webgpu-headers/blob/main/webgpu.h) C API no longer exposes `wgpuSurfaceGetPreferredFormat()`, the C equivalent of Dawn's `wgpu::Surface::GetPreferredFormat()`. Instead, use `wgpu::Surface::GetCapabilities()` to get the list of supported formats, then use `formats[0]` to get the texture format preferred for this surface. In the meantime, calling `wgpu::Surface::GetPreferredFormat()` emits a deprecation warning. See [issue 290](https://github.com/webgpu-native/webgpu-headers/issues/290).
+
+The supported texture usages of a surface are now available through `wgpu::SurfaceCapabilities::usages` when calling `wgpu::Surface::GetCapabilities()`. They are expected to always include `wgpu::TextureUsage::RenderAttachment`. See [issue 301](https://github.com/webgpu-native/webgpu-headers/pull/301).
+
+This covers only some of the key highlights. Check out the exhaustive [list of commits](https://dawn.googlesource.com/dawn/+log/chromium/6478..chromium/6533?n=1000).
+
 ## New origin trials
 
 ### Compression dictionary transport with Shared Brotli and Shared Zstandard

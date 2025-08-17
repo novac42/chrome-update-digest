@@ -1,0 +1,320 @@
+version: '124'
+channel: stable
+area: graphics-webgpu
+extraction_timestamp: '2025-08-17T21:27:00.378737'
+extraction_method: deterministic
+statistics:
+  total_features: 8
+  total_links: 28
+  primary_tags:
+    webgpu: 8
+    serviceworker: 2
+    storage: 1
+    deprecation: 1
+  cross_cutting:
+    webgpu: 6
+    privacy: 2
+    ai: 1
+    enterprise: 1
+features:
+- title: SVG `context-fill` and `context-stroke`
+  content: 'Implements an existing SVG feature that allows the keywords `context-fill` and `context-stroke` when specifying
+    fill and stroke properties. This only affects SVG sub-trees that are instantiated with a `<use>` element, and `<marker>`
+    elements that are instantiated using the `marker` property on a `<path>` element. In those circumstances, `context-fill`
+    and `context-stroke` are resolved to the value of the `fill` and `stroke` properties on the `<use>` or `<path>`.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5146558556536832) | [Spec](https://svgwg.org/svg2-draft/painting.html#context-paint)'
+  heading_path:
+  - Chrome 124
+  - Rendering and Graphics
+  - SVG `context-fill` and `context-stroke`
+  links:
+  - url: https://chromestatus.com/feature/5146558556536832
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://svgwg.org/svg2-draft/painting.html#context-paint
+    link_type: other
+    title: Spec
+  line_number: 155
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: 'WebGPU: ServiceWorker and SharedWorker support'
+  content: '[ServiceWorker and SharedWorker support](/blog/new-in-webgpu-124#service_workers_and_shared_workers_support) is
+    added to WebGPU, aligning with existing WebGL capabilities.
+
+
+    Service Workers enable offline capabilities and background processing for WebGPU. This means graphics-intensive web applications
+    or Chrome Extensions can cache resources and perform computations even when the user isn''t actively interacting with
+    the page.
+
+
+    Shared Workers allow multiple tabs or extension contexts to coordinate and share WebGPU resources. This leads to smoother
+    performance and more efficient use of the user''s graphics hardware.
+
+
+    [Tracking bug #41494731](https://issues.chromium.org/issues/41494731) | [ChromeStatus.com entry](https://chromestatus.com/feature/4875951026733056)
+    | [Spec](https://gpuweb.github.io/gpuweb/#navigator-gpu)'
+  heading_path:
+  - Chrome 124
+  - Rendering and Graphics
+  - 'WebGPU: ServiceWorker and SharedWorker support'
+  links:
+  - url: https://issues.chromium.org/issues/41494731
+    link_type: other
+    title: 'Tracking bug #41494731'
+  - url: https://chromestatus.com/feature/4875951026733056
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://gpuweb.github.io/gpuweb/#navigator-gpu
+    link_type: github
+    title: Spec
+  line_number: 161
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: serviceworker
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+  - privacy
+- title: Read-only and read-write storage textures
+  content: "The storage texture binding type allows shaders to read from storage textures without adding the `TEXTURE_BINDING`\
+    \ usage, and perform mixed reads and writes on certain formats. When the `\"readonly_and_readwrite_storage_textures\"\
+    ` WGSL [language extension](https://gpuweb.github.io/gpuweb/wgsl/#language-extension) is present in [`navigator.gpu.wgslLanguageFeatures`](https://developer.mozilla.org/docs/Web/API/WGSLLanguageFeatures),\
+    \ you can now set `GPUStorageTexture` access to either `\"read-write\"` or `\"read-only\"` when creating a bind group\
+    \ layout. Previously this was restricted to `\"write-only\"`.\n\nThen, your WGSL shader code can use `read_write` and\
+    \ `read` access qualifier for storage textures, the `textureLoad()` and `textureStore()` built-in functions behave accordingly,\
+    \ and a new `textureBarrier()` built-in function is available to synchronize texture memory accesses in a workgroup.\n\
+    \nIt's recommended to use a [requires-directive](https://gpuweb.github.io/gpuweb/wgsl/#requires-directive) to signal the\
+    \ potential for non-portability with `requires readonly_and_readwrite_storage_textures;` at the top of your WGSL shader\
+    \ code. See the following example and [issue dawn:1972](https://bugs.chromium.org/p/dawn/issues/detail?id=1972).\n   \
+    \ \n    \n    if (!navigator.gpu.wgslLanguageFeatures.has(\"readonly_and_readwrite_storage_textures\")) {\n      throw\
+    \ new Error(\"Read-only and read-write storage textures are not available\");\n    }\n    \n    const adapter = await\
+    \ navigator.gpu.requestAdapter();\n    const device = await adapter.requestDevice();\n    \n    const bindGroupLayout\
+    \ = device.createBindGroupLayout({\n      entries: [{\n        binding: 0,\n        visibility: GPUShaderStage.COMPUTE,\n\
+    \        storageTexture: {\n          access: \"read-write\", // <-- New!\n          format: \"r32uint\",\n        },\n\
+    \      }],\n    });\n    \n    const shaderModule = device.createShaderModule({ code: `\n      requires readonly_and_readwrite_storage_textures;\n\
+    \    \n      @group(0) @binding(0) var tex : texture_storage_2d<r32uint, read_write>;\n    \n      @compute @workgroup_size(1,\
+    \ 1)\n      fn main(@builtin(local_invocation_id) local_id: vec3u) {\n        var data = textureLoad(tex, vec2i(local_id.xy));\n\
+    \        data.x *= 2;\n        textureStore(tex, vec2i(local_id.xy), data);\n      }`\n    });\n    \n    // You can now\
+    \ create a compute pipeline with this shader module and\n    // send the appropriate commands to the GPU."
+  heading_path:
+  - What's New in WebGPU (Chrome 124)
+  - Read-only and read-write storage textures
+  links:
+  - url: https://gpuweb.github.io/gpuweb/wgsl/#language-extension
+    link_type: github
+    title: language extension
+  - url: https://developer.mozilla.org/docs/Web/API/WGSLLanguageFeatures
+    link_type: mdn
+    title: '`navigator.gpu.wgslLanguageFeatures`'
+  - url: https://gpuweb.github.io/gpuweb/wgsl/#requires-directive
+    link_type: github
+    title: requires-directive
+  - url: https://bugs.chromium.org/p/dawn/issues/detail?id=1972
+    link_type: tracking_bug
+    title: issue dawn:1972
+  line_number: 185
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: storage
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Service workers and shared workers support
+  content: 'WebGPU in Chrome takes web workers support to the next level, now offering support for both [service workers](https://developer.mozilla.org/docs/Web/API/Service_Worker_API)
+    and [shared workers](https://developer.mozilla.org/docs/Web/API/SharedWorker). You can use service workers to enhance
+    background tasks and offline capabilities, and shared workers for efficient resource sharing across scripts. See [issue
+    chromium:41494731](https://issues.chromium.org/issues/41494731).
+
+
+    Check out the [chrome extension sample](https://github.com/GoogleChrome/chrome-extensions-samples/tree/main/functional-samples/sample.webgpu)
+    and [WebLLM chrome extension](https://github.com/mlc-ai/web-llm/tree/main/examples/chrome-extension-webgpu-service-worker)
+    to see how to use WebGPU in an extension service worker.
+
+
+    ![Screenshot of the WebLLM chrome extension.](/static/blog/new-in-webgpu-124/image/webllm-chrome-extension.jpg) WebLLM
+    chrome extension.'
+  heading_path:
+  - What's New in WebGPU (Chrome 124)
+  - Service workers and shared workers support
+  links:
+  - url: https://developer.mozilla.org/docs/Web/API/Service_Worker_API
+    link_type: mdn
+    title: service workers
+  - url: https://developer.mozilla.org/docs/Web/API/SharedWorker
+    link_type: mdn
+    title: shared workers
+  - url: https://issues.chromium.org/issues/41494731
+    link_type: other
+    title: issue chromium:41494731
+  - url: https://github.com/GoogleChrome/chrome-extensions-samples/tree/main/functional-samples/sample.webgpu
+    link_type: github
+    title: chrome extension sample
+  - url: https://github.com/mlc-ai/web-llm/tree/main/examples/chrome-extension-webgpu-service-worker
+    link_type: github
+    title: WebLLM chrome extension
+  line_number: 229
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: serviceworker
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+  - ai
+- title: New adapter information attributes
+  content: "Non-standard `d3dShaderModel` and `vkDriverVersion` adapter info attributes are now available upon calling [`requestAdapterInfo()`](https://developer.mozilla.org/docs/Web/API/GPUAdapter/requestAdapterInfo)\
+    \ if the user has enabled the \"WebGPU Developer Features\" [flag](/docs/web-platform/chrome-flags#chromeflags) at `chrome://flags/#enable-webgpu-developer-features`.\
+    \ When supported:\n\n  * The `d3dShaderModel` is the maximum supported D3D shader model number. For example, the value\
+    \ 62 indicates that the current driver supports HLSL SM 6.2. See [documentation](https://dawn.googlesource.com/dawn/+/refs/heads/main/docs/dawn/features/adapter_properties.md#d3d)\
+    \ and [issue dawn:1254](https://bugs.chromium.org/p/dawn/issues/detail?id=1254).\n\n  * The `vkDriverVersion` is the vendor-specified\
+    \ version number of the Vulkan driver. See [documentation](https://dawn.googlesource.com/dawn/+/refs/heads/main/docs/dawn/features/adapter_properties.md#vulkan)\
+    \ and [issue chromium:327457605](https://issues.chromium.org/issues/327457605).\n\n![Screenshot of https://webgpureport.org\
+    \ featuring vkDriverVersion in adapter info.](/static/blog/new-in-webgpu-124/image/webgpureport.jpg) Adapter info `vkDriverVersion`\
+    \ shown on <https://webgpureport.org>."
+  heading_path:
+  - What's New in WebGPU (Chrome 124)
+  - New adapter information attributes
+  links:
+  - url: https://developer.mozilla.org/docs/Web/API/GPUAdapter/requestAdapterInfo
+    link_type: mdn
+    title: '`requestAdapterInfo()`'
+  - url: https://dawn.googlesource.com/dawn/+/refs/heads/main/docs/dawn/features/adapter_properties.md#d3d
+    link_type: other
+    title: documentation
+  - url: https://bugs.chromium.org/p/dawn/issues/detail?id=1254
+    link_type: tracking_bug
+    title: issue dawn:1254
+  - url: https://dawn.googlesource.com/dawn/+/refs/heads/main/docs/dawn/features/adapter_properties.md#vulkan
+    link_type: other
+    title: documentation
+  - url: https://issues.chromium.org/issues/327457605
+    link_type: other
+    title: issue chromium:327457605
+  line_number: 237
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Bug fixes
+  content: 'Creating two pipelines with matching bindgroups using [`layout: "auto"`](https://gpuweb.github.io/gpuweb/#dom-gpuautolayoutmode-auto),
+    then creating a bindgroup with the first pipeline, and using it on the second pipeline now raises a [GPUValidationError](https://developer.mozilla.org/docs/Web/API/GPUValidationError/GPUValidationError).
+    Allowing it was an implementation bug which is now fixed with proper [tests](https://gpuweb.github.io/cts/standalone/?compatibility=1&runnow=1&q=webgpu:api,validation,encoding,programmable,pipeline_bind_group_compat:default_bind_group_layouts_never_match,*).
+    See [issue dawn:2402](https://bugs.chromium.org/p/dawn/issues/detail?id=2402).'
+  heading_path:
+  - What's New in WebGPU (Chrome 124)
+  - Bug fixes
+  links:
+  - url: https://gpuweb.github.io/gpuweb/#dom-gpuautolayoutmode-auto
+    link_type: github
+    title: '`layout: "auto"`'
+  - url: https://developer.mozilla.org/docs/Web/API/GPUValidationError/GPUValidationError
+    link_type: mdn
+    title: GPUValidationError
+  - url: https://gpuweb.github.io/cts/standalone/?compatibility=1&runnow=1&q=webgpu:api,validation,encoding,programmable,pipeline_bind_group_compat:default_bind_group_layouts_never_match,*
+    link_type: github
+    title: tests
+  - url: https://bugs.chromium.org/p/dawn/issues/detail?id=2402
+    link_type: tracking_bug
+    title: issue dawn:2402
+  line_number: 247
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Dawn updates
+  content: 'In the Dawn API, the uncaptured error callback set with `wgpuDeviceSetUncapturedErrorCallback` is now not called
+    after the GPU device is lost. This fix aligns Dawn with the JavaScript API specification and Blink''s implementation.
+    See [issue dawn:2459](https://bugs.chromium.org/p/dawn/issues/detail?id=2459).
+
+
+    This covers only some of the key highlights. Check out the exhaustive [list of commits](https://dawn.googlesource.com/dawn/+log/chromium/6312..chromium/6367?n=1000).'
+  heading_path:
+  - What's New in WebGPU (Chrome 124)
+  - Dawn updates
+  links:
+  - url: https://bugs.chromium.org/p/dawn/issues/detail?id=2459
+    link_type: tracking_bug
+    title: issue dawn:2459
+  - url: https://dawn.googlesource.com/dawn/+log/chromium/6312..chromium/6367?n=1000
+    link_type: other
+    title: list of commits
+  line_number: 251
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Deprecation trial for mutation events
+  content: 'Mutation events, including `DOMSubtreeModified`, `DOMNodeInserted`, `DOMNodeRemoved`, `DOMNodeRemovedFromDocument`,
+    `DOMNodeInsertedIntoDocument`, and `DOMCharacterDataModified`, can damage page performance, and also significantly increase
+    the complexity of adding new features to the Web. These APIs were deprecated from the specification in 2011, and were
+    replaced (in 2012) by the much better-behaved Mutation Observer API.
+
+
+    Mutation event support [will be disabled by default starting in Chrome 127](/blog/mutation-events-deprecation), around
+    July 30, 2024. Code should be migrated to the Mutation Observer API before that date to avoid site breakage. If more time
+    is needed, register for [Mutation events deprecation trial](/origintrials#/view_trial/919297273937002497) to re-enable
+    the feature for a limited time on a given site. This can be used through Chrome 134, ending March 25, 2025.
+
+
+    Alternatively, a `MutationEventsEnabled` enterprise policy can also be used for the same purpose, also through Chrome
+    134.
+
+
+    [Origin Trial](/origintrials#/view_trial/919297273937002497) | [Tracking bug #40268638](https://issues.chromium.org/issues/40268638)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5083947249172480) | [Spec](https://w3c.github.io/uievents/#legacy-event-types)'
+  heading_path:
+  - What's New in WebGPU (Chrome 124)
+  - Origin trials in progress
+  - Deprecation trial for mutation events
+  links:
+  - url: https://issues.chromium.org/issues/40268638
+    link_type: other
+    title: 'Tracking bug #40268638'
+  - url: https://chromestatus.com/feature/5083947249172480
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://w3c.github.io/uievents/#legacy-event-types
+    link_type: spec
+    title: Spec
+  line_number: 261
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+  - enterprise

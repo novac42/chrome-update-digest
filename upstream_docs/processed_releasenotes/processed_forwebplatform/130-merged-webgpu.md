@@ -153,6 +153,99 @@ This change mitigates this issue by enforcing that source debug keys and trigger
 
 [ChromeStatus.com entry](https://chromestatus.com/feature/6257907243679744) | [Spec](https://wicg.github.io/attribution-reporting-api/#attribution-debugging)
 
+## WebGPU
+
+  * [ Blog ](https://developer.chrome.com/blog)
+
+#  What's New in WebGPU (Chrome 130)
+
+Stay organized with collections  Save and categorize content based on your preferences. 
+
+![François Beaufort](https://web.dev/images/authors/beaufortfrancois.jpg)
+
+François Beaufort 
+
+[ GitHub ](https://github.com/beaufortfrancois)
+
+### Dual source blending
+
+Combining two fragment shader outputs into a single framebuffer is called [dual source blending](https://gpuweb.github.io/gpuweb/#dom-gpufeaturename-dual-source-blending). This technique is particularly useful for applications that require complex blending operations, such as those based on Porter-Duff blend modes. By replacing subsequent render passes with a single render pass, dual source blending can enhance performance and flexibility.
+
+The new `"dual-source-blending"` WebGPU feature lets you use the WGSL `@blend_src` attribute at `@location(0)` to denote the blending source index and the following [blend factors](https://gpuweb.github.io/gpuweb/#enumdef-gpublendfactor): `"src1"`, `"one-minus-src1"`, `"src1-alpha"`, and `"one-minus-src1-alpha"`. See the following snippet, the [chromestatus entry](https://chromestatus.com/feature/5167711051841536), and [issue 341973423](https://issues.chromium.org/issues/341973423).
+    
+    
+    const adapter = await navigator.gpu.requestAdapter();
+    if (!adapter.features.has("dual-source-blending")) {
+      throw new Error("Dual source blending support is not available");
+    }
+    // Explicitly request dual source blending support.
+    const device = await adapter.requestDevice({
+      requiredFeatures: ["dual-source-blending"],
+    });
+    
+    const code = `
+      enable dual_source_blending;
+    
+      struct FragOut {
+        @location(0) @blend_src(0) color : vec4f,
+        @location(0) @blend_src(1) blend : vec4f,
+      }
+    
+      @fragment fn main() -> FragOut {
+        var output : FragOut;
+        output.color = vec4f(1.0, 1.0, 1.0, 1.0);
+        output.blend = vec4f(0.5, 0.5, 0.5, 0.5);
+        return output;
+      }
+    `;
+    
+    const shaderModule = device.createShaderModule({ code });
+    // Create a render pipeline with this shader module
+    // and run the shader on the GPU...
+    
+
+### Shader compilation time improvements on Metal
+
+The Chrome team is enhancing Tint, the WebGPU shader language compiler, by introducing an [intermediate representation](https://dawn.googlesource.com/dawn/+/refs/heads/main/docs/tint/ir.md) (IR) for devices that support WebGPU with the Metal backend. This IR, positioned between Tint's abstract syntax tree (AST) and the Metal backend writer, will make the compiler more efficient and maintainable, ultimately benefiting both developers and users. Initial tests show that the new version of Tint is up to 10 times faster when translating Unity's WGSL shaders to MSL.
+
+![A flowchart shows the process of converting WGSL shader code into low-level GPU instructions.](/static/blog/new-in-webgpu-130/image/render-pipeline-creation-in-macos.png) Render pipeline creation in macOS.
+
+These improvements, already accessible on Android and ChromeOS, are being progressively expanded to macOS devices that support WebGPU with the Metal backend. See [issue 42251016](https://issues.chromium.org/issues/42251016).
+
+### Deprecation of GPUAdapter requestAdapterInfo()
+
+The GPUAdapter `requestAdapterInfo()` asynchronous method is redundant as developers can already get GPUAdapterInfo synchronously using the GPUAdapter `info` attribute. Hence, the non-standard GPUAdapter `requestAdapterInfo()` method is now deprecated. See [intent to deprecate](https://groups.google.com/a/chromium.org/g/blink-dev/c/HxOgGf4NzQ4).
+
+![DevTools console displays a deprecation warning for requestAdapterInfo\(\).](/static/blog/new-in-webgpu-130/image/devtools-deprecation.png) Deprecated feature warning for `requestAdapterInfo()` in Chrome DevTools.
+
+### Dawn updates
+
+The webgpu.h C API has defined some [naming conventions](https://github.com/webgpu-native/webgpu-headers/issues/212) for extension structs. See the following name changes and [issue 42241174](https://issues.chromium.org/issues/42241174).
+
+`WGPURenderPassDescriptor` extensions   
+---  
+`WGPURenderPassDescriptorMaxDrawCount ->` | `WGPURenderPassMaxDrawCount`  
+`WGPUShaderModuleDescriptor` extensions   
+`WGPUShaderModuleSPIRVDescriptor ->` | `WGPUShaderSourceSPIRV`  
+`WGPUShaderModuleWGSLDescriptor ->` | `WGPUShaderSourceWGSL`  
+`WGPUSurfaceDescriptor` extensions   
+`WGPUSurfaceDescriptorFromMetalLayer ->` | `WGPUSurfaceSourceMetalLayer`  
+`WGPUSurfaceDescriptorFromWindowsHWND ->` | `WGPUSurfaceSourceWindowsHWND`  
+`WGPUSurfaceDescriptorFromXlibWindow ->` | `WGPUSurfaceSourceXlibWindow`  
+`WGPUSurfaceDescriptorFromWaylandSurface ->` | `WGPUSurfaceSourceWaylandSurface`  
+`WGPUSurfaceDescriptorFromAndroidNativeWindow ->` | `WGPUSurfaceSourceAndroidNativeWindow`  
+`WGPUSurfaceDescriptorFromXcbWindow ->` | `WGPUSurfaceSourceXCBWindow`  
+`WGPUSurfaceDescriptorFromCanvasHTMLSelector ->` | `WGPUSurfaceSourceCanvasHTMLSelector_Emscripten`  
+  
+The `WGPUDepthStencilState`'s `depthWriteEnabled` attribute type switches from boolean to `WGPUOptionalBool` to better reflect its three possible states (true, false, and undefined) as in the JavaScript API. To learn more, see the following code snippet and the [webgpu-headers PR](https://github.com/webgpu-native/webgpu-headers/pull/308).
+    
+    
+    wgpu::DepthStencilState depthStencilState = {};
+    depthStencilState.depthWriteEnabled = wgpu::OptionalBool::True; // Undefined by default
+    
+
+This covers only some of the key highlights. Check out the exhaustive [list of commits](https://dawn.googlesource.com/dawn/+log/chromium/6668..chromium/6723?n=1000).
+
 ## Origin trials
 
 ### Language Detector API

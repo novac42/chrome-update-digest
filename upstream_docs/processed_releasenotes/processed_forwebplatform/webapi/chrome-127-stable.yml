@@ -1,0 +1,83 @@
+version: '127'
+channel: stable
+area: webapi
+extraction_timestamp: '2025-08-17T21:27:00.649720'
+extraction_method: deterministic
+statistics:
+  total_features: 2
+  total_links: 6
+  primary_tags:
+    webapi: 2
+    webgpu: 1
+  cross_cutting:
+    security: 1
+    privacy: 2
+    enterprise: 1
+    webgpu: 1
+features:
+- title: Automatic fullscreen content setting
+  content: "A new \"automatic fullscreen\" content setting lets enterprise admins allow sites to enter fullscreen without\
+    \ a user gesture. Users may also allow Isolated Web Apps to use this feature through site settings pages.\n\nCombined\
+    \ with the Window Management permission and unblocked popups, this unlocks valuable fullscreen capabilities:\n\n  * Open\
+    \ a fullscreen popup on another display, from one gesture.\n  * Show fullscreen content on multiple displays from one\
+    \ gesture.\n  * Show fullscreen content on a new display, when it's connected.\n  * Swap fullscreen windows between displays\
+    \ with one gesture.\n  * Show fullscreen content after user gesture expiry or consumption.\n\n[Demo](https://github.com/michaelwasserman/iwa-windowing-example)\
+    \ | [Tracking bug #1501130](https://issues.chromium.org/issues/1501130) | [ChromeStatus.com entry](https://chromestatus.com/feature/6218822004768768)"
+  heading_path:
+  - Chrome 127
+  - Web APIs
+  - Automatic fullscreen content setting
+  links:
+  - url: https://github.com/michaelwasserman/iwa-windowing-example
+    link_type: github
+    title: Demo
+  - url: https://issues.chromium.org/issues/1501130
+    link_type: other
+    title: 'Tracking bug #1501130'
+  - url: https://chromestatus.com/feature/6218822004768768
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 68
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - security
+  - privacy
+  - enterprise
+- title: 'WebGPU: GPUAdapter `info` attribute'
+  content: 'Adds a synchronous GPUAdapter info attribute to retrieve the same information about the physical adapter as with
+    the asynchronous GPUAdapter `requestAdapterInfo()` method.
+
+
+    [Tracking bug #335383516](https://issues.chromium.org/issues/335383516) | [ChromeStatus.com entry](https://chromestatus.com/feature/5087914701881344)
+    | [Spec](https://gpuweb.github.io/gpuweb/#dom-gpuadapter-info)'
+  heading_path:
+  - Chrome 127
+  - Web APIs
+  - 'WebGPU: GPUAdapter `info` attribute'
+  links:
+  - url: https://issues.chromium.org/issues/335383516
+    link_type: other
+    title: 'Tracking bug #335383516'
+  - url: https://chromestatus.com/feature/5087914701881344
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://gpuweb.github.io/gpuweb/#dom-gpuadapter-info
+    link_type: github
+    title: Spec
+  line_number: 82
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+  - privacy

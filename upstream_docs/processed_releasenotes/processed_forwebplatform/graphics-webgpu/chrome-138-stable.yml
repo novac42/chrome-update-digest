@@ -1,0 +1,107 @@
+version: '138'
+channel: stable
+area: graphics-webgpu
+extraction_timestamp: '2025-08-17T21:17:49.352923'
+extraction_method: deterministic
+statistics:
+  total_features: 5
+  total_links: 0
+  primary_tags:
+    webgpu: 5
+    deprecation: 1
+  cross_cutting:
+    webgpu: 4
+features:
+- title: Shorthand for Using Buffer as a Binding Resource
+  content: "Developers can now use a `GPUBuffer` directly as a `GPUBindingResource`. This simplifies binding and makes it\
+    \ consistent with other binding types:\n\n```javascript\nconst bindGroup = myDevice.createBindGroup({\n  layout: myPipeline.getBindGroupLayout(0),\n\
+    \  entries: [\n    { binding: 0, resource: mySampler },\n    { binding: 1, resource: myTextureView },\n    { binding:\
+    \ 2, resource: myExternalTexture },\n    { binding: 3, resource: myBuffer }, // Simplified syntax\n    { binding: 4, resource:\
+    \ { buffer: myOtherBuffer, offset: 42 } },\n  ],\n});\n```"
+  heading_path:
+  - Chrome 138 Release Notes
+  - WebGPU
+  - Shorthand for Using Buffer as a Binding Resource
+  links: []
+  line_number: 139
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Size Requirement Changes for Buffers Mapped at Creation
+  content: "Creating a buffer with `mappedAtCreation: true` now throws a `RangeError` if the `size` is not a multiple of 4:\n\
+    \n```javascript\nmyDevice.createBuffer({\n  mappedAtCreation: true,\n  size: 42, // This will now throw a RangeError\n\
+    \  usage: GPUBufferUsage.STORAGE,\n});\n```"
+  heading_path:
+  - Chrome 138 Release Notes
+  - WebGPU
+  - Size Requirement Changes for Buffers Mapped at Creation
+  links: []
+  line_number: 156
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: Architecture Report for Recent GPUs
+  content: 'New GPU architectures are now reported:
+
+    - Nvidia: `"blackwell"`
+
+    - AMD: `"rdna4"`'
+  heading_path:
+  - Chrome 138 Release Notes
+  - WebGPU
+  - Architecture Report for Recent GPUs
+  links: []
+  line_number: 168
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Deprecation of GPUAdapter isFallbackAdapter Attribute
+  content: The `isFallbackAdapter` attribute for `GPUAdapter` is deprecated. It's replaced by the `GPUAdapterInfo.isFallbackAdapter`
+    attribute introduced in Chrome 136.
+  heading_path:
+  - Chrome 138 Release Notes
+  - WebGPU
+  - Deprecation of GPUAdapter isFallbackAdapter Attribute
+  links: []
+  line_number: 174
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Dawn Updates
+  content: '- Emscripten now supports Dawn GLFW for CMake builds
+
+    - A "remote" Emdawnwebgpu port is included in package releases
+
+    - Switching to Emdawnwebgpu is now a single flag change from `emcc -sUSE_WEBGPU` to `emcc --use-port=emdawnwebgpu`'
+  heading_path:
+  - Chrome 138 Release Notes
+  - WebGPU
+  - Dawn Updates
+  links: []
+  line_number: 178
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu

@@ -1,0 +1,267 @@
+version: '130'
+channel: stable
+area: graphics-webgpu
+extraction_timestamp: '2025-08-17T21:27:00.941960'
+extraction_method: deterministic
+statistics:
+  total_features: 8
+  total_links: 20
+  primary_tags:
+    webgpu: 8
+    deprecation: 2
+  cross_cutting:
+    webgpu: 5
+    privacy: 1
+    ai: 1
+features:
+- title: 'WebGPU: Dual source blending'
+  content: 'Adds the optional GPU feature "dual-source-blending" that enables combining two fragment shader outputs into a
+    single framebuffer. This technique is particularly useful for applications that require complex blending operations, such
+    as those based on Porter-Duff blend modes. By reducing the need for frequent pipeline state object changes, dual source
+    blending can enhance performance and flexibility.
+
+
+    [Tracking bug #341973423](https://issues.chromium.org/issues/341973423) | [ChromeStatus.com entry](https://chromestatus.com/feature/5167711051841536)
+    | [Spec](https://github.com/gpuweb/gpuweb/pull/4621)'
+  heading_path:
+  - Chrome 130
+  - Rendering and graphics
+  - 'WebGPU: Dual source blending'
+  links:
+  - url: https://issues.chromium.org/issues/341973423
+    link_type: other
+    title: 'Tracking bug #341973423'
+  - url: https://chromestatus.com/feature/5167711051841536
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/gpuweb/gpuweb/pull/4621
+    link_type: github
+    title: Spec
+  line_number: 132
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+  - privacy
+- title: Dual source blending
+  content: "Combining two fragment shader outputs into a single framebuffer is called [dual source blending](https://gpuweb.github.io/gpuweb/#dom-gpufeaturename-dual-source-blending).\
+    \ This technique is particularly useful for applications that require complex blending operations, such as those based\
+    \ on Porter-Duff blend modes. By replacing subsequent render passes with a single render pass, dual source blending can\
+    \ enhance performance and flexibility.\n\nThe new `\"dual-source-blending\"` WebGPU feature lets you use the WGSL `@blend_src`\
+    \ attribute at `@location(0)` to denote the blending source index and the following [blend factors](https://gpuweb.github.io/gpuweb/#enumdef-gpublendfactor):\
+    \ `\"src1\"`, `\"one-minus-src1\"`, `\"src1-alpha\"`, and `\"one-minus-src1-alpha\"`. See the following snippet, the [chromestatus\
+    \ entry](https://chromestatus.com/feature/5167711051841536), and [issue 341973423](https://issues.chromium.org/issues/341973423).\n\
+    \    \n    \n    const adapter = await navigator.gpu.requestAdapter();\n    if (!adapter.features.has(\"dual-source-blending\"\
+    )) {\n      throw new Error(\"Dual source blending support is not available\");\n    }\n    // Explicitly request dual\
+    \ source blending support.\n    const device = await adapter.requestDevice({\n      requiredFeatures: [\"dual-source-blending\"\
+    ],\n    });\n    \n    const code = `\n      enable dual_source_blending;\n    \n      struct FragOut {\n        @location(0)\
+    \ @blend_src(0) color : vec4f,\n        @location(0) @blend_src(1) blend : vec4f,\n      }\n    \n      @fragment fn main()\
+    \ -> FragOut {\n        var output : FragOut;\n        output.color = vec4f(1.0, 1.0, 1.0, 1.0);\n        output.blend\
+    \ = vec4f(0.5, 0.5, 0.5, 0.5);\n        return output;\n      }\n    `;\n    \n    const shaderModule = device.createShaderModule({\
+    \ code });\n    // Create a render pipeline with this shader module\n    // and run the shader on the GPU..."
+  heading_path:
+  - What's New in WebGPU (Chrome 130)
+  - Dual source blending
+  links:
+  - url: https://gpuweb.github.io/gpuweb/#dom-gpufeaturename-dual-source-blending
+    link_type: github
+    title: dual source blending
+  - url: https://gpuweb.github.io/gpuweb/#enumdef-gpublendfactor
+    link_type: github
+    title: blend factors
+  - url: https://chromestatus.com/feature/5167711051841536
+    link_type: chromestatus
+    title: chromestatus entry
+  - url: https://issues.chromium.org/issues/341973423
+    link_type: other
+    title: issue 341973423
+  line_number: 170
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Shader compilation time improvements on Metal
+  content: 'The Chrome team is enhancing Tint, the WebGPU shader language compiler, by introducing an [intermediate representation](https://dawn.googlesource.com/dawn/+/refs/heads/main/docs/tint/ir.md)
+    (IR) for devices that support WebGPU with the Metal backend. This IR, positioned between Tint''s abstract syntax tree
+    (AST) and the Metal backend writer, will make the compiler more efficient and maintainable, ultimately benefiting both
+    developers and users. Initial tests show that the new version of Tint is up to 10 times faster when translating Unity''s
+    WGSL shaders to MSL.
+
+
+    ![A flowchart shows the process of converting WGSL shader code into low-level GPU instructions.](/static/blog/new-in-webgpu-130/image/render-pipeline-creation-in-macos.png)
+    Render pipeline creation in macOS.
+
+
+    These improvements, already accessible on Android and ChromeOS, are being progressively expanded to macOS devices that
+    support WebGPU with the Metal backend. See [issue 42251016](https://issues.chromium.org/issues/42251016).'
+  heading_path:
+  - What's New in WebGPU (Chrome 130)
+  - Shader compilation time improvements on Metal
+  links:
+  - url: https://dawn.googlesource.com/dawn/+/refs/heads/main/docs/tint/ir.md
+    link_type: other
+    title: intermediate representation
+  - url: https://issues.chromium.org/issues/42251016
+    link_type: other
+    title: issue 42251016
+  line_number: 207
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Deprecation of GPUAdapter requestAdapterInfo()
+  content: 'The GPUAdapter `requestAdapterInfo()` asynchronous method is redundant as developers can already get GPUAdapterInfo
+    synchronously using the GPUAdapter `info` attribute. Hence, the non-standard GPUAdapter `requestAdapterInfo()` method
+    is now deprecated. See [intent to deprecate](https://groups.google.com/a/chromium.org/g/blink-dev/c/HxOgGf4NzQ4).
+
+
+    ![DevTools console displays a deprecation warning for requestAdapterInfo\(\).](/static/blog/new-in-webgpu-130/image/devtools-deprecation.png)
+    Deprecated feature warning for `requestAdapterInfo()` in Chrome DevTools.'
+  heading_path:
+  - What's New in WebGPU (Chrome 130)
+  - Deprecation of GPUAdapter requestAdapterInfo()
+  links:
+  - url: https://groups.google.com/a/chromium.org/g/blink-dev/c/HxOgGf4NzQ4
+    link_type: other
+    title: intent to deprecate
+  line_number: 215
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Dawn updates
+  content: "The webgpu.h C API has defined some [naming conventions](https://github.com/webgpu-native/webgpu-headers/issues/212)\
+    \ for extension structs. See the following name changes and [issue 42241174](https://issues.chromium.org/issues/42241174).\n\
+    \n`WGPURenderPassDescriptor` extensions   \n---  \n`WGPURenderPassDescriptorMaxDrawCount ->` | `WGPURenderPassMaxDrawCount`\
+    \  \n`WGPUShaderModuleDescriptor` extensions   \n`WGPUShaderModuleSPIRVDescriptor ->` | `WGPUShaderSourceSPIRV`  \n`WGPUShaderModuleWGSLDescriptor\
+    \ ->` | `WGPUShaderSourceWGSL`  \n`WGPUSurfaceDescriptor` extensions   \n`WGPUSurfaceDescriptorFromMetalLayer ->` | `WGPUSurfaceSourceMetalLayer`\
+    \  \n`WGPUSurfaceDescriptorFromWindowsHWND ->` | `WGPUSurfaceSourceWindowsHWND`  \n`WGPUSurfaceDescriptorFromXlibWindow\
+    \ ->` | `WGPUSurfaceSourceXlibWindow`  \n`WGPUSurfaceDescriptorFromWaylandSurface ->` | `WGPUSurfaceSourceWaylandSurface`\
+    \  \n`WGPUSurfaceDescriptorFromAndroidNativeWindow ->` | `WGPUSurfaceSourceAndroidNativeWindow`  \n`WGPUSurfaceDescriptorFromXcbWindow\
+    \ ->` | `WGPUSurfaceSourceXCBWindow`  \n`WGPUSurfaceDescriptorFromCanvasHTMLSelector ->` | `WGPUSurfaceSourceCanvasHTMLSelector_Emscripten`\
+    \  \n  \nThe `WGPUDepthStencilState`'s `depthWriteEnabled` attribute type switches from boolean to `WGPUOptionalBool`\
+    \ to better reflect its three possible states (true, false, and undefined) as in the JavaScript API. To learn more, see\
+    \ the following code snippet and the [webgpu-headers PR](https://github.com/webgpu-native/webgpu-headers/pull/308).\n\
+    \    \n    \n    wgpu::DepthStencilState depthStencilState = {};\n    depthStencilState.depthWriteEnabled = wgpu::OptionalBool::True;\
+    \ // Undefined by default\n    \n\nThis covers only some of the key highlights. Check out the exhaustive [list of commits](https://dawn.googlesource.com/dawn/+log/chromium/6668..chromium/6723?n=1000)."
+  heading_path:
+  - What's New in WebGPU (Chrome 130)
+  - Dawn updates
+  links:
+  - url: https://github.com/webgpu-native/webgpu-headers/issues/212
+    link_type: github
+    title: naming conventions
+  - url: https://issues.chromium.org/issues/42241174
+    link_type: other
+    title: issue 42241174
+  - url: https://github.com/webgpu-native/webgpu-headers/pull/308
+    link_type: github
+    title: webgpu-headers PR
+  - url: https://dawn.googlesource.com/dawn/+log/chromium/6668..chromium/6723?n=1000
+    link_type: other
+    title: list of commits
+  line_number: 221
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Language Detector API
+  content: 'A JavaScript API for [detecting the language of text](/blog/august2024-language-detection), with confidence levels.
+
+
+    [Origin Trial](/origintrials#/view_trial/662592095176884225) | [Language detection API available for early preview](/blog/august2024-language-detection)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/6494349985841152) | [Spec](https://github.com/WICG/translation-api/blob/main/README.md)'
+  heading_path:
+  - What's New in WebGPU (Chrome 130)
+  - Origin trials
+  - Language Detector API
+  links:
+  - url: https://chromestatus.com/feature/6494349985841152
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/WICG/translation-api/blob/main/README.md
+    link_type: github
+    title: Spec
+  line_number: 251
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - ai
+- title: WebAuthn `attestationFormats`
+  content: 'Support the `attestationFormats` field from WebAuthn level 3.
+
+
+    WebAuthn Level 3 supports a site expressing an ordered preference for credential attestation formats in the new `attestationFormats`
+    field. This feature enables support for this on Android, where multiple formats can be supported by passkey providers.
+
+
+    [Origin Trial](/origintrials#/view_trial/1428204031829868545) | [ChromeStatus.com entry](https://chromestatus.com/feature/5121935290400768)
+    | [Spec](https://w3c.github.io/webauthn/#dom-publickeycredentialcreationoptions-attestationformats)'
+  heading_path:
+  - What's New in WebGPU (Chrome 130)
+  - Origin trials
+  - WebAuthn `attestationFormats`
+  links:
+  - url: https://chromestatus.com/feature/5121935290400768
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://w3c.github.io/webauthn/#dom-publickeycredentialcreationoptions-attestationformats
+    link_type: spec
+    title: Spec
+  line_number: 257
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: Remove `expectedImprovement` in `DelegatedInkTrailPresenter`
+  content: 'The `expectedImprovement` attribute tells web developers how much improvement the DelegatedInkTrails API will
+    provide to their current ink latency. However, this attribute is not worth the increase to fingerprinting entropy.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5194773674328064) | [Spec](https://wicg.github.io/ink-enhancement)'
+  heading_path:
+  - What's New in WebGPU (Chrome 130)
+  - Deprecations and removals
+  - Remove `expectedImprovement` in `DelegatedInkTrailPresenter`
+  links:
+  - url: https://chromestatus.com/feature/5194773674328064
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/ink-enhancement
+    link_type: spec
+    title: Spec
+  line_number: 267
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []

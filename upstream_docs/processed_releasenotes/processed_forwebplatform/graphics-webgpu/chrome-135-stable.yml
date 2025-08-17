@@ -1,0 +1,398 @@
+version: '135'
+channel: stable
+area: graphics-webgpu
+extraction_timestamp: '2025-08-17T21:25:17.715435'
+extraction_method: deterministic
+statistics:
+  total_features: 11
+  total_links: 35
+  primary_tags:
+    webgpu: 11
+    devices: 1
+    deprecation: 2
+  cross_cutting:
+    webgpu: 5
+    enterprise: 3
+    privacy: 4
+    security: 1
+features:
+- title: Allow creating pipeline layout with null bind group layout
+  content: "Previously, creating an empty bind group layout required adding a bind group with zero bindings, which was inconvenient.\
+    \ This is no longer necessary as null bind group layouts are now allowed and ignored when creating a pipeline layout.\
+    \ This should make development easier.\n\nFor example, you might want to create a pipeline that uses only bind group layouts\
+    \ 0 and 2. You could assign bind group layout 1 to fragment data and bind group layout 2 to vertex data, and then render\
+    \ without a fragment shader. See [issue 377836524](https://issues.chromium.org/issues/377836524).\n    \n    \n    const\
+    \ bgl0 = myDevice.createBindGroupLayout({ entries: myGlobalEntries });\n    const bgl1 = myDevice.createBindGroupLayout({\
+    \ entries: myFragmentEntries });\n    const bgl2 = myDevice.createBindGroupLayout({ entries: myVertexEntries });\n   \
+    \ \n    // Create a pipeline layout that will be used to render without a fragment shader.\n    const myPipelineLayout\
+    \ = myDevice.createPipelineLayout({\n      bindGroupLayouts: [bgl0, null, bgl2],\n    });"
+  heading_path:
+  - What's New in WebGPU (Chrome 135)
+  - Allow creating pipeline layout with null bind group layout
+  links:
+  - url: https://issues.chromium.org/issues/377836524
+    link_type: other
+    title: issue 377836524
+  line_number: 271
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Allow viewports to extend past the render targets bounds
+  content: "The requirements for viewport validation have been relaxed to allow viewports to go beyond the render target boundaries.\
+    \ This is especially useful for drawing 2D elements such as UI that may extend outside the current viewport. See [issue\
+    \ 390162929](https://issues.chromium.org/issues/390162929).\n    \n    \n    const passEncoder = myCommandEncoder.beginRenderPass({\n\
+    \      colorAttachments: [\n        {\n          view: myColorTexture.createView(),\n          loadOp: \"clear\",\n  \
+    \        storeOp: \"store\",\n        },\n      ],\n    });\n    \n    // Set a viewport that extends past the render\
+    \ target's bounds by 8 pixels\n    // in all directions.\n    passEncoder.setViewport(\n      /*x=*/ -8,\n      /*y=*/\
+    \ -8,\n      /*width=*/ myColorTexture.width + 16,\n      /*height=*/ myColorTexture.height + 16,\n      /*minDepth=*/\
+    \ 0,\n      /*maxDepth=*/ 1,\n    );\n    \n    // Draw geometry and complete the render pass as usual."
+  heading_path:
+  - What's New in WebGPU (Chrome 135)
+  - Allow viewports to extend past the render targets bounds
+  links:
+  - url: https://issues.chromium.org/issues/390162929
+    link_type: other
+    title: issue 390162929
+  line_number: 288
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: Easier access to the experimental compatibility mode on Android
+  content: "The `chrome://flags/#enable-unsafe-webgpu` flag alone now enables all capabilities required for the experimental\
+    \ [WebGPU compatibility mode](/blog/new-in-webgpu-122#expand_reach_with_compatibility_mode_feature_in_development) on\
+    \ Android. With that, you can request a GPUAdapter in compatibility mode with the `featureLevel: \"compatibility\"` option\
+    \ and even get access to the OpenGL ES backend on devices lacking support for Vulkan. See the following example and issue\
+    \ [dawn:389876644](https://issues.chromium.org/issues/389876644).\n    \n    \n    // Request a GPUAdapter in compatibility\
+    \ mode.\n    const adapter = await navigator.gpu.requestAdapter({ featureLevel: \"compatibility\" });\n    \n\n![WebGPU\
+    \ report page shows a GPUAdapter in compatibility mode on Android device.](/static/blog/new-in-webgpu-135/image/compatibility-mode-android.jpg)\
+    \ Compatibility mode adapter info in [webgpureport.org](https://webgpureport.org)."
+  heading_path:
+  - What's New in WebGPU (Chrome 135)
+  - Easier access to the experimental compatibility mode on Android
+  links:
+  - url: https://issues.chromium.org/issues/389876644
+    link_type: other
+    title: dawn:389876644
+  - url: https://webgpureport.org
+    link_type: other
+    title: webgpureport.org
+  line_number: 317
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Remove maxInterStageShaderComponents limit
+  content: "As [previously announced](/blog/new-in-webgpu-133#deprecate_maxinterstageshadercomponents_limit), the maxInterStageShaderComponents\
+    \ limit is removed due to a combination of factors:\n\n  * Redundancy with `maxInterStageShaderVariables`: This limit\
+    \ already serves a similar purpose, controlling the amount of data passed between shader stages.\n  * Minor discrepancies:\
+    \ While there are slight differences in how the two limits are calculated, these differences are minor and can be effectively\
+    \ managed within the `maxInterStageShaderVariables` limit.\n  * Simplification: Removing `maxInterStageShaderComponents`\
+    \ streamlines the shader interface and reduces complexity for developers. Instead of managing two separate limits with\
+    \ subtle differences, they can focus on the more appropriately named and comprehensive `maxInterStageShaderVariables`.\n\
+    \nSee [intent to remove](https://groups.google.com/a/chromium.org/g/blink-dev/c/i5oJu9lZPAk) and [issue 364338810](https://issues.chromium.org/issues/364338810)."
+  heading_path:
+  - What's New in WebGPU (Chrome 135)
+  - Remove maxInterStageShaderComponents limit
+  links:
+  - url: https://groups.google.com/a/chromium.org/g/blink-dev/c/i5oJu9lZPAk
+    link_type: other
+    title: intent to remove
+  - url: https://issues.chromium.org/issues/364338810
+    link_type: other
+    title: issue 364338810
+  line_number: 328
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+  - enterprise
+- title: Dawn updates
+  content: "It's no longer possible to use a filtering sampler to sample a depth texture. As a reminder, a depth texture can\
+    \ only be used with a non filtering or a comparison sampler. See [issue 379788112](https://issues.chromium.org/issues/379788112).\n\
+    \nThe `WGPURequiredLimits` and `WGPUSupportedLimits` structures have been flattened into `WGPULimits`. See [issue 374263404](https://issues.chromium.org/issues/374263404).\n\
+    \nThe following structs have been renamed. See [issue 42240793](https://issues.chromium.org/issues/42240793).\n\n  * `WGPUImageCopyBuffer`\
+    \ is now `WGPUTexelCopyBufferInfo`\n  * `WGPUImageCopyTexture` is now `WGPUTexelCopyTextureInfo`\n  * `WGPUTextureDataLayout`\
+    \ is now `WGPUTexelCopyBufferLayout`\n\nThe `subgroupMinSize` and `subgroupMaxSize` members have been added to the `WGPUAdapterInfo`\
+    \ struct. See [webgpu-headers PR](https://github.com/webgpu-native/webgpu-headers/pull/509).\n\nTracing Dawn API usage\
+    \ in Metal is now possible when running your program with the `DAWN_TRACE_FILE_BASE` environment variable which saves\
+    \ a .gputrace file that can be loaded later into XCode's Metal Debugger. See the [Debugging Dawn](https://dawn.googlesource.com/dawn/+/HEAD/docs/dawn/debugging.md#tracing-native-gpu-api-usage)\
+    \ documentation.\n\nThis covers only some of the key highlights. Check out the exhaustive [list of commits](https://dawn.googlesource.com/dawn/+log/chromium/6998..chromium/7049?n=1000)."
+  heading_path:
+  - What's New in WebGPU (Chrome 135)
+  - Dawn updates
+  links:
+  - url: https://issues.chromium.org/issues/379788112
+    link_type: other
+    title: issue 379788112
+  - url: https://issues.chromium.org/issues/374263404
+    link_type: other
+    title: issue 374263404
+  - url: https://issues.chromium.org/issues/42240793
+    link_type: other
+    title: issue 42240793
+  - url: https://github.com/webgpu-native/webgpu-headers/pull/509
+    link_type: github
+    title: webgpu-headers PR
+  - url: https://dawn.googlesource.com/dawn/+/HEAD/docs/dawn/debugging.md#tracing-native-gpu-api-usage
+    link_type: other
+    title: Debugging Dawn
+  - url: https://dawn.googlesource.com/dawn/+log/chromium/6998..chromium/7049?n=1000
+    link_type: other
+    title: list of commits
+  line_number: 338
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Device bound session credentials
+  content: 'A way for websites to securely bind a session to a single device.
+
+
+    It will let servers have a session be securely bound to a device. The browser will renew the session periodically as requested
+    by the server, with proof of possession of a private key.
+
+
+    [Origin Trial](https://developer.chrome.com/origintrials/#/view_trial/3911939226324697089) | [ChromeStatus.com entry](https://chromestatus.com/feature/5140168270413824)
+    | [Spec](https://w3c.github.io/webappsec-dbsc)'
+  heading_path:
+  - What's New in WebGPU (Chrome 135)
+  - Origin trials
+  - Device bound session credentials
+  links:
+  - url: https://developer.chrome.com/origintrials/#/view_trial/3911939226324697089
+    link_type: other
+    title: Origin Trial
+  - url: https://chromestatus.com/feature/5140168270413824
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://w3c.github.io/webappsec-dbsc
+    link_type: spec
+    title: Spec
+  line_number: 358
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: devices
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: Interest invokers
+  content: 'This feature adds an `interesttarget` attribute to `<button>` and `<a>` elements. The `interesttarget` attribute
+    adds "interest" behaviors to the element, such that when the user "shows interest" in the element, actions are triggered
+    on the target element. Actions can include things like showing a popover. The user agent will handle detecting when the
+    user "shows interest" in the element—when hovering the element with a mouse, hitting special hotkeys on the keyboard,
+    or long-pressing the element on touchscreens. When interest is shown or lost, an `InterestEvent` will be fired on the
+    target, which have default actions in the case of popovers - showing and hiding the popover.
+
+
+    [Origin Trial](https://developer.chrome.com/origintrials/#/view_trial/813462682693795841) | [Tracking bug #326681249](https://issues.chromium.org/issues/326681249)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/4530756656562176) | [Spec](https://github.com/whatwg/html/pull/11006)'
+  heading_path:
+  - What's New in WebGPU (Chrome 135)
+  - Origin trials
+  - Interest invokers
+  links:
+  - url: https://developer.chrome.com/origintrials/#/view_trial/813462682693795841
+    link_type: other
+    title: Origin Trial
+  - url: https://issues.chromium.org/issues/326681249
+    link_type: other
+    title: 'Tracking bug #326681249'
+  - url: https://chromestatus.com/feature/4530756656562176
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/whatwg/html/pull/11006
+    link_type: github
+    title: Spec
+  line_number: 366
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Signature-based integrity
+  content: 'This feature provides web developers with a mechanism to verify the provenance of resources they depend upon,
+    creating a technical foundation for trust in a site''s dependencies. In short: servers can sign responses with a Ed25519
+    key pair, and web developers can require the user agent to verify the signature using a specific public key. This offers
+    a helpful addition to URL-based checks offered by Content Security Policy on the one hand, and Subresource Integrity''s
+    content-based checks on the other.
+
+
+    [Origin Trial](https://developer.chrome.com/origintrials/#/view_trial/2704974526189404161) | [Tracking bug #375224898](https://issues.chromium.org/issues/375224898)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5032324620877824) | [Spec](https://wicg.github.io/signature-based-sri)'
+  heading_path:
+  - What's New in WebGPU (Chrome 135)
+  - Origin trials
+  - Signature-based integrity
+  links:
+  - url: https://developer.chrome.com/origintrials/#/view_trial/2704974526189404161
+    link_type: other
+    title: Origin Trial
+  - url: https://issues.chromium.org/issues/375224898
+    link_type: other
+    title: 'Tracking bug #375224898'
+  - url: https://chromestatus.com/feature/5032324620877824
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/signature-based-sri
+    link_type: spec
+    title: Spec
+  line_number: 372
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - security
+  - privacy
+  - enterprise
+- title: 'Speculation rules: target_hint field'
+  content: 'This extends speculation rules syntax to allow developers to specify the target_hint field.
+
+
+    This field provides a hint to indicate a target navigable where a prerendered page will eventually be activated. For example,
+    when _blank is specified as a hint, a prerendered page can be activated for a navigable opened by window.open(). The field
+    has no effect on prefetching.
+
+
+    The specification allows this field to accept any strings that are valid as navigable target name or keyword as the value,
+    but this launch supports only one of `"_self"` or `"_blank"` strings. If the hint is not specified, it''s treated as if
+    `"_self"` is specified.
+
+
+    [Origin Trial](https://developer.chrome.com/origintrials/#/view_trial/1858297796243750913) | [Tracking bug #40234240](https://issues.chromium.org/issues/40234240)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5162540351094784) | [Spec](https://wicg.github.io/nav-speculation/speculation-rules.html)'
+  heading_path:
+  - What's New in WebGPU (Chrome 135)
+  - Origin trials
+  - 'Speculation rules: target_hint field'
+  links:
+  - url: https://developer.chrome.com/origintrials/#/view_trial/1858297796243750913
+    link_type: other
+    title: Origin Trial
+  - url: https://issues.chromium.org/issues/40234240
+    link_type: other
+    title: 'Tracking bug #40234240'
+  - url: https://chromestatus.com/feature/5162540351094784
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/nav-speculation/speculation-rules.html
+    link_type: spec
+    title: Spec
+  line_number: 378
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Remove deprecated `navigator.xr.supportsSession` method
+  content: 'The `navigator.xr.supportsSession` method was replaced in the WebXR spec by the `navigator.xr.isSessionSupported`
+    method in September 2019 after receiving feedback on the API shape from the TAG. It has been marked as deprecated in Chromium
+    since then, producing a console warning redirecting developers to the updated API.
+
+
+    Use of the call is very low, and all major frameworks that are used to build WebXR content have been confirmed to have
+    been updated to use the newer call.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5114816316047360) | [Spec](https://immersive-web.github.io/webxr/#dom-xrsystem-issessionsupported)'
+  heading_path:
+  - What's New in WebGPU (Chrome 135)
+  - Deprecations and removals
+  - Remove deprecated `navigator.xr.supportsSession` method
+  links:
+  - url: https://chromestatus.com/feature/5114816316047360
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://immersive-web.github.io/webxr/#dom-xrsystem-issessionsupported
+    link_type: github
+    title: Spec
+  line_number: 390
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: Remove WebGPU limit `maxInterStageShaderComponents`
+  content: "The `maxInterStageShaderComponents` limit is being removed due to a combination of factors:\n\n  * Redundancy\
+    \ with `maxInterStageShaderVariables`: This limit already serves a similar purpose, controlling the amount of data passed\
+    \ between shader stages.\n  * Minor Discrepancies: While there are slight differences in how the two limits are calculated,\
+    \ these differences are minor and can be effectively managed within the `maxInterStageShaderVariables` limit.\n  * Simplification:\
+    \ Removing `maxInterStageShaderComponents` streamlines the shader interface and reduces complexity for developers. Instead\
+    \ of managing two separate limits (that both apply simultaneously but with subtle differences), they can focus on the\
+    \ more appropriately named and comprehensive `maxInterStageShaderVariables`.\n\n[Tracking bug #364338810](https://issues.chromium.org/issues/364338810)\
+    \ | [ChromeStatus.com entry](https://chromestatus.com/feature/4853767735083008) | [Spec](https://gpuweb.github.io/gpuweb/#dom-supported-limits-maxinterstageshadervariables)\n\
+    \nExcept as otherwise noted, the content of this page is licensed under the [Creative Commons Attribution 4.0 License](https://creativecommons.org/licenses/by/4.0/),\
+    \ and code samples are licensed under the [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0). For details,\
+    \ see the [Google Developers Site Policies](https://developers.google.com/site-policies). Java is a registered trademark\
+    \ of Oracle and/or its affiliates.\n\nLast updated 2025-04-01 UTC.\n\n[[[\"Easy to understand\",\"easyToUnderstand\",\"\
+    thumb-up\"],[\"Solved my problem\",\"solvedMyProblem\",\"thumb-up\"],[\"Other\",\"otherUp\",\"thumb-up\"]],[[\"Missing\
+    \ the information I need\",\"missingTheInformationINeed\",\"thumb-down\"],[\"Too complicated / too many steps\",\"tooComplicatedTooManySteps\"\
+    ,\"thumb-down\"],[\"Out of date\",\"outOfDate\",\"thumb-down\"],[\"Samples / code issue\",\"samplesCodeIssue\",\"thumb-down\"\
+    ],[\"Other\",\"otherDown\",\"thumb-down\"]],[\"Last updated 2025-04-01 UTC.\"],[],[]]"
+  heading_path:
+  - What's New in WebGPU (Chrome 135)
+  - Deprecations and removals
+  - Remove WebGPU limit `maxInterStageShaderComponents`
+  links:
+  - url: https://issues.chromium.org/issues/364338810
+    link_type: other
+    title: 'Tracking bug #364338810'
+  - url: https://chromestatus.com/feature/4853767735083008
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://gpuweb.github.io/gpuweb/#dom-supported-limits-maxinterstageshadervariables
+    link_type: github
+    title: Spec
+  - url: https://creativecommons.org/licenses/by/4.0/
+    link_type: other
+    title: Creative Commons Attribution 4.0 License
+  - url: https://www.apache.org/licenses/LICENSE-2.0
+    link_type: other
+    title: Apache 2.0 License
+  - url: https://developers.google.com/site-policies
+    link_type: other
+    title: Google Developers Site Policies
+  line_number: 398
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+  - privacy
+  - enterprise

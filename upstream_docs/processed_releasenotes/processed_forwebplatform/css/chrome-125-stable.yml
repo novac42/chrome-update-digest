@@ -1,0 +1,231 @@
+version: '125'
+channel: stable
+area: css
+extraction_timestamp: '2025-08-17T21:27:00.465325'
+extraction_method: deterministic
+statistics:
+  total_features: 6
+  total_links: 20
+  primary_tags:
+    css: 6
+  cross_cutting:
+    privacy: 4
+features:
+- title: CSS Anchor Positioning
+  content: "CSS anchor positioning lets developers _tether_ an absolutely positioned element to one or more other elements\
+    \ on the page (the _anchors_), in a declarative way, without the use of JavaScript. Anchor positioning works performantly\
+    \ when the anchors are scrollable. A common use case is to position a popover such as a tooltip next to the element that\
+    \ invoked it, or a select menu and its popover options list. Before the anchor positioning feature, these use cases required\
+    \ JavaScript to dynamically position the popover, and keep it anchored as the invoking element was scrolled, which is\
+    \ a performance footgun and difficult to get right. With anchor positioning, these use cases can be implemented performantly\
+    \ and declaratively.\n\nThe anchor positioning feature consists of a large number of CSS properties. A few of the key\
+    \ properties are as follows:\n\n  * `anchor-name`: sets up an element to be an anchor for other elements.\n  * `position-anchor`:\
+    \ describes the \"default\" anchor that an anchored element should use for anchor positioning.\n  * The `anchor()` function:\
+    \ used to refer to the position of the anchor element, in positioning the anchored element.\n  * `inset-area`: a shorthand\
+    \ for positioning, for common relative positions.\n\n[Introducing the CSS anchor positioning API](/blog/anchor-positioning-api)\
+    \ | [Tracking bug #40059176](https://issues.chromium.org/issues/40059176) | [ChromeStatus.com entry](https://chromestatus.com/feature/5124922471874560)\
+    \ | [Spec](https://drafts.csswg.org/css-anchor-position-1)"
+  heading_path:
+  - Chrome 125
+  - CSS
+  - CSS Anchor Positioning
+  links:
+  - url: https://issues.chromium.org/issues/40059176
+    link_type: other
+    title: 'Tracking bug #40059176'
+  - url: https://chromestatus.com/feature/5124922471874560
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://drafts.csswg.org/css-anchor-position-1
+    link_type: other
+    title: Spec
+  line_number: 29
+  primary_tags:
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: CSS stepped value functions—`round()`, `mod()`, and `rem()`
+  content: 'The stepped-value functions, [`round()`](https://developer.mozilla.org/docs/Web/CSS/round), [`mod()`](https://developer.mozilla.org/docs/Web/CSS/mod),
+    and [`rem()`](https://developer.mozilla.org/docs/Web/CSS/rem), all transform a given value according to another "step
+    value".
+
+
+    The `round()` CSS function returns a rounded number based on a selected rounding strategy.
+
+
+    The `mod()` CSS function returns a modulus left over when the first parameter is divided by the second parameter, similar
+    to the JavaScript remainder operator (%). The modulus is the value left over when one operand, the dividend, is divided
+    by a second operand, the divisor. It always takes the sign of the divisor.
+
+
+    The `rem()` CSS function returns a remainder left over when the first parameter is divided by the second parameter, similar
+    to the JavaScript remainder operator (%). The remainder is the value left over when one operand, the dividend, is divided
+    by a second operand, the divisor. It always takes the sign of the dividend.
+
+
+    [Tracking bug #40253179](https://issues.chromium.org/issues/40253179) | [ChromeStatus.com entry](https://chromestatus.com/feature/5500897196244992)
+    | [Spec](https://drafts.csswg.org/css-values/#round-func)
+
+
+    **Baseline Newly Available:** This feature is now available in all three major browser engines.'
+  heading_path:
+  - Chrome 125
+  - CSS
+  - CSS stepped value functions—`round()`, `mod()`, and `rem()`
+  links:
+  - url: https://developer.mozilla.org/docs/Web/CSS/round
+    link_type: mdn
+    title: '`round()`'
+  - url: https://developer.mozilla.org/docs/Web/CSS/mod
+    link_type: mdn
+    title: '`mod()`'
+  - url: https://developer.mozilla.org/docs/Web/CSS/rem
+    link_type: mdn
+    title: '`rem()`'
+  - url: https://issues.chromium.org/issues/40253179
+    link_type: other
+    title: 'Tracking bug #40253179'
+  - url: https://chromestatus.com/feature/5500897196244992
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://drafts.csswg.org/css-values/#round-func
+    link_type: other
+    title: Spec
+  line_number: 42
+  primary_tags:
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: New syntax for CSS custom `:state()`
+  content: 'CSS custom state lets custom elements expose their own pseudo-classes. The syntax has now been spec''ed in the
+    CSSWG, and Chrome 125 now supports the new syntax `:state(foo)`. This change will have a window where Chrome will support
+    both the old syntax (`:--foo`) and the new syntax so websites can switch to the new one.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5586433790443520) | [Spec](https://html.spec.whatwg.org/multipage/custom-elements.html#custom-state-pseudo-class)'
+  heading_path:
+  - Chrome 125
+  - CSS
+  - New syntax for CSS custom `:state()`
+  links:
+  - url: https://chromestatus.com/feature/5586433790443520
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://html.spec.whatwg.org/multipage/custom-elements.html#custom-state-pseudo-class
+    link_type: spec
+    title: Spec
+  line_number: 56
+  primary_tags:
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: Remove discontinuity for Oklab and Oklch colors with lightness of nearly 100% or 0
+  content: 'Before this change, all Lab, LCH, Oklab and Oklch colors with a lightness value of 100% were rendered as white,
+    regardless of the other two parameters. All colors in these spaces with a lightness value of 0 were rendered as black.
+    These two mappings caused discontinuities in gradients and were unexpected to web developers.
+
+
+    With this rollback, these colors are no longer mapped artificially and the resulting displayed color will be continuous
+    with nearby colors and depend on the gamut mapping of the display.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5534009582157824) | [Spec](https://html.spec.whatwg.org/#dom-element-gethtml)'
+  heading_path:
+  - Chrome 125
+  - CSS
+  - Remove discontinuity for Oklab and Oklch colors with lightness of nearly 100% or 0
+  links:
+  - url: https://chromestatus.com/feature/5534009582157824
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://html.spec.whatwg.org/#dom-element-gethtml
+    link_type: spec
+    title: Spec
+  line_number: 62
+  primary_tags:
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: Used color scheme root scrollbars
+  content: 'Makes the browser use the user''s preferred color scheme to render the viewport scrollbars if the value of "page''s
+    supported color schemes" is ''normal'' or not specified, and the computed value of [`color-scheme`](https://www.w3.org/TR/css-color-adjust-1/#color-scheme-prop)
+    for the root element is `normal`. Viewport scrollbars can be considered to be outside the web content. Therefore, the
+    user agents should honor the user''s preferred color scheme when rendering viewport scrollbars if the developer has not
+    explicitly specified support for color schemes.
+
+
+    This change does not prevent developers from controlling the color scheme for scrollbars. The new behavior makes the browser
+    use the user''s preferred color-scheme to render viewport non-overlay scrollbars only if the developer hasn''t specified
+    the color scheme for the root element.
+
+
+    [title](/release-notes/125/url) | [Tracking bug #40259909](https://issues.chromium.org/issues/40259909) | [ChromeStatus.com
+    entry](https://chromestatus.com/feature/5089486318075904) | [Spec](https://www.w3.org/TR/css-color-adjust-1)'
+  heading_path:
+  - Chrome 125
+  - CSS
+  - Used color scheme root scrollbars
+  links:
+  - url: https://www.w3.org/TR/css-color-adjust-1/#color-scheme-prop
+    link_type: spec
+    title: '`color-scheme`'
+  - url: https://issues.chromium.org/issues/40259909
+    link_type: other
+    title: 'Tracking bug #40259909'
+  - url: https://chromestatus.com/feature/5089486318075904
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://www.w3.org/TR/css-color-adjust-1
+    link_type: spec
+    title: Spec
+  line_number: 70
+  primary_tags:
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: '`view-transitions` class'
+  content: 'There''s a new CSS property `view-transition-class` which allows the you to specify one or more view transition
+    classes. You can then select the `ViewTransition` pseudo elements using these classes, for example `::view-transition-group(*.class)`.
+
+
+    This is an extension to the [ViewTransition API](/docs/web-platform/view-transitions) that simplifies styling of view
+    transition pseudo elements in a similar way that CSS classes simplify styling of regular DOM elements.
+
+
+    [Tracking bug #41492972](https://issues.chromium.org/issues/41492972) | [ChromeStatus.com entry](https://chromestatus.com/feature/5064894363992064)
+    | [Spec](https://drafts.csswg.org/css-view-transitions-2/#view-transition-class-prop)'
+  heading_path:
+  - Chrome 125
+  - CSS
+  - '`view-transitions` class'
+  links:
+  - url: https://issues.chromium.org/issues/41492972
+    link_type: other
+    title: 'Tracking bug #41492972'
+  - url: https://chromestatus.com/feature/5064894363992064
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://drafts.csswg.org/css-view-transitions-2/#view-transition-class-prop
+    link_type: other
+    title: Spec
+  line_number: 78
+  primary_tags:
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy

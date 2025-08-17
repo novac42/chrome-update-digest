@@ -1,0 +1,52 @@
+version: '129'
+channel: stable
+area: other
+extraction_timestamp: '2025-08-17T21:27:00.841163'
+extraction_method: deterministic
+statistics:
+  total_features: 1
+  total_links: 4
+  primary_tags:
+    multimedia: 1
+  cross_cutting:
+    privacy: 1
+features:
+- title: Blob support in WebRTC data channels
+  content: 'Implements `RTCDataChannel.send(Blob)`, and the `onMessage` event can now optionally receive data of type Blob
+    using the `binaryType` attribute.
+
+
+    In addition to supporting sending strings and ArrayBuffers, you can now choose to send a Blob instead as long as its size
+    is below the SCTP transport `maxMessageSize` as indicated in the [WebRTC specification](https://www.w3.org/TR/webrtc/#dom-rtcsctptransport-maxmessagesize).
+
+
+    Using the `binaryType` attribute set to `blob`, the `onMessage` event data attribute will be of type Blob instead of ArrayBuffer.
+
+
+    [Tracking bug #41370769](https://issues.chromium.org/issues/41370769) | [ChromeStatus.com entry](https://chromestatus.com/feature/5686378455105536)
+    | [Spec](https://www.w3.org/TR/webrtc)'
+  heading_path:
+  - Chrome 129
+  - Media
+  - Blob support in WebRTC data channels
+  links:
+  - url: https://www.w3.org/TR/webrtc/#dom-rtcsctptransport-maxmessagesize
+    link_type: spec
+    title: WebRTC specification
+  - url: https://issues.chromium.org/issues/41370769
+    link_type: other
+    title: 'Tracking bug #41370769'
+  - url: https://chromestatus.com/feature/5686378455105536
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://www.w3.org/TR/webrtc
+    link_type: spec
+    title: Spec
+  line_number: 53
+  primary_tags:
+  - name: multimedia
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy

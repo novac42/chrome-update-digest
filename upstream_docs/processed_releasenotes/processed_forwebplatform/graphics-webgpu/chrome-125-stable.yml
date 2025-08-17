@@ -1,0 +1,335 @@
+version: '125'
+channel: stable
+area: graphics-webgpu
+extraction_timestamp: '2025-08-17T21:27:00.481365'
+extraction_method: deterministic
+statistics:
+  total_features: 10
+  total_links: 23
+  primary_tags:
+    webgpu: 10
+    deprecation: 4
+  cross_cutting:
+    webgpu: 3
+    security: 2
+    privacy: 3
+    enterprise: 2
+features:
+- title: Subgroups (feature in development)
+  content: "The subgroups feature enables SIMD-level parallelism, allowing threads within a group to communicate and perform\
+    \ collective math operations (for example, calculating the sum of 16 numbers). This provides a highly efficient form of\
+    \ cross-thread data sharing.\n\nSubgroup operations are supported by modern GPU APIs, but naming and implementation details\
+    \ vary. The Chrome team has identified the commonalities and is now working to standardize this feature. Check out the\
+    \ [proposal](https://github.com/gpuweb/gpuweb/blob/main/proposals/subgroups.md) and [comment](https://github.com/gpuweb/gpuweb/issues/4306)\
+    \ if you have questions.\n\nThere's a minimal and unstandardized implementation of subgroups behind the \"Experimental\
+    \ Web Platform Features\" flag at `chrome://flags/#enable-experimental-web-platform-features` so that developers can give\
+    \ it a try and share feedback as real-world benefits have not been proven yet in the context of WebGPU.\n\nWhen the `\"\
+    chromium-experimental-subgroups\"` feature is available in a `GPUAdapter`, request a `GPUDevice` with this feature to\
+    \ get experimental subgroups support in WGSL and check its `minSubgroupSize` and `maxSubgroupSize` limits.\n\nYou also\
+    \ need to explicitly enable this extension in your WGSL code with `enable chromium_experimental_subgroups`. When enabled,\
+    \ you get access to the following additions:\n\n  * `subgroup_invocation_id`: A built-in value for the index of the thread\
+    \ within the subgroup.\n  * `subgroup_size`: A built-in value for subgroup size access.\n  * `subgroupBallot(value):`\
+    \ Returns a set of bit fields where the bit corresponding to `subgroup_invocation_id` is 1 if `value` is true for that\
+    \ active invocation and 0 otherwise.\n  * `subgroupBroadcast(value, id)`: Broadcasts the `value` from the invocation with\
+    \ `subgroup_invocation_id` matching `id` to all invocations within the subgroup. Note: `id` must be a compile-time constant.\n\
+    \nThe following code snippet provides a base to tinker with and discover the potential of subgroups.\n    \n    \n   \
+    \ const adapter = await navigator.gpu.requestAdapter();\n    if (!adapter.features.has(\"chromium-experimental-subgroups\"\
+    )) {\n      throw new Error(\"Experimental subgroups support is not available\");\n    }\n    // Explicitly request experimental\
+    \ subgroups support.\n    const device = await adapter.requestDevice({\n      requiredFeatures: [\"chromium-experimental-subgroups\"\
+    ],\n    });\n    \n    const shaderModule = device.createShaderModule({ code: `\n      enable chromium_experimental_subgroups;\n\
+    \    \n      @compute @workgroup_size(64) fn main(\n          @builtin(global_invocation_id) global_id : vec3u,\n    \
+    \      @builtin(subgroup_size) sg_size : u32,\n          @builtin(subgroup_invocation_id) sg_id : u32) {\n        // TODO:\
+    \ Use subgroupBallot() and subgroupBroadcast().\n      }`,\n    });"
+  heading_path:
+  - What's New in WebGPU (Chrome 125)
+  - Subgroups (feature in development)
+  links:
+  - url: https://github.com/gpuweb/gpuweb/blob/main/proposals/subgroups.md
+    link_type: github
+    title: proposal
+  - url: https://github.com/gpuweb/gpuweb/issues/4306
+    link_type: github
+    title: comment
+  line_number: 196
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Render to slice of 3D texture
+  content: You can now render directly to slice(s) of 3D textures within render passes, expanding its capabilities beyond
+    common 2D texture rendering, with the new [`depthSlice`](https://gpuweb.github.io/gpuweb/#dom-gpurenderpasscolorattachment-depthslice)
+    member in a [`GPURenderPassColorAttachment`](https://gpuweb.github.io/gpuweb/#dictdef-gpurenderpasscolorattachment). This
+    addition allows you for example to create voxel-based scenes and effects by rendering directly into 3D texture volumes.
+    See [issue dawn:1020](https://bugs.chromium.org/p/dawn/issues/detail?id=1020).
+  heading_path:
+  - What's New in WebGPU (Chrome 125)
+  - Render to slice of 3D texture
+  links:
+  - url: https://gpuweb.github.io/gpuweb/#dom-gpurenderpasscolorattachment-depthslice
+    link_type: github
+    title: '`depthSlice`'
+  - url: https://gpuweb.github.io/gpuweb/#dictdef-gpurenderpasscolorattachment
+    link_type: github
+    title: '`GPURenderPassColorAttachment`'
+  - url: https://bugs.chromium.org/p/dawn/issues/detail?id=1020
+    link_type: tracking_bug
+    title: issue dawn:1020
+  line_number: 237
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Dawn updates
+  content: Check out the exhaustive [list of commits](https://dawn.googlesource.com/dawn/+log/chromium/6367..chromium/6422?n=1000).
+  heading_path:
+  - What's New in WebGPU (Chrome 125)
+  - Dawn updates
+  links:
+  - url: https://dawn.googlesource.com/dawn/+log/chromium/6367..chromium/6422?n=1000
+    link_type: other
+    title: list of commits
+  line_number: 241
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: FedCM Button Mode API and Use Other Account API
+  content: 'This origin trial includes the following two FedCM APIs.
+
+
+    The Button Mode API lets websites call FedCM inside a button click, such as clicking on a **Sign-in to IdP** button. This
+    requires FedCM to guarantee it always responds with a visible user interface, as opposed to widget mode, which doesn''t
+    show a UI when users log out. Calling the FedCM API in _button mode_ takes users to login to the IdP (in a dialog window),
+    when users are logged-out.
+
+
+    Also, because the button mode is called within an explicit user gesture, the UI may also be more prominent (for example,
+    centered and modal) compared to the UI from the widget mode (which doesn''t have such explicit intention). Learn more
+    about how the Button Mode API works in [FedCM updates: Button Mode API origin trial, CORS and SameSite](https://developers.google.com/privacy-sandbox/blog/fedcm-chrome-125-updates#button-mode-api)
+
+
+    The Use Other Account API lets an Identity Provider allow users to sign in to other accounts.
+
+
+    [Origin Trial](/origintrials#/view_trial/3196429835526209537) | [Demo](https://fedcm-button.glitch.me/) | [Tracking bug
+    #40284792](https://issues.chromium.org/issues/40284792) | [ChromeStatus.com entry](https://chromestatus.com/feature/4689551782313984)
+    | [Spec](https://github.com/fedidcg/FedCM/issues/442#issuecomment-1949323416)'
+  heading_path:
+  - What's New in WebGPU (Chrome 125)
+  - New origin trials
+  - FedCM Button Mode API and Use Other Account API
+  links:
+  - url: https://developers.google.com/privacy-sandbox/blog/fedcm-chrome-125-updates#button-mode-api
+    link_type: other
+    title: 'FedCM updates: Button Mode API origin trial, CORS and SameSite'
+  - url: https://fedcm-button.glitch.me/
+    link_type: other
+    title: Demo
+  - url: https://issues.chromium.org/issues/40284792
+    link_type: other
+    title: 'Tracking bug #40284792'
+  - url: https://chromestatus.com/feature/4689551782313984
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/fedidcg/FedCM/issues/442#issuecomment-1949323416
+    link_type: github
+    title: Spec
+  line_number: 247
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - security
+  - privacy
+- title: Foldable APIs
+  content: 'This origin trial includes the Device Posture API and Viewport Segments Enumeration API. These APIs are designed
+    to help developers target foldable devices.
+
+
+    [Origin Trial](/origintrials#/view_trial/4188910603407982593) | [Origin trial for Foldable APIs](/blog/foldable-apis-ot)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5121612962856960) | [Spec](https://www.w3.org/TR/device-posture)'
+  heading_path:
+  - What's New in WebGPU (Chrome 125)
+  - New origin trials
+  - Foldable APIs
+  links:
+  - url: https://chromestatus.com/feature/5121612962856960
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://www.w3.org/TR/device-posture
+    link_type: spec
+    title: Spec
+  line_number: 259
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: Deprecation trial for prefixed HTMLVideoElement Fullscreen properties and methods
+  content: 'This deprecation trial lets you opt back into support for the prefixed HTMLVideoElement properties and methods
+    if you need more time to adjust your code.
+
+
+    [Origin Trial](/origintrials#/register_trial/300896750103691264) | [ChromeStatus.com entry](https://chromestatus.com/feature/5111638103687168)'
+  heading_path:
+  - What's New in WebGPU (Chrome 125)
+  - New origin trials
+  - Deprecation trial for prefixed HTMLVideoElement Fullscreen properties and methods
+  links:
+  - url: https://chromestatus.com/feature/5111638103687168
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 265
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: Skip preload scanning
+  content: 'Skips the [preload scanner](https://web.dev/articles/preload-scanner) to explore performance tradeoffs for pages
+    with no sub-resource fetches.
+
+
+    The preload scanner step benefits performance of pages with sub-resource fetches, through implementation of the speculative
+    prefetch. However, for pages that don''t benefit from this step, that is, for pages with no sub-resources, this is additional
+    processing overhead with little benefit.
+
+
+    For advanced web users who would like to benefit by reducing this overhead, this experiment provides a page-level control
+    to disable the preload scanner. Data collected from this experiment could evaluate if a modified API or a different implementation
+    of the HTML preload scanner would be helpful.
+
+
+    [Origin Trial](/origintrials#/view_trial/919297273937002497) | [Tracking bug #330802493](https://issues.chromium.org/issues/330802493)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5190976638550016) | [Spec](https://docs.google.com/document/d/1wiaTL5TeONTZamycMVMjo76nMcbhHNYznQy7I_zCVRY/preview)'
+  heading_path:
+  - What's New in WebGPU (Chrome 125)
+  - New origin trials
+  - Skip preload scanning
+  links:
+  - url: https://web.dev/articles/preload-scanner
+    link_type: other
+    title: preload scanner
+  - url: https://issues.chromium.org/issues/330802493
+    link_type: other
+    title: 'Tracking bug #330802493'
+  - url: https://chromestatus.com/feature/5190976638550016
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://docs.google.com/document/d/1wiaTL5TeONTZamycMVMjo76nMcbhHNYznQy7I_zCVRY/preview
+    link_type: other
+    title: Spec
+  line_number: 271
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Remove "window-placement" alias for permission and permission policy "window-management"
+  content: 'Removes the "window-placement" alias for permission and permission policy "window-management". This is part of
+    a larger effort to rename the strings by eventually [deprecating and removing "window-placement"](/docs/capabilities/web-apis/window-management#the_window-management_permission).
+    The terminology change improves the longevity of the descriptor as the Window Management API evolves over time.
+
+
+    [title](/release-notes/125/url) | [Tracking bug #40842072](https://issues.chromium.org/issues/40842072) | [ChromeStatus.com
+    entry](https://chromestatus.com/feature/5137018030391296) | [Spec](https://w3c.github.io/window-management/#api-permission-api-integration)'
+  heading_path:
+  - What's New in WebGPU (Chrome 125)
+  - Deprecations and removals
+  - Remove "window-placement" alias for permission and permission policy "window-management"
+  links:
+  - url: https://issues.chromium.org/issues/40842072
+    link_type: other
+    title: 'Tracking bug #40842072'
+  - url: https://chromestatus.com/feature/5137018030391296
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://w3c.github.io/window-management/#api-permission-api-integration
+    link_type: spec
+    title: Spec
+  line_number: 283
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - security
+  - privacy
+  - enterprise
+- title: 'Removal of Enterprise policy: `NewBaseUrlInheritanceBehaviorAllowed`'
+  content: 'The underlying code change (enable new base URL inheritance behavior) that this enterprise policy overrides has
+    been enabled in stable releases since August 2023 (Chrome 118). Since known issues have been dealt with, this enterprise
+    policy has been removed in Chrome 125.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5122505296838656)'
+  heading_path:
+  - What's New in WebGPU (Chrome 125)
+  - Deprecations and removals
+  - 'Removal of Enterprise policy: `NewBaseUrlInheritanceBehaviorAllowed`'
+  links:
+  - url: https://chromestatus.com/feature/5122505296838656
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 289
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - enterprise
+- title: Removal of prefixed HTMLVideoElement Fullscreen properties and methods
+  content: "The prefixed `HTMLVideoElement` fullscreen APIs have been deprecated since Chrome 38. They were replaced by `Element.requestFullscreen()`,\
+    \ which first shipped un-prefixed in 2018 in Chrome 71.\n\nThe following properties and methods will be removed from HTMLVideoElement:\n\
+    \n  * `webkitSupportsFullscreen`\n  * `webkitDisplayingFullscreen`\n  * `webkitEnterFullscreen()`\n  * `webkitExitFullscreen()`\n\
+    \  * `webkitEnterFullScreen()` (note the different capitalization of the \"S\" in FullScreen)\n  * `webkitExitFullScreen()`\n\
+    \nRegister for the deprecation trial listed in this post, if your site still relies on these and you need more time for\
+    \ updating code.\n\n[ChromeStatus.com entry](https://chromestatus.com/feature/5111638103687168)"
+  heading_path:
+  - What's New in WebGPU (Chrome 125)
+  - Deprecations and removals
+  - Removal of prefixed HTMLVideoElement Fullscreen properties and methods
+  links:
+  - url: https://chromestatus.com/feature/5111638103687168
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 295
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []

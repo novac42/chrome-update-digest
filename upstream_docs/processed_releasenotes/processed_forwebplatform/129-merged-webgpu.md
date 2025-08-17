@@ -102,6 +102,112 @@ Adds tone mapping parameters to the WebGPU canvas configuration, and adds option
 
 [Demo](https://ccameron-chromium.github.io/webgpu-hdr/example.html) | [Tracking bug #333967627](https://issues.chromium.org/issues/333967627) | [ChromeStatus.com entry](https://chromestatus.com/feature/6196313866895360) | [Spec](https://github.com/ccameron-chromium/webgpu-hdr/blob/main/EXPLAINER.md)
 
+## WebGPU
+
+  * [ Blog ](https://developer.chrome.com/blog)
+
+#  What's New in WebGPU (Chrome 129)
+
+Stay organized with collections  Save and categorize content based on your preferences. 
+
+![François Beaufort](https://web.dev/images/authors/beaufortfrancois.jpg)
+
+François Beaufort 
+
+[ GitHub ](https://github.com/beaufortfrancois)
+
+### HDR support with canvas tone mapping mode
+
+Web developers have limited options for delivering HDR content, relying primarily on `<img>` and `<video>` elements. The `<canvas>` element, however, remains restricted to SDR. Generating dynamic HDR content within a canvas requires encoding its contents as an HDR image before displaying it (for an example see this [demo](https://gkjohnson.github.io/three-gpu-pathtracer/example/bundle/hdr.html)).
+
+The new [`GPUCanvasToneMappingMode`](https://www.w3.org/TR/webgpu/#gpucanvastonemappingmode) parameter in the WebGPU canvas configuration now allows WebGPU to draw colors brighter than white (`#FFFFFF`). It does so through the following modes:
+
+  * `"standard"`: The default behavior restricts content to the SDR range of the screen. This mode is accomplished by clamping all color values in the color space of the screen to the `[0, 1]` interval.
+
+  * `"extended"`: Unlocks the full HDR range of the screen. This mode matches `"standard"` in the `[0, 1]` range of the screen. Clamping or projection is done to the extended dynamic range of the screen but not `[0, 1]`.
+
+The following code snippet shows you to configure a canvas for high dynamic range.
+    
+    
+    const adapter = await navigator.gpu.requestAdapter();
+    const device = await adapter.requestDevice();
+    
+    const canvas = document.querySelector("canvas");
+    const context = canvas.getContext("webgpu");
+    
+    context.configure({
+      device,
+      format: "rgba16float",
+      toneMapping: { mode: "extended" },
+    });
+    
+
+Explore HDR with WebGPU by checking out the [Particles (HDR) sample](https://webgpu.github.io/webgpu-samples/?sample=particles) and [WebGPU HDR example](https://ccameron-chromium.github.io/webgpu-hdr/example.html), and see the [chromestatus entry](https://chromestatus.com/feature/6196313866895360).
+
+![A laptop with an HDR screen displaying a vibrant image.](/static/blog/new-in-webgpu-129/image/particles.jpg) The Particles (HDR) sample displayed on a HDR screen.
+
+### Expanded subgroups support
+
+Following the announcement of [subgroups experimentation](/blog/new-in-webgpu-128#experimenting_with_subgroups), the subgroup built-ins functions are now available for use in both compute shaders and fragment shaders. They are no longer restricted to just compute shaders. See [issue 354738715](https://issues.chromium.org/issues/354738715).
+
+Note that the `subgroup_size` built-in value is currently [buggy](https://issues.chromium.org/issues/361593660) in fragment shaders. Avoid it for now.
+
+Furthermore, the following subgroup built-ins functions have been added:
+
+  * `subgroupAdd(value)`: Returns the summation of all active invocations `value`s across the subgroup.
+  * `subgroupExclusiveAdd(value)`: Returns the exclusive scan summation of all active invocations `value`s across the subgroup.
+  * `subgroupMul(value)`: Returns the multiplication of all active invocations `value`s across the subgroup.
+  * `subgroupExclusiveMul(value)`: Returns the exclusive scan multiplication of all active invocations `value`s across the subgroup.   
+  
+
+  * `subgroupAnd(value)`: Returns the binary AND of all active invocations `value`s across the subgroup.
+  * `subgroupOr(value)`: Returns the binary OR of all active invocations `value`s across the subgroup.
+  * `subgroupXor(value)`: Returns the binary XOR of all active invocations `value`s across the subgroup.   
+  
+
+  * `subgroupMin(value)`: Returns the minimal value of all active invocations `value`s across the subgroup.
+  * `subgroupMax(value)`: Returns the maximal value of all active invocations `value`s across the subgroup.   
+  
+
+  * `subgroupAll(value)`: Returns true if `value` is true for all active invocations in the subgroup.
+  * `subgroupAny(value)`: Returns true if `value` is true for any active invocation in the subgroup.   
+  
+
+  * `subgroupElect()`: Returns true if this invocation has the lowest `subgroup_invocation_id` among active invocations in the subgroup.
+  * `subgroupBroadcastFirst(value)`: Broadcasts `value` from the active invocation with the lowest `subgroup_invocation_id` in the subgroup to all other active invocations.   
+  
+
+  * `subgroupShuffle(value, id)`: Returns `value` from the active invocation whose `subgroup_invocation_id` matches `id`.
+  * `subgroupShuffleXor(value, mask)`: Returns `value` from the active invocation whose `subgroup_invocation_id` matches `subgroup_invocation_id ^ mask`. `mask` must be dynamically uniform.
+  * `subgroupShuffleUp(value, delta)`: Returns `value` from the active invocation whose `subgroup_invocation_id` matches `subgroup_invocation_id - delta`.
+  * `subgroupShuffleDown(value, delta)`: Returns `value` from the active invocation whose `subgroup_invocation_id` matches `subgroup_invocation_id + delta`.   
+  
+
+  * `quadBroadcast(value, id)`: Broadcasts `value` from the quad invocation with id equal to `id`. `id` must be a constant-expression.
+  * `quadSwapX(value)`: Swaps `value` between invocations in the quad in the X direction.
+  * `quadSwapY(value)`: Swaps `value` between invocations in the quad in the Y direction.
+  * `quadSwapDiagonal(value)`: Swaps `value` between invocations in the quad diagonally.
+
+### Dawn updates
+
+The `wgpu::PrimitiveState` struct now directly includes depth clip control setting, eliminating the need for a separate `wgpu::PrimitiveDepthClipControl` struct. To learn more, see the following code snippet and the [webgpu-headers PR](https://github.com/webgpu-native/webgpu-headers/pull/311).
+    
+    
+    // Before
+    wgpu::PrimitiveState primitive = {};
+    wgpu::PrimitiveDepthClipControl depthClipControl;
+    depthClipControl.unclippedDepth = true;
+    primitive.nextInChain = &depthClipControl;
+    
+    
+    
+    // Now
+    wgpu::PrimitiveState primitive = {};
+    primitive.unclippedDepth = true;
+    
+
+This covers only some of the key highlights. Check out the exhaustive [list of commits](https://dawn.googlesource.com/dawn/+log/chromium/6613..chromium/6668?n=1000).
+
 ## Origin trials
 
 ### FileSystemObserver interface

@@ -1,0 +1,509 @@
+version: '133'
+channel: stable
+area: graphics-webgpu
+extraction_timestamp: '2025-08-17T21:27:01.246252'
+extraction_method: deterministic
+statistics:
+  total_features: 17
+  total_links: 36
+  primary_tags:
+    webgpu: 17
+    performance: 1
+    deprecation: 3
+  cross_cutting:
+    webgpu: 10
+    privacy: 3
+    enterprise: 2
+features:
+- title: 'WebGPU: 1-component vertex formats (and unorm8x4-bgra)'
+  content: 'Adds additional vertex formats not present in the initial release of WebGPU due to lack of support or old macOS
+    versions (which are no longer supported by any browser). The 1-component vertex formats let applications request only
+    the necessary data when previously they had to request at least two times more for 8 and 16-bit data types. The unorm8x4-bgra
+    format makes it slightly more convenient to load BGRA-encoded vertex colors while keeping the same shader.
+
+
+    [Tracking bug #376924407](https://issues.chromium.org/issues/376924407) | [ChromeStatus.com entry](https://chromestatus.com/feature/4609840973086720)'
+  heading_path:
+  - Chrome 133
+  - Rendering and graphics
+  - 'WebGPU: 1-component vertex formats (and unorm8x4-bgra)'
+  links:
+  - url: https://issues.chromium.org/issues/376924407
+    link_type: other
+    title: 'Tracking bug #376924407'
+  - url: https://chromestatus.com/feature/4609840973086720
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 215
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+  - privacy
+- title: Additional unorm8x4-bgra and 1-component vertex formats
+  content: 'The `"unorm8x4-bgra"` vertex format and the following 1-component vertex formats have been added: `"uint8"`, `"sint8"`,
+    `"unorm8"`, `"snorm8"`, `"uint16"`, `"sint16"`, `"unorm16"`, `"snorm16"`, and `"float16"`. The `"unorm8x4-bgra"` vertex
+    format makes it slightly more convenient to load BGRA-encoded vertex colors while keeping the same shader. Additionally,
+    the 1-component vertex format lets you request only the data that is necessary when previously at least twice as much
+    was required for 8 and 16-bit data types. See the [chromestatus entry](https://chromestatus.com/feature/4609840973086720)
+    and [issue 376924407](https://issues.chromium.org/issues/376924407).'
+  heading_path:
+  - What's New in WebGPU (Chrome 133)
+  - Additional unorm8x4-bgra and 1-component vertex formats
+  links:
+  - url: https://chromestatus.com/feature/4609840973086720
+    link_type: chromestatus
+    title: chromestatus entry
+  - url: https://issues.chromium.org/issues/376924407
+    link_type: other
+    title: issue 376924407
+  line_number: 237
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: Allow unknown limits to be requested with undefined value
+  content: "To make the WebGPU API less brittle as it evolves, you can now request unknown limits with `undefined` value when\
+    \ requesting a GPU device. This is useful in the following application code for example where `adapter.limits.someLimit`\
+    \ can be `undefined` if `someLimit` doesn't exist anymore. See [spec PR 4781](https://github.com/gpuweb/gpuweb/pull/4781).\n\
+    \    \n    \n    const adapter = await navigator.gpu.requestAdapter();\n    \n    const device = await adapter.requestDevice({\n\
+    \      requiredLimits: { someLimit: adapter.limits.someLimit }, // someLimit can be undefined\n    });"
+  heading_path:
+  - What's New in WebGPU (Chrome 133)
+  - Allow unknown limits to be requested with undefined value
+  links:
+  - url: https://github.com/gpuweb/gpuweb/pull/4781
+    link_type: github
+    title: spec PR 4781
+  line_number: 241
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: WGSL alignment rules changes
+  content: It is no longer possible to provide a too-small alignment value for a struct member as it is now required that
+    `@align(n)` divides [`RequiredAlignOf`](https://gpuweb.github.io/gpuweb/wgsl/#requiredalignof) for all structs. This breaking
+    change simplifies usage of the WGSL language and makes it more compatible with Firefox and Safari. You can find sample
+    code showing differences between Tint, Naga, and WebKit compilers in the [spec PR](https://github.com/gpuweb/gpuweb/pull/4978).
+  heading_path:
+  - What's New in WebGPU (Chrome 133)
+  - WGSL alignment rules changes
+  links:
+  - url: https://gpuweb.github.io/gpuweb/wgsl/#requiredalignof
+    link_type: github
+    title: '`RequiredAlignOf`'
+  - url: https://github.com/gpuweb/gpuweb/pull/4978
+    link_type: github
+    title: spec PR
+  line_number: 253
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: WGSL performance gains with discard
+  content: Due to a significant performance drop observed when rendering a complex screen-space reflections (SSR) effect,
+    the implementation of the [discard statement](https://gpuweb.github.io/gpuweb/wgsl/#discard-statement) uses the platform-provided
+    semantics for demoting to a helper invocation when available. This improves the performance of shaders that use discard.
+    See [issue 372714384](https://issues.chromium.org/372714384).
+  heading_path:
+  - What's New in WebGPU (Chrome 133)
+  - WGSL performance gains with discard
+  links:
+  - url: https://gpuweb.github.io/gpuweb/wgsl/#discard-statement
+    link_type: github
+    title: discard statement
+  - url: https://issues.chromium.org/372714384
+    link_type: other
+    title: issue 372714384
+  line_number: 257
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: performance
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Use VideoFrame displaySize for external textures
+  content: The `displayWidth` and `displayHeight` dimensions should be used as the apparent size of the GPUExternalTexture
+    when importing a VideoFrame according to the WebGPU spec. However the visible size was incorrectly used causing issues
+    when trying to use `textureLoad()` on a GPUExternalTexture. This is now fixed. See [issue 377574981](https://issues.chromium.org/issues/377574981).
+  heading_path:
+  - What's New in WebGPU (Chrome 133)
+  - Use VideoFrame displaySize for external textures
+  links:
+  - url: https://issues.chromium.org/issues/377574981
+    link_type: other
+    title: issue 377574981
+  line_number: 261
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Handle images with non-default orientations using copyExternalImageToTexture
+  content: The `copyExternalImageToTexture()` GPUQueue method is used to copy the contents of an image or canvas into a texture.
+    It now properly handles images with non-default orientations. This was not the case before when the source was an ImageBitmap
+    with `imageOrientation` [`"from-image"`](https://developer.mozilla.org/docs/Web/API/Window/createImageBitmap#from-image)
+    or an image with a non-default orientation. See [issue 384858956](https://issues.chromium.org/issues/384858956).
+  heading_path:
+  - What's New in WebGPU (Chrome 133)
+  - Handle images with non-default orientations using copyExternalImageToTexture
+  links:
+  - url: https://developer.mozilla.org/docs/Web/API/Window/createImageBitmap#from-image
+    link_type: mdn
+    title: '`"from-image"`'
+  - url: https://issues.chromium.org/issues/384858956
+    link_type: other
+    title: issue 384858956
+  line_number: 265
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: Improving developer experience
+  content: "It can be surprising when `adapter.limits` shows high values, but you don't realize you need to explicitly request\
+    \ a higher limit when requesting a GPU device. Failing to do so can result in unexpectedly hitting limits later on.\n\n\
+    To help you, the error messages have been expanded with hints that tell you to explicitly request a higher limit when\
+    \ no limit was specified in `requiredLimits` when calling `requestDevice()`. See [issue 42240683](https://issues.chromium.org/issues/42240683).\n\
+    \nThe following example shows you an improved error message logged in the DevTools console when creating a GPU buffer\
+    \ with a size exceeding the default max buffer size device limit.\n    \n    \n    const adapter = await navigator.gpu.requestAdapter();\n\
+    \    const device = await adapter.requestDevice();\n    \n    // Create a GPU buffer with a size exceeding the default\
+    \ max buffer size device limit.\n    const size = device.limits.maxBufferSize + 1;\n    const buffer = device.createBuffer({\
+    \ size, usage: GPUBufferUsage.MAP_READ });\n    \n    device.queue.submit([]);\n    \n    \n    \n    ⚠️ Buffer size (268435457)\
+    \ exceeds the max buffer size limit (268435456). This adapter supports a higher maxBufferSize of 4294967296, which can\
+    \ be specified in requiredLimits when calling requestDevice(). Limits differ by hardware, so always check the adapter\
+    \ limits prior to requesting a higher limit.\n    - While calling [Device].CreateBuffer([BufferDescriptor])."
+  heading_path:
+  - What's New in WebGPU (Chrome 133)
+  - Improving developer experience
+  links:
+  - url: https://issues.chromium.org/issues/42240683
+    link_type: other
+    title: issue 42240683
+  line_number: 269
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Enable compatibility mode with featureLevel
+  content: "Requesting a GPU adapter in the [experimental compatibility mode](https://github.com/gpuweb/gpuweb/blob/main/proposals/compatibility-mode.md#webgpu-spec-changes)\
+    \ is now possible by setting the standardized [`featureLevel`](https://gpuweb.github.io/gpuweb/#dom-gpurequestadapteroptions-featurelevel)\
+    \ option to `\"compatibility\"`. The `\"core\"` (default) and `\"compatibility\"` strings are the only values allowed.\
+    \ See the following example and [spec PR 4897](https://github.com/gpuweb/gpuweb/pull/4897).\n    \n    \n    // Request\
+    \ a GPU adapter in compatibility mode\n    const adapter = await navigator.gpu.requestAdapter({ featureLevel: \"compatibility\"\
+    \ });\n    \n    if (adapter?.featureLevel === \"compatibility\") {\n      // Any devices created from this adapter will\
+    \ support only compatibility mode.\n    }\n    \n\nThe `featureLevel` option replaces the non-standardized `compatibilityMode`\
+    \ option while the non-standardized `featureLevel` attribute replaces the `isCompatibilityMode` attribute.\n\nAs it's\
+    \ still experimental, you need to run Chrome with the \"Unsafe WebGPU Support\" flag at `chrome://flags/#enable-unsafe-webgpu`\
+    \ for now. Check out [webgpureport.org](https://webgpureport.org) to play with it."
+  heading_path:
+  - What's New in WebGPU (Chrome 133)
+  - Enable compatibility mode with featureLevel
+  links:
+  - url: https://github.com/gpuweb/gpuweb/blob/main/proposals/compatibility-mode.md#webgpu-spec-changes
+    link_type: github
+    title: experimental compatibility mode
+  - url: https://gpuweb.github.io/gpuweb/#dom-gpurequestadapteroptions-featurelevel
+    link_type: github
+    title: '`featureLevel`'
+  - url: https://github.com/gpuweb/gpuweb/pull/4897
+    link_type: github
+    title: spec PR 4897
+  - url: https://webgpureport.org
+    link_type: other
+    title: webgpureport.org
+  line_number: 292
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Experimental subgroup features cleanup
+  content: 'The deprecated `"chromium-experimental-subgroups"` and `"chromium-experimental-subgroup-uniform-control-flow"`
+    experimental subgroup features are removed. See [issue 377868468](https://issues.chromium.org/issues/377868468).
+
+
+    The `"subgroups"` experimental feature is all you need now when [experimenting with subgroups](/blog/new-in-webgpu-128#experimenting_with_subgroups).
+    The `"subgroups-f16"` experimental feature is deprecated and will soon be removed. You can use f16 values with subgroups
+    when your application requests both `"shader-f16"` and `"subgroups"` features. See [issue 380244620](https://issues.chromium.org/issues/380244620).'
+  heading_path:
+  - What's New in WebGPU (Chrome 133)
+  - Experimental subgroup features cleanup
+  links:
+  - url: https://issues.chromium.org/issues/377868468
+    link_type: other
+    title: issue 377868468
+  - url: https://issues.chromium.org/issues/380244620
+    link_type: other
+    title: issue 380244620
+  line_number: 309
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Deprecate maxInterStageShaderComponents limit
+  content: "The `maxInterStageShaderComponents` limit is deprecated due to a combination of factors:\n\n  * Redundancy with\
+    \ `maxInterStageShaderVariables`: This limit already serves a similar purpose, controlling the amount of data passed between\
+    \ shader stages.\n  * Minor discrepancies: While there are slight differences in how the two limits are calculated, these\
+    \ differences are minor and can be effectively managed within the `maxInterStageShaderVariables` limit.\n  * Simplification:\
+    \ Removing `maxInterStageShaderComponents` streamlines the shader interface and reduces complexity for developers. Instead\
+    \ of managing two separate limits with subtle differences, they can focus on the more appropriately named and comprehensive\
+    \ `maxInterStageShaderVariables`.\n\nThe goal is to fully remove it in Chrome 135. See [intent to deprecate](https://groups.google.com/a/chromium.org/g/blink-dev/c/i5oJu9lZPAk)\
+    \ and [issue 364338810](https://issues.chromium.org/issues/364338810)."
+  heading_path:
+  - What's New in WebGPU (Chrome 133)
+  - Deprecate maxInterStageShaderComponents limit
+  links:
+  - url: https://groups.google.com/a/chromium.org/g/blink-dev/c/i5oJu9lZPAk
+    link_type: other
+    title: intent to deprecate
+  - url: https://issues.chromium.org/issues/364338810
+    link_type: other
+    title: issue 364338810
+  line_number: 315
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - enterprise
+- title: Dawn updates
+  content: 'The `wgpu::Device::GetAdapterInfo(adapterInfo)` lets you get adapter info directly from a `wgpu::Device`. See
+    [issue 376600838](https://issues.chromium.org/issues/376600838).
+
+
+    The `WGPUProgrammableStageDescriptor` struct has been renamed to `WGPUComputeState` to make compute state consistent with
+    vertex and fragment states. See [issue 379059434](https://issues.chromium.org/issues/379059434).
+
+
+    The `wgpu::VertexStepMode::VertexBufferNotUsed` enum value has been removed. A vertex buffer layout that is not used can
+    now be expressed with `{.stepMode=wgpu::VertexStepMode::Undefined, .attributeCount=0}`. See [issue 383147017](https://issues.chromium.org/issues/383147017).
+
+
+    This covers only some of the key highlights. Check out the exhaustive [list of commits](https://dawn.googlesource.com/dawn/+log/chromium/6834..chromium/6943?n=1000).'
+  heading_path:
+  - What's New in WebGPU (Chrome 133)
+  - Dawn updates
+  links:
+  - url: https://issues.chromium.org/issues/376600838
+    link_type: other
+    title: issue 376600838
+  - url: https://issues.chromium.org/issues/379059434
+    link_type: other
+    title: issue 379059434
+  - url: https://issues.chromium.org/issues/383147017
+    link_type: other
+    title: issue 383147017
+  - url: https://dawn.googlesource.com/dawn/+log/chromium/6834..chromium/6943?n=1000
+    link_type: other
+    title: list of commits
+  line_number: 325
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Opt out of freezing on Energy Saver
+  content: 'This opt out trial lets sites opt out from the freezing on Energy Saver behavior that ships in Chrome 133.
+
+
+    [Origin Trial](/origintrials#/register_trial/4254212798004854785) | [Tracking bug #325954772](https://issues.chromium.org/issues/325954772)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5158599457767424) | [Spec](https://wicg.github.io/page-lifecycle)'
+  heading_path:
+  - What's New in WebGPU (Chrome 133)
+  - Origin trials
+  - Opt out of freezing on Energy Saver
+  links:
+  - url: https://issues.chromium.org/issues/325954772
+    link_type: other
+    title: 'Tracking bug #325954772'
+  - url: https://chromestatus.com/feature/5158599457767424
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/page-lifecycle
+    link_type: spec
+    title: Spec
+  line_number: 337
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Reference Target for Cross-root ARIA
+  content: 'Reference Target is a feature to enable using IDREF attributes such as `for` and `aria-labelledby` to refer to
+    elements inside a component''s shadow DOM, while maintaining encapsulation of the internal details of the shadow DOM.
+    The main goal of this feature is to enable ARIA to work across shadow root boundaries.
+
+
+    A component can specify an element in its shadow tree to act as its "reference target". When the host component is the
+    target of a IDREF like a label''s `for` attribute, the reference target becomes the effective target of the label.
+
+
+    The shadow root specifies the ID of the target element inside the shadow DOM. This is done either in JavaScript with the
+    `referenceTarget` attribute on the `ShadowRoot` object, or in HTML markup using the `shadowrootreferencetarget` attribute
+    on the `<template>` element.
+
+
+    [Origin Trial](/origintrials#/register_trial/2164542570904944641) | [ChromeStatus.com entry](https://chromestatus.com/feature/5188237101891584)'
+  heading_path:
+  - What's New in WebGPU (Chrome 133)
+  - Origin trials
+  - Reference Target for Cross-root ARIA
+  links:
+  - url: https://chromestatus.com/feature/5188237101891584
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 343
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: Deprecate WebGPU limit `maxInterStageShaderComponents`
+  content: "The `maxInterStageShaderComponents limit` is deprecated due to a combination of factors. The intended removal\
+    \ date in Chrome 135.\n\n  * Redundancy with `maxInterStageShaderVariables`: This limit already serves a similar purpose,\
+    \ controlling the amount of data passed between shader stages.\n  * Minor discrepancies: While there are slight differences\
+    \ in how the two limits are calculated, these differences are minor and can be effectively managed within the `maxInterStageShaderVariables`\
+    \ limit.\n  * Simplification: Removing `maxInterStageShaderComponents` streamlines the shader interface and reduces complexity\
+    \ for developers. Instead of managing two separate limits with subtle differences, they can focus on the more appropriately\
+    \ named and comprehensive `maxInterStageShaderVariables`.\n\n[ChromeStatus.com entry](https://chromestatus.com/feature/4853767735083008)"
+  heading_path:
+  - What's New in WebGPU (Chrome 133)
+  - Deprecations and removals
+  - Deprecate WebGPU limit `maxInterStageShaderComponents`
+  links:
+  - url: https://chromestatus.com/feature/4853767735083008
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 355
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+  - enterprise
+- title: Remove `<link rel=prefetch>` five-minute rule
+  content: 'Previously, when a resource was prefetched using `<link rel=prefetch>`, Chrome ignored its cache semantics (namely
+    `max-age` and `no-cache`) for the first use within five minutes, to avoid refetching. Now, Chrome removes this special
+    case and uses normal HTTP cache semantics.
+
+
+    This means web developers need to include appropriate caching headers (Cache-Control or Expires) to see benefits from
+    `<link rel=prefetch>`.
+
+
+    This also affects the nonstandard `<link rel=prerender>`.
+
+
+    [Tracking bug #40232065](https://issues.chromium.org/issues/40232065) | [ChromeStatus.com entry](https://chromestatus.com/feature/5087526916718592)'
+  heading_path:
+  - What's New in WebGPU (Chrome 133)
+  - Deprecations and removals
+  - Remove `<link rel=prefetch>` five-minute rule
+  links:
+  - url: https://issues.chromium.org/issues/40232065
+    link_type: other
+    title: 'Tracking bug #40232065'
+  - url: https://chromestatus.com/feature/5087526916718592
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 365
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Remove Chrome Welcome page triggering with initial prefs first run tabs
+  content: 'Including `chrome://welcome` in the `first_run_tabs` property of the `initial_preferences` file will now have
+    no effect. This is removed because that page is redundant with the First Run Experience that triggers on desktop platforms.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5118328941838336)
+
+
+    Except as otherwise noted, the content of this page is licensed under the [Creative Commons Attribution 4.0 License](https://creativecommons.org/licenses/by/4.0/),
+    and code samples are licensed under the [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0). For details,
+    see the [Google Developers Site Policies](https://developers.google.com/site-policies). Java is a registered trademark
+    of Oracle and/or its affiliates.
+
+
+    Last updated 2025-02-04 UTC.
+
+
+    [[["Easy to understand","easyToUnderstand","thumb-up"],["Solved my problem","solvedMyProblem","thumb-up"],["Other","otherUp","thumb-up"]],[["Missing
+    the information I need","missingTheInformationINeed","thumb-down"],["Too complicated / too many steps","tooComplicatedTooManySteps","thumb-down"],["Out
+    of date","outOfDate","thumb-down"],["Samples / code issue","samplesCodeIssue","thumb-down"],["Other","otherDown","thumb-down"]],["Last
+    updated 2025-02-04 UTC."],[],[]]'
+  heading_path:
+  - What's New in WebGPU (Chrome 133)
+  - Deprecations and removals
+  - Remove Chrome Welcome page triggering with initial prefs first run tabs
+  links:
+  - url: https://chromestatus.com/feature/5118328941838336
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://creativecommons.org/licenses/by/4.0/
+    link_type: other
+    title: Creative Commons Attribution 4.0 License
+  - url: https://www.apache.org/licenses/LICENSE-2.0
+    link_type: other
+    title: Apache 2.0 License
+  - url: https://developers.google.com/site-policies
+    link_type: other
+    title: Google Developers Site Policies
+  line_number: 375
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
