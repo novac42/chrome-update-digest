@@ -14,6 +14,7 @@ import yaml
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from utils.yaml_pipeline import YAMLPipeline
+from processors.merge_webgpu_graphics import WebGPUGraphicsMerger
 
 
 class ReleaseNoteSplitter:
@@ -62,7 +63,7 @@ class ReleaseNoteSplitter:
         
         # Create output directory if saving files
         if save_files:
-            output_dir = Path(__file__).parent.parent.parent / 'upstream_docs' / 'processed_releasenotes' / 'split_by_heading'
+            output_dir = Path(__file__).parent.parent.parent / 'upstream_docs' / 'processed_releasenotes' / 'processed_forwebplatform' / 'split_by_heading'
             output_dir.mkdir(parents=True, exist_ok=True)
         
         for line in lines:
@@ -122,7 +123,9 @@ class ReleaseNoteSplitter:
     def merge_webgpu_section(self, chrome_webgpu_section: Optional[str], 
                            webgpu_release_notes: str, version: str) -> str:
         """
-        Merge Chrome's WebGPU section with dedicated WebGPU release notes.
+        DEPRECATED: Use merge_webgpu_graphics.py instead.
+        This method is kept for backward compatibility but should not be used.
+        The new approach splits first, then merges WebGPU with Graphics content.
         
         Args:
             chrome_webgpu_section: WebGPU section from Chrome notes (may be None)
@@ -296,49 +299,29 @@ def process_with_split_pipeline(version: str):
     
     # Step 1: Split Chrome notes by heading2 and save each section
     sections = splitter.split_by_heading2(chrome_content, version=version, channel='stable', save_files=True)
-    print(f"  ✓ Split into {len(sections)} sections and saved to split_by_heading/")
+    print(f"  ✓ Split into {len(sections)} sections and saved to processed_forwebplatform/split_by_heading/")
     
-    # Step 2: Process WebGPU section if WebGPU file exists
-    if webgpu_file.exists():
-        with open(webgpu_file, 'r', encoding='utf-8') as f:
-            webgpu_content = f.read()
-        
-        # Get Chrome's WebGPU/Graphics section
-        chrome_webgpu = sections.get('WebGPU') or sections.get('Graphics')
-        
-        # Merge with dedicated WebGPU notes
-        merged_webgpu = splitter.merge_webgpu_section(
-            chrome_webgpu, webgpu_content, version
-        )
-        
-        # Replace the section
-        if 'WebGPU' in sections:
-            sections['WebGPU'] = merged_webgpu
-        elif 'Graphics' in sections:
-            sections['Graphics'] = merged_webgpu
-        else:
-            sections['WebGPU'] = merged_webgpu
-        
-        print(f"  ✓ Merged WebGPU content")
+    # Step 2: Run WebGPU-Graphics merger AFTER splitting
+    # This merges dedicated WebGPU notes with split Graphics/WebGPU sections
+    merger = WebGPUGraphicsMerger()
+    merge_result = merger.merge(version, 'stable')
+    if merge_result['success']:
+        print(f"  ✓ Merged WebGPU and Graphics content")
+        print(f"    Sources used: {', '.join(merge_result['sources_used'])}")
+        print(f"    Features: {merge_result['features_total']} (deduplicated: {merge_result['features_deduplicated']})")
+    else:
+        print(f"  ⚠️  WebGPU-Graphics merge skipped (no sources found)")
     
-    # Step 3: Reconstruct full markdown
-    reconstructed = splitter.reconstruct_with_sections(sections)
-    
-    # Save reconstructed markdown
-    output_file = output_dir / f'{version}-split-merged.md'
-    output_file.parent.mkdir(parents=True, exist_ok=True)
-    with open(output_file, 'w', encoding='utf-8') as f:
-        f.write(reconstructed)
-    print(f"  ✓ Saved: {output_file}")
-    
-    # Step 4: Process with YAML pipeline
+    # Step 3: Process with YAML pipeline
+    # For graphics-webgpu, use the merged file; for others, use original content
     result = pipeline.process_release_notes(
-        markdown_content=reconstructed,
+        markdown_content=chrome_content,  # Original content
         version=version,
         channel='stable',
         save_yaml=True,
         split_by_area=True,
-        merge_webgpu=False  # Already merged
+        merge_webgpu=False,  # Don't merge in pipeline, already done by merger
+        merged_graphics_webgpu_path=merge_result.get('output_file') if merge_result['success'] else None
     )
     
     print(f"  ✓ Generated YAML files")

@@ -1,0 +1,55 @@
+version: '136'
+channel: stable
+area: deprecations
+extraction_timestamp: '2025-08-17T22:57:36.473051'
+extraction_method: deterministic
+statistics:
+  total_features: 1
+  total_links: 4
+  primary_tags:
+    deprecation: 1
+  cross_cutting: {}
+features:
+- title: Remove HTMLFencedFrameElement.canLoadOpaqueURL()
+  content: 'The `HTMLFencedFrameElement` method `canLoadOpaqueURL()` was replaced with `navigator.canLoadAdAuctionFencedFrame()`
+    in 2023, and calling it has resulted in a deprecation console warning ever since pointing to the new API. The method is
+    removed from Chrome 136.
+
+
+    **References:** [ChromeStatus.com entry](https://chromestatus.com/feature/5083847901667328)
+
+
+    ---
+
+
+    *Except as otherwise noted, the content of this page is licensed under the [Creative Commons Attribution 4.0 License](https://creativecommons.org/licenses/by/4.0/),
+    and code samples are licensed under the [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0). For details,
+    see the [Google Developers Site Policies](https://developers.google.com/site-policies). Java is a registered trademark
+    of Oracle and/or its affiliates.*
+
+
+    *Last updated 2025-04-29 UTC.*'
+  heading_path:
+  - Chrome 136 Release Notes
+  - Deprecations and removals
+  - Remove HTMLFencedFrameElement.canLoadOpaqueURL()
+  links:
+  - url: https://chromestatus.com/feature/5083847901667328
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://creativecommons.org/licenses/by/4.0/
+    link_type: other
+    title: Creative Commons Attribution 4.0 License
+  - url: https://www.apache.org/licenses/LICENSE-2.0
+    link_type: other
+    title: Apache 2.0 License
+  - url: https://developers.google.com/site-policies
+    link_type: other
+    title: Google Developers Site Policies
+  line_number: 212
+  primary_tags:
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []

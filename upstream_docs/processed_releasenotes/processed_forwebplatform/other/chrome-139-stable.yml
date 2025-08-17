@@ -1,0 +1,200 @@
+version: '139'
+channel: stable
+area: other
+extraction_timestamp: '2025-08-17T23:20:02.965940'
+extraction_method: deterministic
+statistics:
+  total_features: 7
+  total_links: 18
+  primary_tags:
+    devices: 1
+    network: 2
+  cross_cutting:
+    privacy: 7
+features:
+- title: The `securePaymentConfirmationAvailability` API
+  content: 'This is a JavaScript API to provide an easier way to check if the Secure Payment Confirmation (SPC) feature is
+    available. With this API, the only way to determine SPC''s availability was to create a `PaymentRequest` with the required
+    parameters, which is clunky and difficult in the case where a developer wants to check for SPC before starting to process
+    a payment.
+
+
+    [Tracking bug #40258712](https://issues.chromium.org/issues/40258712) | [ChromeStatus.com entry](https://chromestatus.com/feature/5165040614768640)
+    | [Spec](https://github.com/w3c/secure-payment-confirmation/pull/285)'
+  heading_path:
+  - Chrome 139
+  - Secure Payment Confirmation (SPC)
+  - The `securePaymentConfirmationAvailability` API
+  links:
+  - url: https://issues.chromium.org/issues/40258712
+    link_type: other
+    title: 'Tracking bug #40258712'
+  - url: https://chromestatus.com/feature/5165040614768640
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/w3c/secure-payment-confirmation/pull/285
+    link_type: github
+    title: Spec
+  line_number: 114
+  primary_tags: []
+  cross_cutting_concerns:
+  - privacy
+- title: 'Secure Payment Confirmation: Browser Bound Keys'
+  content: 'Adds an additional cryptographic signature over Secure Payment Confirmation assertions and credential creation.
+    The corresponding private key is not synced across devices. This helps web developers meet requirements for device binding
+    for payment transactions.
+
+
+    [Tracking bug #377278827](https://issues.chromium.org/issues/377278827) | [ChromeStatus.com entry](https://chromestatus.com/feature/5106102997614592)
+    | [Spec](https://w3c.github.io/secure-payment-confirmation/#sctn-browser-bound-key-store)'
+  heading_path:
+  - Chrome 139
+  - Secure Payment Confirmation (SPC)
+  - 'Secure Payment Confirmation: Browser Bound Keys'
+  links:
+  - url: https://issues.chromium.org/issues/377278827
+    link_type: other
+    title: 'Tracking bug #377278827'
+  - url: https://chromestatus.com/feature/5106102997614592
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://w3c.github.io/secure-payment-confirmation/#sctn-browser-bound-key-store
+    link_type: spec
+    title: Spec
+  line_number: 120
+  primary_tags: []
+  cross_cutting_concerns:
+  - privacy
+- title: On-device Web Speech API
+  content: 'This feature adds on-device speech recognition support to the Web Speech API, allowing websites to ensure that
+    neither audio nor transcribed speech are sent to a third-party service for processing.
+
+
+    Websites can query the availability of on-device speech recognition for specific languages, prompt users to install the
+    necessary resources for on-device speech recognition, and choose between on-device or cloud-based speech recognition as
+    needed.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/6090916291674112) | [Spec](https://webaudio.github.io/web-speech-api)'
+  heading_path:
+  - Chrome 139
+  - On-device AI
+  - On-device Web Speech API
+  links:
+  - url: https://chromestatus.com/feature/6090916291674112
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://webaudio.github.io/web-speech-api
+    link_type: github
+    title: Spec
+  line_number: 128
+  primary_tags:
+  - name: devices
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Clear window name for cross-site navigations that switches browsing context group
+  content: 'Clears the value of the `window.name` property when navigation switches browsing context groups, to avoid leaking
+    information that could be used as a tracking vector.
+
+
+    [Tracking bug #1090128](https://issues.chromium.org/issues/1090128) | [ChromeStatus.com entry](https://chromestatus.com/feature/5962406356320256)
+    | [Spec](https://html.spec.whatwg.org/multipage/browsing-the-web.html#resetBCName)'
+  heading_path:
+  - Chrome 139
+  - Navigation
+  - Clear window name for cross-site navigations that switches browsing context group
+  links:
+  - url: https://issues.chromium.org/issues/1090128
+    link_type: other
+    title: 'Tracking bug #1090128'
+  - url: https://chromestatus.com/feature/5962406356320256
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://html.spec.whatwg.org/multipage/browsing-the-web.html#resetBCName
+    link_type: spec
+    title: Spec
+  line_number: 138
+  primary_tags: []
+  cross_cutting_concerns:
+  - privacy
+- title: Reduce fingerprinting in Accept-Language header information
+  content: 'Reduces the amount of information the `Accept-Language` header value string exposes in HTTP requests and in `navigator.languages`.
+    Instead of sending a full list of the user''s preferred languages on every HTTP request using the `Accept-Language` header,
+    Chrome only sends the user''s most preferred language.
+
+
+    [Tracking bug #1306905](https://issues.chromium.org/issues/1306905) | [ChromeStatus.com entry](https://chromestatus.com/feature/5188040623390720)'
+  heading_path:
+  - Chrome 139
+  - Network
+  - Reduce fingerprinting in Accept-Language header information
+  links:
+  - url: https://issues.chromium.org/issues/1306905
+    link_type: other
+    title: 'Tracking bug #1306905'
+  - url: https://chromestatus.com/feature/5188040623390720
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 146
+  primary_tags:
+  - name: network
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Randomize TCP port allocation on Windows
+  content: 'This launch enables TCP port randomization on versions of Windows (2020 or later) where we don''t expect to see
+    issues with re-use of prior ports occurring too fast (causing rejection due to timeouts on port re-use). The rapid port
+    re-use issue arises from the Birthday problem, where the probability of randomly re-picking a port already seen rapidly
+    converges with 100% for each new port chosen when compared to port re-use in a sequential model.
+
+
+    [Tracking bug #40744069](https://issues.chromium.org/issues/40744069) | [ChromeStatus.com entry](https://chromestatus.com/feature/5106900286570496)'
+  heading_path:
+  - Chrome 139
+  - Network
+  - Randomize TCP port allocation on Windows
+  links:
+  - url: https://issues.chromium.org/issues/40744069
+    link_type: other
+    title: 'Tracking bug #40744069'
+  - url: https://chromestatus.com/feature/5106900286570496
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 152
+  primary_tags:
+  - name: network
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Audio level for RTC encoded frames
+  content: 'This feature exposes to the web the audio level of an encoded frame transmitted using `RTCPeerConnection` and
+    exposed using WebRTC encoded transform.
+
+
+    [Tracking bug #418116079](https://issues.chromium.org/issues/418116079) | [ChromeStatus.com entry](https://chromestatus.com/feature/5206106602995712)
+    | [Spec](https://w3c.github.io/webrtc-encoded-transform/#dom-rtcencodedaudioframemetadata-audiolevel)'
+  heading_path:
+  - Chrome 139
+  - WebRTC
+  - Audio level for RTC encoded frames
+  links:
+  - url: https://issues.chromium.org/issues/418116079
+    link_type: other
+    title: 'Tracking bug #418116079'
+  - url: https://chromestatus.com/feature/5206106602995712
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://w3c.github.io/webrtc-encoded-transform/#dom-rtcencodedaudioframemetadata-audiolevel
+    link_type: spec
+    title: Spec
+  line_number: 176
+  primary_tags: []
+  cross_cutting_concerns:
+  - privacy

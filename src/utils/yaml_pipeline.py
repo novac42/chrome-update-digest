@@ -94,7 +94,8 @@ class YAMLPipeline:
         channel: str = 'stable',
         save_yaml: bool = True,
         split_by_area: bool = False,
-        merge_webgpu: bool = True
+        merge_webgpu: bool = True,
+        merged_graphics_webgpu_path: Optional[str] = None
     ) -> Dict[str, Any]:
         """
         Process release notes through the full pipeline.
@@ -142,6 +143,26 @@ class YAMLPipeline:
             if split_by_area:
                 # Split features by area and save separate files
                 area_features = self.split_features_by_area(features_as_dicts)
+                
+                # Special handling for graphics-webgpu area with merged file
+                if merged_graphics_webgpu_path and 'graphics-webgpu' in area_features:
+                    merged_path = Path(merged_graphics_webgpu_path)
+                    if merged_path.exists():
+                        # Extract features from merged file for graphics-webgpu
+                        merged_content = merged_path.read_text(encoding='utf-8')
+                        merged_extracted = self.link_extractor.extract_from_content(merged_content)
+                        merged_tagged = []
+                        for feature in merged_extracted:
+                            tagged = self.tagger.tag_feature(feature)
+                            merged_tagged.append(tagged)
+                        merged_dicts = [self._tagged_feature_to_dict(f) for f in merged_tagged]
+                        
+                        # Apply deduplication for graphics-webgpu
+                        merged_dicts = self._deduplicate_webgpu_features(merged_dicts)
+                        
+                        # Replace graphics-webgpu features with merged ones
+                        area_features['graphics-webgpu'] = merged_dicts
+                
                 for area, features in area_features.items():
                     area_stats = self._calculate_statistics_from_dicts(features)
                     area_output = {
