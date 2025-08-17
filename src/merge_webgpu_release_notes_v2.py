@@ -21,52 +21,57 @@ class WebGPUMergerV2:
         # Ensure output directory exists
         self.output_dir.mkdir(parents=True, exist_ok=True)
     
-    def extract_webgpu_features(self, webgpu_content: str) -> List[str]:
+    def clean_and_process_webgpu_content(self, webgpu_content: str) -> str:
         """
-        Extract only the actual WebGPU feature sections from the WebGPU release notes.
+        Clean WebGPU content by removing header and footer sections,
+        then adjust heading levels.
         
         Returns:
-            List of feature sections as strings
+            Cleaned and processed WebGPU content as string
         """
         lines = webgpu_content.split('\n')
-        features = []
-        current_feature = []
-        in_feature = False
-        skip_sections = ['What\'s New in WebGPU', 'WebGPU 139 Release Notes', 'WebGPU 138 Release Notes', 'WebGPU 137 Release Notes']
+        cleaned_lines = []
+        in_content = False
         
-        for line in lines:
-            # Check if this is a H2 header
+        for i, line in enumerate(lines):
+            # Start capturing after we see "Published:"
+            if 'Published:' in line and not in_content:
+                in_content = True
+                continue
+            
+            # Stop capturing when we hit the version history section
+            if line.strip() == '## What\'s New in WebGPU':
+                break
+            
+            # Add lines if we're in the content section
+            if in_content:
+                cleaned_lines.append(line)
+        
+        # Now process the cleaned content to adjust heading levels
+        processed_lines = []
+        
+        for line in cleaned_lines:
+            # Skip empty lines at the beginning
+            if not processed_lines and not line.strip():
+                continue
+                
+            # Demote all headings by one level
             if line.startswith('## '):
-                # Check if we should skip this section
-                if any(skip in line for skip in skip_sections):
-                    in_feature = False
-                    current_feature = []
-                    continue
-                
-                # Save previous feature if exists
-                if current_feature and in_feature:
-                    features.append('\n'.join(current_feature))
-                
-                # Start new feature
-                current_feature = ['### ' + line[3:]]  # Convert H2 to H3
-                in_feature = True
-            
-            # Check for H3 headers (demote to H4)
-            elif line.startswith('### ') and in_feature:
-                current_feature.append('#### ' + line[4:])
-            
-            # Add content if we're in a feature section
-            elif in_feature:
-                current_feature.append(line)
+                processed_lines.append('### ' + line[3:])
+            elif line.startswith('### '):
+                processed_lines.append('#### ' + line[4:])
+            elif line.startswith('#### '):
+                processed_lines.append('##### ' + line[5:])
+            elif line.startswith('##### '):
+                processed_lines.append('###### ' + line[6:])
+            else:
+                processed_lines.append(line)
         
-        # Don't forget the last feature
-        if current_feature and in_feature:
-            features.append('\n'.join(current_feature))
+        # Remove trailing empty lines
+        while processed_lines and not processed_lines[-1].strip():
+            processed_lines.pop()
         
-        # Filter out empty or whitespace-only features
-        features = [f.strip() for f in features if f.strip()]
-        
-        return features
+        return '\n'.join(processed_lines)
     
     def merge_release_notes(self, version: str) -> Optional[str]:
         """
@@ -106,14 +111,14 @@ class WebGPUMergerV2:
             print(f"  Error reading WebGPU file: {e}")
             return chrome_content
         
-        # Extract WebGPU features
-        webgpu_features = self.extract_webgpu_features(webgpu_content)
+        # Clean and process WebGPU content
+        processed_webgpu = self.clean_and_process_webgpu_content(webgpu_content)
         
-        if not webgpu_features:
-            print(f"  No WebGPU features found to merge")
+        if not processed_webgpu.strip():
+            print(f"  No WebGPU content found after cleaning")
             return chrome_content
         
-        print(f"  Found {len(webgpu_features)} WebGPU features to merge")
+        print(f"  WebGPU content processed successfully")
         
         # Find where to insert WebGPU content
         chrome_lines = chrome_content.split('\n')
@@ -124,63 +129,25 @@ class WebGPUMergerV2:
         while i < len(chrome_lines):
             line = chrome_lines[i]
             
-            # Look for Graphics section or WebGPU mentions
-            if line.startswith('## Graphics') or (line.startswith('### ') and 'WebGPU' in line):
-                # Add the Graphics header
-                merged_lines.append(line)
+            # Look for a good insertion point - before Origin trials or Deprecations
+            if not webgpu_inserted and line.startswith('## ') and any(keyword in line.lower() for keyword in ['origin trial', 'deprecation', 'removal']):
+                # Insert WebGPU section before this section
+                merged_lines.append("## WebGPU")
                 merged_lines.append("")
-                
-                # Skip to next line
-                i += 1
-                
-                # Collect existing Graphics content until next H2
-                while i < len(chrome_lines) and not chrome_lines[i].startswith('## '):
-                    merged_lines.append(chrome_lines[i])
-                    i += 1
-                
-                # Now add the WebGPU features
-                if not webgpu_inserted:
-                    merged_lines.append("")
-                    merged_lines.append("### Additional WebGPU Updates")
-                    merged_lines.append("")
-                    merged_lines.append("*The following WebGPU features and updates are included in this release:*")
-                    merged_lines.append("")
-                    
-                    for feature in webgpu_features:
-                        merged_lines.append(feature)
-                        merged_lines.append("")
-                    
-                    webgpu_inserted = True
-                
-                # Don't increment i since we're at the next section
-                continue
-            else:
-                merged_lines.append(line)
-                i += 1
+                merged_lines.extend(processed_webgpu.split('\n'))
+                merged_lines.append("")
+                webgpu_inserted = True
+            
+            merged_lines.append(line)
+            i += 1
         
-        # If no Graphics section was found, add WebGPU as its own section
+        # If no suitable insertion point was found, add at the end
         if not webgpu_inserted:
-            # Find a good insertion point
-            insert_index = len(merged_lines)
-            
-            for idx, line in enumerate(merged_lines):
-                if line.startswith('## ') and any(keyword in line.lower() for keyword in ['deprecation', 'removal', 'origin trial']):
-                    insert_index = idx
-                    break
-            
-            # Insert WebGPU section
-            webgpu_section = [
-                "## WebGPU",
-                "",
-                "*WebGPU updates for this release:*",
-                ""
-            ]
-            
-            for feature in webgpu_features:
-                webgpu_section.append(feature)
-                webgpu_section.append("")
-            
-            merged_lines[insert_index:insert_index] = webgpu_section
+            merged_lines.append("")
+            merged_lines.append("## WebGPU")
+            merged_lines.append("")
+            merged_lines.extend(processed_webgpu.split('\n'))
+            merged_lines.append("")
         
         return '\n'.join(merged_lines)
     
@@ -198,53 +165,58 @@ class WebGPUMergerV2:
             return False
 
 
-def extract_webgpu_features(webgpu_content: str) -> List[str]:
+def clean_and_process_webgpu_content_standalone(webgpu_content: str) -> str:
     """
-    Extract only the actual WebGPU feature sections from the WebGPU release notes.
+    Clean WebGPU content by removing header and footer sections,
+    then adjust heading levels.
     Standalone function version for import.
     
     Returns:
-        List of feature sections as strings
+        Cleaned and processed WebGPU content as string
     """
     lines = webgpu_content.split('\n')
-    features = []
-    current_feature = []
-    in_feature = False
-    skip_sections = ['What\'s New in WebGPU', 'WebGPU 139 Release Notes', 'WebGPU 138 Release Notes', 'WebGPU 137 Release Notes']
+    cleaned_lines = []
+    in_content = False
     
-    for line in lines:
-        # Check if this is a H2 header
+    for i, line in enumerate(lines):
+        # Start capturing after we see "Published:"
+        if 'Published:' in line and not in_content:
+            in_content = True
+            continue
+        
+        # Stop capturing when we hit the version history section
+        if line.strip() == '## What\'s New in WebGPU':
+            break
+        
+        # Add lines if we're in the content section
+        if in_content:
+            cleaned_lines.append(line)
+    
+    # Now process the cleaned content to adjust heading levels
+    processed_lines = []
+    
+    for line in cleaned_lines:
+        # Skip empty lines at the beginning
+        if not processed_lines and not line.strip():
+            continue
+            
+        # Demote all headings by one level
         if line.startswith('## '):
-            # Check if we should skip this section
-            if any(skip in line for skip in skip_sections):
-                in_feature = False
-                current_feature = []
-                continue
-            
-            # Save previous feature if exists
-            if current_feature and in_feature:
-                features.append('\n'.join(current_feature))
-            
-            # Start new feature
-            current_feature = ['### ' + line[3:]]  # Convert H2 to H3
-            in_feature = True
-        
-        # Check for H3 headers (demote to H4)
-        elif line.startswith('### ') and in_feature:
-            current_feature.append('#### ' + line[4:])
-        
-        # Add content if we're in a feature section
-        elif in_feature:
-            current_feature.append(line)
+            processed_lines.append('### ' + line[3:])
+        elif line.startswith('### '):
+            processed_lines.append('#### ' + line[4:])
+        elif line.startswith('#### '):
+            processed_lines.append('##### ' + line[5:])
+        elif line.startswith('##### '):
+            processed_lines.append('###### ' + line[6:])
+        else:
+            processed_lines.append(line)
     
-    # Don't forget the last feature
-    if current_feature and in_feature:
-        features.append('\n'.join(current_feature))
+    # Remove trailing empty lines
+    while processed_lines and not processed_lines[-1].strip():
+        processed_lines.pop()
     
-    # Filter out empty or whitespace-only features
-    features = [f.strip() for f in features if f.strip()]
-    
-    return features
+    return '\n'.join(processed_lines)
 
 
 def merge_webgpu_notes(version: str) -> Optional[str]:
@@ -260,6 +232,18 @@ def merge_webgpu_notes(version: str) -> Optional[str]:
     """
     merger = WebGPUMergerV2('upstream_docs')
     return merger.merge_release_notes(version)
+
+
+# Backward compatibility alias
+def extract_webgpu_features(webgpu_content: str) -> List[str]:
+    """
+    Legacy function - now returns processed content as a single-item list.
+    For backward compatibility only.
+    """
+    processed = clean_and_process_webgpu_content_standalone(webgpu_content)
+    if processed:
+        return [processed]
+    return []
 
 
 def main():
