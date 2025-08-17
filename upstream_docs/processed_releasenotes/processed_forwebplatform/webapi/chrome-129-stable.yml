@@ -1,0 +1,178 @@
+version: '129'
+channel: stable
+area: webapi
+extraction_timestamp: '2025-08-13T15:22:58.832234'
+extraction_method: deterministic
+statistics:
+  total_features: 5
+  total_links: 17
+  primary_tags:
+    webapi: 5
+    javascript: 1
+  cross_cutting:
+    privacy: 5
+features:
+- title: Intl.DurationFormat
+  content: 'Provides a method of formatting durations, for example "1 hr 40 min 30 sec" that supports multiple locales.
+
+
+    [MDN Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DurationFormat) | [Tracking
+    bug #42201655](https://issues.chromium.org/issues/42201655) | [ChromeStatus.com entry](https://chromestatus.com/feature/5193021205774336)
+    | [Spec](https://tc39.es/proposal-intl-duration-format)'
+  heading_path:
+  - Chrome 129
+  - Web APIs
+  - Intl.DurationFormat
+  links:
+  - url: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DurationFormat
+    link_type: mdn
+    title: MDN Docs
+  - url: https://issues.chromium.org/issues/42201655
+    link_type: other
+    title: 'Tracking bug #42201655'
+  - url: https://chromestatus.com/feature/5193021205774336
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://tc39.es/proposal-intl-duration-format
+    link_type: other
+    title: Spec
+  line_number: 65
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Snap Events
+  content: 'Snap Events allow developers reliably listen for when the "snap target" of a scroller changes and perform style
+    adjustments as selected.
+
+
+    [Scroll snap events](/blog/scroll-snap-events) | [Tracking bug #40273052](https://issues.chromium.org/issues/40273052)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5826089036808192) | [Spec](https://drafts.csswg.org/css-scroll-snap-2#snap-events)'
+  heading_path:
+  - Chrome 129
+  - Web APIs
+  - Snap Events
+  links:
+  - url: https://issues.chromium.org/issues/40273052
+    link_type: other
+    title: 'Tracking bug #40273052'
+  - url: https://chromestatus.com/feature/5826089036808192
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://drafts.csswg.org/css-scroll-snap-2#snap-events
+    link_type: other
+    title: Spec
+  line_number: 71
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: 'Private Aggregation API: client-side contribution merging'
+  content: 'Modifies the Private Aggregation API to merge histogram contributions with the same bucket and filtering ID before
+    embedding in the aggregatable report''s encrypted payload.
+
+
+    Private Aggregation imposes a limit on the number of contributions that can be embedded in a single aggregatable report,
+    with any additional contributions being dropped. By merging together contributions where possible, we can get additional
+    utility out of the limit. Note that, ignoring the dropping of excess contributions, merging these sorts of contributions
+    shouldn''t have any impact on the final outputs, for example summary reports.
+
+
+    [Tracking bug #349980058](https://issues.chromium.org/issues/349980058) | [ChromeStatus.com entry](https://chromestatus.com/feature/5094168719523840)
+    | [Spec](https://github.com/patcg-individual-drafts/private-aggregation-api/pull/136)'
+  heading_path:
+  - Chrome 129
+  - Web APIs
+  - 'Private Aggregation API: client-side contribution merging'
+  links:
+  - url: https://issues.chromium.org/issues/349980058
+    link_type: other
+    title: 'Tracking bug #349980058'
+  - url: https://chromestatus.com/feature/5094168719523840
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/patcg-individual-drafts/private-aggregation-api/pull/136
+    link_type: github
+    title: Spec
+  line_number: 77
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: '`scheduler.yield()`'
+  content: 'Provides a method for yielding control to the browser, which can be used to break up long tasks. Awaiting the
+    promise returned by `scheduler.yield()` causes the current task to yield, continuing in a new browser task. This can be
+    used to improve responsiveness issues caused by long tasks. Continuations are prioritized to mitigate performance problems
+    of existing alternatives.
+
+
+    [Docs](https://web.dev/articles/optimize-long-tasks#scheduler-dot-yield) | [Tracking bug #40633887](https://issues.chromium.org/issues/40633887)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/6266249336586240) | [Spec](https://wicg.github.io/scheduling-apis/#dom-scheduler-yield)'
+  heading_path:
+  - Chrome 129
+  - Web APIs
+  - '`scheduler.yield()`'
+  links:
+  - url: https://web.dev/articles/optimize-long-tasks#scheduler-dot-yield
+    link_type: other
+    title: Docs
+  - url: https://issues.chromium.org/issues/40633887
+    link_type: other
+    title: 'Tracking bug #40633887'
+  - url: https://chromestatus.com/feature/6266249336586240
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/scheduling-apis/#dom-scheduler-yield
+    link_type: spec
+    title: Spec
+  line_number: 85
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: 'Web Authentication API: JSON serialization methods'
+  content: 'The WebAuthn `PublicKeyCredential.toJSON()`, `parseCreationOptionsFromJSON()`, and `parseRequestOptionsFromJSON()`
+    methods let developers serialize a WebAuthn response into a JSON object or deserialize a WebAuthn request object from
+    its JSON representation.
+
+
+    [Tracking bug #40250593](https://issues.chromium.org/issues/40250593) | [ChromeStatus.com entry](https://chromestatus.com/feature/5141695044255744)
+    | [Spec](https://w3c.github.io/webauthn/#publickeycredential)'
+  heading_path:
+  - Chrome 129
+  - Web APIs
+  - 'Web Authentication API: JSON serialization methods'
+  links:
+  - url: https://issues.chromium.org/issues/40250593
+    link_type: other
+    title: 'Tracking bug #40250593'
+  - url: https://chromestatus.com/feature/5141695044255744
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://w3c.github.io/webauthn/#publickeycredential
+    link_type: spec
+    title: Spec
+  line_number: 91
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: javascript
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy

@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chrome Platform Updates Digest</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: {{ body_gradient | default('linear-gradient(135deg, #667eea 0%, #764ba2 100%)') }};
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: visible;
+            position: relative;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4285f4 0%, #34a853 50%, #fbbc05 75%, #ea4335 100%);
+            color: white;
+            padding: 20px 40px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .version-selector {
+            flex-shrink: 0;
+        }
+
+        .version-selector select {
+            background: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #333;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .content {
+            padding: 40px;
+            min-height: calc(100vh - 200px);
+        }
+
+        .version-content {
+            display: none;
+        }
+
+        .version-content.active {
+            display: block;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            font-size: 1.8rem;
+            color: #1a73e8;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #e8f0fe;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h3 {
+            font-size: 1.4rem;
+            color: #34a853;
+            margin: 20px 0 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section h4 {
+            font-size: 1.2rem;
+            color: #333;
+            margin: 15px 0 10px 0;
+        }
+
+        /* H3 Cards */
+        .h3-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #e8eaed;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin: 20px 0;
+        }
+
+        .h3-card h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        /* Summary Cards */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .summary-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid #4285f4;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .summary-card h4 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #1a73e8;
+        }
+
+        .summary-card p {
+            margin-bottom: 8px;
+            color: #5f6368;
+        }
+
+        /* Takeaways Section */
+        .takeaways {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+
+        .takeaway-category {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .takeaway-category h4 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #ea4335;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Special categories */
+        .breaking-changes {
+            background: #fef7e0;
+            border-left: 5px solid #fbbc05;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .breaking-changes h4 {
+            color: #f57c00;
+            margin-bottom: 10px;
+        }
+
+        .opportunities {
+            background: #e8f5e8;
+            border-left: 5px solid #34a853;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .opportunities h4 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+
+        /* Update Cards Grid */
+        .updates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .update-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid #e8eaed;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .update-card h4 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #1a73e8;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Lists */
+        .takeaway-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .takeaway-list li {
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+            color: #5f6368;
+            line-height: 1.7;
+        }
+
+        .takeaway-list li::before {
+            content: "▶";
+            position: absolute;
+            left: 0;
+            color: #34a853;
+            font-weight: bold;
+        }
+
+        .update-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .update-card li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+            color: #5f6368;
+            line-height: 1.6;
+        }
+
+        .update-card li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #fbbc05;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* Links */
+        .spec-link {
+            color: #1a73e8;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .spec-link:hover {
+            color: #1557b0;
+            text-decoration: underline;
+        }
+
+        /* Version Comparison */
+        .version-comparison {
+            background: linear-gradient(135deg, #e8f0fe 0%, #f8f9fa 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border: 1px solid #dadce0;
+        }
+
+        .version-comparison p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #3c4043;
+            margin-bottom: 15px;
+        }
+
+
+        /* Footer */
+        .footer {
+            background: #f8f9fa;
+            padding: 20px 40px;
+            text-align: center;
+            border-top: 1px solid #e8eaed;
+        }
+
+        .footer p {
+            color: #5f6368;
+            font-style: italic;
+        }
+
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+                text-align: center;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .summary-grid,
+            .updates-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <h1>🚀 Chrome Platform Updates Digest</h1>
+                {% if versions|length > 1 %}
+                <div class="version-selector">
+                    <select id="version-select" onchange="switchVersion(this.value)">
+                        {% for version_data in versions %}
+                            <option value="{{ version_data.version }}">
+                                Chrome {{ version_data.version }} {{ version_data.channel|title }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% elif versions|length == 1 %}
+                <div class="version-selector">
+                    <span style="color: white; font-size: 14px; padding: 8px 16px;">Chrome {{ versions[0].version }} {{ versions[0].channel|title }}</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="content">
+            {% if show_archive_note %}
+            <div style="background: #f8f9fa; padding: 15px; margin-bottom: 20px; border-radius: 10px; border-left: 4px solid #4285f4;">
+                <p style="margin: 0; color: #5f6368;">
+                    📌 显示最新 {{ versions|length }} 个版本。共有 {{ total_versions }} 个版本，
+                    <a href="#" onclick="alert('历史版本文件位于 digest_html/ 目录中，文件名格式为 chrome_[版本号]_[类型]_[渠道].html'); return false;" style="color: #1a73e8;">
+                        查看更多历史版本
+                    </a>
+                </p>
+            </div>
+            {% endif %}
+            
+            {% for version_data in versions %}
+            <div id="version-{{ version_data.version }}" class="version-content{% if loop.first %} active{% endif %}">
+                {{ version_data.html_content|safe }}
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="footer">
+            <p><em>Generated with ❤️ by Professional Digest Converter</em></p>
+        </div>
+    </div>
+
+    <script>
+        function switchVersion(version) {
+            // Hide all version contents
+            document.querySelectorAll('.version-content').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Show selected version
+            const selectedContent = document.getElementById('version-' + version);
+            if (selectedContent) {
+                selectedContent.classList.add('active');
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const selector = document.getElementById('version-select');
+            if (selector && selector.options.length > 0) {
+                switchVersion(selector.options[0].value);
+            }
+        });
+    </script>
+</body>
+</html>

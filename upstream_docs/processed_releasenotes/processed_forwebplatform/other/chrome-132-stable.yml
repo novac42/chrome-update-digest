@@ -1,0 +1,122 @@
+version: '132'
+channel: stable
+area: other
+extraction_timestamp: '2025-08-13T15:22:57.939181'
+extraction_method: deterministic
+statistics:
+  total_features: 3
+  total_links: 11
+  primary_tags:
+    multimedia: 2
+  cross_cutting:
+    privacy: 3
+    enterprise: 1
+features:
+- title: 'Fetch: `Request.bytes()` and `Response.bytes()`'
+  content: "Add a `bytes()` method to the `Request` and `Response` interfaces, which returns a promise that resolves with\
+    \ a Uint8Array. While `Request` and `Response` have an `arrayBuffer()` method, you can't read directly from a buffer.\
+    \ You have to create a view such as a `Uint8Array` to read it. The `bytes()` method improves the ergonomics of getting\
+    \ the body of Request and Response.\n\n**Baseline Newly Available:** This feature is now available in all three major\
+    \ browser engines. \n\n[Tracking bug #340206277](https://issues.chromium.org/issues/340206277) | [ChromeStatus.com entry](https://chromestatus.com/feature/5239268180754432)\
+    \ | [Spec](https://fetch.spec.whatwg.org/#dom-body-bytes)"
+  heading_path:
+  - Chrome 132
+  - Loading
+  - 'Fetch: `Request.bytes()` and `Response.bytes()`'
+  links:
+  - url: https://issues.chromium.org/issues/340206277
+    link_type: other
+    title: 'Tracking bug #340206277'
+  - url: https://chromestatus.com/feature/5239268180754432
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://fetch.spec.whatwg.org/#dom-body-bytes
+    link_type: spec
+    title: Spec
+  line_number: 57
+  primary_tags: []
+  cross_cutting_concerns:
+  - privacy
+- title: Capture all screens
+  content: 'Capture all the screens connected to the device using `getAllScreensMedia()`.
+
+
+    Calling `getDisplayMedia()` multiple times requires multiple user gestures, burdens the user with choosing the next screen
+    each time, and does not guarantee to the app that all the screens were selected. The `getAllScreensMedia()` method improves
+    on all of these fronts.
+
+
+    **Note:** As this feature has privacy ramifications, it is only exposed behind the `MultiScreenCaptureAllowedForUrls`
+    enterprise policy, and users are warned before recording even starts, that recording _could_ start at some point. The
+    API will only work for origins that are specified in the `MultiScreenCaptureAllowedForUrls` allowlist. Any origin not
+    specified there, won''t have access to it.
+
+
+    This feature is shipping on Desktop only.
+
+
+    [Design Doc](https://docs.google.com/document/d/1XB8rQRnY5N8G2PeEcNJpVO0q22CutvwW8GGKCZ1z_vc/preview?tab=t.0) | [Tracking
+    bug #40216442](https://issues.chromium.org/issues/40216442) | [ChromeStatus.com entry](https://chromestatus.com/feature/6284029979525120)
+    | [Spec](https://screen-share.github.io/capture-all-screens)'
+  heading_path:
+  - Chrome 132
+  - Media
+  - Capture all screens
+  links:
+  - url: https://docs.google.com/document/d/1XB8rQRnY5N8G2PeEcNJpVO0q22CutvwW8GGKCZ1z_vc/preview?tab=t.0
+    link_type: other
+    title: Design Doc
+  - url: https://issues.chromium.org/issues/40216442
+    link_type: other
+    title: 'Tracking bug #40216442'
+  - url: https://chromestatus.com/feature/6284029979525120
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://screen-share.github.io/capture-all-screens
+    link_type: github
+    title: Spec
+  line_number: 75
+  primary_tags:
+  - name: multimedia
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+  - enterprise
+- title: Element Capture
+  content: 'Given a video `MediaStreamTrack` obtained through pre-existing means to initiate tab-capture, [Element Capture](/docs/web-platform/element-capture)
+    allows mutating the track to only capture a subtree of the DOM starting at a given Element.
+
+
+    The API bears some resemblance to the Region Capture API, but affords greater flexibility for applications, because occluding
+    and occluded content are both excluded from the capture.
+
+
+    [Demo](https://element-capture-demo.glitch.me/) | [Tracking bug #270230413](https://issues.chromium.org/issues/270230413)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5198989277790208) | [Spec](https://screen-share.github.io/element-capture)'
+  heading_path:
+  - Chrome 132
+  - Media
+  - Element Capture
+  links:
+  - url: https://element-capture-demo.glitch.me/
+    link_type: other
+    title: Demo
+  - url: https://issues.chromium.org/issues/270230413
+    link_type: other
+    title: 'Tracking bug #270230413'
+  - url: https://chromestatus.com/feature/5198989277790208
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://screen-share.github.io/element-capture
+    link_type: github
+    title: Spec
+  line_number: 87
+  primary_tags:
+  - name: multimedia
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy

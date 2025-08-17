@@ -1,0 +1,65 @@
+version: '137'
+channel: stable
+area: webgpu
+extraction_timestamp: '2025-08-13T15:22:56.314455'
+extraction_method: deterministic
+statistics:
+  total_features: 2
+  total_links: 5
+  primary_tags:
+    webgpu: 2
+  cross_cutting:
+    privacy: 1
+features:
+- title: GPUTextureView for externalTexture binding
+  content: 'A `GPUTextureView` is now allowed to be used for an `externalTexture` binding when creating a `GPUBindGroup`.
+
+
+    **References:** [Tracking bug #398752857](https://bugs.chromium.org/p/chromium/issues/detail?id=398752857) | [ChromeStatus.com
+    entry](https://chromestatus.com/feature/5107071463104512) | [Spec](https://gpuweb.github.io/gpuweb/#gpubindgroup)'
+  heading_path:
+  - Chrome 137 Release Notes
+  - WebGPU
+  - GPUTextureView for externalTexture binding
+  links:
+  - url: https://bugs.chromium.org/p/chromium/issues/detail?id=398752857
+    link_type: tracking_bug
+    title: 'Tracking bug #398752857'
+  - url: https://chromestatus.com/feature/5107071463104512
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://gpuweb.github.io/gpuweb/#gpubindgroup
+    link_type: github
+    title: Spec
+  line_number: 175
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: copyBufferToBuffer overload
+  content: 'The `GPUCommandEncoder` `copyBufferToBuffer()` method now includes a simpler way to copy entire buffers using
+    a new overload with optional offsets and size parameters.
+
+
+    **References:** [ChromeStatus.com entry](https://chromestatus.com/feature/5103419089608704) | [Spec](https://gpuweb.github.io/gpuweb/#dom-gpucommandencoder-copybuffertobuffer)'
+  heading_path:
+  - Chrome 137 Release Notes
+  - WebGPU
+  - copyBufferToBuffer overload
+  links:
+  - url: https://chromestatus.com/feature/5103419089608704
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://gpuweb.github.io/gpuweb/#dom-gpucommandencoder-copybuffertobuffer
+    link_type: github
+    title: Spec
+  line_number: 181
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []

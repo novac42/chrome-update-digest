@@ -1,0 +1,40 @@
+version: '135'
+channel: stable
+area: other
+extraction_timestamp: '2025-08-13T15:22:56.948902'
+extraction_method: deterministic
+statistics:
+  total_features: 1
+  total_links: 2
+  primary_tags:
+    multimedia: 1
+  cross_cutting: {}
+features:
+- title: Add MediaStreamTrack support to the Web Speech API
+  content: 'Add MediaStreamTrack support to the Web Speech API.
+
+
+    The Web Speech API is a web standard API that allows developers to incorporate speech recognition and synthesis into their
+    web pages. Currently, the Web Speech API uses the user''s default microphone as the audio input. MediaStreamTrack support
+    allows websites to use the Web Speech API to caption other sources of audio including remote audio tracks.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5178378197139456) | [Spec](https://wicg.github.io/speech-api)'
+  heading_path:
+  - Chrome 135
+  - Audio and video
+  - Add MediaStreamTrack support to the Web Speech API
+  links:
+  - url: https://chromestatus.com/feature/5178378197139456
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/speech-api
+    link_type: spec
+    title: Spec
+  line_number: 127
+  primary_tags:
+  - name: multimedia
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []

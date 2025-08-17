@@ -1,0 +1,37 @@
+version: '124'
+channel: stable
+area: html-dom
+extraction_timestamp: '2025-08-13T15:23:00.265141'
+extraction_method: deterministic
+statistics:
+  total_features: 1
+  total_links: 2
+  primary_tags: {}
+  cross_cutting: {}
+features:
+- title: The `writingsuggestions` attribute
+  content: 'Browsers are starting to provide writing suggestions to users as they type on various editable fields across the
+    web. While this is generally useful for users, there are cases when developers may want to turn off browser-provided writing
+    assistance, such as extensions or sites that provide similar functionality of their own.
+
+
+    The new attribute `writingsuggestions` has values of `true` or `false` that allow developers to turn on or off browser-provided
+    writing suggestions. The attribute''s state for an element can also be inherited from ancestor elements, thereby allowing
+    developers to control this ability at a per-element or per-document or sub-document scale.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5153375153029120) | [Spec](https://html.spec.whatwg.org/multipage/interaction.html#writing-suggestions)'
+  heading_path:
+  - Chrome 124
+  - HTML and DOM
+  - The `writingsuggestions` attribute
+  links:
+  - url: https://chromestatus.com/feature/5153375153029120
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://html.spec.whatwg.org/multipage/interaction.html#writing-suggestions
+    link_type: spec
+    title: Spec
+  line_number: 43
+  primary_tags: []
+  cross_cutting_concerns: []

@@ -1,0 +1,42 @@
+version: '126'
+channel: stable
+area: javascript
+extraction_timestamp: '2025-08-13T15:22:59.689267'
+extraction_method: deterministic
+statistics:
+  total_features: 1
+  total_links: 2
+  primary_tags:
+    javascript: 1
+  cross_cutting:
+    privacy: 1
+features:
+- title: '`visualViewport` `onscrollend` support'
+  content: 'The `scrollend` JavaScript event fires to signal that a scrolling operation has come to an end.
+
+
+    The `visualViewport` interface includes an `onscrollend` event handler that should be invoked when a scrolling operation
+    on the `visualViewport` has ended. Chrome already supports adding a scrollend event listener through `visualViewport.addEventListener("scrollend")`.
+    This just makes it possible to also add an event listener using `visualViewport.onscrollend`.
+
+
+    [Tracking bug #325307785](https://issues.chromium.org/issues/325307785) | [ChromeStatus.com entry](https://chromestatus.com/feature/5774579609108480)'
+  heading_path:
+  - Chrome 126
+  - JavaScript
+  - '`visualViewport` `onscrollend` support'
+  links:
+  - url: https://issues.chromium.org/issues/325307785
+    link_type: other
+    title: 'Tracking bug #325307785'
+  - url: https://chromestatus.com/feature/5774579609108480
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 101
+  primary_tags:
+  - name: javascript
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy

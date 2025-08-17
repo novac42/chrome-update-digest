@@ -1,0 +1,71 @@
+version: '134'
+channel: stable
+area: other
+extraction_timestamp: '2025-08-13T15:22:57.255705'
+extraction_method: deterministic
+statistics:
+  total_features: 2
+  total_links: 5
+  primary_tags:
+    pwa: 2
+  cross_cutting:
+    privacy: 1
+features:
+- title: Document subtitle (Fix PWA app titles)
+  content: 'This feature allows to specify complementary information about the current window of an installed running PWA.
+    It adds a subtitle to the page to provide contextual information that is displayed in the window''s title bar. This replaces
+    the text contained in the HTML title element.
+
+
+    [Tracking bug #1351682](https://issues.chromium.org/issues/1351682) | [ChromeStatus.com entry](https://chromestatus.com/feature/5168096826884096)
+    | [Spec](https://github.com/whatwg/html/compare/main...diekus:html:main)'
+  heading_path:
+  - Chrome 134
+  - PWA
+  - Document subtitle (Fix PWA app titles)
+  links:
+  - url: https://issues.chromium.org/issues/1351682
+    link_type: other
+    title: 'Tracking bug #1351682'
+  - url: https://chromestatus.com/feature/5168096826884096
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/whatwg/html/compare/main...diekus:html:main
+    link_type: github
+    title: Spec
+  line_number: 59
+  primary_tags:
+  - name: pwa
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: User link capturing on PWAs
+  content: 'Web links automatically direct users to installed web apps. To better align with users'' expectations around installed
+    experiences, Chrome makes it easier to move between the browser and installed web apps. When the user clicks a link that
+    could be handled by an installed web app, the link will open in that installed web app. Users can change this behavior
+    through the installed web app''s settings. Developers can control this behavior with the [`launch_handler`](/docs/web-platform/launch-handler)
+    manifest property, and can reference this [developer documentation](https://docs.google.com/document/d/e/2PACX-1vSqYzAmiLr-58OgSWBITtAAu6_2XUpjjNEdMvc6IdZn9DjQCeVrE0SKViumyly0cpryxAONMq62zwHw/pub)
+    for more information about how deep linking works with installed web apps.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5194343954776064)'
+  heading_path:
+  - Chrome 134
+  - PWA
+  - User link capturing on PWAs
+  links:
+  - url: https://docs.google.com/document/d/e/2PACX-1vSqYzAmiLr-58OgSWBITtAAu6_2XUpjjNEdMvc6IdZn9DjQCeVrE0SKViumyly0cpryxAONMq62zwHw/pub
+    link_type: other
+    title: developer documentation
+  - url: https://chromestatus.com/feature/5194343954776064
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 65
+  primary_tags:
+  - name: pwa
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []

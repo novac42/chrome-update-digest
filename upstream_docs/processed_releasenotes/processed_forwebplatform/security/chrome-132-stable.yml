@@ -1,0 +1,46 @@
+version: '132'
+channel: stable
+area: security
+extraction_timestamp: '2025-08-13T15:22:58.007033'
+extraction_method: deterministic
+statistics:
+  total_features: 1
+  total_links: 2
+  primary_tags:
+    security: 1
+  cross_cutting:
+    security: 1
+    privacy: 1
+features:
+- title: Ignore `Strict-Transport-Security` for localhost
+  content: '`Strict-Transport-Security` (STS) response headers can cause problems for localhost web servers because STS applies
+    host-wide, across all ports. This causes compatibility problems for web developers testing locally. It also affects end-users
+    who use software packages that commonly start localhost web servers for ephemeral reasons. For example, communication
+    of an auth token from a web login to a local software package. If one local listener sets `Strict-Transport-Security`
+    on a localhost response, it''s applied to all subsequent localhost requests regardless of port.
+
+
+    Chrome 132 resolves this problem by ignoring `Strict-Transport-Security` headers on responses from localhost URLs.
+
+
+    [Tracking bug #41251622](https://issues.chromium.org/issues/41251622) | [ChromeStatus.com entry](https://chromestatus.com/feature/5134293196865536)'
+  heading_path:
+  - Chrome 132
+  - Loading
+  - Ignore `Strict-Transport-Security` for localhost
+  links:
+  - url: https://issues.chromium.org/issues/41251622
+    link_type: other
+    title: 'Tracking bug #41251622'
+  - url: https://chromestatus.com/feature/5134293196865536
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 65
+  primary_tags:
+  - name: security
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - security
+  - privacy

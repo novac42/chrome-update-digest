@@ -1,0 +1,222 @@
+version: '130'
+channel: stable
+area: webgpu
+extraction_timestamp: '2025-08-13T15:22:58.618214'
+extraction_method: deterministic
+statistics:
+  total_features: 7
+  total_links: 14
+  primary_tags:
+    webgpu: 7
+    privacy: 2
+    deprecation: 1
+  cross_cutting:
+    webgpu: 2
+    privacy: 2
+    ai: 1
+    experimental: 2
+features:
+- title: 'WebGPU: Dual source blending'
+  content: 'Adds the optional GPU feature "dual-source-blending" that enables combining two fragment shader outputs into a
+    single framebuffer. This technique is particularly useful for applications that require complex blending operations, such
+    as those based on Porter-Duff blend modes. By reducing the need for frequent pipeline state object changes, dual source
+    blending can enhance performance and flexibility.
+
+
+    [Tracking bug #341973423](https://issues.chromium.org/issues/341973423) | [ChromeStatus.com entry](https://chromestatus.com/feature/5167711051841536)
+    | [Spec](https://github.com/gpuweb/gpuweb/pull/4621)'
+  heading_path:
+  - Chrome 130
+  - Rendering and graphics
+  - 'WebGPU: Dual source blending'
+  links:
+  - url: https://issues.chromium.org/issues/341973423
+    link_type: other
+    title: 'Tracking bug #341973423'
+  - url: https://chromestatus.com/feature/5167711051841536
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/gpuweb/gpuweb/pull/4621
+    link_type: github
+    title: Spec
+  line_number: 135
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+  - privacy
+- title: Detailed WebGPU Updates
+  content: "Source: https://developer.chrome.com/blog/new-in-webgpu-130\n\n  * [ Chrome for Developers ](https://developer.chrome.com/)\n\
+    \  * [ Blog ](https://developer.chrome.com/blog)"
+  heading_path:
+  - Chrome 130
+  - Rendering and graphics
+  - Detailed WebGPU Updates
+  links:
+  - url: https://developer.chrome.com/
+    link_type: other
+    title: Chrome for Developers
+  - url: https://developer.chrome.com/blog
+    link_type: other
+    title: Blog
+  line_number: 142
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Attribution Reporting API feature (Attribution Scopes)
+  content: 'This change is based on ad tech feedback and the need for more fine grained filtering controls before the attribution
+    process takes place. It lets API callers specify a field called "attribution scopes" which will be used for filtering
+    before starting the regular attribution flow. This allows API callers more fine grained control over the attribution granularity
+    and the ability to receive proper attribution reports when there are multiple different advertisers or campaigns that
+    all convert on the same destination site.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5096560068395008)'
+  heading_path:
+  - What's New in WebGPU (Chrome 130)
+  - Privacy
+  - Attribution Reporting API feature (Attribution Scopes)
+  links:
+  - url: https://chromestatus.com/feature/5096560068395008
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 242
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: privacy
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: Attribution Reporting API feature (debug key privacy improvement)
+  content: 'This change helps to mitigate a potential privacy gap with debug keys.
+
+
+    Currently the API allows a source debug key or a trigger debug key to be specified if third-party cookies are available
+    and can be set by API callers. If either a source or trigger debug key is specified then it will be included in the attribution
+    report. This may lead to a privacy leak if third-party cookies are only allowed on either the publisher or the advertiser
+    site but not both.
+
+
+    This change mitigates this issue by enforcing that source debug keys and trigger debug keys are only included in the attribution
+    report if they''re present on both the source and trigger, which would mean that third-party cookies were available on
+    both the publisher and advertiser site. This change will apply to both event-level reports and aggregatable reports.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/6257907243679744) | [Spec](https://wicg.github.io/attribution-reporting-api/#attribution-debugging)'
+  heading_path:
+  - What's New in WebGPU (Chrome 130)
+  - Privacy
+  - Attribution Reporting API feature (debug key privacy improvement)
+  links:
+  - url: https://chromestatus.com/feature/6257907243679744
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/attribution-reporting-api/#attribution-debugging
+    link_type: spec
+    title: Spec
+  line_number: 248
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: privacy
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Language Detector API
+  content: 'A JavaScript API for [detecting the language of text](/blog/august2024-language-detection), with confidence levels.
+
+
+    [Origin Trial](/origintrials#/view_trial/662592095176884225) | [Language detection API available for early preview](/blog/august2024-language-detection)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/6494349985841152) | [Spec](https://github.com/WICG/translation-api/blob/main/README.md)'
+  heading_path:
+  - What's New in WebGPU (Chrome 130)
+  - Origin trials
+  - Language Detector API
+  links:
+  - url: https://chromestatus.com/feature/6494349985841152
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/WICG/translation-api/blob/main/README.md
+    link_type: github
+    title: Spec
+  line_number: 260
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - ai
+  - experimental
+- title: WebAuthn `attestationFormats`
+  content: 'Support the `attestationFormats` field from WebAuthn level 3.
+
+
+    WebAuthn Level 3 supports a site expressing an ordered preference for credential attestation formats in the new `attestationFormats`
+    field. This feature enables support for this on Android, where multiple formats can be supported by passkey providers.
+
+
+    [Origin Trial](/origintrials#/view_trial/1428204031829868545) | [ChromeStatus.com entry](https://chromestatus.com/feature/5121935290400768)
+    | [Spec](https://w3c.github.io/webauthn/#dom-publickeycredentialcreationoptions-attestationformats)'
+  heading_path:
+  - What's New in WebGPU (Chrome 130)
+  - Origin trials
+  - WebAuthn `attestationFormats`
+  links:
+  - url: https://chromestatus.com/feature/5121935290400768
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://w3c.github.io/webauthn/#dom-publickeycredentialcreationoptions-attestationformats
+    link_type: spec
+    title: Spec
+  line_number: 266
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - experimental
+- title: Remove `expectedImprovement` in `DelegatedInkTrailPresenter`
+  content: 'The `expectedImprovement` attribute tells web developers how much improvement the DelegatedInkTrails API will
+    provide to their current ink latency. However, this attribute is not worth the increase to fingerprinting entropy.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5194773674328064) | [Spec](https://wicg.github.io/ink-enhancement)'
+  heading_path:
+  - What's New in WebGPU (Chrome 130)
+  - Deprecations and removals
+  - Remove `expectedImprovement` in `DelegatedInkTrailPresenter`
+  links:
+  - url: https://chromestatus.com/feature/5194773674328064
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/ink-enhancement
+    link_type: spec
+    title: Spec
+  line_number: 276
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []

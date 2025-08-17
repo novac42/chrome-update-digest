@@ -1,0 +1,165 @@
+CHROME DIGEST GENERATION RECOMMENDATIONS
+=========================================
+Generated: 2025-08-15
+Based on: upstream_docs/processed_releasenotes/processed_forwebplatform/
+
+FOCUS AREA COVERAGE AND RECOMMENDATIONS
+========================================
+
+CSS (Most Active)
+-----------------
+Available Versions: 125-139 (all versions)
+Recommended: 125-139 (comprehensive coverage)
+Priority Focus: 139 (latest), 138, 137 (recent major updates)
+
+WebAPI (Continuous Updates)
+---------------------------
+Available Versions: 124-139 (missing 130, 131, 133)
+Recommended: 124-139 (all available versions)
+Priority Focus: 139, 138, 137, 136 (recent intensive updates)
+
+WebGPU (Key Technology)
+-----------------------
+Available Versions: 124-127, 129-134, 136-137, 139
+Recommended: All available versions
+Priority Focus: 139 (has dedicated merged file), 137, 134
+Note: Version 139 includes special merged WebGPU content
+
+Security (Critical)
+-------------------
+Available Versions: 132, 136, 138, 139
+Recommended: All available versions
+Priority Focus: 139, 138 (latest security updates)
+
+Performance
+-----------
+Available Versions: 133, 134, 138, 139
+Recommended: All available versions
+Priority Focus: 139, 138 (latest optimizations)
+
+Deprecations (Developer Notice)
+--------------------------------
+Available Versions: 135, 138, 139 (beta & stable)
+Recommended: All available versions
+Priority Focus: 139 (includes both beta and stable)
+
+JavaScript
+----------
+Available Versions: 126, 128, 138, 139
+Recommended: All available versions
+Priority Focus: 139, 138 (latest JS features)
+
+HTML-DOM
+--------
+Available Versions: 124-125, 132-136
+Recommended: All available versions
+Priority Focus: 136, 135 (most recent updates)
+
+Trials (Experimental Features)
+-------------------------------
+Available Versions: 125-126, 128, 135, 137, 139 (beta & stable)
+Recommended: All available versions
+Priority Focus: 139 (includes beta), 137
+
+Other (Mixed Content)
+---------------------
+Available Versions: 124-126, 128-129, 132, 134-135, 137-139
+Recommended: 138, 139 only (latest versions)
+Note: Contains miscellaneous updates, selective generation recommended
+
+NICHE AREAS (Generate as Needed)
+=================================
+
+Browser
+-------
+Available: 124, 129
+Recommendation: Generate on demand
+
+Devices
+-------
+Available: 138
+Recommendation: Generate if device-specific updates needed
+
+Enterprise
+----------
+Available: 137
+Recommendation: Important for enterprise deployments
+
+Identity
+--------
+Available: 136
+Recommendation: Generate if identity/auth features relevant
+
+Media
+-----
+Available: 136, 138
+Recommendation: Generate for media-focused applications
+
+Payments
+--------
+Available: 137
+Recommendation: Generate for payment-related features
+
+Service Worker
+--------------
+Available: 138
+Recommendation: Important for PWA developers
+
+WebAssembly
+-----------
+Available: 137
+Recommendation: Generate for WASM-focused development
+
+GENERATION PRIORITY TIERS
+=========================
+
+HIGH PRIORITY (Generate Immediately)
+------------------------------------
+1. Chrome 139 - All major areas (CSS, WebAPI, WebGPU, Security, Performance)
+2. Chrome 138 - CSS, WebAPI, Security, Performance, JavaScript
+3. Chrome 137 - CSS, WebAPI, WebGPU
+
+MEDIUM PRIORITY (Generate as Needed)
+------------------------------------
+- Chrome 134-136: Selected areas based on requirements
+- Chrome 132-133: Performance and Security focused
+
+LOW PRIORITY (Historical Reference)
+-----------------------------------
+- Chrome 124-131: Generate only when historical comparison needed
+
+SPECIAL NOTES
+=============
+
+1. Version 139 WebGPU:
+   - Has special merged content files:
+     * 139-merged-webgpu.md
+     * 139-webplatform-with-webgpu.md
+   - Should be prioritized for WebGPU digest generation
+
+2. Beta vs Stable:
+   - Some versions (e.g., 139) have both beta and stable YML files
+   - Prioritize stable for production digests
+   - Use beta for preview/planning purposes
+
+3. Coverage Gaps:
+   - WebAPI missing: 130, 131, 133
+   - Consider these gaps when generating comprehensive reports
+
+4. Area Concentration:
+   - CSS and WebAPI have the most consistent updates
+   - Security and Performance show recent increased activity
+   - Enterprise and specialized areas have sporadic updates
+
+RECOMMENDATIONS SUMMARY
+=======================
+
+For comprehensive coverage:
+- Generate digests for versions 137-139 across all major areas
+- Prioritize CSS, WebAPI, WebGPU, Security, and Performance
+- Consider enterprise and specialized areas based on audience needs
+
+For minimal viable coverage:
+- Focus on version 139 for all areas
+- Add version 138 for critical updates
+- Include version 137 for WebGPU specifically

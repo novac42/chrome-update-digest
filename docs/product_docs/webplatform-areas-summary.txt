@@ -1,0 +1,123 @@
+Chrome WebPlatform Release Notes - Areas Summary
+=================================================
+
+Based on comprehensive analysis of Chrome release notes (versions 124-139), the following heading2 areas have been identified:
+
+Primary Areas (Most Frequent - Present in 10+ versions):
+---------------------------------------------------------
+1. Web APIs - Browser APIs and interfaces (14/15 versions)
+2. Deprecations and removals - Features being phased out (13/15 versions)
+3. CSS / CSS and UI - Styling, layout, and user interface features (11/15 versions for CSS, 3/15 for CSS and UI)
+4. Origin trials - Experimental features for testing (10/15 versions)
+
+Secondary Areas (Regular - Present in 5-9 versions):
+----------------------------------------------------
+5. Media / Multimedia - Media playback, images, audio, and video (9/15 versions)
+6. HTML and DOM - HTML elements and DOM manipulation (7/15 versions)
+7. Privacy and security - Security enhancements and privacy features (7/15 versions)
+8. Rendering and graphics - Rendering engine improvements (6/15 versions)
+
+Tertiary Areas (Occasional - Present in 3-4 versions):
+------------------------------------------------------
+9. JavaScript - JavaScript language features and V8 updates (4/15 versions)
+10. Loading - Resource loading and page load optimizations (4/15 versions)
+11. Performance - Performance optimizations (3/15 versions)
+
+Specialized Areas (Rare - Present in 1-2 versions):
+---------------------------------------------------
+12. Accessibility - Accessibility improvements (2/15 versions)
+13. Browser changes - General browser behavior changes (2/15 versions)
+14. WebGPU - Graphics and GPU compute features (2/15 versions, appeared in 136-137)
+15. DevTools - Developer tools updates (1/15 versions)
+16. PWA - Progressive Web App features (1/15 versions)
+17. Identity - Authentication and identity features (1/15 versions)
+18. Payments - Payment request API and features (1/15 versions)
+19. WebAssembly - WebAssembly support and features (1/15 versions)
+20. Enterprise - Enterprise-specific features (1/15 versions)
+21. Devices - Device-related APIs and features (1/15 versions)
+22. Service Worker - Service worker features (1/15 versions)
+
+Meta/Documentation Areas:
+-------------------------
+- Further reading (9/15 versions, 124-132)
+- Download Google Chrome (8/15 versions, 125-132)
+- New origin trials (4/15 versions, 125-128)
+
+Mapping to Focus Areas Configuration:
+-------------------------------------
+Current focus areas in config/focus_areas.yaml:
+- ai → Should map to: Web APIs (when AI-related)
+- webgpu → Maps to: WebGPU
+- security → Maps to: Security / Privacy and security
+- performance → Maps to: Performance
+- css → Maps to: CSS and UI / CSS
+- webapi → Maps to: Web APIs
+- devtools → Not found in release notes (separate section)
+- pwa → Maps to: Service Worker
+- accessibility → Not found as separate section (distributed)
+- media → Maps to: Multimedia / Images and media
+
+Suggested Area Groupings for YAML Files (Updated):
+---------------------------------------------------
+Based on frequency analysis, the following groupings are recommended:
+
+Core Areas (Always present):
+1. webapi.yml - Web APIs (most frequent area)
+2. deprecations.yml - Deprecations and removals
+3. css.yml - CSS, CSS and UI
+4. trials.yml - Origin trials, New origin trials
+
+Common Areas (Frequently present):
+5. media.yml - Media, Multimedia, Images and media, Audio and video
+6. html-dom.yml - HTML and DOM
+7. security.yml - Security, Privacy, Privacy and security
+8. rendering.yml - Rendering and graphics, Rendering and Graphics
+
+Variable Areas (Sometimes present):
+9. javascript.yml - JavaScript
+10. loading.yml - Loading optimizations
+11. performance.yml - Performance
+
+Specialized Areas (Rarely present but important):
+12. accessibility.yml - Accessibility
+13. browser.yml - Browser changes
+14. webgpu.yml - WebGPU (emerging area, Chrome 136+)
+15. devtools.yml - DevTools
+16. pwa.yml - PWA, Service Worker
+17. identity.yml - Identity
+18. payments.yml - Payments
+19. webassembly.yml - WebAssembly
+20. enterprise.yml - Enterprise
+21. devices.yml - Devices
+
+22. other.yml - Any features not matching above categories
+
+Evolution Patterns Observed (Chrome 124-139):
+---------------------------------------------
+Early versions (124-128):
+- Included meta sections like "Further reading" and "Download Google Chrome"
+- Had "New origin trials" as a separate section
+- More consistent use of "Loading" as a category
+
+Mid versions (129-135):
+- "Rendering and graphics" became a regular area
+- CSS consistently appeared as standalone category
+- Media features were prominent
+
+Recent versions (136-139):
+- Introduction of WebGPU as a dedicated area (136-137)
+- CSS evolved to "CSS and UI" combined category
+- More specialized areas like Identity, Payments, WebAssembly
+- Performance became more prominent
+
+Key Insights:
+------------
+- Web APIs and Deprecations are the most consistent areas across ALL Chrome versions
+- CSS appears in most versions but naming evolved from "CSS" to "CSS and UI" in recent versions
+- WebGPU is an emerging area that appeared in Chrome 136-137, indicating growing importance
+- Security-related content appears under various names: "Security", "Privacy", "Privacy and security"
+- Media-related content appears under various names: "Media", "Multimedia", "Images and media", "Audio and video"
+- Some areas like DevTools, PWA, and Enterprise appear sporadically based on release content
+- The "Further reading" and "Download Google Chrome" sections should be excluded from feature extraction
+- "Loading" was more prominent in earlier versions (124-132) but disappeared in recent releases
+- Performance optimizations became a dedicated section starting from Chrome 133

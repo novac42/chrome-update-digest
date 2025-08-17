@@ -1,0 +1,132 @@
+version: '128'
+channel: stable
+area: css
+extraction_timestamp: '2025-08-13T15:22:59.007491'
+extraction_method: deterministic
+statistics:
+  total_features: 4
+  total_links: 12
+  primary_tags:
+    css: 4
+  cross_cutting:
+    privacy: 3
+features:
+- title: CSS `ruby-align` property
+  content: "There are multiple ways to align characters when the length of ruby annotations and the base characters don't\
+    \ match, and the `ruby-align` property lets you choose the one that works best for your design. The property takes one\
+    \ of the following keyword values:\n\n  * `space-around`\n  * `space-between`\n  * `start`\n  * `center`\n\n[Tracking\
+    \ bug #40249572](https://issues.chromium.org/issues/40249572) | [ChromeStatus.com entry](https://chromestatus.com/feature/5152412192210944)\
+    \ | [Spec](https://drafts.csswg.org/css-ruby/#ruby-align-property)"
+  heading_path:
+  - Chrome 128
+  - CSS
+  - CSS `ruby-align` property
+  links:
+  - url: https://issues.chromium.org/issues/40249572
+    link_type: other
+    title: 'Tracking bug #40249572'
+  - url: https://chromestatus.com/feature/5152412192210944
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://drafts.csswg.org/css-ruby/#ruby-align-property
+    link_type: other
+    title: Spec
+  line_number: 21
+  primary_tags:
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Line-breakable ruby
+  content: 'Makes line-breaks possible within elements with `display: ruby`.
+
+
+    Previously a single pair of a ruby-base and a ruby-text was not line-breakable, and would be pushed to the next line if
+    the current line had not enough space for the entire pair. Now each of the ruby-base and the ruby-text can be split into
+    multiple lines.
+
+
+    [Tracking bug #324111880](https://issues.chromium.org/issues/324111880) | [ChromeStatus.com entry](https://chromestatus.com/feature/5077282711666688)
+    | [Spec](https://drafts.csswg.org/css-ruby/#break-within)'
+  heading_path:
+  - Chrome 128
+  - CSS
+  - Line-breakable ruby
+  links:
+  - url: https://issues.chromium.org/issues/324111880
+    link_type: other
+    title: 'Tracking bug #324111880'
+  - url: https://chromestatus.com/feature/5077282711666688
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://drafts.csswg.org/css-ruby/#break-within
+    link_type: other
+    title: Spec
+  line_number: 32
+  primary_tags:
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Minimum size of `<option>` within `<select>` drop-down
+  content: 'The WCAG accessibility guidelines specify that the size of pointer inputs must be at least 24 by 24 CSS pixels.
+    This change makes the `<option>` element within the `<select>` drop-down meet this height requirement.
+
+
+    [Tracking bug #339141283](https://issues.chromium.org/issues/339141283) | [ChromeStatus.com entry](https://chromestatus.com/feature/5152633181700096)
+    | [Spec](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html)'
+  heading_path:
+  - Chrome 128
+  - CSS
+  - Minimum size of `<option>` within `<select>` drop-down
+  links:
+  - url: https://issues.chromium.org/issues/339141283
+    link_type: other
+    title: 'Tracking bug #339141283'
+  - url: https://chromestatus.com/feature/5152633181700096
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html
+    link_type: spec
+    title: Spec
+  line_number: 40
+  primary_tags:
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Standardized CSS `zoom` property
+  content: 'Updates the existing implementation of the previously non-standard CSS [`zoom`](https://developer.mozilla.org/docs/Web/CSS/zoom)
+    property to align with the new standard. This changes various JavaScript APIs to align with the spec, changes zoom to
+    apply to iframe content documents, and changes it to apply to all inherited length properties (previously it only changed
+    the inherited `font-size`).
+
+
+    [Demo](https://jsbin.com/wasafateko/edit?html,css,js,output) | [ChromeStatus.com entry](https://chromestatus.com/feature/5198254868529152)'
+  heading_path:
+  - Chrome 128
+  - CSS
+  - Standardized CSS `zoom` property
+  links:
+  - url: https://developer.mozilla.org/docs/Web/CSS/zoom
+    link_type: mdn
+    title: '`zoom`'
+  - url: https://jsbin.com/wasafateko/edit?html,css,js,output
+    link_type: other
+    title: Demo
+  - url: https://chromestatus.com/feature/5198254868529152
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 46
+  primary_tags:
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []

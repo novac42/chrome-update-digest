@@ -1,0 +1,718 @@
+version: '138'
+channel: stable
+extraction_timestamp: '2025-08-15T17:46:25.185938'
+extraction_method: deterministic
+statistics:
+  total_features: 21
+  total_links: 65
+  primary_tags:
+    css: 5
+    devices: 2
+    javascript: 1
+    webapi: 6
+    multimedia: 2
+    performance: 2
+    security: 1
+    serviceworker: 1
+    deprecation: 1
+    webgpu: 1
+  cross_cutting:
+    privacy: 17
+    enterprise: 6
+    ai: 3
+    security: 2
+    webgpu: 1
+features:
+- title: 'CSS Sign-Related Functions: abs(), sign()'
+  content: 'The sign-related functions `abs()` and `sign()` compute various functions related to the sign of their argument.
+    The `abs(A)` function contains one calculation A, and returns the absolute value of A, as the same type as the input:
+    if A''s numeric value is positive or 0⁺, just A again; otherwise -1 * A. The `sign(A)` function contains one calculation
+    A, and returns -1 if A''s numeric value is negative, +1 if A''s numeric value is positive, 0⁺ if A''s numeric value is
+    0⁺, and 0⁻ if A''s numeric value is 0⁻. The return type is a `<number>`, made consistent with the type of the input calculation.
+
+
+    **References:** [MDN Docs:abs()](https://developer.mozilla.org/docs/Web/CSS/abs) | [Tracking bug #40253181](https://bugs.chromium.org/p/chromium/issues/detail?id=40253181)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5196860094464000) | [Spec](https://www.w3.org/TR/css-values-4/#sign-funcs)'
+  heading_path:
+  - Chrome 138 Release Notes
+  - CSS and UI
+  - 'CSS Sign-Related Functions: abs(), sign()'
+  links:
+  - url: https://developer.mozilla.org/docs/Web/CSS/abs
+    link_type: mdn
+    title: MDN Docs:abs()
+  - url: https://bugs.chromium.org/p/chromium/issues/detail?id=40253181
+    link_type: tracking_bug
+    title: 'Tracking bug #40253181'
+  - url: https://chromestatus.com/feature/5196860094464000
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://www.w3.org/TR/css-values-4/#sign-funcs
+    link_type: spec
+    title: Spec
+  line_number: 9
+  primary_tags:
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: 'Interpolation progress functional notation: CSS progress() function'
+  content: 'The `progress()` functional notation returns a `<number>` value representing the position of one calculation (the
+    progress value) between two other calculations (the progress start value and progress end value). The `progress()` function
+    is a math function.
+
+
+    **References:** [Tracking bug #40944203](https://bugs.chromium.org/p/chromium/issues/detail?id=40944203) | [ChromeStatus.com
+    entry](https://chromestatus.com/feature/5096136905244672) | [Spec](https://www.w3.org/TR/css-values-5/#progress-notation)'
+  heading_path:
+  - Chrome 138 Release Notes
+  - CSS and UI
+  - 'Interpolation progress functional notation: CSS progress() function'
+  links:
+  - url: https://bugs.chromium.org/p/chromium/issues/detail?id=40944203
+    link_type: tracking_bug
+    title: 'Tracking bug #40944203'
+  - url: https://chromestatus.com/feature/5096136905244672
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://www.w3.org/TR/css-values-5/#progress-notation
+    link_type: spec
+    title: Spec
+  line_number: 15
+  primary_tags:
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: CSS sibling-index() and sibling-count()
+  content: 'The `sibling-index()` and `sibling-count()` functions can be used as integers in CSS property values to style
+    elements based on their position among its siblings, or the total number of siblings respectively. These functions can
+    be used directly as integer values, but more interestingly inside `calc()` expressions.
+
+
+    **References:** [Tracking bug #40282719](https://bugs.chromium.org/p/chromium/issues/detail?id=40282719) | [ChromeStatus.com
+    entry](https://chromestatus.com/feature/5649901281918976) | [Spec](https://www.w3.org/TR/css-values-5/#sibling-functions)'
+  heading_path:
+  - Chrome 138 Release Notes
+  - CSS and UI
+  - CSS sibling-index() and sibling-count()
+  links:
+  - url: https://bugs.chromium.org/p/chromium/issues/detail?id=40282719
+    link_type: tracking_bug
+    title: 'Tracking bug #40282719'
+  - url: https://chromestatus.com/feature/5649901281918976
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://www.w3.org/TR/css-values-5/#sibling-functions
+    link_type: spec
+    title: Spec
+  line_number: 21
+  primary_tags:
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: CSS stretch sizing keyword
+  content: 'A keyword for CSS sizing properties (for example, `width` and `height`) that lets elements grow to exactly fill
+    their containing block''s available space. It is similar to ''100%'', except the resulting size is applied to the element''s
+    margin box instead of the box indicated by `box-sizing`. Using this keyword lets the element keep its margins while still
+    being as large as possible. An unprefixed version of `-webkit-fill-available`.
+
+
+    **References:** [Tracking bug #41253915](https://bugs.chromium.org/p/chromium/issues/detail?id=41253915) | [ChromeStatus.com
+    entry](https://chromestatus.com/feature/5102457485459456) | [Spec](https://www.w3.org/TR/css-sizing-4/#valdef-width-stretch)'
+  heading_path:
+  - Chrome 138 Release Notes
+  - CSS and UI
+  - CSS stretch sizing keyword
+  links:
+  - url: https://bugs.chromium.org/p/chromium/issues/detail?id=41253915
+    link_type: tracking_bug
+    title: 'Tracking bug #41253915'
+  - url: https://chromestatus.com/feature/5102457485459456
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://www.w3.org/TR/css-sizing-4/#valdef-width-stretch
+    link_type: spec
+    title: Spec
+  line_number: 27
+  primary_tags:
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: CSS env variable for OS-level font scale
+  content: 'Exposes a user''s preferred font scale to CSS. Without this, it''s not practical for a page to detect if the user
+    has changed their preferred font size using the Operating System''s preferences. This CSS environment variable will reflect
+    the scale chosen by the user.
+
+
+    **References:** [Tracking bug #397737223](https://bugs.chromium.org/p/chromium/issues/detail?id=397737223) | [ChromeStatus.com
+    entry](https://chromestatus.com/feature/5106542883938304) | [Spec](https://www.w3.org/TR/css-env-1/#os-font-scale)'
+  heading_path:
+  - Chrome 138 Release Notes
+  - CSS and UI
+  - CSS env variable for OS-level font scale
+  links:
+  - url: https://bugs.chromium.org/p/chromium/issues/detail?id=397737223
+    link_type: tracking_bug
+    title: 'Tracking bug #397737223'
+  - url: https://chromestatus.com/feature/5106542883938304
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://www.w3.org/TR/css-env-1/#os-font-scale
+    link_type: spec
+    title: Spec
+  line_number: 33
+  primary_tags:
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Web serial over Bluetooth on Android
+  content: 'This feature lets web pages and web apps connect to serial ports over Bluetooth on Android devices. Chrome on
+    Android now supports Web Serial API over Bluetooth RFCOMM. Existing enterprise policies (`DefaultSerialGuardSetting`,
+    `SerialAllowAllPortsForUrls`, `SerialAllowUsbDevicesForUrls`, `SerialAskForUrls` and `SerialBlockedForUrls`) on other
+    platforms are enabled in future_on states for Android. All policies except `SerialAllowUsbDevicesForUrls` will be enabled
+    after the feature is enabled. `SerialAllowUsbDevicesForUrls` will be enabled in a future launch after Android provides
+    system level support of wired serial ports.
+
+
+    **References:** [Tracking bug #375245353](https://bugs.chromium.org/p/chromium/issues/detail?id=375245353) | [ChromeStatus.com
+    entry](https://chromestatus.com/feature/5085754267189248) | [Spec](https://wicg.github.io/serial/)'
+  heading_path:
+  - Chrome 138 Release Notes
+  - Devices
+  - Web serial over Bluetooth on Android
+  links:
+  - url: https://bugs.chromium.org/p/chromium/issues/detail?id=375245353
+    link_type: tracking_bug
+    title: 'Tracking bug #375245353'
+  - url: https://chromestatus.com/feature/5085754267189248
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/serial/
+    link_type: spec
+    title: Spec
+  line_number: 41
+  primary_tags:
+  - name: devices
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+  - enterprise
+- title: Viewport Segments Enumeration API
+  content: 'The Viewport Segments API allows developers to adapt their web layout to target foldable devices. The viewport
+    segments defines the position and dimensions of a logically separate region of the viewport. Viewport segments are created
+    when the viewport is split by one or more hardware features (such as a fold or a hinge between separate displays) that
+    act as a divider; segments are the regions of the viewport that can be treated as logically distinct by the developer.
+
+
+    **References:** [Tracking bug #1039050](https://bugs.chromium.org/p/chromium/issues/detail?id=1039050) | [ChromeStatus.com
+    entry](https://chromestatus.com/feature/5131631321964544) | [Spec](https://wicg.github.io/visual-viewport/)'
+  heading_path:
+  - Chrome 138 Release Notes
+  - Devices
+  - Viewport Segments Enumeration API
+  links:
+  - url: https://bugs.chromium.org/p/chromium/issues/detail?id=1039050
+    link_type: tracking_bug
+    title: 'Tracking bug #1039050'
+  - url: https://chromestatus.com/feature/5131631321964544
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/visual-viewport/
+    link_type: spec
+    title: Spec
+  line_number: 47
+  primary_tags:
+  - name: devices
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Update QuotaExceededError to a DOMException derived interface
+  content: 'Previously, when the web platform wants to tell you when you''ve exceeded quota, it will use `DOMException` with
+    the specific name property set to `QuotaExceededError`. However this does not allow carrying additional information. This
+    proposes removing "QuotaExceededError" from the list of built-in DOMException names, and instead creates a class name
+    `QuotaExceededError` from the list of built-in DOMException and has the additional optional properties `quota` and `requested`.
+    We propose all instances of specs that throw "QuotaExceededError" `DOMException`s get upgraded to instead throw `QuotaExceededError`s.
+    For now, such specs would leave the `quota` and `requested` properties at their default value of null, but they could
+    eventually upgrade to include that data, if it''s useful for their use case (and isn''t, e.g., a privacy leak).
+
+
+    **References:** [ChromeStatus.com entry](https://chromestatus.com/feature/5647993867927552) | [Spec](https://whatpr.org/dom/1245.html)'
+  heading_path:
+  - Chrome 138 Release Notes
+  - JavaScript
+  - Update QuotaExceededError to a DOMException derived interface
+  links:
+  - url: https://chromestatus.com/feature/5647993867927552
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://whatpr.org/dom/1245.html
+    link_type: spec
+    title: Spec
+  line_number: 55
+  primary_tags:
+  - name: javascript
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Translator API
+  content: 'A JavaScript API to provide language translation capabilities to web pages. Browsers are increasingly offering
+    language translation to their users. Such translation capabilities can also be useful to web developers. This is especially
+    the case when browser''s built-in translation abilities cannot help. An enterprise policy (`GenAILocalFoundationalModelSettings`)
+    is available to disable the underlying model downloading which would render this API unavailable.
+
+
+    **References:** [MDN Docs](https://developer.mozilla.org/docs/Web/API/Translator) | [Tracking bug #322229993](https://bugs.chromium.org/p/chromium/issues/detail?id=322229993)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5652970345332736) | [Spec](https://wicg.github.io/translation-api/)'
+  heading_path:
+  - Chrome 138 Release Notes
+  - Web APIs
+  - Translator API
+  links:
+  - url: https://developer.mozilla.org/docs/Web/API/Translator
+    link_type: mdn
+    title: MDN Docs
+  - url: https://bugs.chromium.org/p/chromium/issues/detail?id=322229993
+    link_type: tracking_bug
+    title: 'Tracking bug #322229993'
+  - url: https://chromestatus.com/feature/5652970345332736
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/translation-api/
+    link_type: spec
+    title: Spec
+  line_number: 63
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - ai
+  - privacy
+  - enterprise
+- title: Language Detector API
+  content: 'A JavaScript API for detecting the language of text, with confidence levels. An important supplement to translation
+    is language detection. This can be combined with translation, for example, taking user input in an unknown language and
+    translating it to a specific target language. Browsers today often already have language detection capabilities, and we
+    want to offer them to web developers through a JavaScript API, supplementing the translation API. An enterprise policy
+    (`GenAILocalFoundationalModelSettings`) is available to disable the underlying model downloading which would render this
+    API unavailable.
+
+
+    **References:** [MDN Docs](https://developer.mozilla.org/docs/Web/API/LanguageDetector) | [ChromeStatus.com entry](https://chromestatus.com/feature/5134901000871936)
+    | [Spec](https://wicg.github.io/language-detection-api/)'
+  heading_path:
+  - Chrome 138 Release Notes
+  - Web APIs
+  - Language Detector API
+  links:
+  - url: https://developer.mozilla.org/docs/Web/API/LanguageDetector
+    link_type: mdn
+    title: MDN Docs
+  - url: https://chromestatus.com/feature/5134901000871936
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/language-detection-api/
+    link_type: spec
+    title: Spec
+  line_number: 69
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - ai
+  - enterprise
+- title: Summarizer API
+  content: 'Summarizer API is a JavaScript API for producing summaries of input text, backed by an AI language model. Browsers
+    and operating systems are increasingly expected to gain access to a language model. By exposing this built-in model, we
+    avoid every website needing to download their own multi-gigabyte language model, or send input text to third-party APIs.
+    The summarizer API in particular exposes a high-level API for interfacing with a language model in order to summarize
+    inputs for a variety of use cases, in a way that does not depend on the specific language model in question. An enterprise
+    policy (`GenAILocalFoundationalModelSettings`) is available to disable the underlying model downloading which would render
+    this API unavailable.
+
+
+    **References:** [MDN Docs](https://developer.mozilla.org/docs/Web/API/Summarizer) | [Tracking bug #351744634](https://bugs.chromium.org/p/chromium/issues/detail?id=351744634)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5134971702001664) | [Spec](https://wicg.github.io/summarization-api/)'
+  heading_path:
+  - Chrome 138 Release Notes
+  - Web APIs
+  - Summarizer API
+  links:
+  - url: https://developer.mozilla.org/docs/Web/API/Summarizer
+    link_type: mdn
+    title: MDN Docs
+  - url: https://bugs.chromium.org/p/chromium/issues/detail?id=351744634
+    link_type: tracking_bug
+    title: 'Tracking bug #351744634'
+  - url: https://chromestatus.com/feature/5134971702001664
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/summarization-api/
+    link_type: spec
+    title: Spec
+  line_number: 75
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - ai
+  - privacy
+  - enterprise
+- title: Escape < and > in attributes on serialization
+  content: 'Escape `<` and `>` in values of attributes on serialization. This mitigates the risk of mutation XSS attacks,
+    which occur when value of an attribute is interpreted as a start tag token after being serialized and re-parsed.
+
+
+    **References:** [ChromeStatus.com entry](https://chromestatus.com/feature/5125509031477248) | [Spec](https://html.spec.whatwg.org/multipage/parsing.html#serializing-html-fragments)'
+  heading_path:
+  - Chrome 138 Release Notes
+  - Web APIs
+  - Escape < and > in attributes on serialization
+  links:
+  - url: https://chromestatus.com/feature/5125509031477248
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://html.spec.whatwg.org/multipage/parsing.html#serializing-html-fragments
+    link_type: spec
+    title: Spec
+  line_number: 81
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: 'Crash Reporting API: is_top_level and visibility_state'
+  content: 'This feature adds `is_top_level` and `visibility_state` string fields to the crash reporting API body that gets
+    sent to the default reporting endpoint for crash reports.
+
+
+    **References:** [ChromeStatus.com entry](https://chromestatus.com/feature/5112885175918592) | [Spec](https://w3c.github.io/reporting/#crash-report)'
+  heading_path:
+  - Chrome 138 Release Notes
+  - Web APIs
+  - 'Crash Reporting API: is_top_level and visibility_state'
+  links:
+  - url: https://chromestatus.com/feature/5112885175918592
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://w3c.github.io/reporting/#crash-report
+    link_type: spec
+    title: Spec
+  line_number: 87
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: Fire the pushsubscriptionchange event upon resubscription
+  content: 'Fire the `pushsubscriptionchange` event in service workers when an origin for which a push subscription existed
+    in the past, but which was revoked because of a permission change (from granted to deny/default), is re-granted notification
+    permission. The event will be fired with an empty `oldSubscription` and `newSubscription`.
+
+
+    **References:** [Tracking bug #407523313](https://bugs.chromium.org/p/chromium/issues/detail?id=407523313) | [ChromeStatus.com
+    entry](https://chromestatus.com/feature/5115983529336832) | [Spec](https://w3c.github.io/push-api/#the-pushsubscriptionchange-event)'
+  heading_path:
+  - Chrome 138 Release Notes
+  - Web APIs
+  - Fire the pushsubscriptionchange event upon resubscription
+  links:
+  - url: https://bugs.chromium.org/p/chromium/issues/detail?id=407523313
+    link_type: tracking_bug
+    title: 'Tracking bug #407523313'
+  - url: https://chromestatus.com/feature/5115983529336832
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://w3c.github.io/push-api/#the-pushsubscriptionchange-event
+    link_type: spec
+    title: Spec
+  line_number: 93
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - security
+  - privacy
+- title: Add support for video frame orientation metadata to WebCodecs
+  content: 'Introduces `rotation: int` and `flip: bool` values to various video related interfaces in WebCodecs so that developers
+    can work with frame sources that have orientation (For example, Android cameras, certain media). The `VideoFrame` interface
+    grows the ability to create VideoFrames with arbitrary rotation and flip as well as accessors for this information on
+    the VideoFrame object. The `VideoDecoderConfig` object gains rotation and flip fields that are emitted on decoded VideoFrame
+    objects automatically. The `VideoEncoder` class gains mechanisms for passing rotation and flip information from `encode()`
+    to the VideoDecoderConfig emitted as part of `EncodedVideoChunkMetadata`. If `encode()` is called with frames with different
+    orientations a nonfatal exception will be thrown. `configure()` may be used to reset the allowed orientation.
+
+
+    **References:** [Tracking bug #40243431](https://bugs.chromium.org/p/chromium/issues/detail?id=40243431) | [ChromeStatus.com
+    entry](https://chromestatus.com/feature/5098495055380480) | [Spec](https://w3c.github.io/webcodecs/#videoframe-interface)'
+  heading_path:
+  - Chrome 138 Release Notes
+  - Multimedia
+  - Add support for video frame orientation metadata to WebCodecs
+  links:
+  - url: https://bugs.chromium.org/p/chromium/issues/detail?id=40243431
+    link_type: tracking_bug
+    title: 'Tracking bug #40243431'
+  - url: https://chromestatus.com/feature/5098495055380480
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://w3c.github.io/webcodecs/#videoframe-interface
+    link_type: spec
+    title: Spec
+  line_number: 101
+  primary_tags:
+  - name: multimedia
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Add prefetchCache and prerenderCache to Clear-Site-Data header
+  content: 'Two new values for the Clear-Site-Data header to help developers target clearing the prerender and prefetch cache:
+    "prefetchCache" and "prerenderCache".
+
+
+    **References:** [Tracking bug #398149359](https://bugs.chromium.org/p/chromium/issues/detail?id=398149359) | [ChromeStatus.com
+    entry](https://chromestatus.com/feature/5110263659667456) | [Spec](https://w3c.github.io/webappsec-clear-site-data/#grammardef-cache-directive)'
+  heading_path:
+  - Chrome 138 Release Notes
+  - Performance
+  - Add prefetchCache and prerenderCache to Clear-Site-Data header
+  links:
+  - url: https://bugs.chromium.org/p/chromium/issues/detail?id=398149359
+    link_type: tracking_bug
+    title: 'Tracking bug #398149359'
+  - url: https://chromestatus.com/feature/5110263659667456
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://w3c.github.io/webappsec-clear-site-data/#grammardef-cache-directive
+    link_type: spec
+    title: Spec
+  line_number: 109
+  primary_tags:
+  - name: performance
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: 'Speculation rules: target_hint field'
+  content: 'This extends speculation rules syntax to allow developers to specify the target_hint field. This field provides
+    a hint to indicate a target navigable where a prerendered page will eventually be activated. For example, when `_blank`
+    is specified as a hint, a prerendered page can be activated for a navigable opened by `window.open()`. The field has no
+    effect on prefetching. The specification allows this field to accept any strings that are valid as navigable target name
+    or keyword as the value, but this launch supports only one of "_self" or "_blank" strings. If the hint is not specified,
+    it''s treated like "_self" is specified.
+
+
+    **References:** [Tracking bug #40234240](https://bugs.chromium.org/p/chromium/issues/detail?id=40234240) | [ChromeStatus.com
+    entry](https://chromestatus.com/feature/5084493854924800) | [Spec](https://wicg.github.io/nav-speculation/speculation-rules.html#speculation-rule-target-hint)'
+  heading_path:
+  - Chrome 138 Release Notes
+  - Performance
+  - 'Speculation rules: target_hint field'
+  links:
+  - url: https://bugs.chromium.org/p/chromium/issues/detail?id=40234240
+    link_type: tracking_bug
+    title: 'Tracking bug #40234240'
+  - url: https://chromestatus.com/feature/5084493854924800
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/nav-speculation/speculation-rules.html#speculation-rule-target-hint
+    link_type: spec
+    title: Spec
+  line_number: 115
+  primary_tags:
+  - name: performance
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Integrity Policy for scripts
+  content: 'Subresource-Integrity (SRI) enables developers to make sure the assets they intend to load are indeed the assets
+    they are loading. But there''s no current way for developers to be sure that all of their scripts are validated using
+    SRI. The Integrity-Policy header gives developers the ability to assert that every resource of a given type needs to be
+    integrity-checked. If a resource of that type is attempted to be loaded without integrity metadata, that attempt will
+    fail and trigger a violation report.
+
+
+    **References:** [ChromeStatus.com entry](https://chromestatus.com/feature/5104518463627264) | [Spec](https://w3c.github.io/webappsec-csp/#integrityPolicy)'
+  heading_path:
+  - Chrome 138 Release Notes
+  - Security
+  - Integrity Policy for scripts
+  links:
+  - url: https://chromestatus.com/feature/5104518463627264
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://w3c.github.io/webappsec-csp/#integrityPolicy
+    link_type: spec
+    title: Spec
+  line_number: 123
+  primary_tags:
+  - name: security
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - security
+  - enterprise
+- title: ServiceWorker support for Speculation Rules Prefetch
+  content: 'This feature enables ServiceWorker-controlled prefetches, that is a speculation rules prefetch to URLs controlled
+    by a Service Worker. Previously, the prefetch is cancelled upon detecting a controlling Service Worker, thus subsequent
+    navigation to the prefetch target is served by the non-prefetch path. This feature will enable the prefetch request to
+    go through the Service Worker''s fetch handler and the response with the Service Worker interception is cached in the
+    prefetch cache, resulting in a subsequent navigation being served by the prefetch cache. Use the enterprise policy `PrefetchWithServiceWorkerEnabled`
+    to control this feature.
+
+
+    **References:** [Tracking bug #40947546](https://bugs.chromium.org/p/chromium/issues/detail?id=40947546) | [ChromeStatus.com
+    entry](https://chromestatus.com/feature/5121066433150976) | [Spec](https://wicg.github.io/nav-speculation/speculation-rules.html#speculation-rule-sw-integration)'
+  heading_path:
+  - Chrome 138 Release Notes
+  - Service Worker
+  - ServiceWorker support for Speculation Rules Prefetch
+  links:
+  - url: https://bugs.chromium.org/p/chromium/issues/detail?id=40947546
+    link_type: tracking_bug
+    title: 'Tracking bug #40947546'
+  - url: https://chromestatus.com/feature/5121066433150976
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/nav-speculation/speculation-rules.html#speculation-rule-sw-integration
+    link_type: spec
+    title: Spec
+  line_number: 131
+  primary_tags:
+  - name: serviceworker
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+  - enterprise
+- title: 'WebGPU: Deprecate GPUAdapter isFallbackAdapter attribute'
+  content: '*This section includes both Chrome WebGPU highlights and detailed WebGPU release notes.*
+
+
+
+    Deprecates the `GPUAdapter` `isFallbackAdapter` boolean attribute from WebGPU, which is redundant with the `GPUAdapterInfo`
+    `isFallbackAdapter` boolean attribute. This upcoming removal is a minor breaking change as support for fallback adapters
+    has not yet been implemented in any browser, thereby resulting in both `isFallbackAdapter` attributes consistently returning
+    a falsy value.
+
+
+    **References:** [Tracking bug #409259074](https://bugs.chromium.org/p/chromium/issues/detail?id=409259074) | [ChromeStatus.com
+    entry](https://chromestatus.com/feature/5125671816847360) | [Spec](https://gpuweb.github.io/gpuweb/#gpu-adapter)'
+  heading_path:
+  - Chrome 138 Release Notes
+  - Deprecations and removals
+  - 'WebGPU: Deprecate GPUAdapter isFallbackAdapter attribute'
+  links:
+  - url: https://bugs.chromium.org/p/chromium/issues/detail?id=409259074
+    link_type: tracking_bug
+    title: 'Tracking bug #409259074'
+  - url: https://chromestatus.com/feature/5125671816847360
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://gpuweb.github.io/gpuweb/#gpu-adapter
+    link_type: github
+    title: Spec
+  line_number: 139
+  primary_tags:
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+  - privacy
+- title: Deprecate asynchronous range removal for Media Source Extensions
+  content: 'The Media Source standard long ago changed to disallow ambiguously defined behavior involving asynchronous range
+    removals: `SourceBuffer.abort()` no longer aborts `SourceBuffer.remove()` operations. Setting `MediaSource.duration` can
+    no longer truncate currently buffered media. Exceptions will be thrown in both of these cases now. Safari and Firefox
+    have long shipped this behavior, Chromium is the last browser remaining with the old behavior. Use counters show that
+    around 0.001%-0.005% of page loads hit the deprecated behavior. If a site hits this issue, playback may now break. Usage
+    of `abort()` cancelling removals is increasing, so it''s prudent to resolve this deprecation before more incompatible
+    usage appears.
+
+
+    **References:** [Tracking bug #40474569](https://bugs.chromium.org/p/chromium/issues/detail?id=40474569) | [ChromeStatus.com
+    entry](https://chromestatus.com/feature/5073717525970944) | [Spec](https://w3c.github.io/media-source/#dom-sourcebuffer-abort)
+
+
+    ---
+
+
+    *Except as otherwise noted, the content of this page is licensed under the [Creative Commons Attribution 4.0 License](https://creativecommons.org/licenses/by/4.0/),
+    and code samples are licensed under the [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0). For details,
+    see the [Google Developers Site Policies](https://developers.google.com/site-policies). Java is a registered trademark
+    of Oracle and/or its affiliates.*
+
+
+    *Last updated 2025-06-24 UTC.*'
+  heading_path:
+  - Chrome 138 Release Notes
+  - Dawn Updates
+  - Deprecate asynchronous range removal for Media Source Extensions
+  links:
+  - url: https://bugs.chromium.org/p/chromium/issues/detail?id=40474569
+    link_type: tracking_bug
+    title: 'Tracking bug #40474569'
+  - url: https://chromestatus.com/feature/5073717525970944
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://w3c.github.io/media-source/#dom-sourcebuffer-abort
+    link_type: spec
+    title: Spec
+  - url: https://creativecommons.org/licenses/by/4.0/
+    link_type: other
+    title: Creative Commons Attribution 4.0 License
+  - url: https://www.apache.org/licenses/LICENSE-2.0
+    link_type: other
+    title: Apache 2.0 License
+  - url: https://developers.google.com/site-policies
+    link_type: other
+    title: Google Developers Site Policies
+  line_number: 197
+  primary_tags:
+  - name: multimedia
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy

@@ -1,0 +1,285 @@
+version: '132'
+channel: stable
+area: webapi
+extraction_timestamp: '2025-08-13T15:22:58.041554'
+extraction_method: deterministic
+statistics:
+  total_features: 8
+  total_links: 27
+  primary_tags:
+    webapi: 8
+    devices: 1
+    storage: 1
+  cross_cutting:
+    privacy: 7
+    enterprise: 1
+features:
+- title: '`PushMessageData::bytes()`'
+  content: "The `PushMessageData` interface mimics the `Body` interface, which was amended earlier this year with a new `bytes()`\
+    \ method, following the principle that APIs should generally vend byte buffers as `Uint8Arrays`. Chrome 132 realigns with\
+    \ the `Body` interface by providing the `bytes()` accessor on the `PushMessageData` interface as well.\n\n**Baseline Newly\
+    \ Available:** This feature is now available in all three major browser engines. \n\n[MDN PushMessageData: bytes() method](https://developer.mozilla.org/en-US/docs/Web/API/PushMessageData/bytes)\
+    \ | [Tracking bug #373336950](https://issues.chromium.org/issues/373336950) | [ChromeStatus.com entry](https://chromestatus.com/feature/5117729756151808)\
+    \ | [Spec](https://www.w3.org/TR/push-api/#dom-pushmessagedata-bytes)"
+  heading_path:
+  - Chrome 132
+  - Web APIs
+  - '`PushMessageData::bytes()`'
+  links:
+  - url: https://developer.mozilla.org/en-US/docs/Web/API/PushMessageData/bytes
+    link_type: mdn
+    title: 'MDN PushMessageData: bytes() method'
+  - url: https://issues.chromium.org/issues/373336950
+    link_type: other
+    title: 'Tracking bug #373336950'
+  - url: https://chromestatus.com/feature/5117729756151808
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://www.w3.org/TR/push-api/#dom-pushmessagedata-bytes
+    link_type: spec
+    title: Spec
+  line_number: 97
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Keyboard focusable scroll containers
+  content: 'The rollout of this feature (from Chrome 130) was stopped due to an accessibility regression. This is fixed and
+    the feature continues to roll out with Chrome 132.
+
+
+    [Keyboard focusable scrollers](/blog/keyboard-focusable-scrollers) | [Tracking bug #40113891](https://issues.chromium.org/issues/40113891)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5231964663578624) | [Spec](https://drafts.csswg.org/css-overflow-3/#scroll-container)'
+  heading_path:
+  - Chrome 132
+  - Web APIs
+  - Keyboard focusable scroll containers
+  links:
+  - url: https://issues.chromium.org/issues/40113891
+    link_type: other
+    title: 'Tracking bug #40113891'
+  - url: https://chromestatus.com/feature/5231964663578624
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://drafts.csswg.org/css-overflow-3/#scroll-container
+    link_type: other
+    title: Spec
+  line_number: 105
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Device Posture API
+  content: 'This API helps developers to detect the current posture of a foldable device. The _device posture_ is the physical
+    position in which a device holds which may be derived from sensors in addition to the angle.
+
+
+    From enhancing the usability of a website by avoiding the area of a fold, to enabling innovative use cases for the web,
+    knowing the posture of a device can help developers tailor their content to different devices.
+
+
+    Content can be consumed and browsed even when the device is not flat, in which case the developer might want to provide
+    a different layout for it depending on the posture state in which the device is being used.
+
+
+    [Git Repo](https://github.com/foldable-devices) | [Tracking bug #40124716](https://issues.chromium.org/issues/40124716)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5185813744975872) | [Spec](https://www.w3.org/TR/device-posture)'
+  heading_path:
+  - Chrome 132
+  - Web APIs
+  - Device Posture API
+  links:
+  - url: https://github.com/foldable-devices
+    link_type: github
+    title: Git Repo
+  - url: https://issues.chromium.org/issues/40124716
+    link_type: other
+    title: 'Tracking bug #40124716'
+  - url: https://chromestatus.com/feature/5185813744975872
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://www.w3.org/TR/device-posture
+    link_type: spec
+    title: Spec
+  line_number: 111
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: devices
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Saved queries in `sharedStorage.selectURL`
+  content: '`sharedStorage.selectURL()` now allows queries to be saved and reused on a per-page basis, where the two per-page-load
+    budgets are charged the first time a saved query is run but not for subsequent runs of the saved query during the same
+    page-load. This is accomplished with a `savedQuery` parameter in the options for `selectURL()` that names the query.
+
+
+    [Tracking bug #367440966](https://issues.chromium.org/issues/367440966) | [ChromeStatus.com entry](https://chromestatus.com/feature/5098690386329600)
+    | [Spec](https://github.com/WICG/shared-storage/pull/188)'
+  heading_path:
+  - Chrome 132
+  - Web APIs
+  - Saved queries in `sharedStorage.selectURL`
+  links:
+  - url: https://issues.chromium.org/issues/367440966
+    link_type: other
+    title: 'Tracking bug #367440966'
+  - url: https://chromestatus.com/feature/5098690386329600
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/WICG/shared-storage/pull/188
+    link_type: github
+    title: Spec
+  line_number: 121
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: storage
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Private State Token API Permissions Policy default allowlist wildcard
+  content: 'Access to the Private State Token API is gated by Permissions Policy features. Chrome 132 updates the default
+    allowlist for both `private-state-token-issuance` and `private-state-token-redemption` features from `self` to `*` (wildcard).
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5205548434456576) | [Spec](https://github.com/WICG/trust-token-api/pull/306)'
+  heading_path:
+  - Chrome 132
+  - Web APIs
+  - Private State Token API Permissions Policy default allowlist wildcard
+  links:
+  - url: https://chromestatus.com/feature/5205548434456576
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/WICG/trust-token-api/pull/306
+    link_type: github
+    title: Spec
+  line_number: 127
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - enterprise
+- title: FedCM Mode API and Use Other Account API
+  content: "Two new extensions for FedCM:\n\n  * **Mode** : The `active` mode allows websites to call FedCM inside a button\
+    \ click (for example, clicking on a **Sign-in to IdP** button), which requires FedCM to guarantee it will always respond\
+    \ with a visible user interface. Calling the FedCM API in _active mode_ takes users to login to the Identity Provider\
+    \ (IdP) when users are logged-out. Also, because the active mode is called within an explicit user gesture, the UI is\
+    \ also more prominent (for example, centered and modal) compared to the UI from the passive mode (which doesn't require\
+    \ a user gesture requirement and can be called on page load).\n  * **Use Other Account** : With this extension, an IdP\
+    \ can allow users to sign into other accounts.\n\n[Demo](https://fedcm-button.glitch.me/) | [Tracking bug #370694829](https://issues.chromium.org/issues/370694829)\
+    \ | [ChromeStatus.com entry](https://chromestatus.com/feature/4689551782313984) | [Spec](https://github.com/w3c-fedid/FedCM/pull/660)"
+  heading_path:
+  - Chrome 132
+  - Web APIs
+  - FedCM Mode API and Use Other Account API
+  links:
+  - url: https://fedcm-button.glitch.me/
+    link_type: other
+    title: Demo
+  - url: https://issues.chromium.org/issues/370694829
+    link_type: other
+    title: 'Tracking bug #370694829'
+  - url: https://chromestatus.com/feature/4689551782313984
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/w3c-fedid/FedCM/pull/660
+    link_type: github
+    title: Spec
+  line_number: 133
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: File System Access for Android and WebView
+  content: 'This API enables developers to build powerful apps that interact with other (non-Web) apps on the user''s device
+    using the device''s file system. After a user grants a web app access, this API allows the app to read or save changes
+    directly to files and folders selected by the user. Beyond reading and writing files, this API provides the ability to
+    open a directory and enumerate its contents, as well as store file and directory handles in IndexedDB to later regain
+    access to the same content.
+
+
+    [File System access](/docs/capabilities/web-apis/file-system-access) shipped on Desktop in Chrome 86, with Chrome 132
+    it''s available on Android and WebView.
+
+
+    [The File System Access API](/docs/capabilities/web-apis/file-system-access) | [Tracking bug #40091667](https://issues.chromium.org/issues/40091667)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/6284708426022912) | [Spec](https://wicg.github.io/file-system-access)'
+  heading_path:
+  - Chrome 132
+  - Web APIs
+  - File System Access for Android and WebView
+  links:
+  - url: https://issues.chromium.org/issues/40091667
+    link_type: other
+    title: 'Tracking bug #40091667'
+  - url: https://chromestatus.com/feature/6284708426022912
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/file-system-access
+    link_type: spec
+    title: Spec
+  line_number: 142
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: WebAuthn Signal API
+  content: 'Allows WebAuthn relying parties to signal information about existing credentials back to credential storage providers,
+    so that incorrect or revoked credentials can be updated or removed from provider and system UI.
+
+
+    Learn more about [the Signal API for passkeys on Chrome desktop](/blog/passkeys-signal-api).
+
+
+    [Demo](https://signal-api-demo.glitch.me/) | [Tracking bug #361751877](https://issues.chromium.org/issues/361751877) |
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5101778518147072) | [Spec](https://pr-preview.s3.amazonaws.com/nsatragno/webauthn/pull/2093.html#sctn-signal-methods)'
+  heading_path:
+  - Chrome 132
+  - Web APIs
+  - WebAuthn Signal API
+  links:
+  - url: https://signal-api-demo.glitch.me/
+    link_type: other
+    title: Demo
+  - url: https://issues.chromium.org/issues/361751877
+    link_type: other
+    title: 'Tracking bug #361751877'
+  - url: https://chromestatus.com/feature/5101778518147072
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://pr-preview.s3.amazonaws.com/nsatragno/webauthn/pull/2093.html#sctn-signal-methods
+    link_type: other
+    title: Spec
+  line_number: 150
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy

@@ -1,0 +1,66 @@
+version: '139'
+channel: beta
+area: trials
+extraction_timestamp: '2025-08-13T15:58:00.279705'
+extraction_method: deterministic
+statistics:
+  total_features: 3
+  total_links: 0
+  primary_tags:
+    webgpu: 1
+  cross_cutting:
+    ai: 1
+    experimental: 1
+    webgpu: 1
+features:
+- title: Prompt API
+  content: The [Prompt API](/docs/ai/prompt-api) is designed for interacting with an AI language model using text, image,
+    and audio inputs. It supports various use cases, from generating image captions and performing visual searches to transcribing
+    audio, classifying sound events, generating text following specific instructions, and extracting information or insights
+    from text. It supports [structured outputs](/docs/ai/structured-output-for-prompt-api) which ensure that responses adhere
+    to a predefined format, typically expressed as a JSON schema, to enhance response conformance and facilitate seamless
+    integration with downstream applications that require standardized output formats. This API is also exposed in Chrome
+    Extensions. This origin trial is for exposure on the web.
+  heading_path:
+  - Chrome 139 beta
+  - New origin trials
+  - Prompt API
+  links: []
+  line_number: 154
+  primary_tags: []
+  cross_cutting_concerns:
+  - ai
+  - experimental
+- title: Full frame rate render blocking attribute
+  content: We propose to add a new render blocking token full-frame-rate to the blocking attributes. When the renderer is
+    blocked with the full-frame-rate token, the renderer will work at a lower frame rate so as to reserve more resources for
+    loading.
+  heading_path:
+  - Chrome 139 beta
+  - New origin trials
+  - Full frame rate render blocking attribute
+  links: []
+  line_number: 158
+  primary_tags: []
+  cross_cutting_concerns: []
+- title: WebGPU Compatibility mode
+  content: Adds an opt-in, lightly restricted subset of the WebGPU API capable of running older graphics APIs such as OpenGL
+    and Direct3D11. By opting into this mode and obeying its constraints, developers can extend the reach of their WebGPU
+    applications to many older devices that do not have the modern, explicit graphics APIs that core WebGPU requires. For
+    simple applications, the only required change is to specify the `"compatibility"` featureLevel when calling `requestAdapter`.
+    For more advanced applications, some modifications may be necessary to accommodate the mode's restrictions. Since Compatibility
+    mode is a subset, the resulting applications are also valid WebGPU Core applications and will run even on user agents
+    that do not support Compatibility mode.
+  heading_path:
+  - Chrome 139 beta
+  - New origin trials
+  - WebGPU Compatibility mode
+  links: []
+  line_number: 162
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu

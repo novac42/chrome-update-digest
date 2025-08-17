@@ -1,0 +1,180 @@
+version: '128'
+channel: stable
+area: other
+extraction_timestamp: '2025-08-13T15:22:59.085348'
+extraction_method: deterministic
+statistics:
+  total_features: 5
+  total_links: 15
+  primary_tags:
+    multimedia: 3
+    devices: 1
+    privacy: 2
+  cross_cutting:
+    privacy: 3
+    security: 1
+features:
+- title: '`AudioContext.onerror`'
+  content: 'AudioContext creation and audio rendering errors are now reported to web applications with a callback assigned
+    to `AudioContext.onerror`.
+
+
+    [Tracking bug #41495720](https://issues.chromium.org/issues/41495720) | [ChromeStatus.com entry](https://chromestatus.com/feature/5113439453446144)
+    | [Spec](https://webaudio.github.io/web-audio-api/#dom-audiocontext-onerror)'
+  heading_path:
+  - Chrome 128
+  - Media
+  - '`AudioContext.onerror`'
+  links:
+  - url: https://issues.chromium.org/issues/41495720
+    link_type: other
+    title: 'Tracking bug #41495720'
+  - url: https://chromestatus.com/feature/5113439453446144
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://webaudio.github.io/web-audio-api/#dom-audiocontext-onerror
+    link_type: github
+    title: Spec
+  line_number: 74
+  primary_tags:
+  - name: multimedia
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: '`PointerEvent.deviceProperties` for multi-pen inking'
+  content: 'Currently, developers have no way to distinguish between two individual pens on an ink-enabled digitizer. The
+    existing `PointerEvent.id` attribute is implemented in different ways and does not always persist for each ink stroke
+    or interaction with the screen.
+
+
+    This change provides a secure and reliable way to identify individual pen (pointers) interacting with the screen to set
+    specific colors or pen shapes for each device interacting with the digitizer. It extends the `PointerEvent` interface
+    to include a new attribute, `deviceProperties`. This contains the attribute `uniqueId`, that represents a session-persistent,
+    document isolated, unique identifier that a developer can reliably use to identify individual pens interacting with the
+    page.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5114132234240000) | [Spec](https://github.com/MicrosoftEdge/MSEdgeExplainers/blob/main/PointerEventDeviceId/explainer.md)'
+  heading_path:
+  - Chrome 128
+  - Media
+  - '`PointerEvent.deviceProperties` for multi-pen inking'
+  links:
+  - url: https://chromestatus.com/feature/5114132234240000
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/MicrosoftEdge/MSEdgeExplainers/blob/main/PointerEventDeviceId/explainer.md
+    link_type: github
+    title: Spec
+  line_number: 80
+  primary_tags:
+  - name: multimedia
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: devices
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: SkipAd media session action
+  content: 'Supports the SkipAd media session action. This action lets browsers show a button in the system media controls
+    or in the Picture-in-Picture window.
+
+
+    [Demo](https://googlechrome.github.io/samples/picture-in-picture/skip-ad.html) | [ChromeStatus.com entry](https://chromestatus.com/feature/4749278882824192)
+    | [Spec](https://wicg.github.io/picture-in-picture/#media-session)'
+  heading_path:
+  - Chrome 128
+  - Media
+  - SkipAd media session action
+  links:
+  - url: https://googlechrome.github.io/samples/picture-in-picture/skip-ad.html
+    link_type: github
+    title: Demo
+  - url: https://chromestatus.com/feature/4749278882824192
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/picture-in-picture/#media-session
+    link_type: spec
+    title: Spec
+  line_number: 88
+  primary_tags:
+  - name: multimedia
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: Cross-site ancestor chain bit for CookiePartitionKey of partitioned cookies
+  content: 'Chrome 128 adds a cross-site ancestor bit to the key ring of the partitioned cookie''s `CookiePartitionKey`. This
+    change unifies the partition key with the partition key values used in storage partitioning and adds protection against
+    clickjacking attacks by preventing cross-site embedded frames from having access to the top-level-site''s partitioned
+    cookies.
+
+
+    [Tracking bug #41486025](https://issues.chromium.org/issues/41486025) | [ChromeStatus.com entry](https://chromestatus.com/feature/5144832583663616)
+    | [Spec](https://github.com/explainers-by-googlers/CHIPS-spec)'
+  heading_path:
+  - Chrome 128
+  - Privacy
+  - Cross-site ancestor chain bit for CookiePartitionKey of partitioned cookies
+  links:
+  - url: https://issues.chromium.org/issues/41486025
+    link_type: other
+    title: 'Tracking bug #41486025'
+  - url: https://chromestatus.com/feature/5144832583663616
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/explainers-by-googlers/CHIPS-spec
+    link_type: github
+    title: Spec
+  line_number: 96
+  primary_tags:
+  - name: privacy
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: 'Private Aggregation API: client-side contribution merging'
+  content: 'Modifies the [Private Aggregation API](https://developers.google.com/privacy-sandbox/relevance/private-aggregation)
+    to merge histogram contributions with the same bucket and filtering ID before embedding in the aggregatable report''s
+    encrypted payload.
+
+
+    Private Aggregation imposes a limit on the number of contributions that can be embedded in a single aggregatable report,
+    with any additional contributions being dropped. By merging contributions where possible, we can get additional utility
+    out of the limit. Note that, ignoring the dropping of excess contributions, merging these sorts of contributions shouldn''t
+    have any impact on the final summary reports.
+
+
+    [Tracking bug #330744610](https://issues.chromium.org/issues/330744610) | [ChromeStatus.com entry](https://chromestatus.com/feature/4793172803977216)
+    | [Spec](https://github.com/patcg-individual-drafts/private-aggregation-api/pull/123)'
+  heading_path:
+  - Chrome 128
+  - Privacy
+  - 'Private Aggregation API: client-side contribution merging'
+  links:
+  - url: https://developers.google.com/privacy-sandbox/relevance/private-aggregation
+    link_type: other
+    title: Private Aggregation API
+  - url: https://issues.chromium.org/issues/330744610
+    link_type: other
+    title: 'Tracking bug #330744610'
+  - url: https://chromestatus.com/feature/4793172803977216
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/patcg-individual-drafts/private-aggregation-api/pull/123
+    link_type: github
+    title: Spec
+  line_number: 102
+  primary_tags:
+  - name: privacy
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - security
+  - privacy

@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chrome Platform Updates Digest</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #4a90e2 0%, #7cb9e8 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: visible;
+            position: relative;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4285f4 0%, #34a853 50%, #fbbc05 75%, #ea4335 100%);
+            color: white;
+            padding: 20px 40px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .version-selector {
+            flex-shrink: 0;
+        }
+
+        .version-selector select {
+            background: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #333;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .content {
+            padding: 40px;
+            min-height: calc(100vh - 200px);
+        }
+
+        .version-content {
+            display: none;
+        }
+
+        .version-content.active {
+            display: block;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            font-size: 1.8rem;
+            color: #1a73e8;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #e8f0fe;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h3 {
+            font-size: 1.4rem;
+            color: #34a853;
+            margin: 20px 0 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section h4 {
+            font-size: 1.2rem;
+            color: #333;
+            margin: 15px 0 10px 0;
+        }
+
+        /* H3 Cards */
+        .h3-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #e8eaed;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin: 20px 0;
+        }
+
+        .h3-card h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        /* Summary Cards */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .summary-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid #4285f4;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .summary-card h4 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #1a73e8;
+        }
+
+        .summary-card p {
+            margin-bottom: 8px;
+            color: #5f6368;
+        }
+
+        /* Takeaways Section */
+        .takeaways {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+
+        .takeaway-category {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .takeaway-category h4 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #ea4335;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Special categories */
+        .breaking-changes {
+            background: #fef7e0;
+            border-left: 5px solid #fbbc05;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .breaking-changes h4 {
+            color: #f57c00;
+            margin-bottom: 10px;
+        }
+
+        .opportunities {
+            background: #e8f5e8;
+            border-left: 5px solid #34a853;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .opportunities h4 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+
+        /* Update Cards Grid */
+        .updates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .update-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid #e8eaed;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .update-card h4 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #1a73e8;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Lists */
+        .takeaway-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .takeaway-list li {
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+            color: #5f6368;
+            line-height: 1.7;
+        }
+
+        .takeaway-list li::before {
+            content: "▶";
+            position: absolute;
+            left: 0;
+            color: #34a853;
+            font-weight: bold;
+        }
+
+        .update-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .update-card li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+            color: #5f6368;
+            line-height: 1.6;
+        }
+
+        .update-card li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #fbbc05;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* Links */
+        .spec-link {
+            color: #1a73e8;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .spec-link:hover {
+            color: #1557b0;
+            text-decoration: underline;
+        }
+
+        /* Version Comparison */
+        .version-comparison {
+            background: linear-gradient(135deg, #e8f0fe 0%, #f8f9fa 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border: 1px solid #dadce0;
+        }
+
+        .version-comparison p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #3c4043;
+            margin-bottom: 15px;
+        }
+
+
+        /* Footer */
+        .footer {
+            background: #f8f9fa;
+            padding: 20px 40px;
+            text-align: center;
+            border-top: 1px solid #e8eaed;
+        }
+
+        .footer p {
+            color: #5f6368;
+            font-style: italic;
+        }
+
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+                text-align: center;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .summary-grid,
+            .updates-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <h1>🚀 Chrome Platform Updates Digest</h1>
+                
+                <div class="version-selector">
+                    <select id="version-select" onchange="switchVersion(this.value)">
+                        
+                            <option value="138">
+                                Chrome 138 Stable
+                            </option>
+                        
+                            <option value="137">
+                                Chrome 137 Stable
+                            </option>
+                        
+                    </select>
+                </div>
+                
+            </div>
+        </div>
+        
+        <div class="content">
+            
+            
+            
+            <div id="version-138" class="version-content active">
+                <div class="section">
+<h2>Highlights</h2>
+<div class="h3-card"><h3 id="core-browser-profile-related-highlights">Core Browser Profile Related Highlights</h3><p>• <strong>Multiple identity support on iOS</strong> - iOS平台现已支持多账户功能，特别是托管（工作或学校）账户，为每个托管账户引入独立的浏览器配置文件，确保工作和个人浏览的严格数据分离 (Policy: 现有iOS策略继续有效)</p><p>• <strong>History sync opt-in using the profile pill</strong> - 已登录用户可通过配置文件标识选择启用历史记录和标签页同步，企业用户的扩展配置文件标识仅在浏览器闲置4小时后显示 (Policy: SyncDisabled, SyncTypesListDisabled, SavingBrowserHistoryDisabled)</p><p>• <strong>Bookmarks and reading list improvements</strong> - 桌面端已登录用户在保存新书签时可在Google账户中使用和保存书签及阅读列表项目 (Policy: BrowserSignin, SyncDisabled, SyncTypesListDisabled, EditBookmarksEnabled)</p></div>
+<div class="h3-card"><h3 id="productivity-highlights">Productivity Highlights</h3><p>• <strong>Agentspace recommendations in Chrome search bars</strong> - 企业搜索结果现已正式发布，可将来自Agentspace的人员、文件或查询建议添加到Chrome地址栏和新标签页搜索框中 (Policy: EnterpriseSearchAggregatorSettings)</p><p>• <strong>AI Mode for search recommendations</strong> - 地址栏中的AI模式搜索推荐功能开始推出，帮助用户深入探索关心的主题 (Policy: AIModeSettings)</p><p>• <strong>Shared tab groups</strong> - 标签页组共享功能允许用户在桌面或移动设备上协作使用标签页组，Chrome 138支持加入和使用共享标签页组 (Policy: TabGroupSharingSettings)</p></div>
+<div class="h3-card"><h3 id="mobile-enterprise-security-highlights">Mobile Enterprise Security Highlights</h3><p>• <strong>Enhanced Safe Browsing sync</strong> - 增强安全浏览现在是一个同步功能，用户在一台设备上启用后将自动应用到所有已登录Chrome的设备上 (Policy: SafeBrowsingProtectionLevel)</p><p>• <strong>DLP Download Support for File System Access API</strong> - 数据丢失防护现在覆盖使用文件系统访问API下载的文件和目录，确保现代Web应用程序的下载按照组织的DLP规则进行扫描</p><p>• <strong>Client's LLM assistance in mitigating scams</strong> - Chrome现在使用设备端LLM为增强安全浏览用户识别诈骗网站，基于服务器信誉评分系统向用户显示警告</p></div>
+<div class="h3-card"><h3 id="mobile-management-highlights">Mobile Management Highlights</h3><p>• <strong>URL Filtering capabilities on iOS</strong> - 桌面端WebProtect URL过滤功能现已扩展到iOS移动平台，允许组织对托管Chrome浏览器或托管用户配置文件进行URL审核、警告或阻止</p><p>• <strong>Inactive profile deletion</strong> - 非活跃配置文件删除设置开始推出，将自动删除超过定义非活跃期（默认90天）的托管配置文件</p></div>
+
+</div>
+<div class="section">
+<h2>Updates by Area</h2>
+<div class="h3-card"><h3 id="core-browser-profile-related-updates">Core Browser Profile Related Updates</h3><h4 id="current-stable-version-chrome-138">Current Stable Version (Chrome 138)</h4><p>• <strong>Multiple identity support on iOS</strong> - iOS平台的Chrome现在支持多账户功能，特别是针对托管（工作或学校）账户。此更新为每个托管账户引入独立的浏览器配置文件，确保工作和个人浏览之间的严格数据分离。常规账户继续共享单个配置文件。用户可通过点击新标签页上的账户粒子盘在账户之间切换。</p><p>• <strong>History sync opt-in using the profile pill</strong> - 在Chrome 138中，一些已登录用户看到使用配置文件标识选择启用历史记录和标签页同步的新选项。此更改旨在通过使用配置文件标识显示简短的内联消息，以非干扰性的方式提供历史记录同步的好处。对于企业用户，扩展的配置文件标识仅在浏览器闲置4小时后出现。</p><p>• <strong>Bookmarks and reading list improvements</strong> - 对于Chrome 138桌面版，一些在保存新书签时登录Chrome的用户现在可以在其Google账户中使用和保存书签及阅读列表项目。相关的企业策略继续按以前的方式工作，因此管理员可以配置用户是否可以在其Google账户中使用和保存项目。</p><h4 id="upcoming-profile-changes">Upcoming Profile Changes</h4><p>• <strong>Profile management enhancements</strong> - Chrome 139及后续版本将继续改进配置文件管理功能，包括更好的企业配置文件隔离和同步控制能力。</p></div>
+<div class="h3-card"><h3 id="user-productivity-updates-on-chrome-desktop">User Productivity Updates on Chrome Desktop</h3><h4 id="current-desktop-productivity-features-chrome-138">Current Desktop Productivity Features (Chrome 138)</h4><p>• <strong>Agentspace recommendations正式发布</strong> - 为帮助企业用户满足内部信息需求，现在可以将来自Agentspace的企业搜索结果（如人员、文件或查询建议）添加到Chrome地址栏和新标签页搜索框中。结果可以默认显示或仅在自定义关键字触发时显示。</p><p>• <strong>AI Mode搜索推荐开始推出</strong> - AI模式是一个功能，通过在Chrome中显示AI模式搜索推荐，帮助用户深入探索关心的主题。新策略AIModeSettings可用于控制地址栏和新标签页搜索框中的搜索推荐。</p><p>• <strong>上下文搜索建议功能</strong> - 通过此功能，用户可以直接在当前页面的上下文中询问任何问题。基于地址栏现有的搜索习惯，用户可以通过选择屏幕上的任何内容或用文字提问来使用Google Lens提问。</p><p>• <strong>共享标签页组功能推出</strong> - 用户现在可以使用共享标签页组功能在标签页上进行协作。Chrome 138推出加入和使用共享标签页组的能力。稳定版Chrome用户将无法创建共享标签页组（入口点不可用）。</p><p>• <strong>语言检测器API</strong> - 语言检测器API是一个用于检测文本语言并提供置信度级别的JavaScript API。这可以与翻译功能结合使用，例如接受未知语言的用户输入并将其翻译为特定目标语言。</p><p>• <strong>摘要生成器API</strong> - 摘要生成器API是一个用于生成输入文本摘要的JavaScript API，由AI语言模型支持。通过公开这个内置模型，避免每个网站都需要下载自己的多吉字节语言模型。</p><p>• <strong>翻译器API</strong> - 翻译器API是一个为网页提供语言翻译功能的JavaScript API。当浏览器的内置翻译能力无法提供帮助时，这对Web开发人员特别有用。</p><h4 id="upcoming-productivity-changes">Upcoming Productivity Changes</h4><p>• <strong>Gemini在Chrome中的扩展</strong> - Chrome 139开始，Gemini功能将在美国为已登录Chrome的用户逐步推出稳定版。</p><p>• <strong>AI模式移动平台支持</strong> - Chrome 139将在Android和iOS的地址栏中开始推出AI模式功能。</p></div>
+<div class="h3-card"><h3 id="chrome-mobile-security-updates-androidios">Chrome Mobile Security Updates (Android/iOS)</h3><h4 id="current-mobile-security-features-chrome-138">Current Mobile Security Features (Chrome 138)</h4><p>• <strong>Enhanced Safe Browsing同步功能</strong> - 在Chrome 138中，Chrome的增强安全浏览成为同步功能。这意味着如果用户在一台设备上选择启用增强安全浏览，此保护级别将自动应用到已登录同一账户的所有其他设备上。</p><p>• <strong>DLP文件系统访问API支持</strong> - 数据丢失防护保护现在覆盖使用文件系统访问API下载的文件和目录。此增强确保现代Web应用程序（如基于浏览器的编辑器）的下载按照组织的DLP规则进行扫描。</p><p>• <strong>客户端LLM反诈骗辅助</strong> - 为对抗诈骗，Chrome现在使用设备端LLM为增强安全浏览用户识别诈骗网站。Chrome将页面内容发送到设备端LLM以推断页面的安全相关信号，并将这些信号发送到安全浏览服务器以获得最终判断。</p><p>• <strong>iPad上的Google Lens屏幕搜索</strong> - 将iOS上的"使用Google Lens搜索屏幕"功能扩展到iPad设备。iPad通常与更复杂的任务相关，例如购物，在iPad上扩展Lens功能使用户能够轻松执行这些任务。</p><p>• <strong>Android蓝牙串行通信</strong> - 此功能允许网页和Web应用程序在Android设备上通过蓝牙连接到串行端口。Chrome on Android现在支持通过蓝牙RFCOMM的Web Serial API。</p><h4 id="upcoming-mobile-security-changes">Upcoming Mobile Security Changes</h4><p>• <strong>恶意APK下载检查</strong> - Chrome 139开始，Chrome on Android将就在Chrome中下载的APK文件联系Google服务器，以获得关于其安全性的判断。</p><p>• <strong>Manifest V3迁移截止日期</strong> - 2025年6月之前，扩展程序必须更新为利用Manifest V3。Chrome 139将移除ExtensionManifestV2Availability策略。</p><p>• <strong>CA证书变更</strong> - Chrome 139对中华电信和Netlock颁发的公开信任TLS服务器认证证书的默认信任方式进行更改。</p></div>
+<div class="h3-card"><h3 id="chrome-mobile-management-updates-androidios">Chrome Mobile Management Updates (Android/iOS)</h3><h4 id="current-mobile-management-features-chrome-138">Current Mobile Management Features (Chrome 138)</h4><p>• <strong>iOS URL过滤功能</strong> - 当前桌面端的WebProtect URL过滤功能正在扩展到移动端，以便组织可以审核、警告或阻止某些URL或URL类别在托管Chrome浏览器或托管用户配置文件上加载。此功能是Chrome Enterprise Premium的一部分。</p><p>• <strong>非活跃配置文件删除</strong> - 2025年6月，非活跃期配置文件删除设置开始推出。2025年7月，该设置将开始自动删除管理控制台中超过定义非活跃期的托管配置文件。非活跃期的默认值为90天。</p><p>• <strong>新LayerX风险评估</strong> - 在管理控制台中添加新的扩展风险评估提供商：LayerX Security。此评分在应用程序和扩展使用报告中对管理员可用。</p><p>• <strong>用户脚本的每扩展切换</strong> - 在Chrome 138中，用户和管理员控制扩展运行用户创建脚本和使用userScripts API的方式正在改变。最终用户现在将在chrome://extensions页面上通过"允许用户脚本"切换来切换每个扩展。</p><h4 id="upcoming-mobile-management-changes">Upcoming Mobile Management Changes</h4><p>• <strong>新标签页页脚管理通知</strong> - Chrome 139开始，如果企业管理员设置了自定义页脚的策略之一，将显示浏览器管理披露。Chrome 140开始，所有托管浏览器的新标签页页脚将开始显示默认通知。</p></div>
+
+</div>
+<div class="section">
+<h2>Version Comparison Context</h2>
+<p>Chrome 138代表了Google在企业功能方面的重大进步，特别是在多平台统一管理和AI集成方面。与之前版本相比，此版本的关键发展趋势包括：</p>
+<p><strong>配置文件管理现代化</strong> - iOS多身份支持和改进的书签同步功能表明Google正在统一跨平台的用户体验，同时保持企业级数据分离。</p>
+<p><strong>AI功能企业就绪</strong> - Agentspace集成、AI模式搜索和多个AI API的推出显示Chrome正在将AI功能无缝集成到企业工作流程中，同时提供适当的策略控制。</p>
+<p><strong>安全功能主动化</strong> - 从反应性安全措施转向主动威胁检测，如LLM辅助的诈骗检测和增强的DLP支持，体现了零信任安全模型的实施。</p>
+<p><strong>移动优先企业策略</strong> - iOS URL过滤和增强的移动设备管理功能表明Google认识到现代企业环境中移动设备管理的重要性。</p>
+<p><strong>策略简化和标准化</strong> - 私有网络访问策略的移除和新策略的引入反映了对更现代、可部署的安全标准的转移。</p>
+<p>建议企业管理员重点关注Chrome 139中即将到来的Manifest V3截止日期、CA证书变更以及各种AI功能的逐步推出，以确保平稳的部署和用户采用。</p>
+</div>
+            </div>
+            
+            <div id="version-137" class="version-content">
+                <div class="section">
+<h2>Productivity Highlights</h2>
+<ul>
+<li><strong>Agentspace在Chrome地址栏中的推荐</strong>：企业搜索结果直接集成到Chrome地址栏，支持人员、文件或查询建议，可通过"@"符号或自定义关键字触发 (Policy: EnterpriseSearchAggregatorSettings)</li>
+<li><strong>AI辅助的自动填充</strong>：AI增强的表单填写功能，可更好地理解表单并自动填写先前保存的信息 (Policy: GenAiDefaultSettings, AutofillPredictionSettings)</li>
+<li><strong>托管配置文件的自定义标识</strong>：Chrome 137推出工具栏和配置文件菜单自定义功能，帮助用户轻松识别Chrome配置文件是否受管理 (Policy: EnterpriseCustomLabel, EnterpriseLogoUrl, EnterpriseProfileBadgeToolbarSettings)</li>
+<li><strong>Chrome中的Gemini集成</strong>：Windows和macOS上的Gemini集成，可理解当前页面内容并提供互动 (Policy: GeminiSettings, GenAiDefaultSettings)</li>
+</ul>
+</div>
+<div class="section">
+<h2>Mobile Enterprise Security Highlights</h2>
+<ul>
+<li><strong>iOS多身份支持</strong>：Chrome iOS引入对多账户的支持，特别是托管（工作或学校）账户，为每个托管账户提供独立的浏览器配置文件</li>
+<li><strong>移动端报告连接器</strong>：Chrome Enterprise报告连接器扩展到移动设备，提供与桌面端同等的安全事件报告功能</li>
+<li><strong>iOS上的Safe Browsing事件报告</strong>：将Safe Browsing事件报告功能扩展到iOS平台</li>
+</ul>
+</div>
+<div class="section">
+<h2>Mobile Management Highlights</h2>
+<ul>
+<li><strong>Android不再支持Android Oreo或Android Pie</strong>：Chrome 138将是最后支持Android Oreo或Android Pie的版本，Chrome 139及更高版本将不再支持</li>
+<li><strong>Android上的蓝牙串行通信</strong>：Chrome Android现在支持通过蓝牙RFCOMM的Web Serial API</li>
+</ul>
+<h1 id="updates-by-area">Updates by Area</h1>
+</div>
+<div class="section">
+<h2>User Productivity Updates on Chrome Desktop</h2>
+<div class="h3-card"><h3 id="current-stable-version-chrome-137">Current Stable Version (Chrome 137)</h3><ul>
+<li>
+<p><strong>Agentspace recommendations in the Chrome omnibox</strong>：企业用户可通过在地址栏输入"@"符号访问Agentspace的企业搜索结果，包括人员、文件或查询建议。组织可自定义关键字、快捷方式和显示图标 (Policy: EnterpriseSearchAggregatorSettings)</p>
+</li>
+<li>
+<p><strong>AI辅助的自动填充 (Autofill with AI)</strong>：Chrome 137开始为部分用户提供AI增强的表单自动填写功能，可更好地理解表单结构并提供自动填写建议 (Policy: GenAiDefaultSettings, AutofillPredictionSettings)</p>
+</li>
+<li>
+<p><strong>托管配置文件的自定义标识</strong>：Chrome 137推出新的工具栏和配置文件菜单自定义功能，特别适用于BYOD场景。新增三个策略用于定制体验：EnterpriseCustomLabel（自定义工具栏文本）、EnterpriseLogoUrl（添加公司标识）、EnterpriseProfileBadgeToolbarSettings（控制默认标签显示）</p>
+</li>
+<li>
+<p><strong>Chrome中的Gemini集成</strong>：Windows和macOS上的Gemini集成，支持文本聊天和语音交互。当前仅对美国的Google AI Pro和Ultra订阅用户开放 (Policy: GeminiSettings, GenAiDefaultSettings)</p>
+</li>
+<li>
+<p><strong>Chrome Enterprise概览页面</strong>：Google Admin控制台中新增概览页面，为IT管理员提供部署关键信息的快速访问，包括活跃/非活跃配置文件、过期浏览器识别、高风险扩展预览等</p>
+</li>
+<li>
+<p><strong>新标签页Microsoft 365卡片</strong>：企业用户可在新标签页直接访问Outlook即将到来的会议或SharePoint建议文件 (Policy: NTPSharepointCardVisible, NTPOutlookCardVisible)</p>
+</li>
+<li>
+<p><strong>托管配置文件列表的新远程命令和CSV导出</strong>：Admin控制台支持配置文件级别的"清除缓存"和"清除Cookie"远程命令，以及托管配置文件列表的CSV导出功能</p>
+</li>
+</ul></div>
+<div class="h3-card"><h3 id="upcoming-changes">Upcoming Changes</h3><ul>
+<li>
+<p><strong>书签和阅读列表改进</strong>：Chrome 138桌面版将允许登录用户在Google账户中使用和保存书签及阅读列表项目，相关企业策略将继续有效 (Policy: BrowserSignin, SyncDisabled, SyncTypesListDisabled, EditBookmarksEnabled)</p>
+</li>
+<li>
+<p><strong>共享标签组</strong>：Chrome 138将推出标签组协作功能，允许用户在桌面或移动设备上创建和使用标签组，协作伙伴可在其设备上浏览相同标签 (Policy: TabGroupSharingSettings)</p>
+</li>
+<li>
+<p><strong>非活跃配置文件删除</strong>：Chrome 138开始，Chrome Enterprise Core将自动删除超过定义非活跃期的托管配置文件，默认为90天</p>
+</li>
+<li>
+<p><strong>语言检测API</strong>：Chrome 138提供JavaScript语言检测API，配合翻译功能使用 (Policy: GenAILocalFoundationalModelSettings)</p>
+</li>
+<li>
+<p><strong>摘要API (Summarizer API)</strong>：Chrome 138提供基于AI语言模型的文本摘要JavaScript API (Policy: GenAILocalFoundationalModelSettings)</p>
+</li>
+<li>
+<p><strong>翻译API (Translator API)</strong>：Chrome 138提供语言翻译JavaScript API (Policy: GenAILocalFoundationalModelSettings)</p>
+</li>
+<li>
+<p><strong>可预测的存储配额报告</strong>：Chrome 138将为没有无限存储权限的站点引入可预测的存储配额</p>
+</li>
+</ul></div>
+
+</div>
+<div class="section">
+<h2>Chrome Mobile Security Updates (Android/iOS)</h2>
+<div class="h3-card"><h3 id="current-stable-version-chrome-137-mobile-security">Current Stable Version (Chrome 137) - Mobile Security</h3><ul>
+<li>
+<p><strong>增强安全浏览同步设置</strong>：Chrome的增强安全浏览成为同步功能，用户在一台设备上启用后将自动应用到所有登录相同账户的设备 (Policy: SafeBrowsingProtectionLevel)</p>
+</li>
+<li>
+<p><strong>HSTS跟踪防护</strong>：通过HSTS缓存减轻第三方用户跟踪，仅允许顶级导航的HSTS升级</p>
+</li>
+<li>
+<p><strong>移动端报告连接器</strong>：Chrome Enterprise报告连接器扩展到Android和iOS，提供不安全站点访问、敏感数据传输等安全事件报告</p>
+</li>
+<li>
+<p><strong>iOS上的Safe Browsing事件报告</strong>：将桌面和Android已有的Safe Browsing事件报告功能扩展到iOS平台</p>
+</li>
+</ul></div>
+<div class="h3-card"><h3 id="upcoming-changes">Upcoming Changes</h3><ul>
+<li>
+<p><strong>Chrome 139将不再支持macOS 11</strong>：Chrome 139及更高版本将不再支持macOS 11，运行在受支持的操作系统对维护安全至关重要</p>
+</li>
+<li>
+<p><strong>Safe Browsing API v4迁移到v5</strong>：Chrome 145将从Safe Browsing v4 API迁移到v5 API，管理员需要修改URL允许列表配置</p>
+</li>
+</ul></div>
+
+</div>
+<div class="section">
+<h2>Chrome Mobile Management Updates (Android/iOS)</h2>
+<div class="h3-card"><h3 id="current-stable-version-chrome-137-mobile-management">Current Stable Version (Chrome 137) - Mobile Management</h3><ul>
+<li>
+<p><strong>iOS多身份支持</strong>：Chrome iOS引入对多账户支持，特别是托管账户。为每个托管账户提供独立的浏览器配置文件，确保工作和个人浏览的严格数据分离。用户可通过新标签页上的账户粒子磁盘切换账户</p>
+</li>
+<li>
+<p><strong>Android上的蓝牙串行通信</strong>：Chrome Android现在支持通过蓝牙RFCOMM的Web Serial API，现有企业策略将在功能启用后生效</p>
+</li>
+</ul></div>
+<div class="h3-card"><h3 id="upcoming-changes">Upcoming Changes</h3><ul>
+<li>
+<p><strong>Android系统支持变更</strong>：Chrome 138将是最后支持Android Oreo或Android Pie的版本，Chrome 139及更高版本将不再支持这些Android版本</p>
+</li>
+<li>
+<p><strong>DLP对文件系统访问API的下载支持</strong>：Chrome 138将扩展数据丢失防护保护，覆盖使用文件系统访问API下载的文件和目录</p>
+</li>
+</ul><h1 id="version-comparison-context">Version Comparison Context</h1><p>Chrome 137在企业功能方面展现了显著的发展趋势，特别是在AI集成和移动端企业支持方面。主要特点包括：</p><p><strong>AI功能企业化</strong>：Gemini集成、AI辅助自动填充等功能的推出，标志着Chrome企业版向智能化办公方向发展，同时提供完整的企业策略控制。</p><p><strong>移动端企业功能成熟化</strong>：iOS多身份支持和移动端报告连接器的推出，显示Chrome企业版在移动办公场景下的功能逐渐与桌面端达到同等水平。</p><p><strong>管理功能精细化</strong>：托管配置文件的自定义标识、新的远程命令等功能，为企业管理员提供更精细的控制和更直观的管理体验。</p><p><strong>安全策略标准化</strong>：增强安全浏览同步、HSTS跟踪防护等功能的推出，体现了Chrome在跨平台安全策略统一方面的努力。</p><p>企业管理员应特别关注即将到来的Android系统支持变更以及各种API和安全功能的企业策略配置，确保在功能升级过程中维持适当的安全和合规水平。</p></div>
+
+</div>
+            </div>
+            
+        </div>
+
+        <div class="footer">
+            <p><em>Generated with ❤️ by Professional Digest Converter</em></p>
+        </div>
+    </div>
+
+    <script>
+        function switchVersion(version) {
+            // Hide all version contents
+            document.querySelectorAll('.version-content').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Show selected version
+            const selectedContent = document.getElementById('version-' + version);
+            if (selectedContent) {
+                selectedContent.classList.add('active');
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const selector = document.getElementById('version-select');
+            if (selector && selector.options.length > 0) {
+                switchVersion(selector.options[0].value);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+version: '125'
+channel: stable
+area: other
+extraction_timestamp: '2025-08-13T15:22:59.986937'
+extraction_method: deterministic
+statistics:
+  total_features: 2
+  total_links: 5
+  primary_tags: {}
+  cross_cutting:
+    privacy: 1
+features:
+- title: Accept HTTP and HTTPS URLs when constructing WebSocket
+  content: 'This update enables HTTP and HTTPS schemes in the WebSocket constructor, therefore also letting developers use
+    relative URLs. These are normalized to the `ws:` and `wss:` internal schemes.
+
+
+    [Tracking bug #325979102](https://issues.chromium.org/issues/325979102) | [ChromeStatus.com entry](https://chromestatus.com/feature/5848709993857024)
+    | [Spec](https://github.com/whatwg/websockets/pull/45)'
+  heading_path:
+  - Chrome 125
+  - Loading
+  - Accept HTTP and HTTPS URLs when constructing WebSocket
+  links:
+  - url: https://issues.chromium.org/issues/325979102
+    link_type: other
+    title: 'Tracking bug #325979102'
+  - url: https://chromestatus.com/feature/5848709993857024
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/whatwg/websockets/pull/45
+    link_type: github
+    title: Spec
+  line_number: 88
+  primary_tags: []
+  cross_cutting_concerns:
+  - privacy
+- title: Direct Sockets API in Chrome Apps
+  content: 'This update helps ease the transition of specialized apps from Chrome Apps to Isolated Web Apps by enabling Direct
+    Sockets in Chrome Apps, letting web apps establish direct transmission control protocol (TCP) and user datagram protocol
+    (UDP) communications with network devices and systems.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5168654087094272) | [Spec](https://wicg.github.io/direct-sockets)'
+  heading_path:
+  - Chrome 125
+  - Chrome Apps
+  - Direct Sockets API in Chrome Apps
+  links:
+  - url: https://chromestatus.com/feature/5168654087094272
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/direct-sockets
+    link_type: spec
+    title: Spec
+  line_number: 174
+  primary_tags: []
+  cross_cutting_concerns: []

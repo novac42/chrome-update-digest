@@ -1,0 +1,263 @@
+version: '132'
+channel: stable
+area: webgpu
+extraction_timestamp: '2025-08-13T15:22:58.106152'
+extraction_method: deterministic
+statistics:
+  total_features: 8
+  total_links: 20
+  primary_tags:
+    webgpu: 7
+    devices: 1
+    deprecation: 2
+    storage: 1
+  cross_cutting:
+    webgpu: 4
+    privacy: 5
+    experimental: 2
+    security: 1
+    enterprise: 1
+features:
+- title: 'WebGPU: 32-bit float textures blending'
+  content: 'The `float32-blendable` GPU feature makes GPU textures with formats `r32float`, `rg32float`, and `rgba32float`
+    blendable.
+
+
+    [Tracking bug #369649348](https://issues.chromium.org/issues/369649348) | [ChromeStatus.com entry](https://chromestatus.com/feature/5173655901044736)
+    | [Spec](https://www.w3.org/TR/webgpu/#float32-blendable)'
+  heading_path:
+  - Chrome 132
+  - Rendering and graphics
+  - 'WebGPU: 32-bit float textures blending'
+  links:
+  - url: https://issues.chromium.org/issues/369649348
+    link_type: other
+    title: 'Tracking bug #369649348'
+  - url: https://chromestatus.com/feature/5173655901044736
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://www.w3.org/TR/webgpu/#float32-blendable
+    link_type: spec
+    title: Spec
+  line_number: 163
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+  - privacy
+- title: 'WebGPU: Expose `GPUAdapterInfo` from `GPUDevice`'
+  content: 'The GPUDevice `adapterInfo` attribute exposes the same `GPUAdapterInfo` as the `GPUAdapter` object.
+
+
+    [Tracking bug #376600838](https://issues.chromium.org/issues/376600838) | [ChromeStatus.com entry](https://chromestatus.com/feature/6221851301511168)
+    | [Spec](https://www.w3.org/TR/webgpu/#dom-gpudevice-adapterinfo)'
+  heading_path:
+  - Chrome 132
+  - Rendering and graphics
+  - 'WebGPU: Expose `GPUAdapterInfo` from `GPUDevice`'
+  links:
+  - url: https://issues.chromium.org/issues/376600838
+    link_type: other
+    title: 'Tracking bug #376600838'
+  - url: https://chromestatus.com/feature/6221851301511168
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://www.w3.org/TR/webgpu/#dom-gpudevice-adapterinfo
+    link_type: spec
+    title: Spec
+  line_number: 169
+  primary_tags:
+  - name: devices
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+  - privacy
+- title: 'WebGPU: Texture view usage'
+  content: 'Adds an optional field to WebGPU texture view creation to request a subset of the usage flags from the source
+    texture.
+
+
+    By default, texture view usage inherits from the source texture but there are view formats which can be incompatible with
+    the full set of inherited usages. Adding a usage field to texture view creation allows the user to request a subset of
+    the source texture''s usages that are valid with the view format and specific to their intended usage of the texture view.
+
+
+    WebGPU implementations can also optimize the creation of low level resources and improve performance when using views
+    with more specialized usage flags.
+
+
+    [Tracking bug #363903526](https://issues.chromium.org/issues/363903526) | [ChromeStatus.com entry](https://chromestatus.com/feature/5155252832305152)
+    | [Spec](https://github.com/gpuweb/gpuweb/commit/b39d86d356eb759d7564bc7c808ca62fce8bbf3e)'
+  heading_path:
+  - Chrome 132
+  - Rendering and graphics
+  - 'WebGPU: Texture view usage'
+  links:
+  - url: https://issues.chromium.org/issues/363903526
+    link_type: other
+    title: 'Tracking bug #363903526'
+  - url: https://chromestatus.com/feature/5155252832305152
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/gpuweb/gpuweb/commit/b39d86d356eb759d7564bc7c808ca62fce8bbf3e
+    link_type: github
+    title: Spec
+  line_number: 175
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+  - privacy
+- title: Detailed WebGPU Updates
+  content: "Source: https://developer.chrome.com/blog/new-in-webgpu-132\n\n  * [ Chrome for Developers ](https://developer.chrome.com/)\n\
+    \  * [ Blog ](https://developer.chrome.com/blog)"
+  heading_path:
+  - Chrome 132
+  - Rendering and graphics
+  - Detailed WebGPU Updates
+  links:
+  - url: https://developer.chrome.com/
+    link_type: other
+    title: Chrome for Developers
+  - url: https://developer.chrome.com/blog
+    link_type: other
+    title: Blog
+  line_number: 186
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Explicit compile hints with magic comments
+  content: 'This feature lets you attach information about which functions should be eagerly parsed and compiled in JavaScript
+    files. The information will be encoded as magic comments.
+
+
+    [Origin Trial](/origintrials#/view_trial/4317826142741463041) | [Explainer](https://explainers-by-googlers.github.io/explicit-javascript-compile-hints-file-based)
+    | [Tracking bug #42203853](https://issues.chromium.org/issues/42203853) | [ChromeStatus.com entry](https://chromestatus.com/feature/5100466238652416)'
+  heading_path:
+  - What's New in WebGPU (Chrome 132)
+  - Origin trials
+  - Explicit compile hints with magic comments
+  links:
+  - url: https://explainers-by-googlers.github.io/explicit-javascript-compile-hints-file-based
+    link_type: github
+    title: Explainer
+  - url: https://issues.chromium.org/issues/42203853
+    link_type: other
+    title: 'Tracking bug #42203853'
+  - url: https://chromestatus.com/feature/5100466238652416
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 352
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+  - experimental
+- title: '`Document-Isolation-Policy`'
+  content: '`Document-Isolation-Policy` allows a document to enable `crossOriginIsolation` for itself, without having to deploy
+    COOP or COEP, and regardless of the `crossOriginIsolation` status of the page. The policy is backed by process isolation.
+    Additionally, the document non-CORS cross-origin subresources will either be loaded without credentials or will need to
+    have a CORP header.
+
+
+    [Origin Trial](/origintrials#/view_trial/3670996646260375553) | [Tracking bug #333029146](https://issues.chromium.org/issues/333029146)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5141940204208128) | [Spec](https://wicg.github.io/document-isolation-policy)'
+  heading_path:
+  - What's New in WebGPU (Chrome 132)
+  - Origin trials
+  - '`Document-Isolation-Policy`'
+  links:
+  - url: https://issues.chromium.org/issues/333029146
+    link_type: other
+    title: 'Tracking bug #333029146'
+  - url: https://chromestatus.com/feature/5141940204208128
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/document-isolation-policy
+    link_type: spec
+    title: Spec
+  line_number: 358
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - security
+  - privacy
+  - experimental
+  - enterprise
+- title: '`navigator.storage` no longer an `EventTarget`'
+  content: '`navigator.storage` was made an `EventTarget` for the Storage Pressure Event, which never made it past the prototype
+    phase. This dead code is being removed and as a result, `navigator.storage` will no longer extend `EventTarget`.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5132158480678912) | [Spec](https://storage.spec.whatwg.org/)'
+  heading_path:
+  - What's New in WebGPU (Chrome 132)
+  - Deprecations and removals
+  - '`navigator.storage` no longer an `EventTarget`'
+  links:
+  - url: https://chromestatus.com/feature/5132158480678912
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://storage.spec.whatwg.org/
+    link_type: spec
+    title: Spec
+  line_number: 366
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: storage
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: Remove prefixed `HTMLVideoElement` fullscreen APIs
+  content: "The prefixed `HTMLVideoElement` fullscreen APIs have been deprecated from Chrome.\n\nThey were replaced by the\
+    \ `Element.requestFullscreen()` API, which first shipped unprefixed in Chrome 71, in 2018. As of 2024, most browsers have\
+    \ had support for the unprefixed APIs for a few years now.\n\nChrome 132 removes the following from `HTMLVideoElement`:\n\
+    \n  * The `webkitSupportsFullscreen` attribute.\n  * The `webkitDisplayingFullscreen` attribute.\n  * The `webkitEnterFullscreen()`\
+    \ method.\n  * The `webkitExitFullscreen()` method. Note the different capitalization of the \"S\" in FullScreen.\n  *\
+    \ The `webkitEnterFullScreen()` method.\n  * The `webkitExitFullScreen()` method.\n\nThese methods are now only aliases\
+    \ for the modern API. Their use has declined steadily over the years.\n\n[ChromeStatus.com entry](https://chromestatus.com/feature/5111638103687168)"
+  heading_path:
+  - What's New in WebGPU (Chrome 132)
+  - Deprecations and removals
+  - Remove prefixed `HTMLVideoElement` fullscreen APIs
+  links:
+  - url: https://chromestatus.com/feature/5111638103687168
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 372
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []

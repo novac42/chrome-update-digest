@@ -1,0 +1,82 @@
+version: '133'
+channel: stable
+area: html-dom
+extraction_timestamp: '2025-08-13T15:22:57.527826'
+extraction_method: deterministic
+statistics:
+  total_features: 3
+  total_links: 6
+  primary_tags: {}
+  cross_cutting:
+    privacy: 3
+features:
+- title: The hint value of the popover attribute
+  content: 'The Popover API specifies the behavior for two values of the popover attribute: auto and manual. This feature
+    describes a third value, `popover=hint`. Hints, which are most often associated with "tooltip" type behaviors, have slightly
+    different behaviors. Primarily, the difference is that a hint is subordinate to auto when opening nested stacks of popovers.
+    So it is possible to open an unrelated hint popover while an existing stack of auto popovers stays open.
+
+
+    The canonical example is that a `<select>` picker is open (`popover=auto`) and a hover-triggered tooltip (`popover=hint`)
+    is shown. That action does not close the `<select>` picker.
+
+
+    [Tracking bug #1416284](https://issues.chromium.org/issues/1416284) | [ChromeStatus.com entry](https://chromestatus.com/feature/5073251081912320)'
+  heading_path:
+  - Chrome 133
+  - HTML and DOM
+  - The hint value of the popover attribute
+  links:
+  - url: https://issues.chromium.org/issues/1416284
+    link_type: other
+    title: 'Tracking bug #1416284'
+  - url: https://chromestatus.com/feature/5073251081912320
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 21
+  primary_tags: []
+  cross_cutting_concerns:
+  - privacy
+- title: Popover invoker and anchor positioning improvements
+  content: 'Adds an imperative way to set invoker relationships between popovers with `popover.showPopover({source})`. Enables
+    invoker relationships to create implicit anchor element references.
+
+
+    [Tracking bug #364669918](https://issues.chromium.org/issues/364669918) | [ChromeStatus.com entry](https://chromestatus.com/feature/5120638407409664)'
+  heading_path:
+  - Chrome 133
+  - HTML and DOM
+  - Popover invoker and anchor positioning improvements
+  links:
+  - url: https://issues.chromium.org/issues/364669918
+    link_type: other
+    title: 'Tracking bug #364669918'
+  - url: https://chromestatus.com/feature/5120638407409664
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 29
+  primary_tags: []
+  cross_cutting_concerns:
+  - privacy
+- title: Popover nested inside invoker shouldn't re-invoke it
+  content: "In the following case clicking the button properly activates the popover, however, clicking on the popover itself\
+    \ after that shouldn't close the popover.\n    \n    \n    <button popovertarget=foo>Activate\n      <div popover id=foo>Clicking\
+    \ me shouldn't close me</div>\n    </button>\n    \n\nPreviously this happened, because the popover click bubbles to the\
+    \ `<button>` and activates the invoker, which toggles the popover closed. This has now been changed to the expected behavior.\n\
+    \n[Tracking bug #https://crbug.com/379241451](https://issues.chromium.org/issues/https://crbug.com/379241451) | [ChromeStatus.com\
+    \ entry](https://chromestatus.com/feature/4821788884992000)"
+  heading_path:
+  - Chrome 133
+  - HTML and DOM
+  - Popover nested inside invoker shouldn't re-invoke it
+  links:
+  - url: https://issues.chromium.org/issues/https://crbug.com/379241451
+    link_type: tracking_bug
+    title: 'Tracking bug #https://crbug.com/379241451'
+  - url: https://chromestatus.com/feature/4821788884992000
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 35
+  primary_tags: []
+  cross_cutting_concerns:
+  - privacy

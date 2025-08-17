@@ -1,0 +1,240 @@
+# Focus Areas Configuration for Chrome Release Notes Digest
+# Updated based on comprehensive analysis of Chrome 124-139
+# Simplified keyword matching with heading-first priority
+version: "2.0"
+last_updated: "2025-01-13"
+
+# Fixed focus areas with simplified keywords
+# Matching is case-insensitive
+# Priority: heading match > keyword match (except for Web API)
+focus_areas:
+  css:
+    name: "CSS"
+    description: "CSS styling, layout, and UI features"
+    priority: 1
+    keywords:
+      - "css"
+    heading_patterns:
+      - "CSS"
+      - "CSS and UI"
+      - "Styling"
+    
+  html-dom:
+    name: "HTML-DOM"
+    description: "HTML elements and DOM manipulation"
+    priority: 2
+    keywords:
+      - "html"
+      - "dom"
+    heading_patterns:
+      - "HTML and DOM"
+      - "HTML"
+      - "DOM"
+    
+  graphics-webgpu:
+    name: "Graphics and WebGPU"
+    description: "Graphics rendering and WebGPU features"
+    priority: 1
+    keywords:
+      - "graphics"
+      - "webgpu"
+      - "gpu"
+      - "rendering"
+    heading_patterns:
+      - "WebGPU"
+      - "Graphics"
+      - "Rendering and graphics"
+      - "Rendering and Graphics"
+    
+  on-device-ai:
+    name: "On-device AI"
+    description: "On-device AI and LLM features"
+    priority: 1
+    keywords:
+      - "on-device"
+      - "ai"
+      - "llm"
+      - "on-device llm"
+      - "language model"
+      - "built-in ai"
+    heading_patterns:
+      - "AI"
+      - "On-device AI"
+      - "Machine Learning"
+    
+  webapi:
+    name: "Web API"
+    description: "Web APIs and browser interfaces"
+    priority: 1
+    keywords:
+      - "api"
+      - "web api"
+      - "webapi"
+    heading_patterns:
+      - "Web APIs"
+      - "Web API"
+      - "Browser APIs"
+    # Note: Web API can have multiple tags since it contains APIs from many areas
+    allow_multiple_tags: true
+    
+  origin-trials:
+    name: "Origin trials"
+    description: "Experimental features in origin trials"
+    priority: 2
+    keywords:
+      - "origin trial"
+      - "trials"
+      - "experimental"
+    heading_patterns:
+      - "Origin trials"
+      - "New origin trials"
+      - "Origin trials in progress"
+    
+  deprecations:
+    name: "Deprecations"
+    description: "Deprecated and removed features"
+    priority: 2
+    keywords:
+      - "deprecation"
+      - "deprecated"
+      - "removal"
+      - "removed"
+    heading_patterns:
+      - "Deprecations and removals"
+      - "Deprecations"
+      - "Removals"
+    
+  security-privacy:
+    name: "Security-Privacy"
+    description: "Security and privacy features"
+    priority: 1
+    keywords:
+      - "security"
+      - "privacy"
+      - "secure"
+    heading_patterns:
+      - "Security"
+      - "Privacy"
+      - "Privacy and security"
+      - "Security and privacy"
+    
+  navigation-loading:
+    name: "Navigation-Loading"
+    description: "Navigation and resource loading features"
+    priority: 3
+    keywords:
+      - "navigation"
+      - "loading"
+      - "load"
+      - "navigate"
+    heading_patterns:
+      - "Loading"
+      - "Navigation"
+      - "Resource loading"
+    
+  multimedia:
+    name: "Multimedia"
+    description: "Media, audio, and video features"
+    priority: 2
+    keywords:
+      - "multimedia"
+      - "media"
+      - "audio"
+      - "video"
+    heading_patterns:
+      - "Media"
+      - "Multimedia"
+      - "Images and media"
+      - "Audio and video"
+      - "Video"
+      - "Audio"
+    
+  performance:
+    name: "Performance"
+    description: "Performance optimizations and improvements"
+    priority: 2
+    keywords:
+      - "performance"
+      - "optimization"
+      - "optimize"
+      - "speed"
+    heading_patterns:
+      - "Performance"
+      - "Optimizations"
+      - "Performance improvements"
+    
+  devices:
+    name: "Devices"
+    description: "Device APIs and sensor features"
+    priority: 3
+    keywords:
+      - "device"
+      - "devices"
+      - "sensor"
+      - "hardware"
+    heading_patterns:
+      - "Devices"
+      - "Device APIs"
+      - "Hardware"
+    
+  pwa-service-worker:
+    name: "PWA and service worker"
+    description: "Progressive Web Apps and service worker features"
+    priority: 3
+    keywords:
+      - "pwa"
+      - "service worker"
+      - "serviceworker"
+      - "progressive web app"
+    heading_patterns:
+      - "PWA"
+      - "Service Worker"
+      - "Progressive Web Apps"
+    
+  others:
+    name: "Others"
+    description: "Features not matching any specific category"
+    priority: 10
+    keywords: []
+    heading_patterns:
+      # This will catch everything else
+      - "JavaScript"
+      - "WebAssembly"
+      - "Browser changes"
+      - "DevTools"
+      - "Developer Tools"
+      - "Extensions"
+      - "Enterprise"
+      - "Payments"
+      - "Identity"
+      - "Accessibility"
+      - "Chrome OS"
+      - "Permissions"
+      - "Storage"
+      - "Network"
+      - "Canvas"
+      - "Shadow DOM"
+      - "Custom Elements"
+      - "Forms"
+      - "Input"
+    is_catchall: true
+
+# Metadata configuration for the matching system
+metadata:
+  matching_strategy:
+    case_sensitive: false  # Case-insensitive matching
+    heading_priority: true  # Prioritize heading matches over keywords
+    webapi_multiple_tags: true  # Allow Web API to have multiple area tags
+  
+  matching_rules:
+    # Match by heading first (except for Web API)
+    # If no heading match, then match by keywords
+    # Web API can match even if other headings matched
+    heading_first: true
+    keyword_fallback: true
+  
+  excluded_sections:
+    # Sections to exclude from feature extraction
+    - "Further reading"
+    - "Download Google Chrome"
+    - "Chrome release summary"

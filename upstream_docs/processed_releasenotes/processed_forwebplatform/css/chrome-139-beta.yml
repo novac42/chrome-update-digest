@@ -1,0 +1,121 @@
+version: '139'
+channel: beta
+area: css
+extraction_timestamp: '2025-08-13T15:58:00.265779'
+extraction_method: deterministic
+statistics:
+  total_features: 6
+  total_links: 1
+  primary_tags:
+    css: 6
+    ui: 1
+  cross_cutting: {}
+features:
+- title: Short-circuiting `var()` and `attr()`
+  content: "When the fallback is not taken, `var()` and `attr()` functions evaluate without looking for cycles in that fallback.\
+    \ The following CSS works, because `--green` and `--blue` exist.\n    \n    \n    --green: green;\n    --blue: blue;\n\
+    \    --a: var(--green, var(--b));\n    --b: var(--blue, var(--a));"
+  heading_path:
+  - Chrome 139 beta
+  - CSS
+  - Short-circuiting `var()` and `attr()`
+  links: []
+  line_number: 22
+  primary_tags:
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: ui
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: CSS `caret-animation` property
+  content: 'Chrome already supported animation of the `caret-color` property, but when animated the default blinking behavior
+    of the caret interfered with the animation. The CSS `caret-animation` property has two possible values: `auto` and `manual`,
+    where `auto` means browser default (blinking) and `manual` means the web developer is controlling the caret animation.
+    The property also lets users disable blinking using a user stylesheet.'
+  heading_path:
+  - Chrome 139 beta
+  - CSS
+  - CSS `caret-animation` property
+  links: []
+  line_number: 33
+  primary_tags:
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: Corner shaping
+  content: Enable styling corners, on top of the existing `border-radius`, by specifying the shape or curvature of the corner.
+    This lets you create shapes like squircles, notches, and scoops, and animate between them. Learn more in [this post from
+    Amit Sheen](https://frontendmasters.com/blog/understanding-css-corner-shape-and-the-power-of-the-superellipse/).
+  heading_path:
+  - Chrome 139 beta
+  - CSS
+  - Corner shaping
+  links:
+  - url: https://frontendmasters.com/blog/understanding-css-corner-shape-and-the-power-of-the-superellipse/
+    link_type: other
+    title: this post from Amit Sheen
+  line_number: 37
+  primary_tags:
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: Continue running transitions when switching to the initial transition value.
+  content: When the transition related properties change, they are only supposed to affect newly started transitions. This
+    means that if you change the transition properties, unless you also change the properties which have active transition
+    animations, those transition animations will continue with the previously specified duration, easing, etc. Blink incorrectly
+    canceled transitions when the transition property was set to "none", even though it doesn't cancel them if you only change
+    the transition-duration. With this feature, blink will be consistent with webkit and gecko, allowing active transitions
+    to continue running, unless or until their property value changes triggering a new transition update.
+  heading_path:
+  - Chrome 139 beta
+  - CSS
+  - Continue running transitions when switching to the initial transition value.
+  links: []
+  line_number: 41
+  primary_tags:
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: CSS Custom Functions
+  content: "Custom Functions are similar to custom properties, but instead of returning a single, fixed value, they return\
+    \ values based on other custom properties, parameters, and conditionals.\n    \n    \n    @function --negate(--value)\
+    \ {\n    result: calc(var(--value) * -1);\n    }\n    \n    div {\n    --gap: 1em;\n    margin-top: --negate(var(--gap));\n\
+    \    }"
+  heading_path:
+  - Chrome 139 beta
+  - CSS
+  - CSS Custom Functions
+  links: []
+  line_number: 45
+  primary_tags:
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: Support `width` and `height` as presentation attributes on nested `<svg>` elements
+  content: Supports applying `width` and `height` as presentation attributes on nested `<svg>` elements through both SVG markup
+    and CSS. This dual approach provides even greater flexibility, letting you manage and style SVG elements more efficiently
+    within complex designs.
+  heading_path:
+  - Chrome 139 beta
+  - CSS
+  - Support `width` and `height` as presentation attributes on nested `<svg>` elements
+  links: []
+  line_number: 60
+  primary_tags:
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []

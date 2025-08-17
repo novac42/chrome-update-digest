@@ -1,0 +1,822 @@
+version: '132'
+channel: stable
+extraction_timestamp: '2025-08-16T23:27:45.434145'
+extraction_method: deterministic
+statistics:
+  total_features: 25
+  total_links: 77
+  primary_tags:
+    css: 2
+    security: 1
+    multimedia: 2
+    webapi: 8
+    devices: 2
+    storage: 2
+    webgpu: 7
+    deprecation: 2
+  cross_cutting:
+    privacy: 21
+    security: 2
+    enterprise: 3
+    webgpu: 4
+    experimental: 2
+features:
+- title: Throw exception for popovers and dialogs in non-active documents
+  content: 'Previously calling `showPopover()` or `showModal()` on a popover or dialog that resides within an inactive document
+    would silently fail. No exception would be thrown, but as the document is inactive, no popover or dialog would be shown.
+    As of Chrome 132, these situations now throw `InvalidStateError`.
+
+
+    [Tracking bug #373684393](https://issues.chromium.org/issues/373684393) | [ChromeStatus.com entry](https://chromestatus.com/feature/6352111728852992)
+    | [Spec](https://github.com/whatwg/html/pull/10705)'
+  heading_path:
+  - Chrome 132
+  - HTML and DOM
+  - Throw exception for popovers and dialogs in non-active documents
+  links:
+  - url: https://issues.chromium.org/issues/373684393
+    link_type: other
+    title: 'Tracking bug #373684393'
+  - url: https://chromestatus.com/feature/6352111728852992
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/whatwg/html/pull/10705
+    link_type: github
+    title: Spec
+  line_number: 21
+  primary_tags: []
+  cross_cutting_concerns:
+  - privacy
+- title: Dialog toggle events
+  content: 'It''s useful to know when `<dialog>` elements open and close, and `popover` already has `ToggleEvent` which is
+    dispatched when a popover opens or closes. Previously, to detect when a `<dialog>` opens you had to register a mutation
+    observer to check for open, however, this is quite a lot of work where an event would be easier.
+
+
+    This change incorporates the same `ToggleEvent` that popovers dispatch, but for `<dialog>` elements: when `showModal`
+    or `show` is called, `<dialog>` dispatches a `ToggleEvent` with `newState=open`. When a `<dialog>` is closed (using the
+    form, button, or closewatcher) it should dispatch a `ToggleEvent` with `newState=closed`.
+
+
+    [Tracking bug #41494780](https://issues.chromium.org/issues/41494780) | [ChromeStatus.com entry](https://chromestatus.com/feature/5078613609938944)
+    | [Spec](https://github.com/whatwg/html/pull/10091)'
+  heading_path:
+  - Chrome 132
+  - HTML and DOM
+  - Dialog toggle events
+  links:
+  - url: https://issues.chromium.org/issues/41494780
+    link_type: other
+    title: 'Tracking bug #41494780'
+  - url: https://chromestatus.com/feature/5078613609938944
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/whatwg/html/pull/10091
+    link_type: github
+    title: Spec
+  line_number: 27
+  primary_tags: []
+  cross_cutting_concerns:
+  - privacy
+- title: Fix selection `isCollapsed` in Shadow DOM
+  content: 'Selection isCollapsed should return true if and only if the anchor and focus are the same. This should be true
+    whether the selection starts or ends inside a light or a shadow tree.
+
+
+    [Demo](https://codepen.io/Di-Zhang/pen/jOjdeoX) | [Tracking bug #40400558](https://issues.chromium.org/issues/40400558)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5175599392620544) | [Spec](https://w3c.github.io/selection-api/#dom-selection-iscollapsed)'
+  heading_path:
+  - Chrome 132
+  - HTML and DOM
+  - Fix selection `isCollapsed` in Shadow DOM
+  links:
+  - url: https://codepen.io/Di-Zhang/pen/jOjdeoX
+    link_type: other
+    title: Demo
+  - url: https://issues.chromium.org/issues/40400558
+    link_type: other
+    title: 'Tracking bug #40400558'
+  - url: https://chromestatus.com/feature/5175599392620544
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://w3c.github.io/selection-api/#dom-selection-iscollapsed
+    link_type: spec
+    title: Spec
+  line_number: 35
+  primary_tags: []
+  cross_cutting_concerns:
+  - privacy
+- title: 'CSS Anchor Positioning: allow `anchor-size()` in `inset` and `margin` properties'
+  content: 'Originally, `anchor-size()` was only allowed in sizing properties. The specification was changed to allow `anchor-size()`
+    in insets and margins as well.
+
+
+    [Tracking bug #346521300](https://issues.chromium.org/issues/346521300) | [ChromeStatus.com entry](https://chromestatus.com/feature/5203950077476864)
+    | [Spec](https://drafts.csswg.org/css-anchor-position-1/#anchor-size-fn)'
+  heading_path:
+  - Chrome 132
+  - CSS
+  - 'CSS Anchor Positioning: allow `anchor-size()` in `inset` and `margin` properties'
+  links:
+  - url: https://issues.chromium.org/issues/346521300
+    link_type: other
+    title: 'Tracking bug #346521300'
+  - url: https://chromestatus.com/feature/5203950077476864
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://drafts.csswg.org/css-anchor-position-1/#anchor-size-fn
+    link_type: other
+    title: Spec
+  line_number: 43
+  primary_tags:
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: CSS sideways writing modes
+  content: 'Support of `sideways-rl` and `sideways-lr` keywords for the `writing-mode` CSS property. `sideways-rl` and `sideways-lr`
+    are helpful to write non-CJK text vertically. They don''t have behaviors favorable for CJK languages unlike `vertical-rl`
+    and `vertical-lr`.
+
+
+    [MDN writing-mode](https://developer.mozilla.org/docs/Web/CSS/writing-mode) | [Tracking bug #40501131](https://issues.chromium.org/issues/40501131)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/6201053052928000) | [Spec](https://drafts.csswg.org/css-writing-modes/#propdef-writing-mode)'
+  heading_path:
+  - Chrome 132
+  - CSS
+  - CSS sideways writing modes
+  links:
+  - url: https://developer.mozilla.org/docs/Web/CSS/writing-mode
+    link_type: mdn
+    title: MDN writing-mode
+  - url: https://issues.chromium.org/issues/40501131
+    link_type: other
+    title: 'Tracking bug #40501131'
+  - url: https://chromestatus.com/feature/6201053052928000
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://drafts.csswg.org/css-writing-modes/#propdef-writing-mode
+    link_type: other
+    title: Spec
+  line_number: 49
+  primary_tags:
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: 'Fetch: `Request.bytes()` and `Response.bytes()`'
+  content: "Add a `bytes()` method to the `Request` and `Response` interfaces, which returns a promise that resolves with\
+    \ a Uint8Array. While `Request` and `Response` have an `arrayBuffer()` method, you can't read directly from a buffer.\
+    \ You have to create a view such as a `Uint8Array` to read it. The `bytes()` method improves the ergonomics of getting\
+    \ the body of Request and Response.\n\n**Baseline Newly Available:** This feature is now available in all three major\
+    \ browser engines. \n\n[Tracking bug #340206277](https://issues.chromium.org/issues/340206277) | [ChromeStatus.com entry](https://chromestatus.com/feature/5239268180754432)\
+    \ | [Spec](https://fetch.spec.whatwg.org/#dom-body-bytes)"
+  heading_path:
+  - Chrome 132
+  - Loading
+  - 'Fetch: `Request.bytes()` and `Response.bytes()`'
+  links:
+  - url: https://issues.chromium.org/issues/340206277
+    link_type: other
+    title: 'Tracking bug #340206277'
+  - url: https://chromestatus.com/feature/5239268180754432
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://fetch.spec.whatwg.org/#dom-body-bytes
+    link_type: spec
+    title: Spec
+  line_number: 57
+  primary_tags: []
+  cross_cutting_concerns:
+  - privacy
+- title: Ignore `Strict-Transport-Security` for localhost
+  content: '`Strict-Transport-Security` (STS) response headers can cause problems for localhost web servers because STS applies
+    host-wide, across all ports. This causes compatibility problems for web developers testing locally. It also affects end-users
+    who use software packages that commonly start localhost web servers for ephemeral reasons. For example, communication
+    of an auth token from a web login to a local software package. If one local listener sets `Strict-Transport-Security`
+    on a localhost response, it''s applied to all subsequent localhost requests regardless of port.
+
+
+    Chrome 132 resolves this problem by ignoring `Strict-Transport-Security` headers on responses from localhost URLs.
+
+
+    [Tracking bug #41251622](https://issues.chromium.org/issues/41251622) | [ChromeStatus.com entry](https://chromestatus.com/feature/5134293196865536)'
+  heading_path:
+  - Chrome 132
+  - Loading
+  - Ignore `Strict-Transport-Security` for localhost
+  links:
+  - url: https://issues.chromium.org/issues/41251622
+    link_type: other
+    title: 'Tracking bug #41251622'
+  - url: https://chromestatus.com/feature/5134293196865536
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 65
+  primary_tags:
+  - name: security
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - security
+  - privacy
+- title: Capture all screens
+  content: 'Capture all the screens connected to the device using `getAllScreensMedia()`.
+
+
+    Calling `getDisplayMedia()` multiple times requires multiple user gestures, burdens the user with choosing the next screen
+    each time, and does not guarantee to the app that all the screens were selected. The `getAllScreensMedia()` method improves
+    on all of these fronts.
+
+
+    **Note:** As this feature has privacy ramifications, it is only exposed behind the `MultiScreenCaptureAllowedForUrls`
+    enterprise policy, and users are warned before recording even starts, that recording _could_ start at some point. The
+    API will only work for origins that are specified in the `MultiScreenCaptureAllowedForUrls` allowlist. Any origin not
+    specified there, won''t have access to it.
+
+
+    This feature is shipping on Desktop only.
+
+
+    [Design Doc](https://docs.google.com/document/d/1XB8rQRnY5N8G2PeEcNJpVO0q22CutvwW8GGKCZ1z_vc/preview?tab=t.0) | [Tracking
+    bug #40216442](https://issues.chromium.org/issues/40216442) | [ChromeStatus.com entry](https://chromestatus.com/feature/6284029979525120)
+    | [Spec](https://screen-share.github.io/capture-all-screens)'
+  heading_path:
+  - Chrome 132
+  - Media
+  - Capture all screens
+  links:
+  - url: https://docs.google.com/document/d/1XB8rQRnY5N8G2PeEcNJpVO0q22CutvwW8GGKCZ1z_vc/preview?tab=t.0
+    link_type: other
+    title: Design Doc
+  - url: https://issues.chromium.org/issues/40216442
+    link_type: other
+    title: 'Tracking bug #40216442'
+  - url: https://chromestatus.com/feature/6284029979525120
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://screen-share.github.io/capture-all-screens
+    link_type: github
+    title: Spec
+  line_number: 75
+  primary_tags:
+  - name: multimedia
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+  - enterprise
+- title: Element Capture
+  content: 'Given a video `MediaStreamTrack` obtained through pre-existing means to initiate tab-capture, [Element Capture](/docs/web-platform/element-capture)
+    allows mutating the track to only capture a subtree of the DOM starting at a given Element.
+
+
+    The API bears some resemblance to the Region Capture API, but affords greater flexibility for applications, because occluding
+    and occluded content are both excluded from the capture.
+
+
+    [Demo](https://element-capture-demo.glitch.me/) | [Tracking bug #270230413](https://issues.chromium.org/issues/270230413)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5198989277790208) | [Spec](https://screen-share.github.io/element-capture)'
+  heading_path:
+  - Chrome 132
+  - Media
+  - Element Capture
+  links:
+  - url: https://element-capture-demo.glitch.me/
+    link_type: other
+    title: Demo
+  - url: https://issues.chromium.org/issues/270230413
+    link_type: other
+    title: 'Tracking bug #270230413'
+  - url: https://chromestatus.com/feature/5198989277790208
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://screen-share.github.io/element-capture
+    link_type: github
+    title: Spec
+  line_number: 87
+  primary_tags:
+  - name: multimedia
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: '`PushMessageData::bytes()`'
+  content: "The `PushMessageData` interface mimics the `Body` interface, which was amended earlier this year with a new `bytes()`\
+    \ method, following the principle that APIs should generally vend byte buffers as `Uint8Arrays`. Chrome 132 realigns with\
+    \ the `Body` interface by providing the `bytes()` accessor on the `PushMessageData` interface as well.\n\n**Baseline Newly\
+    \ Available:** This feature is now available in all three major browser engines. \n\n[MDN PushMessageData: bytes() method](https://developer.mozilla.org/en-US/docs/Web/API/PushMessageData/bytes)\
+    \ | [Tracking bug #373336950](https://issues.chromium.org/issues/373336950) | [ChromeStatus.com entry](https://chromestatus.com/feature/5117729756151808)\
+    \ | [Spec](https://www.w3.org/TR/push-api/#dom-pushmessagedata-bytes)"
+  heading_path:
+  - Chrome 132
+  - Web APIs
+  - '`PushMessageData::bytes()`'
+  links:
+  - url: https://developer.mozilla.org/en-US/docs/Web/API/PushMessageData/bytes
+    link_type: mdn
+    title: 'MDN PushMessageData: bytes() method'
+  - url: https://issues.chromium.org/issues/373336950
+    link_type: other
+    title: 'Tracking bug #373336950'
+  - url: https://chromestatus.com/feature/5117729756151808
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://www.w3.org/TR/push-api/#dom-pushmessagedata-bytes
+    link_type: spec
+    title: Spec
+  line_number: 97
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Keyboard focusable scroll containers
+  content: 'The rollout of this feature (from Chrome 130) was stopped due to an accessibility regression. This is fixed and
+    the feature continues to roll out with Chrome 132.
+
+
+    [Keyboard focusable scrollers](/blog/keyboard-focusable-scrollers) | [Tracking bug #40113891](https://issues.chromium.org/issues/40113891)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5231964663578624) | [Spec](https://drafts.csswg.org/css-overflow-3/#scroll-container)'
+  heading_path:
+  - Chrome 132
+  - Web APIs
+  - Keyboard focusable scroll containers
+  links:
+  - url: https://issues.chromium.org/issues/40113891
+    link_type: other
+    title: 'Tracking bug #40113891'
+  - url: https://chromestatus.com/feature/5231964663578624
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://drafts.csswg.org/css-overflow-3/#scroll-container
+    link_type: other
+    title: Spec
+  line_number: 105
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Device Posture API
+  content: 'This API helps developers to detect the current posture of a foldable device. The _device posture_ is the physical
+    position in which a device holds which may be derived from sensors in addition to the angle.
+
+
+    From enhancing the usability of a website by avoiding the area of a fold, to enabling innovative use cases for the web,
+    knowing the posture of a device can help developers tailor their content to different devices.
+
+
+    Content can be consumed and browsed even when the device is not flat, in which case the developer might want to provide
+    a different layout for it depending on the posture state in which the device is being used.
+
+
+    [Git Repo](https://github.com/foldable-devices) | [Tracking bug #40124716](https://issues.chromium.org/issues/40124716)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5185813744975872) | [Spec](https://www.w3.org/TR/device-posture)'
+  heading_path:
+  - Chrome 132
+  - Web APIs
+  - Device Posture API
+  links:
+  - url: https://github.com/foldable-devices
+    link_type: github
+    title: Git Repo
+  - url: https://issues.chromium.org/issues/40124716
+    link_type: other
+    title: 'Tracking bug #40124716'
+  - url: https://chromestatus.com/feature/5185813744975872
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://www.w3.org/TR/device-posture
+    link_type: spec
+    title: Spec
+  line_number: 111
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: devices
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Saved queries in `sharedStorage.selectURL`
+  content: '`sharedStorage.selectURL()` now allows queries to be saved and reused on a per-page basis, where the two per-page-load
+    budgets are charged the first time a saved query is run but not for subsequent runs of the saved query during the same
+    page-load. This is accomplished with a `savedQuery` parameter in the options for `selectURL()` that names the query.
+
+
+    [Tracking bug #367440966](https://issues.chromium.org/issues/367440966) | [ChromeStatus.com entry](https://chromestatus.com/feature/5098690386329600)
+    | [Spec](https://github.com/WICG/shared-storage/pull/188)'
+  heading_path:
+  - Chrome 132
+  - Web APIs
+  - Saved queries in `sharedStorage.selectURL`
+  links:
+  - url: https://issues.chromium.org/issues/367440966
+    link_type: other
+    title: 'Tracking bug #367440966'
+  - url: https://chromestatus.com/feature/5098690386329600
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/WICG/shared-storage/pull/188
+    link_type: github
+    title: Spec
+  line_number: 121
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: storage
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Private State Token API Permissions Policy default allowlist wildcard
+  content: 'Access to the Private State Token API is gated by Permissions Policy features. Chrome 132 updates the default
+    allowlist for both `private-state-token-issuance` and `private-state-token-redemption` features from `self` to `*` (wildcard).
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5205548434456576) | [Spec](https://github.com/WICG/trust-token-api/pull/306)'
+  heading_path:
+  - Chrome 132
+  - Web APIs
+  - Private State Token API Permissions Policy default allowlist wildcard
+  links:
+  - url: https://chromestatus.com/feature/5205548434456576
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/WICG/trust-token-api/pull/306
+    link_type: github
+    title: Spec
+  line_number: 127
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - enterprise
+- title: FedCM Mode API and Use Other Account API
+  content: "Two new extensions for FedCM:\n\n  * **Mode** : The `active` mode allows websites to call FedCM inside a button\
+    \ click (for example, clicking on a **Sign-in to IdP** button), which requires FedCM to guarantee it will always respond\
+    \ with a visible user interface. Calling the FedCM API in _active mode_ takes users to login to the Identity Provider\
+    \ (IdP) when users are logged-out. Also, because the active mode is called within an explicit user gesture, the UI is\
+    \ also more prominent (for example, centered and modal) compared to the UI from the passive mode (which doesn't require\
+    \ a user gesture requirement and can be called on page load).\n  * **Use Other Account** : With this extension, an IdP\
+    \ can allow users to sign into other accounts.\n\n[Demo](https://fedcm-button.glitch.me/) | [Tracking bug #370694829](https://issues.chromium.org/issues/370694829)\
+    \ | [ChromeStatus.com entry](https://chromestatus.com/feature/4689551782313984) | [Spec](https://github.com/w3c-fedid/FedCM/pull/660)"
+  heading_path:
+  - Chrome 132
+  - Web APIs
+  - FedCM Mode API and Use Other Account API
+  links:
+  - url: https://fedcm-button.glitch.me/
+    link_type: other
+    title: Demo
+  - url: https://issues.chromium.org/issues/370694829
+    link_type: other
+    title: 'Tracking bug #370694829'
+  - url: https://chromestatus.com/feature/4689551782313984
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/w3c-fedid/FedCM/pull/660
+    link_type: github
+    title: Spec
+  line_number: 133
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: File System Access for Android and WebView
+  content: 'This API enables developers to build powerful apps that interact with other (non-Web) apps on the user''s device
+    using the device''s file system. After a user grants a web app access, this API allows the app to read or save changes
+    directly to files and folders selected by the user. Beyond reading and writing files, this API provides the ability to
+    open a directory and enumerate its contents, as well as store file and directory handles in IndexedDB to later regain
+    access to the same content.
+
+
+    [File System access](/docs/capabilities/web-apis/file-system-access) shipped on Desktop in Chrome 86, with Chrome 132
+    it''s available on Android and WebView.
+
+
+    [The File System Access API](/docs/capabilities/web-apis/file-system-access) | [Tracking bug #40091667](https://issues.chromium.org/issues/40091667)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/6284708426022912) | [Spec](https://wicg.github.io/file-system-access)'
+  heading_path:
+  - Chrome 132
+  - Web APIs
+  - File System Access for Android and WebView
+  links:
+  - url: https://issues.chromium.org/issues/40091667
+    link_type: other
+    title: 'Tracking bug #40091667'
+  - url: https://chromestatus.com/feature/6284708426022912
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/file-system-access
+    link_type: spec
+    title: Spec
+  line_number: 142
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: WebAuthn Signal API
+  content: 'Allows WebAuthn relying parties to signal information about existing credentials back to credential storage providers,
+    so that incorrect or revoked credentials can be updated or removed from provider and system UI.
+
+
+    Learn more about [the Signal API for passkeys on Chrome desktop](/blog/passkeys-signal-api).
+
+
+    [Demo](https://signal-api-demo.glitch.me/) | [Tracking bug #361751877](https://issues.chromium.org/issues/361751877) |
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5101778518147072) | [Spec](https://pr-preview.s3.amazonaws.com/nsatragno/webauthn/pull/2093.html#sctn-signal-methods)'
+  heading_path:
+  - Chrome 132
+  - Web APIs
+  - WebAuthn Signal API
+  links:
+  - url: https://signal-api-demo.glitch.me/
+    link_type: other
+    title: Demo
+  - url: https://issues.chromium.org/issues/361751877
+    link_type: other
+    title: 'Tracking bug #361751877'
+  - url: https://chromestatus.com/feature/5101778518147072
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://pr-preview.s3.amazonaws.com/nsatragno/webauthn/pull/2093.html#sctn-signal-methods
+    link_type: other
+    title: Spec
+  line_number: 150
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: 'WebGPU: 32-bit float textures blending'
+  content: 'The `float32-blendable` GPU feature makes GPU textures with formats `r32float`, `rg32float`, and `rgba32float`
+    blendable.
+
+
+    [Tracking bug #369649348](https://issues.chromium.org/issues/369649348) | [ChromeStatus.com entry](https://chromestatus.com/feature/5173655901044736)
+    | [Spec](https://www.w3.org/TR/webgpu/#float32-blendable)'
+  heading_path:
+  - Chrome 132
+  - Rendering and graphics
+  - 'WebGPU: 32-bit float textures blending'
+  links:
+  - url: https://issues.chromium.org/issues/369649348
+    link_type: other
+    title: 'Tracking bug #369649348'
+  - url: https://chromestatus.com/feature/5173655901044736
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://www.w3.org/TR/webgpu/#float32-blendable
+    link_type: spec
+    title: Spec
+  line_number: 163
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+  - privacy
+- title: 'WebGPU: Expose `GPUAdapterInfo` from `GPUDevice`'
+  content: 'The GPUDevice `adapterInfo` attribute exposes the same `GPUAdapterInfo` as the `GPUAdapter` object.
+
+
+    [Tracking bug #376600838](https://issues.chromium.org/issues/376600838) | [ChromeStatus.com entry](https://chromestatus.com/feature/6221851301511168)
+    | [Spec](https://www.w3.org/TR/webgpu/#dom-gpudevice-adapterinfo)'
+  heading_path:
+  - Chrome 132
+  - Rendering and graphics
+  - 'WebGPU: Expose `GPUAdapterInfo` from `GPUDevice`'
+  links:
+  - url: https://issues.chromium.org/issues/376600838
+    link_type: other
+    title: 'Tracking bug #376600838'
+  - url: https://chromestatus.com/feature/6221851301511168
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://www.w3.org/TR/webgpu/#dom-gpudevice-adapterinfo
+    link_type: spec
+    title: Spec
+  line_number: 169
+  primary_tags:
+  - name: devices
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+  - privacy
+- title: 'WebGPU: Texture view usage'
+  content: 'Adds an optional field to WebGPU texture view creation to request a subset of the usage flags from the source
+    texture.
+
+
+    By default, texture view usage inherits from the source texture but there are view formats which can be incompatible with
+    the full set of inherited usages. Adding a usage field to texture view creation allows the user to request a subset of
+    the source texture''s usages that are valid with the view format and specific to their intended usage of the texture view.
+
+
+    WebGPU implementations can also optimize the creation of low level resources and improve performance when using views
+    with more specialized usage flags.
+
+
+    [Tracking bug #363903526](https://issues.chromium.org/issues/363903526) | [ChromeStatus.com entry](https://chromestatus.com/feature/5155252832305152)
+    | [Spec](https://github.com/gpuweb/gpuweb/commit/b39d86d356eb759d7564bc7c808ca62fce8bbf3e)'
+  heading_path:
+  - Chrome 132
+  - Rendering and graphics
+  - 'WebGPU: Texture view usage'
+  links:
+  - url: https://issues.chromium.org/issues/363903526
+    link_type: other
+    title: 'Tracking bug #363903526'
+  - url: https://chromestatus.com/feature/5155252832305152
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/gpuweb/gpuweb/commit/b39d86d356eb759d7564bc7c808ca62fce8bbf3e
+    link_type: github
+    title: Spec
+  line_number: 175
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+  - privacy
+- title: Detailed WebGPU Updates
+  content: "Source: https://developer.chrome.com/blog/new-in-webgpu-132\n\n  * [ Chrome for Developers ](https://developer.chrome.com/)\n\
+    \  * [ Blog ](https://developer.chrome.com/blog)"
+  heading_path:
+  - Chrome 132
+  - Rendering and graphics
+  - Detailed WebGPU Updates
+  links:
+  - url: https://developer.chrome.com/
+    link_type: other
+    title: Chrome for Developers
+  - url: https://developer.chrome.com/blog
+    link_type: other
+    title: Blog
+  line_number: 186
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Explicit compile hints with magic comments
+  content: 'This feature lets you attach information about which functions should be eagerly parsed and compiled in JavaScript
+    files. The information will be encoded as magic comments.
+
+
+    [Origin Trial](/origintrials#/view_trial/4317826142741463041) | [Explainer](https://explainers-by-googlers.github.io/explicit-javascript-compile-hints-file-based)
+    | [Tracking bug #42203853](https://issues.chromium.org/issues/42203853) | [ChromeStatus.com entry](https://chromestatus.com/feature/5100466238652416)'
+  heading_path:
+  - What's New in WebGPU (Chrome 132)
+  - Origin trials
+  - Explicit compile hints with magic comments
+  links:
+  - url: https://explainers-by-googlers.github.io/explicit-javascript-compile-hints-file-based
+    link_type: github
+    title: Explainer
+  - url: https://issues.chromium.org/issues/42203853
+    link_type: other
+    title: 'Tracking bug #42203853'
+  - url: https://chromestatus.com/feature/5100466238652416
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 352
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+  - experimental
+- title: '`Document-Isolation-Policy`'
+  content: '`Document-Isolation-Policy` allows a document to enable `crossOriginIsolation` for itself, without having to deploy
+    COOP or COEP, and regardless of the `crossOriginIsolation` status of the page. The policy is backed by process isolation.
+    Additionally, the document non-CORS cross-origin subresources will either be loaded without credentials or will need to
+    have a CORP header.
+
+
+    [Origin Trial](/origintrials#/view_trial/3670996646260375553) | [Tracking bug #333029146](https://issues.chromium.org/issues/333029146)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5141940204208128) | [Spec](https://wicg.github.io/document-isolation-policy)'
+  heading_path:
+  - What's New in WebGPU (Chrome 132)
+  - Origin trials
+  - '`Document-Isolation-Policy`'
+  links:
+  - url: https://issues.chromium.org/issues/333029146
+    link_type: other
+    title: 'Tracking bug #333029146'
+  - url: https://chromestatus.com/feature/5141940204208128
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/document-isolation-policy
+    link_type: spec
+    title: Spec
+  line_number: 358
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - security
+  - privacy
+  - experimental
+  - enterprise
+- title: '`navigator.storage` no longer an `EventTarget`'
+  content: '`navigator.storage` was made an `EventTarget` for the Storage Pressure Event, which never made it past the prototype
+    phase. This dead code is being removed and as a result, `navigator.storage` will no longer extend `EventTarget`.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5132158480678912) | [Spec](https://storage.spec.whatwg.org/)'
+  heading_path:
+  - What's New in WebGPU (Chrome 132)
+  - Deprecations and removals
+  - '`navigator.storage` no longer an `EventTarget`'
+  links:
+  - url: https://chromestatus.com/feature/5132158480678912
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://storage.spec.whatwg.org/
+    link_type: spec
+    title: Spec
+  line_number: 366
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: storage
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: Remove prefixed `HTMLVideoElement` fullscreen APIs
+  content: "The prefixed `HTMLVideoElement` fullscreen APIs have been deprecated from Chrome.\n\nThey were replaced by the\
+    \ `Element.requestFullscreen()` API, which first shipped unprefixed in Chrome 71, in 2018. As of 2024, most browsers have\
+    \ had support for the unprefixed APIs for a few years now.\n\nChrome 132 removes the following from `HTMLVideoElement`:\n\
+    \n  * The `webkitSupportsFullscreen` attribute.\n  * The `webkitDisplayingFullscreen` attribute.\n  * The `webkitEnterFullscreen()`\
+    \ method.\n  * The `webkitExitFullscreen()` method. Note the different capitalization of the \"S\" in FullScreen.\n  *\
+    \ The `webkitEnterFullScreen()` method.\n  * The `webkitExitFullScreen()` method.\n\nThese methods are now only aliases\
+    \ for the modern API. Their use has declined steadily over the years.\n\n[ChromeStatus.com entry](https://chromestatus.com/feature/5111638103687168)"
+  heading_path:
+  - What's New in WebGPU (Chrome 132)
+  - Deprecations and removals
+  - Remove prefixed `HTMLVideoElement` fullscreen APIs
+  links:
+  - url: https://chromestatus.com/feature/5111638103687168
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 372
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []

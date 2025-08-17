@@ -1,0 +1,210 @@
+version: '131'
+channel: stable
+area: webapi
+extraction_timestamp: '2025-08-13T15:22:58.317494'
+extraction_method: deterministic
+statistics:
+  total_features: 7
+  total_links: 15
+  primary_tags:
+    webapi: 7
+    storage: 1
+  cross_cutting:
+    privacy: 4
+    security: 2
+    enterprise: 1
+features:
+- title: Direct Sockets API
+  content: 'Allows Isolated Web Apps to establish direct transmission control protocol (TCP) and user datagram protocol (UDP)
+    communications with network devices and systems as well as listen to and accept incoming connections.
+
+
+    [Tracking bug #40604287](https://issues.chromium.org/issues/40604287) | [ChromeStatus.com entry](https://chromestatus.com/feature/6398297361088512)
+    | [Spec](https://wicg.github.io/direct-sockets)'
+  heading_path:
+  - Chrome 131
+  - Web APIs
+  - Direct Sockets API
+  links:
+  - url: https://issues.chromium.org/issues/40604287
+    link_type: other
+    title: 'Tracking bug #40604287'
+  - url: https://chromestatus.com/feature/6398297361088512
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/direct-sockets
+    link_type: spec
+    title: Spec
+  line_number: 85
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Exempt Speculation-Rules Header from CSP restrictions
+  content: 'updates the integration between speculation rules and CSP so that CSP only applies to `<script type=speculationrules>`,
+    and not to the `Speculation-Rules` header.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5123809745829888) | [Spec](https://wicg.github.io/nav-speculation/speculation-rules.html#security-xss)'
+  heading_path:
+  - Chrome 131
+  - Web APIs
+  - Exempt Speculation-Rules Header from CSP restrictions
+  links:
+  - url: https://chromestatus.com/feature/5123809745829888
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/nav-speculation/speculation-rules.html#security-xss
+    link_type: spec
+    title: Spec
+  line_number: 91
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - security
+- title: FedCM as a trust signal for the Storage Access API
+  content: 'Reconciles the FedCM and Storage Access APIs by making a prior FedCM grant a valid reason to automatically approve
+    a storage access request.
+
+
+    [Tracking bug #330574529](https://issues.chromium.org/issues/330574529) | [ChromeStatus.com entry](https://chromestatus.com/feature/5116478702747648)'
+  heading_path:
+  - Chrome 131
+  - Web APIs
+  - FedCM as a trust signal for the Storage Access API
+  links:
+  - url: https://issues.chromium.org/issues/330574529
+    link_type: other
+    title: 'Tracking bug #330574529'
+  - url: https://chromestatus.com/feature/5116478702747648
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 97
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: storage
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: noopener-allow-popups COOP value
+  content: 'Some origins can contain different applications with different levels of security requirements. In those cases,
+    it can be beneficial to prevent scripts running in one application from being able to open and script pages of another
+    same-origin application.
+
+
+    In such cases, it can be beneficial for a document to ensure its opener cannot script it, even if the opener document
+    is a same-origin one.
+
+
+    The `noopener-allow-popups` Cross-Origin-Opener-Policy value lets documents define that.
+
+
+    [Tracking bug #344963946](https://issues.chromium.org/issues/344963946) | [ChromeStatus.com entry](https://chromestatus.com/feature/5163293877731328)'
+  heading_path:
+  - Chrome 131
+  - Web APIs
+  - noopener-allow-popups COOP value
+  links:
+  - url: https://issues.chromium.org/issues/344963946
+    link_type: other
+    title: 'Tracking bug #344963946'
+  - url: https://chromestatus.com/feature/5163293877731328
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 103
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - security
+  - privacy
+  - enterprise
+- title: WebHID on dedicated workers
+  content: 'Enables WebHID inside dedicated worker contexts. This lets you perform heavy I/O and processing of data from a
+    HID device on a separate thread, helping to reduce the performance impact on the main thread.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5077348995825664)'
+  heading_path:
+  - Chrome 131
+  - Web APIs
+  - WebHID on dedicated workers
+  links:
+  - url: https://chromestatus.com/feature/5077348995825664
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 113
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: WebRTC `RTCRtpEncodingParameters.scaleResolutionDownTo`
+  content: 'An API that configures WebRTC encoders to scale input frames if they are greater than the specified `maxWidth`
+    and `maxHeight`. This API is similar to `scaleResolutionDownBy` except that resolution constraints are expressed in absolute
+    terms (for example, 640x360) as opposed to relative terms (for example, scale down by 2), avoiding race conditions related
+    to changing input frame size on the fly.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5206373705711616) | [Spec](https://w3c.github.io/webrtc-extensions/#dom-rtcrtpencodingparameters-scaleresolutiondownto)'
+  heading_path:
+  - Chrome 131
+  - Web APIs
+  - WebRTC `RTCRtpEncodingParameters.scaleResolutionDownTo`
+  links:
+  - url: https://chromestatus.com/feature/5206373705711616
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://w3c.github.io/webrtc-extensions/#dom-rtcrtpencodingparameters-scaleresolutiondownto
+    link_type: spec
+    title: Spec
+  line_number: 119
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: WebXr hand input module Level 1
+  content: 'Exposes hand joint data on `XrInputSources` for use during a WebXr session. This allows developers to have more
+    fine grained interactions during WebXr sessions.
+
+
+    [Tracking bug #359418633](https://issues.chromium.org/issues/359418633) | [ChromeStatus.com entry](https://chromestatus.com/feature/6290425179275264)
+    | [Spec](https://immersive-web.github.io/webxr-hand-input)'
+  heading_path:
+  - Chrome 131
+  - Web APIs
+  - WebXr hand input module Level 1
+  links:
+  - url: https://issues.chromium.org/issues/359418633
+    link_type: other
+    title: 'Tracking bug #359418633'
+  - url: https://chromestatus.com/feature/6290425179275264
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://immersive-web.github.io/webxr-hand-input
+    link_type: github
+    title: Spec
+  line_number: 125
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy

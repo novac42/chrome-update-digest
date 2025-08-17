@@ -1,0 +1,168 @@
+version: '139'
+channel: stable
+area: webgpu
+extraction_timestamp: '2025-08-13T15:35:35.380830'
+extraction_method: deterministic
+statistics:
+  total_features: 5
+  total_links: 10
+  primary_tags:
+    webgpu: 3
+  cross_cutting:
+    webgpu: 5
+    privacy: 1
+    experimental: 1
+features:
+- title: 'WebGPU: 3D texture support for BC and ASTC compressed formats'
+  content: 'The `texture-compression-bc-sliced-3d` and `texture-compression-astc-sliced-3d` WebGPU features add respectively
+    3D texture support for BC and ASTC compressed formats.
+
+
+    [Tracking bug #342840940](https://issues.chromium.org/issues/342840940) | [ChromeStatus.com entry](https://chromestatus.com/feature/5080855386783744)
+    | [Spec](https://gpuweb.github.io/gpuweb/#texture-compression-bc-sliced-3d)'
+  heading_path:
+  - Chrome 139
+  - Graphics
+  - 'WebGPU: 3D texture support for BC and ASTC compressed formats'
+  links:
+  - url: https://issues.chromium.org/issues/342840940
+    link_type: other
+    title: 'Tracking bug #342840940'
+  - url: https://chromestatus.com/feature/5080855386783744
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://gpuweb.github.io/gpuweb/#texture-compression-bc-sliced-3d
+    link_type: github
+    title: Spec
+  line_number: 107
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+  - privacy
+- title: Additional WebGPU Updates
+  content: '*The following WebGPU features and updates are included in this release:*'
+  heading_path:
+  - Chrome 139
+  - Graphics
+  - Additional WebGPU Updates
+  links: []
+  line_number: 114
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: 3D texture support for BC and ASTC compressed formats
+  content: "The `\"texture-compression-bc-sliced-3d\"` and `\"texture-compression-astc-sliced-3d\"` WebGPU features add support\
+    \ for 3D textures using Block Compression (BC) and Adaptive Scalable Texture Compression (ASTC) formats. This lets you\
+    \ take advantage of the efficient compression capabilities of BC and ASTC formats for volumetric texture data, offering\
+    \ significant reductions in memory footprint and bandwidth requirements without substantial loss in visual quality. This\
+    \ is particularly valuable in fields such as scientific visualization, medical imaging, and advanced rendering techniques.\n\
+    \nThe following code snippet checks whether the adapter supports 3D textures with BC and ASTC compressed formats and requests\
+    \ a device with these features if they are available.\n    \n    \n    const adapter = await navigator.gpu.requestAdapter();\n\
+    \    \n    const requiredFeatures = [];\n    if (adapter?.features.has(\"texture-compression-bc-sliced-3d\")) {\n    \
+    \  requiredFeatures.push(\n        \"texture-compression-bc\",\n        \"texture-compression-bc-sliced-3d\",\n      );\n\
+    \    }\n    if (adapter?.features.has(\"texture-compression-astc-sliced-3d\")) {\n      requiredFeatures.push(\n     \
+    \   \"texture-compression-astc\",\n        \"texture-compression-astc-sliced-3d\",\n      );\n    }\n    const device\
+    \ = await adapter?.requestDevice({ requiredFeatures });\n    \n    // Later on...\n    if (device.features.has(\"texture-compression-astc-sliced-3d\"\
+    )) {\n      // Create a 3D texture using ASTC compression\n    } else if (device.features.has(\"texture-compression-bc-sliced-3d\"\
+    )) {\n      // Create a 3D texture using BC compression\n    } else {\n      // Fallback: Create an uncompressed 3D texture\n\
+    \    }\n    \n\nExplore 3D brain scans by checking out the [Volume Rendering - Texture 3D WebGPU sample](https://webgpu.github.io/webgpu-samples/?sample=volumeRenderingTexture3D)\
+    \ and see the [chromestatus entry](https://chromestatus.com/feature/5080855386783744).\n\n![3D brain scans rendered using\
+    \ WebGPU.](/static/blog/new-in-webgpu-139/image/brain-scans.png) A brain scan image from a 3D texture with ASTC compressed\
+    \ format."
+  heading_path:
+  - Chrome 139
+  - Graphics
+  - 3D texture support for BC and ASTC compressed formats
+  links:
+  - url: https://webgpu.github.io/webgpu-samples/?sample=volumeRenderingTexture3D
+    link_type: github
+    title: Volume Rendering - Texture 3D WebGPU sample
+  - url: https://chromestatus.com/feature/5080855386783744
+    link_type: chromestatus
+    title: chromestatus entry
+  line_number: 118
+  primary_tags: []
+  cross_cutting_concerns:
+  - webgpu
+- title: New "core-features-and-limits" feature
+  content: 'A new `"core-features-and-limits"` feature is being introduced for the upcoming WebGPU compatibility mode. This
+    feature indicates that the adapter or device supports core features and limits of the WebGPU spec. "core" WebGPU is the
+    only version available at the moment, so all WebGPU implementations must include `"core-features-and-limits"` in their
+    supported features.
+
+
+    In the future, when WebGPU compatibility mode ships, an adapter or a device may not have this feature to signify it is
+    a compatibility mode adapter or device and not a core one. When enabled on a device, this lifts all compatibility mode
+    restrictions (features and limits).
+
+
+    For a detailed explanation and usage in WebGPU compatibility mode, refer to the [explainer](https://gist.github.com/greggman/0dea9995e33393c546a4c2bd2a12e50e)
+    and the following section. See [issue 418025721](https://issues.chromium.org/issues/418025721).'
+  heading_path:
+  - Chrome 139
+  - Graphics
+  - New "core-features-and-limits" feature
+  links:
+  - url: https://gist.github.com/greggman/0dea9995e33393c546a4c2bd2a12e50e
+    link_type: github
+    title: explainer
+  - url: https://issues.chromium.org/issues/418025721
+    link_type: other
+    title: issue 418025721
+  line_number: 156
+  primary_tags: []
+  cross_cutting_concerns:
+  - webgpu
+- title: Origin trial for WebGPU compatibility mode
+  content: "WebGPU is a powerful API designed for modern graphics, aligning with technologies like Vulkan, Metal, and Direct3D\
+    \ 12. However, a significant number of devices still lack support for these newer APIs. For example, on Windows, 31% of\
+    \ Chrome users don't have Direct3D 11.1 or higher. On Android, 15% of Android users don't have Vulkan 1.1, including 10%\
+    \ who don't have Vulkan at all.\n\nThis creates a challenge for developers who want to maximize their application's reach.\
+    \ They're often forced to develop multiple implementations (for example, WebGPU and WebGL), accept a more limited audience\
+    \ with core WebGPU, or stick to WebGL, missing out on WebGPU's advanced features like GPU compute.\n\n![Visual representation\
+    \ of WebGPU compatibility mode.](/static/blog/new-in-webgpu-139/image/webgpu-compatibility-mode.png) WebGPU compatibility\
+    \ mode expanded reach.\n\nWebGPU compatibility mode offers a solution by providing an opt-in, slightly restricted version\
+    \ of the WebGPU API. This mode is designed to run older graphics APIs like OpenGL ES 3.1 and Direct3D11, significantly\
+    \ expanding your application's reach to devices that don't support modern, explicit graphics APIs required by core WebGPU.\n\
+    \nBecause compatibility mode is a subset of WebGPU, applications built with it are also valid WebGPU \"core\" applications.\
+    \ This means they will seamlessly run even on browsers that don't specifically support compatibility mode.\n\nFor many\
+    \ basic applications, enabling compatibility mode is as straightforward as passing `featureLevel: \"compatibility\"` when\
+    \ you call [requestAdapter()](https://developer.mozilla.org/docs/Web/API/GPU/requestAdapter). More complex applications\
+    \ might require [minor adjustments](https://webgpufundamentals.org/webgpu/lessons/webgpu-compatibility-mode.html) to fit\
+    \ within the mode's restrictions. The [Generate Mipmap WebGPU sample](https://webgpu.github.io/webgpu-samples/?sample=generateMipmap)\
+    \ is a good example.\n    \n    \n    // Request a GPUAdapter in compatibility mode\n    const adapter = await navigator.gpu.requestAdapter({\n\
+    \      featureLevel: \"compatibility\",\n    });\n    \n    const hasCore = adapter?.features.has(\"core-features-and-limits\"\
+    );\n    const device = await adapter?.requestDevice({\n      requiredFeatures: (hasCore ? [\"core-features-and-limits\"\
+    ] : []),\n    });\n    \n    if (device?.features.has(\"core-features-and-limits\")) {\n      // Compatibility mode restrictions\
+    \ will apply\n    }"
+  heading_path:
+  - Chrome 139
+  - Graphics
+  - Origin trial for WebGPU compatibility mode
+  links:
+  - url: https://developer.mozilla.org/docs/Web/API/GPU/requestAdapter
+    link_type: mdn
+    title: requestAdapter()
+  - url: https://webgpufundamentals.org/webgpu/lessons/webgpu-compatibility-mode.html
+    link_type: other
+    title: minor adjustments
+  - url: https://webgpu.github.io/webgpu-samples/?sample=generateMipmap
+    link_type: github
+    title: Generate Mipmap WebGPU sample
+  line_number: 164
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+  - experimental

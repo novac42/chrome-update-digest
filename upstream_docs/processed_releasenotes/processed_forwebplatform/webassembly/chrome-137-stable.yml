@@ -1,0 +1,60 @@
+version: '137'
+channel: stable
+area: webassembly
+extraction_timestamp: '2025-08-13T15:22:56.294448'
+extraction_method: deterministic
+statistics:
+  total_features: 2
+  total_links: 4
+  primary_tags:
+    javascript: 1
+  cross_cutting: {}
+features:
+- title: JavaScript promise integration
+  content: 'JavaScript Promise Integration (JSPI) is an API that allows WebAssembly applications to integrate with JavaScript
+    Promises. It allows a WebAssembly program to act as the generator of a Promise, and it allows the WebAssembly program
+    to interact with Promise-bearing APIs. In particular, when an application uses JSPI to call a Promise-bearing (JavaScript)
+    API, the WebAssembly code is suspended; and the original caller to the WebAssembly program is given a Promise that will
+    be fulfilled when the WebAssembly program finally completes.
+
+
+    **References:** [ChromeStatus.com entry](https://chromestatus.com/feature/5059306691878912) | [Spec](https://github.com/WebAssembly/js-promise-integration)'
+  heading_path:
+  - Chrome 137 Release Notes
+  - WebAssembly
+  - JavaScript promise integration
+  links:
+  - url: https://chromestatus.com/feature/5059306691878912
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/WebAssembly/js-promise-integration
+    link_type: github
+    title: Spec
+  line_number: 158
+  primary_tags:
+  - name: javascript
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: Branch Hints
+  content: 'Improves the performance of compiled WebAssembly code by informing the engine that a particular branch instruction
+    is very likely to take a specific path. This allows the engine to make better decisions for code layout (improving instruction
+    cache hits) and register allocation.
+
+
+    **References:** [ChromeStatus.com entry](https://chromestatus.com/feature/5089072889290752) | [Spec](https://github.com/WebAssembly/branch-hinting)'
+  heading_path:
+  - Chrome 137 Release Notes
+  - WebAssembly
+  - Branch Hints
+  links:
+  - url: https://chromestatus.com/feature/5089072889290752
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/WebAssembly/branch-hinting
+    link_type: github
+    title: Spec
+  line_number: 164
+  primary_tags: []
+  cross_cutting_concerns: []

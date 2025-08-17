@@ -1,0 +1,68 @@
+version: '138'
+channel: stable
+area: other
+extraction_timestamp: '2025-08-13T15:22:56.165575'
+extraction_method: deterministic
+statistics:
+  total_features: 1
+  total_links: 6
+  primary_tags:
+    multimedia: 1
+  cross_cutting:
+    privacy: 1
+features:
+- title: Deprecate asynchronous range removal for Media Source Extensions
+  content: 'The Media Source standard long ago changed to disallow ambiguously defined behavior involving asynchronous range
+    removals: `SourceBuffer.abort()` no longer aborts `SourceBuffer.remove()` operations. Setting `MediaSource.duration` can
+    no longer truncate currently buffered media. Exceptions will be thrown in both of these cases now. Safari and Firefox
+    have long shipped this behavior, Chromium is the last browser remaining with the old behavior. Use counters show that
+    around 0.001%-0.005% of page loads hit the deprecated behavior. If a site hits this issue, playback may now break. Usage
+    of `abort()` cancelling removals is increasing, so it''s prudent to resolve this deprecation before more incompatible
+    usage appears.
+
+
+    **References:** [Tracking bug #40474569](https://bugs.chromium.org/p/chromium/issues/detail?id=40474569) | [ChromeStatus.com
+    entry](https://chromestatus.com/feature/5073717525970944) | [Spec](https://w3c.github.io/media-source/#dom-sourcebuffer-abort)
+
+
+    ---
+
+
+    *Except as otherwise noted, the content of this page is licensed under the [Creative Commons Attribution 4.0 License](https://creativecommons.org/licenses/by/4.0/),
+    and code samples are licensed under the [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0). For details,
+    see the [Google Developers Site Policies](https://developers.google.com/site-policies). Java is a registered trademark
+    of Oracle and/or its affiliates.*
+
+
+    *Last updated 2025-06-24 UTC.*'
+  heading_path:
+  - Chrome 138 Release Notes
+  - Dawn Updates
+  - Deprecate asynchronous range removal for Media Source Extensions
+  links:
+  - url: https://bugs.chromium.org/p/chromium/issues/detail?id=40474569
+    link_type: tracking_bug
+    title: 'Tracking bug #40474569'
+  - url: https://chromestatus.com/feature/5073717525970944
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://w3c.github.io/media-source/#dom-sourcebuffer-abort
+    link_type: spec
+    title: Spec
+  - url: https://creativecommons.org/licenses/by/4.0/
+    link_type: other
+    title: Creative Commons Attribution 4.0 License
+  - url: https://www.apache.org/licenses/LICENSE-2.0
+    link_type: other
+    title: Apache 2.0 License
+  - url: https://developers.google.com/site-policies
+    link_type: other
+    title: Google Developers Site Policies
+  line_number: 197
+  primary_tags:
+  - name: multimedia
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy

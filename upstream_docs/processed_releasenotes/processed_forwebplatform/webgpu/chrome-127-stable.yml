@@ -1,0 +1,553 @@
+version: '127'
+channel: stable
+area: webgpu
+extraction_timestamp: '2025-08-13T15:22:59.392323'
+extraction_method: deterministic
+statistics:
+  total_features: 14
+  total_links: 44
+  primary_tags:
+    webgpu: 14
+    multimedia: 2
+    javascript: 2
+    privacy: 1
+    accessibility: 1
+    serviceworker: 1
+    deprecation: 4
+    network: 1
+    css: 1
+  cross_cutting:
+    privacy: 12
+    security: 3
+    enterprise: 3
+    experimental: 2
+features:
+- title: Video chapter in `MediaMetadata`
+  content: 'You can now [add individual chapter information](https://web.dev/articles/media-session#:%7E:text=add%20also%20individual-,chapter%20information,-%2C%20such%20as%20the),
+    such as the title of the section, its timestamp, and a screenshot image to media metadata. This allows users to navigate
+    through the content of the media.
+
+
+    This will currently only show up in ChromeOS media notifications, and not in Chrome Browser global media controls.
+
+
+    [Demo](https://googlechrome.github.io/samples/media-session/video.html) | [ChromeStatus.com entry](https://chromestatus.com/feature/6682585059295232)
+    | [Spec](https://www.w3.org/TR/mediasession/#the-chapterinformation-interface/)'
+  heading_path:
+  - What's New in WebGPU (Chrome 127)
+  - Media
+  - Video chapter in `MediaMetadata`
+  links:
+  - url: https://web.dev/articles/media-session#:%7E:text=add%20also%20individual-,chapter%20information,-%2C%20such%20as%20the
+    link_type: other
+    title: add individual chapter information
+  - url: https://googlechrome.github.io/samples/media-session/video.html
+    link_type: github
+    title: Demo
+  - url: https://chromestatus.com/feature/6682585059295232
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://www.w3.org/TR/mediasession/#the-chapterinformation-interface/
+    link_type: spec
+    title: Spec
+  line_number: 173
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: multimedia
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: 'Document picture-in-picture: propagate user activation'
+  content: 'This makes user activations in a document picture-in-picture window usable inside its opener window and the other
+    way around. This makes it more ergonomic to use user-activation-gated APIs, since often event handlers in the document
+    picture-in-picture window are actually run in the opener''s context, so the opener''s context needs access to the user
+    gesture.
+
+
+    [Demo](https://steimelchrome.github.io/document-pip/user-gesture.html) | [Tracking bug #331246719](https://issues.chromium.org/issues/331246719)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5185710702460928)'
+  heading_path:
+  - What's New in WebGPU (Chrome 127)
+  - Media
+  - 'Document picture-in-picture: propagate user activation'
+  links:
+  - url: https://steimelchrome.github.io/document-pip/user-gesture.html
+    link_type: github
+    title: Demo
+  - url: https://issues.chromium.org/issues/331246719
+    link_type: other
+    title: 'Tracking bug #331246719'
+  - url: https://chromestatus.com/feature/5185710702460928
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 181
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: multimedia
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Importmap integrity
+  content: 'Imported ES modules can''t currently have their integrity checked, and hence cannot run in environments that require
+    Subresource Integrity or with `require-sri-for` CSP directives.
+
+
+    This feature adds an `integrity` section to import maps, enabling developers to map ES module URLs to their integrity
+    metadata, and ensure they only load when they match their expected hashes.
+
+
+    [Tracking bug #334251999](https://issues.chromium.org/issues/334251999) | [ChromeStatus.com entry](https://chromestatus.com/feature/5157245026566144)'
+  heading_path:
+  - What's New in WebGPU (Chrome 127)
+  - JavaScript
+  - Importmap integrity
+  links:
+  - url: https://issues.chromium.org/issues/334251999
+    link_type: other
+    title: 'Tracking bug #334251999'
+  - url: https://chromestatus.com/feature/5157245026566144
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 189
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: javascript
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - security
+  - privacy
+- title: Snap Events
+  content: 'Snap Events allow developers to reliably listen for when the _snap target_ of a scroller changes and perform style
+    adjustments as desired.
+
+
+    CSS scroll snap points are often used as a mechanism to create scroll interactive selection components, where selection
+    is determined with JavaScript intersection observers and a scroll end guesstimate. By creating built-in events, the invisible
+    state will become actionable, at the right time, and always correct.
+
+
+    This feature adds two JavaScript events: `scrollsnapchange` and `scrollsnapchanging`. The `scrollsnapchange` event lets
+    developers know, at the completion of a scroll operation (including snapping), that the element to which a scroller is
+    snapped has changed. The `scrollsnapchanging` event gives developers a hint, during a scroll operation, that the user
+    agent intends to snap the scroll container to a new snap target based on the scrolling input so far.'
+  heading_path:
+  - What's New in WebGPU (Chrome 127)
+  - JavaScript
+  - Snap Events
+  links: []
+  line_number: 197
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: javascript
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: Aggregate Debug Reporting in Attribution Reporting API
+  content: 'This change is so the API can continue to provide some form of debugging information after third-party cookie
+    deprecation. This is a new report type that is not tied to third-party cookies and provides similar debug information.
+    This feature allows API callers to request and receive debug signals in aggregate form. This feature is very similar to
+    current Aggregate Reports supported by the API, except these new reports will be specifically for debug signals.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5086433709916160) | [Spec](https://wicg.github.io/attribution-reporting-api/#aggregatable-debug-reporting-config)'
+  heading_path:
+  - What's New in WebGPU (Chrome 127)
+  - Privacy
+  - Aggregate Debug Reporting in Attribution Reporting API
+  links:
+  - url: https://chromestatus.com/feature/5086433709916160
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/attribution-reporting-api/#aggregatable-debug-reporting-config
+    link_type: spec
+    title: Spec
+  line_number: 207
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: privacy
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Keyboard focusable scroll containers
+  content: "This feature introduces the following changes:\n\nScrollers are click-focusable and programmatically-focusable\
+    \ by default. Scrollers without focusable children are keyboard-focusable by default.\n\nThis is an important improvement\
+    \ to help make scrollers and contents within scrollers more accessible to all users. You can read more about its benefits\
+    \ in the post [Keyboard focusable scrollers](/blog/keyboard-focusable-scrollers). Keyboard focusable scrollers will be\
+    \ enabled by default starting in Chrome 127. If websites need time to adjust to this new feature, there are a few options:\n\
+    \n  * The [Keyboard focusable scrollers opt out deprecation trial](/origintrials#/view_trial/2455024746870341633\\)) can\
+    \ be used to opt back out of the feature for a limited time on a given site. This can be used through Chrome 132, ending\
+    \ March 18, 2025.\n  * The [KeyboardFocusableScrollersEnabled enterprise policy](https://chromeenterprise.google/policies/#KeyboardFocusableScrollersEnabled)\
+    \ will be available in Chrome 127, and can be used for the same purpose.\n\n[Keyboard focusable scrollers](/blog/keyboard-focusable-scrollers)\
+    \ | [Tracking bug #1040141](https://issues.chromium.org/issues/1040141) | [ChromeStatus.com entry](https://chromestatus.com/feature/5231964663578624)\
+    \ | [Spec](https://drafts.csswg.org/css-overflow-3/#scroll-container)"
+  heading_path:
+  - What's New in WebGPU (Chrome 127)
+  - Accessibility
+  - Keyboard focusable scroll containers
+  links:
+  - url: https://chromeenterprise.google/policies/#KeyboardFocusableScrollersEnabled
+    link_type: other
+    title: KeyboardFocusableScrollersEnabled enterprise policy
+  - url: https://issues.chromium.org/issues/1040141
+    link_type: other
+    title: 'Tracking bug #1040141'
+  - url: https://chromestatus.com/feature/5231964663578624
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://drafts.csswg.org/css-overflow-3/#scroll-container
+    link_type: other
+    title: Spec
+  line_number: 215
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: accessibility
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+  - enterprise
+- title: '`No-Vary-Search` support for prerender'
+  content: 'Extends `No-Vary-Search` support to prerender on top of [the previous prefetch support](/docs/web-platform/prerender-pages#no-vary-search).
+    This enables a prerender entry to match even if certain URL query parameters change. The No-Vary-Search HTTP response
+    header declares that some or all parts of a URL''s query can be ignored for cache matching purposes.
+
+
+    [Tracking bug #41494389](https://issues.chromium.org/issues/41494389) | [ChromeStatus.com entry](https://chromestatus.com/feature/5099218903760896)
+    | [Spec](https://wicg.github.io/nav-speculation/no-vary-search.html)'
+  heading_path:
+  - What's New in WebGPU (Chrome 127)
+  - Loading
+  - '`No-Vary-Search` support for prerender'
+  links:
+  - url: https://issues.chromium.org/issues/41494389
+    link_type: other
+    title: 'Tracking bug #41494389'
+  - url: https://chromestatus.com/feature/5099218903760896
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/nav-speculation/no-vary-search.html
+    link_type: spec
+    title: Spec
+  line_number: 230
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Compression dictionary transport with Shared Brotli and Shared Zstandard
+  content: 'This feature adds support for using designated previous responses, as an external dictionary for HTTP responses
+    that compress Brotli or Zstandard.
+
+
+    [Origin Trial](https://developer.chrome.com/origintrials/#/view_trial/3693514644397228033) | [Demo](https://compression-dictionary-transport-shop-demo.glitch.me)
+    | [Tracking bug #1413922](https://issues.chromium.org/issues/1413922) | [ChromeStatus.com entry](https://chromestatus.com/feature/5124977788977152)
+    | [Spec](https://github.com/WICG/compression-dictionary-transport)'
+  heading_path:
+  - What's New in WebGPU (Chrome 127)
+  - New origin trials
+  - Compression dictionary transport with Shared Brotli and Shared Zstandard
+  links:
+  - url: https://developer.chrome.com/origintrials/#/view_trial/3693514644397228033
+    link_type: other
+    title: Origin Trial
+  - url: https://compression-dictionary-transport-shop-demo.glitch.me
+    link_type: other
+    title: Demo
+  - url: https://issues.chromium.org/issues/1413922
+    link_type: other
+    title: 'Tracking bug #1413922'
+  - url: https://chromestatus.com/feature/5124977788977152
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/WICG/compression-dictionary-transport
+    link_type: github
+    title: Spec
+  line_number: 238
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+  - experimental
+- title: Deprecate third-party cookies
+  content: 'We intend to deprecate and remove default access to third-party cookies (also known as cross-site cookies), starting
+    with an initial 1% testing period in Q1 2024, followed by a gradual phaseout planned to begin in Q1 2025, subject to addressing
+    any remaining competition concerns of the UK''s Competition and Markets Authority.
+
+
+    [Phasing out third-party cookies](https://goo.gle/3pcd) is a central effort to the Privacy Sandbox initiative, which aims
+    to responsibly reduce cross-site tracking on the web (and beyond) while supporting key use cases through new technologies.
+
+
+    [Demo](https://compression-dictionary-transport-shop-demo.glitch.me) | [ChromeStatus.com entry](https://chromestatus.com/feature/5133113939722240)
+    | [Spec](https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-rfc6265bis-12#name-the-cookie-header-field)'
+  heading_path:
+  - What's New in WebGPU (Chrome 127)
+  - New origin trials
+  - Deprecate third-party cookies
+  links:
+  - url: https://goo.gle/3pcd
+    link_type: other
+    title: Phasing out third-party cookies
+  - url: https://compression-dictionary-transport-shop-demo.glitch.me
+    link_type: other
+    title: Demo
+  - url: https://chromestatus.com/feature/5133113939722240
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-rfc6265bis-12#name-the-cookie-header-field
+    link_type: other
+    title: Spec
+  line_number: 244
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - security
+  - privacy
+- title: Partitioning storage, service workers, and communication APIs
+  content: 'From Chrome 115, storage, service workers, and communication APIs are partitioned in third-party contexts. From
+    Chrome 113 to 126, sites were able to take part in a deprecation trial to temporarily unpartition and restore prior behavior
+    of storage, service workers, and communication APIs.
+
+
+    From Chrome 125, non-cookie storage in the Storage Access API is supported, which should address the majority of use cases
+    for unpartitioned storage. Where those use cases aren''t met, it is now possible to request a renewal for the DisableThirdPartyStoragePartitioning
+    deprecation trial for an additional 6 milestones, for users on Chrome 127 to 132 (inclusive).
+
+
+    See the [Storage Partitioning deprecation trial renewal blog post](https://developers.google.com/privacy-sandbox/blog/storage-partitioning-deprecation-trial-renewal)
+    for more information.
+
+
+    [Tracking bug #1191114](https://issues.chromium.org/issues/1191114) | [ChromeStatus.com entry](https://chromestatus.com/feature/5723617717387264)'
+  heading_path:
+  - What's New in WebGPU (Chrome 127)
+  - New origin trials
+  - Partitioning storage, service workers, and communication APIs
+  links:
+  - url: https://developers.google.com/privacy-sandbox/blog/storage-partitioning-deprecation-trial-renewal
+    link_type: other
+    title: Storage Partitioning deprecation trial renewal blog post
+  - url: https://issues.chromium.org/issues/1191114
+    link_type: other
+    title: 'Tracking bug #1191114'
+  - url: https://chromestatus.com/feature/5723617717387264
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 252
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: serviceworker
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - security
+  - privacy
+- title: Keyboard focusable scroll containers deprecation trial
+  content: 'This feature introduces the following changes:
+
+
+    Scrollers are click-focusable and programmatically-focusable by default. Scrollers without focusable children are keyboard-focusable
+    by default.
+
+
+    We attempted to ship these changes, and found that a limited number of sites had broken expectations around some of their
+    components. As a result, we had to unship the feature to avoid this breakage. Given the benefits mentioned above, the
+    feature will begin shipping in 127. To allow more time for the affected sites to migrate their components, we are starting
+    a Deprecation Trial. When enabled, this will disable the KeyboardFocusableScrollers feature.
+
+
+    [Origin Trial](https://developer.chrome.com/origintrials/#/view_trial/2455024746870341633) | [Keyboard focusable scrollers](/blog/keyboard-focusable-scrollers)
+    | [Tracking bug #1040141](https://issues.chromium.org/issues/1040141) | [ChromeStatus.com entry](https://chromestatus.com/feature/5231964663578624)
+    | [Spec](https://drafts.csswg.org/css-overflow-3/#scroll-container)'
+  heading_path:
+  - What's New in WebGPU (Chrome 127)
+  - New origin trials
+  - Keyboard focusable scroll containers deprecation trial
+  links:
+  - url: https://developer.chrome.com/origintrials/#/view_trial/2455024746870341633
+    link_type: other
+    title: Origin Trial
+  - url: https://issues.chromium.org/issues/1040141
+    link_type: other
+    title: 'Tracking bug #1040141'
+  - url: https://chromestatus.com/feature/5231964663578624
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://drafts.csswg.org/css-overflow-3/#scroll-container
+    link_type: other
+    title: Spec
+  line_number: 262
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+  - experimental
+- title: Mutation events
+  content: "Mutation event support will be disabled by default starting in Chrome 127. Code should be migrated before that\
+    \ date to avoid site breakage. If more time is needed, there are a few options:\n\n  * The Mutation Events deprecation\
+    \ trial (https://developer.chrome.com/origintrials/#/view_trial/919297273937002497) can be used to re-enable the feature\
+    \ for a limited time on a given site. This can be used through Chrome 134, ending March 25, 2025.\n  * The [MutationEventsEnabled\
+    \ enterprise policy](https://chromeenterprise.google/policies/#MutationEventsEnabled) can be used for the same purpose,\
+    \ also through Chrome 134.\n\nSee the blog post [Mutation events deprecation](/blog/mutation-events-deprecation) for more\
+    \ details.\n\n[Tracking bug #40268638](https://issues.chromium.org/issues/40268638) | [ChromeStatus.com entry](https://chromestatus.com/feature/5083947249172480)\
+    \ | [Spec](https://w3c.github.io/uievents/#legacy-event-types)"
+  heading_path:
+  - What's New in WebGPU (Chrome 127)
+  - Deprecations and removals
+  - Mutation events
+  links:
+  - url: https://chromeenterprise.google/policies/#MutationEventsEnabled
+    link_type: other
+    title: MutationEventsEnabled enterprise policy
+  - url: https://issues.chromium.org/issues/40268638
+    link_type: other
+    title: 'Tracking bug #40268638'
+  - url: https://chromestatus.com/feature/5083947249172480
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://w3c.github.io/uievents/#legacy-event-types
+    link_type: spec
+    title: Spec
+  line_number: 278
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+  - enterprise
+- title: Restrict "private network requests" for subresources from public websites to secure contexts
+  content: 'Requires that private network requests for subresources from public websites may only be initiated from a secure
+    context. Examples include internet to intranet requests and internet to loopback requests.
+
+
+    This is a first step towards fully implementing [Private Network Access](https://wicg.github.io/private-network-access/).
+
+
+    [Tracking bug #986744](https://issues.chromium.org/issues/986744) | [ChromeStatus.com entry](https://chromestatus.com/feature/5436853517811712)
+    | [Spec](https://wicg.github.io/private-network-access)'
+  heading_path:
+  - What's New in WebGPU (Chrome 127)
+  - Deprecations and removals
+  - Restrict "private network requests" for subresources from public websites to secure contexts
+  links:
+  - url: https://wicg.github.io/private-network-access/
+    link_type: spec
+    title: Private Network Access
+  - url: https://issues.chromium.org/issues/986744
+    link_type: other
+    title: 'Tracking bug #986744'
+  - url: https://chromestatus.com/feature/5436853517811712
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/private-network-access
+    link_type: spec
+    title: Spec
+  line_number: 289
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: network
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Remove old CSS custom state syntax
+  content: 'The CSS custom state pseudo-class is being renamed from `:--foo` to `:state(foo)`. The new syntax, `:state(foo)`,
+    has been enabled by default, therefore we are removing the `:--foo` syntax.
+
+
+    Firefox and Safari never implemented the old syntax and they have both shipped the new syntax.
+
+
+    Enterprise customers who need more time can use the `CSSCustomStateDeprecatedSyntaxEnabled` policy. This policy will be
+    removed in Chrome 131.
+
+
+    [Tracking bug #41486953](https://issues.chromium.org/issues/41486953) | [ChromeStatus.com entry](https://chromestatus.com/feature/5140610730426368)'
+  heading_path:
+  - What's New in WebGPU (Chrome 127)
+  - Deprecations and removals
+  - Remove old CSS custom state syntax
+  links:
+  - url: https://issues.chromium.org/issues/41486953
+    link_type: other
+    title: 'Tracking bug #41486953'
+  - url: https://chromestatus.com/feature/5140610730426368
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 297
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+  - enterprise

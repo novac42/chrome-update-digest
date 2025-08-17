@@ -1,0 +1,46 @@
+version: '137'
+channel: stable
+area: payments
+extraction_timestamp: '2025-08-13T15:22:56.244999'
+extraction_method: deterministic
+statistics:
+  total_features: 1
+  total_links: 3
+  primary_tags:
+    security: 1
+  cross_cutting:
+    privacy: 1
+features:
+- title: 'Align error type thrown for payment WebAuthn credential creation: SecurityError becomes NotAllowedError'
+  content: 'Correct the error type thrown during WebAuthn credential creation for payment credentials. Due to a historic specification
+    mismatch, creating a payment credential in a cross-origin iframe without a user activation would throw a `SecurityError`
+    instead of a `NotAllowedError`, which is what is thrown for non-payment credentials. This is a breaking change, albeit
+    a niche one. Code that previously detected the type of error thrown (for example, `e instanceof SecurityError`) is affected.
+    Code that just generally handles errors during credential creation (for example, `catch (e)`) will continue to function
+    correctly.
+
+
+    **References:** [Tracking bug #41484826](https://bugs.chromium.org/p/chromium/issues/detail?id=41484826) | [ChromeStatus.com
+    entry](https://chromestatus.com/feature/5096945194598400) | [Spec](https://w3c.github.io/webauthn/#sctn-creating-a-credential)'
+  heading_path:
+  - Chrome 137 Release Notes
+  - Payments
+  - 'Align error type thrown for payment WebAuthn credential creation: SecurityError becomes NotAllowedError'
+  links:
+  - url: https://bugs.chromium.org/p/chromium/issues/detail?id=41484826
+    link_type: tracking_bug
+    title: 'Tracking bug #41484826'
+  - url: https://chromestatus.com/feature/5096945194598400
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://w3c.github.io/webauthn/#sctn-creating-a-credential
+    link_type: spec
+    title: Spec
+  line_number: 116
+  primary_tags:
+  - name: security
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy

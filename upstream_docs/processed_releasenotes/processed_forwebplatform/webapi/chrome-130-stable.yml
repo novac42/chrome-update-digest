@@ -1,0 +1,340 @@
+version: '130'
+channel: stable
+area: webapi
+extraction_timestamp: '2025-08-13T15:22:58.545745'
+extraction_method: deterministic
+statistics:
+  total_features: 9
+  total_links: 29
+  primary_tags:
+    webapi: 9
+    ui: 1
+  cross_cutting:
+    privacy: 7
+    enterprise: 2
+    security: 1
+features:
+- title: Compression dictionary transport with shared Brotli and shared Zstandard
+  content: 'This feature adds support for using designated previous responses, as an external dictionary for content encoding
+    compressing responses with Brotli or Zstandard.
+
+
+    Enterprises might experience potential compatibility issues with enterprise network infrastructure that intercepts HTTPS
+    traffic and is sensitive to unknown content encodings. The enterprise policy `CompressionDictionaryTransportEnabled` is
+    available to turn off the compression dictionary transport feature.
+
+
+    [Tracking bug #40255884](https://issues.chromium.org/issues/40255884) | [ChromeStatus.com entry](https://chromestatus.com/feature/5124977788977152)
+    | [Spec](https://datatracker.ietf.org/doc/draft-ietf-httpbis-compression-dictionary)'
+  heading_path:
+  - Chrome 130
+  - Web APIs
+  - Compression dictionary transport with shared Brotli and shared Zstandard
+  links:
+  - url: https://issues.chromium.org/issues/40255884
+    link_type: other
+    title: 'Tracking bug #40255884'
+  - url: https://chromestatus.com/feature/5124977788977152
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://datatracker.ietf.org/doc/draft-ietf-httpbis-compression-dictionary
+    link_type: other
+    title: Spec
+  line_number: 51
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+  - enterprise
+- title: Concurrent smooth `scrollIntoView()`
+  content: 'The [`scrollIntoView()`](https://developer.mozilla.org/docs/Web/API/Element/scrollIntoView) method with `behavior:
+    "smooth"` lets you create scroll containers that scroll to their descendants with a gentle scroll animation. This feature
+    fixes Chrome''s implementation of the API so that ongoing `scrollIntoView` animations are not canceled by unrelated scrolls
+    on other scroll containers.
+
+
+    The feature also fixes cases where Chrome fails to scroll to a page''s fragment anchor because of a competing `scrollIntoView`
+    that is invoked when the page loads.
+
+
+    [Demo](https://davmila.github.io/MultiSmoothScrollDemo) | [Tracking bug #325081538](https://issues.chromium.org/issues/325081538)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/6270155647352832) | [Spec](https://www.w3.org/TR/cssom-view-1/#dom-element-scrollintoview)'
+  heading_path:
+  - Chrome 130
+  - Web APIs
+  - Concurrent smooth `scrollIntoView()`
+  links:
+  - url: https://developer.mozilla.org/docs/Web/API/Element/scrollIntoView
+    link_type: mdn
+    title: '`scrollIntoView()`'
+  - url: https://davmila.github.io/MultiSmoothScrollDemo
+    link_type: github
+    title: Demo
+  - url: https://issues.chromium.org/issues/325081538
+    link_type: other
+    title: 'Tracking bug #325081538'
+  - url: https://chromestatus.com/feature/6270155647352832
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://www.w3.org/TR/cssom-view-1/#dom-element-scrollintoview
+    link_type: spec
+    title: Spec
+  line_number: 59
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: 'Document picture-in-picture: add option to ignore window bounds cache'
+  content: 'This adds a new parameter (`preferInitialWindowPlacement`) to the document picture-in-picture API that, when set
+    to true, hints to the browser that it shouldn''t try to reuse the position or size of the previous document picture-in-picture
+    from this site when opening this one.
+
+
+    Often, a document picture-in-picture window will close and re-open multiple times for the same site, such as moving a
+    video conference to and from PiP. The browser is free to re-open the PiP window at its most recent size and location,
+    so that it stays where the user last moved it and provides continuity between the PiP windows. However, if the new window
+    is semantically unrelated to the previous window, such as if it is a new video call, then you can use this parameter to
+    provide a hint to the user agent that this window might be better opened in its default position and size instead.
+
+
+    Learn about how to [open the window in its default position and size](/docs/web-platform/document-picture-in-picture#open_the_picture-in-picture_window_in_its_default_position_and_size).
+
+
+    [Picture-in-Picture for any Element, not just video](https://developer.chrome.com/docs/web-platform/document-picture-in-picture#open_the_picture-in-picture_window_in_its_default_position_and_size)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5183881532932096) | [Spec](https://github.com/WICG/document-picture-in-picture/pull/119)'
+  heading_path:
+  - Chrome 130
+  - Web APIs
+  - 'Document picture-in-picture: add option to ignore window bounds cache'
+  links:
+  - url: https://developer.chrome.com/docs/web-platform/document-picture-in-picture#open_the_picture-in-picture_window_in_its_default_position_and_size
+    link_type: other
+    title: Picture-in-Picture for any Element, not just video
+  - url: https://chromestatus.com/feature/5183881532932096
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/WICG/document-picture-in-picture/pull/119
+    link_type: github
+    title: Spec
+  line_number: 67
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: Improved error reporting in IndexedDB for large value read failures
+  content: 'Change to reporting for certain error cases that were previously reported with a `DOMException` and the message
+    "Failed to read large IndexedDB value".
+
+
+    Chrome now raises a `DOMException` with the name `"NotFoundError"` when the file containing the data being read by an
+    IDBRequest is missing from the disk so that sites can take the appropriate corrective action when an unrecoverable failure
+    occurs. Corrective actions could include deleting the entry from the database, notifying the user, or re-fetching the
+    data from servers.
+
+
+    [Tracking bug #362123231](https://issues.chromium.org/issues/362123231) | [ChromeStatus.com entry](https://chromestatus.com/feature/5140210640486400)
+    | [Spec](https://www.w3.org/TR/IndexedDB/#dom-idbrequest-error)'
+  heading_path:
+  - Chrome 130
+  - Web APIs
+  - Improved error reporting in IndexedDB for large value read failures
+  links:
+  - url: https://issues.chromium.org/issues/362123231
+    link_type: other
+    title: 'Tracking bug #362123231'
+  - url: https://chromestatus.com/feature/5140210640486400
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://www.w3.org/TR/IndexedDB/#dom-idbrequest-error
+    link_type: spec
+    title: Spec
+  line_number: 77
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Keyboard focusable scroll containers
+  content: "This feature makes scrollers without focusable children keyboard-focusable by default.\n\nThis is an important\
+    \ improvement to help make scrollers and contents within scrollers more accessible to all users. You can read more about\
+    \ its benefits in [Keyboard focusable scrollers](/blog/keyboard-focusable-scrollers). Keyboard focusable scrollers will\
+    \ be enabled by default starting in Chrome 130. If websites need time to adjust to this new feature, there are a few options:\n\
+    \n  * The [ Keyboard focusable scrollers opt out deprecation trial](/origintrials#/view_trial/2455024746870341633) can\
+    \ be used to opt back out of the feature for a limited time on a given site. This can be used through Chrome 132, ending\
+    \ March 18, 2025.\n  * The [`KeyboardFocusableScrollersEnabled enterprise policy`](https://chromeenterprise.google/policies/#KeyboardFocusableScrollersEnabled)\
+    \ available from Chrome 127 can be used for the same purpose.\n\n**Note:** The previous rollout of this feature (started\
+    \ in [Chrome 127](/release-notes/127)) was stopped due to web compatibility issues, which should be fixed in the new implementation.\n\
+    \n[Keyboard focusable scrollers](/blog/keyboard-focusable-scrollers) | [Tracking bug #40113891](https://issues.chromium.org/issues/40113891)\
+    \ | [ChromeStatus.com entry](https://chromestatus.com/feature/5231964663578624) | [Spec](https://drafts.csswg.org/css-overflow-3/#scroll-container)"
+  heading_path:
+  - Chrome 130
+  - Web APIs
+  - Keyboard focusable scroll containers
+  links:
+  - url: https://chromeenterprise.google/policies/#KeyboardFocusableScrollersEnabled
+    link_type: other
+    title: '`KeyboardFocusableScrollersEnabled enterprise policy`'
+  - url: https://issues.chromium.org/issues/40113891
+    link_type: other
+    title: 'Tracking bug #40113891'
+  - url: https://chromestatus.com/feature/5231964663578624
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://drafts.csswg.org/css-overflow-3/#scroll-container
+    link_type: other
+    title: Spec
+  line_number: 85
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+  - enterprise
+- title: Protected Audience Bidding and Auction Services
+  content: 'The Protected Audience API (formerly known as FLEDGE) is a Privacy Sandbox proposal to serve remarketing and custom
+    audience use cases, designed so third parties cannot track user browsing behavior across sites.
+
+
+    This feature, Protected Audience Bidding and Auction Services, outlines a way to allow Protected Audience computation
+    to take place on cloud servers in a trusted execution environment, rather than running locally on a user''s device. Moving
+    computations to cloud servers can help optimize the Protected Audience auction, to free up computational cycles and network
+    bandwidth for a device.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/4649601971257344) | [Spec](https://github.com/WICG/turtledove/blob/main/FLEDGE_browser_bidding_and_auction_API.md)'
+  heading_path:
+  - Chrome 130
+  - Web APIs
+  - Protected Audience Bidding and Auction Services
+  links:
+  - url: https://chromestatus.com/feature/4649601971257344
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/WICG/turtledove/blob/main/FLEDGE_browser_bidding_and_auction_API.md
+    link_type: github
+    title: Spec
+  line_number: 98
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - security
+  - privacy
+- title: Support non-special scheme URLs
+  content: 'Previously, Chrome''s URL parser didn''t support non-special URLs. The parser parses non-special URLs as if they
+    had an "opaque path", which is not aligned with the URL Standard. Now, Chromium''s URL parser parses non-special URLs
+    correctly, following the URL Standard.
+
+
+    [Support Non-Special Scheme URLs](http://bit.ly/url-non-special) | [Tracking bug #40063064](https://issues.chromium.org/issues/40063064)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5201116810182656) | [Spec](https://url.spec.whatwg.org/)'
+  heading_path:
+  - Chrome 130
+  - Web APIs
+  - Support non-special scheme URLs
+  links:
+  - url: http://bit.ly/url-non-special
+    link_type: other
+    title: Support Non-Special Scheme URLs
+  - url: https://issues.chromium.org/issues/40063064
+    link_type: other
+    title: 'Tracking bug #40063064'
+  - url: https://chromestatus.com/feature/5201116810182656
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://url.spec.whatwg.org/
+    link_type: spec
+    title: Spec
+  line_number: 106
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: WebAssembly JavaScript String Builtins
+  content: 'This feature exposes common JavaScript string operations for import into WebAssembly. This lets you create and
+    manipulate JavaScript strings from WebAssembly without support within WebAssembly. This still allows for a similar performance
+    as supported string references.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/6695587390423040) | [Spec](https://github.com/WebAssembly/js-string-builtins/blob/main/proposals/js-string-builtins/Overview.md)'
+  heading_path:
+  - Chrome 130
+  - Web APIs
+  - WebAssembly JavaScript String Builtins
+  links:
+  - url: https://chromestatus.com/feature/6695587390423040
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/WebAssembly/js-string-builtins/blob/main/proposals/js-string-builtins/Overview.md
+    link_type: github
+    title: Spec
+  line_number: 112
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: ui
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: 'Web Serial: `connected` attribute and RFCOMM connection events'
+  content: 'This feature adds a boolean `SerialPort.connected` attribute. The attribute returns `true` if the serial port
+    is logically connected. For wired serial ports, a port is logically connected if the port is physically attached to the
+    system. For wireless serial ports, a port is logically connected if the device hosting the port has any open connections
+    to the host.
+
+
+    Previously, only wired serial ports dispatched connect and disconnect events. With this feature, Bluetooth RFCOMM serial
+    ports will dispatch these events when the port becomes logically connected or disconnected.
+
+
+    This feature is intended to allow applications to detect when a Bluetooth RFCOMM serial port is available without opening
+    the port.
+
+
+    Learn more in [Bluetooth RFCOMM updates in Web Serial](/blog/bluetooth-rfcomm-updates-web-serial).
+
+
+    [Bluetooth RFCOMM updates in Web Serial](/blog/bluetooth-rfcomm-updates-web-serial) | [Tracking bug #40283485](https://issues.chromium.org/issues/40283485)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5118102654418944) | [Spec](https://wicg.github.io/serial/#serialport-interface)'
+  heading_path:
+  - Chrome 130
+  - Web APIs
+  - 'Web Serial: `connected` attribute and RFCOMM connection events'
+  links:
+  - url: https://issues.chromium.org/issues/40283485
+    link_type: other
+    title: 'Tracking bug #40283485'
+  - url: https://chromestatus.com/feature/5118102654418944
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/serial/#serialport-interface
+    link_type: spec
+    title: Spec
+  line_number: 118
+  primary_tags:
+  - name: webapi
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
