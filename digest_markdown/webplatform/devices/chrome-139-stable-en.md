@@ -3,8 +3,6 @@ layout: default
 title: Chrome 139 Devices Update Digest
 ---
 
-Save to: digest_markdown/webplatform/Devices/chrome-139-stable-en.md
-
 ---
 
 # Chrome 139 Devices Update Digest

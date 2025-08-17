@@ -4,7 +4,6 @@ title: Chrome 139 性能更新摘要
 ---
 
 ````markdown
-Save to: digest_markdown/webplatform/Performance/chrome-139-stable-zh.md
 
 ---
 

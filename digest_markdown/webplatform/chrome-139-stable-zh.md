@@ -3,7 +3,6 @@ layout: default
 title: Chrome 139 全领域更新分析（Stable）
 ---
 
-```markdown
 # Chrome 139 全领域更新分析（Stable）
 
 ---
@@ -720,4 +719,3 @@ Chrome 139 起不再支持 macOS 11，需升级至 macOS 12+。
 [known security issues](https://www.sonarsource.com/blog/encoding-differentials-why-charset-matters/) | [Tracking bug #40089450](https://issues.chromium.org/issues/40089450) | [ChromeStatus.com entry](https://chromestatus.com/feature/6576566521561088) | [Creative Commons Attribution 4.0 License](https://creativecommons.org/licenses/by/4.0/) | [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0) | [Google Developers Site Policies](https://developers.google.com/site-policies)
 
 ---
-```

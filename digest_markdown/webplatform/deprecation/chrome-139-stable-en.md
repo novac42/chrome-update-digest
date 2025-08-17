@@ -3,8 +3,6 @@ layout: default
 title: Chrome 139 Deprecation Update Digest
 ---
 
-Save to: digest_markdown/webplatform/deprecation/chrome-139-stable-en.md
-
 ---
 
 # Chrome 139 Deprecation Update Digest
