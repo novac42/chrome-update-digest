@@ -1,0 +1,24 @@
+title: Upstream Digest Server
+description: Chrome Release Notes Digest Collection
+theme: minima
+baseurl: "/upstream-digest-server"
+url: "https://novac42.github.io"
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+collections:
+  digests:
+    output: true
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
