@@ -145,8 +145,8 @@ The project implements a Model Context Protocol (MCP) server using FastMCP frame
 - `prompts/`: AI prompts for digest generation
 - `upstream_docs/processed_releasenotes/`: Processed data
 - `feature_details/`: Split feature documentation
-- `docs/product_docs/`: All product-related documentation (PRDs, roadmaps, etc.)
-- `docs/tech_docs/`: Technical documentation (architecture designs, optimization plans, implementation guides)
+- `project_docs/product_docs/`: All product-related documentation (PRDs, roadmaps, etc.)
+- `project_docs/tech_docs/`: Technical documentation (architecture designs, optimization plans, implementation guides)
 
 ### Testing Strategy
 
