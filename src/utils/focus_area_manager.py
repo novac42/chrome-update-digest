@@ -277,3 +277,45 @@ class FocusAreaManager:
                 area_features[tag_name].append(feature)
         
         return area_features
+    
+    def normalize_area(self, area_name: str) -> str:
+        """
+        Normalize area name to standard format.
+        
+        Args:
+            area_name: Raw area name
+            
+        Returns:
+            Normalized area name
+        """
+        area_lower = area_name.lower().replace(' ', '-').replace('_', '-')
+        
+        # Standard mappings
+        mappings = {
+            'webgpu': 'graphics-webgpu',
+            'gpu': 'graphics-webgpu',
+            'graphics': 'graphics-webgpu',
+            'security': 'security-privacy',
+            'privacy': 'security-privacy',
+            'pwa': 'pwa-service-worker',
+            'service-worker': 'pwa-service-worker',
+            'serviceworker': 'pwa-service-worker',
+            'loading': 'navigation-loading',
+            'navigation': 'navigation-loading',
+            'trials': 'origin-trials',
+            'origin-trials': 'origin-trials',
+            'api': 'webapi',
+            'web-api': 'webapi'
+        }
+        
+        # Check for exact mapping
+        if area_lower in mappings:
+            return mappings[area_lower]
+        
+        # Check configured areas
+        for key in self.focus_areas.keys():
+            if area_lower == key.lower().replace('_', '-'):
+                return key
+        
+        # Return as-is if no mapping found
+        return area_name

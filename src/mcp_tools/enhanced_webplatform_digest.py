@@ -49,7 +49,7 @@ class EnhancedWebplatformDigestTool:
         focus_areas: Optional[str] = None,
         use_cache: bool = True,
         language: Optional[str] = None,
-        split_by_area: bool = False,
+        split_by_area: bool = True,
         target_area: Optional[str] = None,
         debug: bool = False
     ) -> str:
@@ -63,12 +63,12 @@ class EnhancedWebplatformDigestTool:
             focus_areas: Comma-separated focus areas (e.g., "ai,webgpu,security")
             use_cache: Whether to use cached YAML if available
             language: Output language ("en", "zh", or None for both)
-            split_by_area: Whether to split features by area into separate YAML files
+            split_by_area: Whether to generate separate digests for each area (default: True)
             target_area: Specific area to analyze (e.g., "css", "webapi", "security")
             debug: Enable debug output
             
         Returns:
-            Generated digest in markdown format
+            Generated digest in markdown format or JSON with per-area results
         """
         try:
             # Parse focus areas
@@ -98,7 +98,11 @@ class EnhancedWebplatformDigestTool:
                     filtered_count = len(yaml_data.get('features', []))
                     print(f"Filtered to {filtered_count} features")
             
-            # Step 3: Generate digest from YAML data with language support
+            # Step 3: Handle per-area generation if split_by_area is True
+            if split_by_area:
+                return await self._generate_per_area_digests(ctx, yaml_data, version, channel, language, debug)
+            
+            # Step 4: Generate digest from YAML data with language support
             # Default to generating both languages if not specified
             if language is None or language == 'bilingual':
                 # Generate both EN and ZH versions
@@ -809,3 +813,523 @@ Language: """ + language
             if debug:
                 print(f"Error saving digest: {e}")
             raise
+    
+    async def _generate_per_area_digests(
+        self,
+        ctx: Context,
+        yaml_data: Dict,
+        version: str,
+        channel: str,
+        language: Optional[str],
+        debug: bool
+    ) -> str:
+        """
+        Generate digests for each area separately.
+        
+        Args:
+            ctx: FastMCP context
+            yaml_data: Full YAML data with all features
+            version: Chrome version
+            channel: Release channel
+            language: Output language ("en", "zh", or None for bilingual)
+            debug: Debug mode
+            
+        Returns:
+            JSON response with status and output paths
+        """
+        # Determine languages to generate
+        languages = ['en', 'zh'] if language in [None, 'bilingual'] else [language]
+        
+        # Get all areas from YAML data
+        areas = self._get_areas_from_yaml(yaml_data)
+        if debug:
+            print(f"Found {len(areas)} areas to process: {areas}")
+        
+        results = {
+            "success": True,
+            "mode": "per_area",
+            "version": version,
+            "channel": channel,
+            "language": language or "bilingual",
+            "languages": languages,
+            "areas": areas,
+            "outputs": {},
+            "errors": {},
+            "translation_status": {}
+        }
+        
+        # Process each area
+        for area in areas:
+            if debug:
+                print(f"\nProcessing area: {area}")
+            
+            # Normalize area name
+            normalized_area = self.focus_manager.normalize_area(area)
+            
+            # Load area-specific YAML
+            area_yaml = await self._load_area_yaml(ctx, version, channel, normalized_area, yaml_data, debug)
+            if not area_yaml or len(area_yaml.get('features', [])) == 0:
+                if debug:
+                    print(f"No features for area {area}, generating fallback")
+                # Generate minimal fallback
+                fallback_content = self._generate_minimal_fallback(version, channel, area, 'en')
+                fallback_path = self._get_digest_path(version, channel, normalized_area, 'en')
+                await self._save_digest(fallback_content, fallback_path, debug)
+                results["outputs"][normalized_area] = {"en": str(fallback_path)}
+                if 'zh' in languages:
+                    fallback_zh = self._generate_minimal_fallback(version, channel, area, 'zh')
+                    fallback_zh_path = self._get_digest_path(version, channel, normalized_area, 'zh')
+                    await self._save_digest(fallback_zh, fallback_zh_path, debug)
+                    results["outputs"][normalized_area]["zh"] = str(fallback_zh_path)
+                continue
+            
+            # Generate English digest first (canonical)
+            try:
+                if debug:
+                    print(f"Generating English digest for {area}")
+                
+                english_digest = await self._generate_area_digest(
+                    ctx, area_yaml, 'en', normalized_area, debug
+                )
+                
+                # Validate English digest
+                validation_result = self._validate_digest(english_digest, area_yaml)
+                if not validation_result['valid']:
+                    if debug:
+                        print(f"Validation failed for {area}: {validation_result['issues']}")
+                    # Retry once with corrective prompt
+                    english_digest = await self._generate_area_digest(
+                        ctx, area_yaml, 'en', normalized_area, debug,
+                        retry_context=validation_result['issues']
+                    )
+                    validation_result = self._validate_digest(english_digest, area_yaml)
+                    if not validation_result['valid']:
+                        # Generate fallback
+                        english_digest = self._generate_area_fallback(
+                            area_yaml, 'en', normalized_area, "LLM generation failed validation"
+                        )
+                
+                # Save English digest
+                en_path = self._get_digest_path(version, channel, normalized_area, 'en')
+                await self._save_digest(english_digest, en_path, debug)
+                
+                if normalized_area not in results["outputs"]:
+                    results["outputs"][normalized_area] = {}
+                results["outputs"][normalized_area]["en"] = str(en_path)
+                
+                # Generate Chinese translation if needed
+                if 'zh' in languages:
+                    if debug:
+                        print(f"Translating to Chinese for {area}")
+                    
+                    try:
+                        chinese_digest = await self._translate_digest(
+                            ctx, english_digest, normalized_area, version, channel, debug
+                        )
+                        
+                        # Validate translation
+                        translation_valid = self._validate_translation(english_digest, chinese_digest)
+                        if not translation_valid['valid']:
+                            if debug:
+                                print(f"Translation validation failed: {translation_valid['issues']}")
+                            # Retry translation once
+                            chinese_digest = await self._translate_digest(
+                                ctx, english_digest, normalized_area, version, channel, debug,
+                                retry_context=translation_valid['issues']
+                            )
+                            translation_valid = self._validate_translation(english_digest, chinese_digest)
+                            if not translation_valid['valid']:
+                                # Translation fallback
+                                chinese_digest = self._generate_translation_fallback(
+                                    version, channel, normalized_area, en_path
+                                )
+                                results["translation_status"][normalized_area] = "fallback"
+                            else:
+                                results["translation_status"][normalized_area] = "retry_success"
+                        else:
+                            results["translation_status"][normalized_area] = "ok"
+                        
+                        # Save Chinese digest
+                        zh_path = self._get_digest_path(version, channel, normalized_area, 'zh')
+                        await self._save_digest(chinese_digest, zh_path, debug)
+                        results["outputs"][normalized_area]["zh"] = str(zh_path)
+                        
+                    except Exception as e:
+                        if debug:
+                            print(f"Translation failed for {area}: {e}")
+                        results["errors"][f"{normalized_area}:zh"] = str(e)
+                        results["translation_status"][normalized_area] = "error"
+                        # Generate translation fallback
+                        fallback = self._generate_translation_fallback(
+                            version, channel, normalized_area, en_path
+                        )
+                        zh_path = self._get_digest_path(version, channel, normalized_area, 'zh')
+                        await self._save_digest(fallback, zh_path, debug)
+                        results["outputs"][normalized_area]["zh"] = str(zh_path)
+                
+            except Exception as e:
+                if debug:
+                    print(f"Failed to generate digest for {area}: {e}")
+                results["errors"][f"{normalized_area}:en"] = str(e)
+                results["success"] = False
+        
+        return json.dumps(results, ensure_ascii=False, indent=2)
+    
+    def _get_areas_from_yaml(self, yaml_data: Dict) -> List[str]:
+        """Extract all areas from YAML data."""
+        areas = set()
+        for feature in yaml_data.get('features', []):
+            tags = feature.get('primary_tags', [])
+            for tag in tags:
+                if isinstance(tag, dict):
+                    areas.add(tag.get('name', 'others'))
+                else:
+                    areas.add(str(tag))
+        
+        # Always include 'others' if there are untagged features
+        if not areas:
+            areas.add('others')
+        
+        return sorted(list(areas))
+    
+    async def _load_area_yaml(
+        self,
+        ctx: Context,
+        version: str,
+        channel: str,
+        area: str,
+        full_yaml: Dict,
+        debug: bool
+    ) -> Optional[Dict]:
+        """Load or extract area-specific YAML data."""
+        # Check for cached area YAML
+        area_yaml_path = self.cache_dir / area / f"chrome-{version}-{channel}.yml"
+        if area_yaml_path.exists():
+            if debug:
+                print(f"Loading cached area YAML: {area_yaml_path}")
+            return self.yaml_pipeline.load_from_yaml(area_yaml_path)
+        
+        # Extract features for this area from full YAML
+        area_features = []
+        for feature in full_yaml.get('features', []):
+            tags = feature.get('primary_tags', [])
+            tag_names = []
+            for tag in tags:
+                if isinstance(tag, dict):
+                    tag_names.append(tag.get('name', ''))
+                else:
+                    tag_names.append(str(tag))
+            
+            if area in tag_names:
+                area_features.append(feature)
+        
+        if not area_features and area == 'others':
+            # Get untagged features for 'others'
+            for feature in full_yaml.get('features', []):
+                if not feature.get('primary_tags', []):
+                    area_features.append(feature)
+        
+        # Create area-specific YAML structure
+        area_yaml = {
+            'version': full_yaml.get('version'),
+            'channel': full_yaml.get('channel'),
+            'area': area,
+            'features': area_features,
+            'statistics': {
+                'total_features': len(area_features),
+                'total_links': sum(len(f.get('links', [])) for f in area_features)
+            }
+        }
+        
+        return area_yaml
+    
+    async def _generate_area_digest(
+        self,
+        ctx: Context,
+        area_yaml: Dict,
+        language: str,
+        area: str,
+        debug: bool,
+        retry_context: Optional[str] = None
+    ) -> str:
+        """Generate digest for a specific area."""
+        # Load prompt template
+        prompt = await self._load_area_prompt(ctx, language, area, debug)
+        
+        # Truncate feature content to avoid token limits
+        truncated_yaml = self._truncate_features(area_yaml, max_content_length=300)
+        
+        # Format features as YAML
+        yaml_text = self._format_features_for_llm(truncated_yaml)
+        
+        # Build system prompt
+        area_display = self.focus_manager.get_area_display_name(area)
+        if language == 'zh':
+            system_prompt = f"""你是 Chrome 更新分析专家，专注于 {area_display} 领域。
+请严格按照提供的模板结构生成摘要。
+仅使用提供的 YAML 数据中的功能和链接，不要编造任何内容。
+输出语言：中文"""
+        else:
+            system_prompt = f"""You are a Chrome Update Analyzer specializing in {area_display}.
+Follow the provided template structure strictly.
+Use ONLY the features and links from the provided YAML data. Do not make up any content.
+Output language: English"""
+        
+        # Add retry context if provided
+        if retry_context:
+            system_prompt += f"\n\nPREVIOUS ATTEMPT FAILED. Issues found:\n{retry_context}\nPlease correct these issues."
+        
+        # Build user message
+        version = area_yaml.get('version', 'Unknown')
+        stats = area_yaml.get('statistics', {})
+        
+        user_message = f"""{prompt}
+
+Chrome {version} Release Data for {area_display}
+Total Features: {stats.get('total_features', 0)}
+Total Links: {stats.get('total_links', 0)}
+
+YAML Data:
+```yaml
+{yaml_text}
+```"""
+        
+        # Generate with LLM
+        return await self._safe_sample_with_retry(ctx, user_message, system_prompt, debug)
+    
+    async def _load_area_prompt(self, ctx: Context, language: str, area: str, debug: bool) -> str:
+        """Load prompt template for specific area."""
+        prompt_path = self.base_path / 'prompts' / 'webplatform-prompts' / f'webplatform-prompt-{language}.md'
+        
+        if prompt_path.exists():
+            with open(prompt_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+                
+                # Replace [AREA] with display name
+                area_display = self.focus_manager.get_area_display_name(area)
+                content = content.replace('[AREA]', area_display)
+                
+                return content
+        
+        # Fallback prompt
+        area_display = self.focus_manager.get_area_display_name(area)
+        if language == 'zh':
+            return f"生成 Chrome {area_display} 领域的更新摘要。"
+        else:
+            return f"Generate a Chrome update digest for the {area_display} area."
+    
+    def _truncate_features(self, yaml_data: Dict, max_content_length: int = 300) -> Dict:
+        """Truncate feature content to avoid token limits."""
+        truncated = yaml_data.copy()
+        truncated['features'] = []
+        
+        for feature in yaml_data.get('features', []):
+            truncated_feature = feature.copy()
+            content = truncated_feature.get('content', '')
+            if len(content) > max_content_length:
+                truncated_feature['content'] = content[:max_content_length] + '...'
+            truncated['features'].append(truncated_feature)
+        
+        return truncated
+    
+    def _validate_digest(self, digest: str, yaml_data: Dict) -> Dict[str, Any]:
+        """Validate that digest contains expected features and links."""
+        import re
+        
+        # Extract feature titles from YAML
+        expected_titles = set()
+        expected_links = set()
+        
+        for feature in yaml_data.get('features', []):
+            expected_titles.add(feature.get('title', ''))
+            for link in feature.get('links', []):
+                if isinstance(link, dict):
+                    expected_links.add(link.get('url', ''))
+                else:
+                    expected_links.add(str(link))
+        
+        # Extract titles and links from digest
+        # Look for H3 headers (feature titles)
+        found_titles = set(re.findall(r'^###\s+(.+)$', digest, re.MULTILINE))
+        # Look for markdown links
+        found_links = set(re.findall(r'\[([^\]]+)\]\(([^\)]+)\)', digest))
+        found_link_urls = {url for _, url in found_links}
+        
+        # Calculate missing elements
+        missing_titles = expected_titles - found_titles
+        extra_links = found_link_urls - expected_links
+        
+        # Determine if valid
+        missing_ratio = len(missing_titles) / len(expected_titles) if expected_titles else 0
+        valid = missing_ratio <= 0.3 and len(extra_links) <= 2
+        
+        issues = []
+        if missing_ratio > 0.3:
+            issues.append(f"Missing {len(missing_titles)} of {len(expected_titles)} features")
+        if len(extra_links) > 2:
+            issues.append(f"Found {len(extra_links)} unknown links")
+        
+        return {
+            'valid': valid,
+            'missing_titles': list(missing_titles),
+            'extra_links': list(extra_links),
+            'missing_ratio': missing_ratio,
+            'issues': '; '.join(issues) if issues else None
+        }
+    
+    async def _translate_digest(
+        self,
+        ctx: Context,
+        english_digest: str,
+        area: str,
+        version: str,
+        channel: str,
+        debug: bool,
+        retry_context: Optional[str] = None
+    ) -> str:
+        """Translate English digest to Chinese."""
+        # Load translation prompt
+        prompt_path = self.base_path / 'prompts' / 'webplatform-prompts' / 'webplatform-translation-prompt-zh.md'
+        
+        if not prompt_path.exists():
+            raise FileNotFoundError(f"Translation prompt not found: {prompt_path}")
+        
+        with open(prompt_path, 'r', encoding='utf-8') as f:
+            prompt_template = f.read()
+        
+        # Replace placeholders
+        area_display = self.focus_manager.get_area_display_name(area)
+        prompt = prompt_template.replace('[AREA_DISPLAY]', area_display)
+        prompt = prompt.replace('[AREA_KEY]', area)
+        prompt = prompt.replace('[VERSION]', version)
+        prompt = prompt.replace('[CHANNEL]', channel)
+        prompt = prompt.replace('[ENGLISH_DIGEST_MARKDOWN]', english_digest)
+        
+        # System prompt for translation
+        system_prompt = "You are a professional bilingual technical translator specializing in Chrome Web Platform documentation."
+        
+        if retry_context:
+            prompt += f"\n\nPREVIOUS TRANSLATION FAILED VALIDATION:\n{retry_context}\nPlease correct these issues."
+        
+        # Generate translation
+        if debug:
+            print(f"Translating digest for {area} to Chinese...")
+        
+        return await self._safe_sample_with_retry(ctx, prompt, system_prompt, debug)
+    
+    def _validate_translation(self, english_digest: str, chinese_digest: str) -> Dict[str, Any]:
+        """Validate that translation preserves structure and links."""
+        import re
+        
+        # Check for error marker
+        if 'ERROR_TRANSLATION_STRUCTURE_MISMATCH' in chinese_digest:
+            return {
+                'valid': False,
+                'issues': 'Translation reported structure mismatch error'
+            }
+        
+        # Extract headings from both versions
+        en_headings = re.findall(r'^(#{2,4})\s+(.+)$', english_digest, re.MULTILINE)
+        zh_headings = re.findall(r'^(#{2,4})\s+(.+)$', chinese_digest, re.MULTILINE)
+        
+        # Extract links from both versions
+        en_links = set(re.findall(r'\[([^\]]+)\]\(([^\)]+)\)', english_digest))
+        zh_links = set(re.findall(r'\[([^\]]+)\]\(([^\)]+)\)', chinese_digest))
+        
+        en_link_urls = {url for _, url in en_links}
+        zh_link_urls = {url for _, url in zh_links}
+        
+        issues = []
+        
+        # Check heading count and hierarchy
+        if len(en_headings) != len(zh_headings):
+            issues.append(f"Heading count mismatch: EN={len(en_headings)}, ZH={len(zh_headings)}")
+        
+        # Check heading levels match
+        for i, ((en_level, _), (zh_level, _)) in enumerate(zip(en_headings[:min(len(en_headings), len(zh_headings))], zh_headings)):
+            if en_level != zh_level:
+                issues.append(f"Heading level mismatch at position {i+1}")
+        
+        # Check links are preserved
+        missing_links = en_link_urls - zh_link_urls
+        extra_links = zh_link_urls - en_link_urls
+        
+        if missing_links:
+            issues.append(f"Missing {len(missing_links)} links from English version")
+        if extra_links:
+            issues.append(f"Added {len(extra_links)} new links not in English version")
+        
+        valid = len(issues) == 0
+        
+        return {
+            'valid': valid,
+            'issues': '; '.join(issues) if issues else None,
+            'heading_match': len(en_headings) == len(zh_headings),
+            'link_match': en_link_urls == zh_link_urls
+        }
+    
+    def _generate_area_fallback(self, area_yaml: Dict, language: str, area: str, reason: str) -> str:
+        """Generate fallback digest for an area."""
+        version = area_yaml.get('version', 'Unknown')
+        area_display = self.focus_manager.get_area_display_name(area)
+        
+        if language == 'zh':
+            lines = [
+                f"# Chrome {version} {area_display} 摘要 (Fallback)",
+                f"> LLM 生成失败：{reason}。以下是原始功能列表。",
+                "",
+                "## 功能列表"
+            ]
+        else:
+            lines = [
+                f"# Chrome {version} {area_display} Digest (Fallback)",
+                f"> LLM generation failed: {reason}. Below is the raw feature list.",
+                "",
+                "## Features"
+            ]
+        
+        for feature in area_yaml.get('features', []):
+            lines.append(f"\n### {feature.get('title', 'Untitled')}")
+            
+            links = feature.get('links', [])
+            if links:
+                if language == 'zh':
+                    lines.append("链接：")
+                else:
+                    lines.append("Links:")
+                for link in links:
+                    if isinstance(link, dict):
+                        lines.append(f"- [{link.get('title', 'Link')}]({link.get('url', '')})")
+                    else:
+                        lines.append(f"- {link}")
+        
+        return '\n'.join(lines)
+    
+    def _generate_translation_fallback(self, version: str, channel: str, area: str, en_path: Path) -> str:
+        """Generate fallback for failed translation."""
+        area_display = self.focus_manager.get_area_display_name(area)
+        return f"""# Chrome {version} {area_display} 摘要（中文翻译失败）
+
+> 自动翻译失败。请参考英文版：{en_path}
+
+## Translation Failed
+
+The automatic translation to Chinese failed. Please refer to the English version for the complete digest.
+
+English version path: `{en_path}`
+"""
+    
+    def _generate_minimal_fallback(self, version: str, channel: str, area: str, language: str) -> str:
+        """Generate minimal fallback for empty area."""
+        area_display = self.focus_manager.get_area_display_name(area)
+        
+        if language == 'zh':
+            return f"""# Chrome {version} {area_display} 摘要
+
+> 此版本在 {area_display} 领域没有新功能。
+"""
+        else:
+            return f"""# Chrome {version} {area_display} Digest
+
+> No new features in the {area_display} area for this release.
+"""

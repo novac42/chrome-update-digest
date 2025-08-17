@@ -1,7 +1,7 @@
 version: '138'
 channel: stable
 area: deprecations
-extraction_timestamp: '2025-08-13T15:22:56.147310'
+extraction_timestamp: '2025-08-17T09:13:08.721312'
 extraction_method: deterministic
 statistics:
   total_features: 1

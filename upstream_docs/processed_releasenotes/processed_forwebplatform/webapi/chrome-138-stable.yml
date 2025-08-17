@@ -1,7 +1,7 @@
 version: '138'
 channel: stable
 area: webapi
-extraction_timestamp: '2025-08-13T15:22:56.041425'
+extraction_timestamp: '2025-08-17T09:13:08.712167'
 extraction_method: deterministic
 statistics:
   total_features: 6

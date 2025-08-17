@@ -64,6 +64,23 @@ python src/processors/extract_profile_features.py
 
 # Monitor releases
 python src/processors/monitor_releases.py
+
+# Generate WebPlatform per-area digests (default behavior)
+# Note: split_by_area=True is now the default, generating separate digests for each focus area
+python -c "
+import asyncio
+from src.mcp_tools.enhanced_webplatform_digest import EnhancedWebplatformDigestTool
+from unittest.mock import AsyncMock
+
+async def run():
+    tool = EnhancedWebplatformDigestTool()
+    ctx = AsyncMock()
+    # Add mock sampling function as needed
+    result = await tool.run(ctx, version='139', channel='stable')
+    print(result)
+
+asyncio.run(run())
+"
 ```
 
 ## High-Level Architecture
