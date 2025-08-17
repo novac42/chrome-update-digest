@@ -1,3 +1,8 @@
+---
+layout: default
+title: Chrome 139 UI Update Digest
+---
+
 Save to: digest_markdown/webplatform/ui/chrome-139-stable-en.md
 
 ---

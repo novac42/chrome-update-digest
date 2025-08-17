@@ -1,3 +1,8 @@
+---
+layout: default
+title: Chrome 139 稳定版 – CSS 更新摘要
+---
+
 ````markdown
 保存至：`digest_markdown/webplatform/css/chrome-139-stable-zh.md`
 

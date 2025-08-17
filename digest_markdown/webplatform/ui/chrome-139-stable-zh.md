@@ -1,3 +1,8 @@
+---
+layout: default
+title: Chrome 139 UI 更新摘要
+---
+
 ````markdown
 保存至: digest_markdown/webplatform/ui/chrome-139-stable-zh.md
 

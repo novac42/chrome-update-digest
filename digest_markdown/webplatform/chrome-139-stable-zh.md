@@ -1,3 +1,8 @@
+---
+layout: default
+title: Chrome 139 全领域更新分析（Stable）
+---
+
 ```markdown
 # Chrome 139 全领域更新分析（Stable）
 

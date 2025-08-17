@@ -1,3 +1,8 @@
+---
+layout: default
+title: Chrome 139 稳定版 – JavaScript 领域更新
+---
+
 ````markdown
 Save to: digest_markdown/webplatform/javascript/chrome-139-stable-zh.md
 

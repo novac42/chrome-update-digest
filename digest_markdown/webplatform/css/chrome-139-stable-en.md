@@ -1,3 +1,8 @@
+---
+layout: default
+title: Chrome 139 Stable – CSS Update Digest
+---
+
 Save to: `digest_markdown/webplatform/css/chrome-139-stable-en.md`
 
 ---

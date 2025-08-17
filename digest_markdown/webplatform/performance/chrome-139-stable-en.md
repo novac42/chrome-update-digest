@@ -1,3 +1,8 @@
+---
+layout: default
+title: Chrome 139 Performance Update Digest
+---
+
 Save to: digest_markdown/webplatform/Performance/chrome-139-stable-en.md
 
 ---

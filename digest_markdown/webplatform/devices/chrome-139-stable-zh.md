@@ -1,3 +1,8 @@
+---
+layout: default
+title: Chrome 139 设备更新摘要
+---
+
 ````markdown
 Save to: digest_markdown/webplatform/Devices/chrome-139-stable-zh.md
 

@@ -1,3 +1,8 @@
+---
+layout: default
+title: Chrome 139 多媒体更新摘要
+---
+
 ```markdown
 保存至: digest_markdown/webplatform/Multimedia/chrome-139-stable-zh.md
 

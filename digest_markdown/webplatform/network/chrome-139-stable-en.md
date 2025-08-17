@@ -1,3 +1,8 @@
+---
+layout: default
+title: Chrome 139 Stable – Network Area Update Digest
+---
+
 digest_markdown/webplatform/network/chrome-139-stable-en.md
 
 ---

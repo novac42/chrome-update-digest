@@ -1,3 +1,8 @@
+---
+layout: default
+title: Chrome 139 Enterprise（Stable）
+---
+
 ```markdown
 # Chrome 139 Enterprise（Stable）
 

@@ -1,3 +1,8 @@
+---
+layout: default
+title: Chrome 139 Stable – JavaScript Area Update
+---
+
 Save to: digest_markdown/webplatform/javascript/chrome-139-stable-en.md
 
 ---

@@ -1,3 +1,8 @@
+---
+layout: default
+title: Chrome 139 Web API Update Digest (Stable)
+---
+
 Save to: digest_markdown/webplatform/Web API/chrome-139-stable-en.md
 
 ---

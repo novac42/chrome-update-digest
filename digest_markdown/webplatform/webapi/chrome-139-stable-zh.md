@@ -1,3 +1,8 @@
+---
+layout: default
+title: Chrome 139 Web API 更新摘要（稳定版）
+---
+
 ````markdown
 Save to: digest_markdown/webplatform/Web API/chrome-139-stable-zh.md
 

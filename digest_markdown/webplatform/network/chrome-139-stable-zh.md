@@ -1,3 +1,8 @@
+---
+layout: default
+title: Chrome 139 稳定版 – 网络领域更新摘要
+---
+
 ````markdown
 digest_markdown/webplatform/network/chrome-139-stable-zh.md
 

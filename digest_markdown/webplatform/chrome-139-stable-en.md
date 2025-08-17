@@ -1,6 +1,6 @@
-Save to:  
-`digest_markdown/webplatform/chrome-139-stable-en.md`
-
+---
+layout: default
+title: Chrome 139 Stable Release – Web Platform Digest
 ---
 
 # Chrome 139 Stable Release – Web Platform Digest

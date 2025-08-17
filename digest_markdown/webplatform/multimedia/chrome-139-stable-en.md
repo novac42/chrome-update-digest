@@ -1,3 +1,8 @@
+---
+layout: default
+title: Chrome 139 Multimedia Update Digest
+---
+
 Save to: digest_markdown/webplatform/Multimedia/chrome-139-stable-en.md
 
 ---
