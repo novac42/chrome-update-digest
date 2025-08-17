@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Test runner script for the upstream digest server
+Test runner script for the chrome update digest
 """
 
 import sys

@@ -444,7 +444,7 @@ class ProfileFeatureExtractor:
 
 def find_processed_files():
     """查找已处理的文件"""
-    base_path = Path("/Users/lyzh/Documents/EMSCodingTool/upstream-digest-server")
+    base_path = Path("/Users/lyzh/Documents/Nova_Projects/chrome-update-digest")
     processed_dir = base_path / "upstream_docs" / "processed_forenterprise"
     
     processed_files = {}

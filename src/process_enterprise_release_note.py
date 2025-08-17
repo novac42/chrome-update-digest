@@ -767,7 +767,7 @@ class ReleaseNotesProcessorV2:
 
 def get_unprocessed_versions():
     """查找未处理的版本"""
-    base_path = Path("/Users/lyzh/Documents/EMSCodingTool/upstream-digest-server")
+    base_path = Path("/Users/lyzh/Documents/Nova_Projects/chrome-update-digest")
     release_notes_dir = base_path / "upstream_docs" / "release_notes" / "Enterprise"
     processed_dir = base_path / "upstream_docs" / "processed_forenterprise"
     

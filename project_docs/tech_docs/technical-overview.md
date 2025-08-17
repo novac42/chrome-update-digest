@@ -1,10 +1,10 @@
-# Technical Overview - Upstream Digest Server
+# Technical Overview - Chrome Update Digest
 
 **Last Updated**: 2025-08-15
 
 ## Project Overview
 
-The Upstream Digest Server is a comprehensive system for processing, analyzing, and generating digests from Chrome release notes. It provides both direct Python script execution and MCP (Model Context Protocol) tool interfaces for accessing its capabilities.
+The Chrome Update Digest is a comprehensive system for processing, analyzing, and generating digests from Chrome release notes. It provides both direct Python script execution and MCP (Model Context Protocol) tool interfaces for accessing its capabilities.
 
 ## System Architecture
 
@@ -50,7 +50,7 @@ The Upstream Digest Server is a comprehensive system for processing, analyzing, 
 ### Directory Structure
 
 ```
-upstream-digest-server/
+chrome-update-digest/
 ├── src/
 │   ├── mcp_tools/           # MCP tool implementations
 │   ├── mcp_resources/       # Resource handlers

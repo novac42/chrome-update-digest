@@ -35,7 +35,7 @@ This MCP server provides access to:
 ```bash
 # Clone the repository
 git clone <repository-url>
-cd upstream-digest-server
+cd chrome-update-digest
 
 # Create and activate virtual environment
 python3 -m venv .venv
@@ -57,8 +57,8 @@ Add to your config file:
 {
   "mcpServers": {
     "chrome-digest": {
-      "command": "/path/to/upstream-digest-server/.venv/bin/python",
-      "args": ["/path/to/upstream-digest-server/fast_mcp_server.py"]
+      "command": "/path/to/chrome-update-digest/.venv/bin/python",
+      "args": ["/path/to/chrome-update-digest/fast_mcp_server.py"]
     }
   }
 }
@@ -149,7 +149,7 @@ python fast_mcp_server.py
 ## 📁 Data Organization
 
 ```
-upstream-digest-server/
+chrome-update-digest/
 ├── upstream_docs/           # Source data
 │   ├── release_notes/      # Raw release notes
 │   └── processed_releasenotes/  # Processed data
