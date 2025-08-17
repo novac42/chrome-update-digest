@@ -63,13 +63,19 @@ class HeadingBasedTagger:
     def __init__(self):
         """Initialize the tagger with predefined tag mappings."""
         # Mapping from heading patterns to tag names
+        # IMPORTANT: Order matters! More specific patterns should come first
         self.heading_to_tag = {
-            # Primary categories
-            "css and ui": "css",
-            "css": "css",
-            "ui": "ui",
+            # Primary categories - compound patterns first
+            "css and ui": "css",  # Handle "CSS and UI" as CSS only
+            "deprecations and removals": "deprecation",
+            "progressive web app": "pwa",
+            "service worker": "serviceworker",
             "web apis": "webapi",
             "web api": "webapi",
+            
+            # Single-word patterns
+            "css": "css",
+            # "ui": "ui",  # Removed - UI is not a valid standalone tag
             "javascript": "javascript",
             "js": "javascript",
             "devices": "devices",
@@ -79,25 +85,59 @@ class HeadingBasedTagger:
             "performance": "performance",
             "perf": "performance",
             "security": "security",
-            "service worker": "serviceworker",
             "serviceworker": "serviceworker",
-            "deprecations and removals": "deprecation",
             "deprecation": "deprecation",
             "removal": "deprecation",
             
             # Additional categories
             "webgpu": "webgpu",
             "gpu": "webgpu",
+            "graphics": "webgpu",  # Map "Graphics" to webgpu
             "storage": "storage",
             "network": "network",
             "privacy": "privacy",
             "accessibility": "accessibility",
             "a11y": "accessibility",
             "pwa": "pwa",
-            "progressive web app": "pwa",
         }
         
+        # Use list of tuples to preserve order
+        self.ordered_heading_patterns = [
+            # Compound patterns first (more specific)
+            ("css and ui", "css"),
+            ("deprecations and removals", "deprecation"),
+            ("progressive web app", "pwa"),
+            ("service worker", "serviceworker"),
+            ("web apis", "webapi"),
+            ("web api", "webapi"),
+            
+            # Single-word patterns (less specific)
+            ("css", "css"),
+            ("javascript", "javascript"),
+            ("js", "javascript"),
+            ("devices", "devices"),
+            ("device", "devices"),
+            ("multimedia", "multimedia"),
+            ("media", "multimedia"),
+            ("performance", "performance"),
+            ("perf", "performance"),
+            ("security", "security"),
+            ("serviceworker", "serviceworker"),
+            ("deprecation", "deprecation"),
+            ("removal", "deprecation"),
+            ("webgpu", "webgpu"),
+            ("gpu", "webgpu"),
+            ("graphics", "webgpu"),
+            ("storage", "storage"),
+            ("network", "network"),
+            ("privacy", "privacy"),
+            ("accessibility", "accessibility"),
+            ("a11y", "accessibility"),
+            ("pwa", "pwa"),
+        ]
+        
         # Cross-cutting concern patterns
+        # Note: "experimental" removed - it's not a meaningful tag for categorization
         self.cross_cutting_patterns = {
             "webgpu": [
                 r'\bwebgpu\b', r'\bgpu\b', r'\bwgsl\b', r'\bcompute shader\b',
@@ -119,10 +159,7 @@ class HeadingBasedTagger:
                 r'\bprivacy\b', r'\btracking\b', r'\bcookie\b', r'\bfingerprint\b',
                 r'\bthird-party\b', r'\buser-agent\b', r'\bclient hints\b'
             ],
-            "experimental": [
-                r'\bexperimental\b', r'\borigin trial\b', r'\bbehind flag\b',
-                r'\bflag:\b', r'\benable-features\b'
-            ],
+            # "experimental" removed - not a meaningful category tag
             "enterprise": [
                 r'\benterprise\b', r'\bpolicy\b', r'\bmanaged\b', r'\badmin\b',
                 r'\bkiosk\b', r'\bdeployment\b'
@@ -192,8 +229,8 @@ class HeadingBasedTagger:
             if re.match(r'^chrome \d+', heading_lower):
                 continue
             
-            # Check against known heading patterns
-            for pattern, tag_name in self.heading_to_tag.items():
+            # Check against ordered heading patterns (more specific first)
+            for pattern, tag_name in self.ordered_heading_patterns:
                 if pattern in heading_lower:
                     # Determine priority based on position in hierarchy
                     if i == len(heading_path) - 1:
@@ -216,6 +253,7 @@ class HeadingBasedTagger:
                     # Avoid duplicate tags
                     if not any(t.name == tag_name for t in tags):
                         tags.append(tag)
+                    # Stop after first match to avoid "CSS and UI" matching both "css and ui" and "ui"
                     break
         
         return tags
