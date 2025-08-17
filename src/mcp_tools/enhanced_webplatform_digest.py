@@ -976,15 +976,19 @@ Language: """ + language
         return json.dumps(results, ensure_ascii=False, indent=2)
     
     def _get_areas_from_yaml(self, yaml_data: Dict) -> List[str]:
-        """Extract all areas from YAML data."""
+        """Extract all areas from YAML data and normalize them."""
         areas = set()
         for feature in yaml_data.get('features', []):
             tags = feature.get('primary_tags', [])
             for tag in tags:
                 if isinstance(tag, dict):
-                    areas.add(tag.get('name', 'others'))
+                    tag_name = tag.get('name', 'others')
                 else:
-                    areas.add(str(tag))
+                    tag_name = str(tag)
+                
+                # Normalize the area name to match folder structure
+                normalized = self.focus_manager.normalize_area(tag_name)
+                areas.add(normalized)
         
         # Always include 'others' if there are untagged features
         if not areas:
@@ -1020,7 +1024,19 @@ Language: """ + language
                 else:
                     tag_names.append(str(tag))
             
+            # Check if area matches any tag, considering normalization
+            # For graphics-webgpu, we need to match 'webgpu' tags
             if area in tag_names:
+                area_features.append(feature)
+            elif area == 'graphics-webgpu' and 'webgpu' in tag_names:
+                area_features.append(feature)
+            elif area == 'security-privacy' and ('security' in tag_names or 'privacy' in tag_names):
+                area_features.append(feature)
+            elif area == 'pwa-service-worker' and ('pwa' in tag_names or 'service-worker' in tag_names or 'serviceworker' in tag_names):
+                area_features.append(feature)
+            elif area == 'navigation-loading' and ('loading' in tag_names or 'navigation' in tag_names):
+                area_features.append(feature)
+            elif area == 'origin-trials' and 'trials' in tag_names:
                 area_features.append(feature)
         
         if not area_features and area == 'others':
