@@ -11,10 +11,10 @@ from typing import List, Dict, Optional, Any
 from datetime import datetime
 from dataclasses import dataclass, asdict
 
-from src.utils.link_extractor import LinkExtractor, ExtractedFeature
-from src.models.feature_tagging import HeadingBasedTagger, TaggedFeature
-from src.utils.focus_area_manager import FocusAreaManager
-from src.utils.area_classifier import WebGPUClassifier
+from utils.link_extractor import LinkExtractor, ExtractedFeature
+from models.feature_tagging import HeadingBasedTagger, TaggedFeature
+from utils.focus_area_manager import FocusAreaManager
+from utils.area_classifier import WebGPUClassifier
 
 
 @dataclass

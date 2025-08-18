@@ -7,7 +7,7 @@ import re
 from dataclasses import dataclass, field
 from typing import List, Dict, Set, Optional
 from enum import Enum
-from src.utils.link_extractor import ExtractedFeature
+from utils.link_extractor import ExtractedFeature
 
 
 class TagPriority(Enum):

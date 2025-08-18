@@ -1,0 +1,76 @@
+version: '139'
+channel: stable
+area: performance
+extraction_timestamp: '2025-08-18T18:58:21.366576'
+extraction_method: deterministic
+statistics:
+  total_features: 2
+  total_links: 5
+  primary_tags:
+    devices: 1
+    performance: 2
+  cross_cutting:
+    privacy: 2
+features:
+- title: WebXR depth sensing performance improvements
+  content: 'Exposes several new mechanisms to customize the behavior of the depth sensing feature within a WebXR session,
+    with the goal of improving the performance of the generation or consumption of the depth buffer.
+
+
+    The key mechanisms exposed are: the ability to request the raw or smooth depth buffer, the ability to request that the
+    runtime stop or resume providing the depth buffer, and the ability to expose a depth buffer that does not align with the
+    user''s view exactly, so that the user agent does not need to perform unnecessary re-projections every frame.
+
+
+    [Tracking bug #410607163](https://issues.chromium.org/issues/410607163) | [ChromeStatus.com entry](https://chromestatus.com/feature/5074096916004864)
+    | [Spec](https://immersive-web.github.io/depth-sensing)'
+  heading_path:
+  - Chrome 139
+  - Device
+  - WebXR depth sensing performance improvements
+  links:
+  - url: https://issues.chromium.org/issues/410607163
+    link_type: other
+    title: 'Tracking bug #410607163'
+  - url: https://chromestatus.com/feature/5074096916004864
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://immersive-web.github.io/depth-sensing
+    link_type: github
+    title: Spec
+  line_number: 86
+  primary_tags:
+  - name: devices
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: performance
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Faster background freezing on Android
+  content: 'Shortens the time to freezing background pages (and associated workers) from five minutes to one minute on Android.
+
+
+    [Tracking bug #435623337](https://issues.chromium.org/issues/435623337) | [ChromeStatus.com entry](https://chromestatus.com/feature/5386725031149568)'
+  heading_path:
+  - Chrome 139
+  - Performance
+  - Faster background freezing on Android
+  links:
+  - url: https://issues.chromium.org/issues/435623337
+    link_type: other
+    title: 'Tracking bug #435623337'
+  - url: https://chromestatus.com/feature/5386725031149568
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 160
+  primary_tags:
+  - name: performance
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
