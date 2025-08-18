@@ -167,8 +167,8 @@ For batch processing or automation, you can also use the Python scripts directly
 # Process enterprise release notes
 python src/process_enterprise_release_note.py
 
-# Merge WebGPU notes
-python src/merge_webgpu_release_notes_v2.py --version 139
+# Process release notes with WebGPU merge (integrated pipeline)
+python3 src/processors/split_and_process_release_notes.py --version 139
 
 # Monitor releases
 python src/processors/monitor_releases.py
