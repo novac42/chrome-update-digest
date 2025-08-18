@@ -56,8 +56,8 @@ python src/convert_md2html.py digest-chrome-138-stable.md  # Specific file
 # Process enterprise release notes
 python src/process_enterprise_release_note.py
 
-# Merge WebGPU release notes (use v2 for better accuracy)
-python3 src/merge_webgpu_release_notes_v2.py --version 139  # Improved version that excludes version history
+# Process release notes with integrated WebGPU merge
+python3 src/processors/split_and_process_release_notes.py --version 139  # Main pipeline with WebGPU merge
 
 # Extract profile features
 python src/processors/extract_profile_features.py
@@ -167,7 +167,7 @@ The test suite validates both traditional file processing and MCP server functio
 ## Known Issues and Solutions
 
 ### WebGPU Processing Pipeline
-**Updated Solution (2025-08-18)**: The pipeline now uses a split-first, then merge approach:
+**Updated Solution (2025-08-18)**: The pipeline now uses a split-first, then merge approach with strict classification:
 
 ```bash
 # Run the integrated pipeline that handles everything
@@ -187,6 +187,10 @@ This pipeline:
 - Extract ALL content from dedicated WebGPU notes except "What's New in WebGPU" history section
 - Apply deduplication only during YAML generation for graphics-webgpu area
 - File organization: `/merged` and `/split_by_heading` folders under `/processed_forwebplatform`
+- **NEW**: Strict WebGPU classification is now enabled by default (as of 2025-08-18)
+  - Reduces misclassification from 72.4% to ~0%
+  - To disable (not recommended): `export STRICT_WEBGPU_AREA=0`
+  - See `docs/webgpu_strict_classification.md` for details
 
 ### Area Classification
 **Issue**: Features may be incorrectly classified into wrong areas due to broad heading detection.

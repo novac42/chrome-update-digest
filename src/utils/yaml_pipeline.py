@@ -5,6 +5,7 @@ Provides intermediate YAML format between extraction and digest generation.
 
 import yaml
 import json
+import os
 from pathlib import Path
 from typing import List, Dict, Optional, Any
 from datetime import datetime
@@ -13,6 +14,7 @@ from dataclasses import dataclass, asdict
 from src.utils.link_extractor import LinkExtractor, ExtractedFeature
 from src.models.feature_tagging import HeadingBasedTagger, TaggedFeature
 from src.utils.focus_area_manager import FocusAreaManager
+from src.utils.area_classifier import WebGPUClassifier
 
 
 @dataclass
@@ -65,6 +67,11 @@ class YAMLPipeline:
         self.link_extractor = LinkExtractor()
         self.tagger = HeadingBasedTagger()
         self.focus_manager = FocusAreaManager(Path('config/focus_areas.yaml'))
+        
+        # Initialize WebGPU classifier with strict mode enabled by default
+        # Can be disabled by setting STRICT_WEBGPU_AREA=0
+        strict_webgpu = os.environ.get('STRICT_WEBGPU_AREA', '1') != '0'
+        self.webgpu_classifier = WebGPUClassifier(strict_mode=strict_webgpu)
         
         # Define area mappings based on heading2
         self.area_mappings = {
@@ -378,7 +385,22 @@ class YAMLPipeline:
             for area, headings in self.area_mappings.items():
                 for h in headings:
                     if h.lower() in heading.lower():
-                        return area
+                        # Special handling for graphics-webgpu with strict classifier
+                        if area == 'graphics-webgpu' and self.webgpu_classifier.strict_mode:
+                            # Use strict classifier to verify this is really WebGPU
+                            classification = self.webgpu_classifier.is_strong_webgpu(feature)
+                            if classification.is_webgpu:
+                                return area
+                            else:
+                                # Log why it was rejected if in debug mode
+                                if os.environ.get('DEBUG_WEBGPU_CLASSIFICATION'):
+                                    print(f"  Rejected WebGPU classification for '{feature.get('title', 'Unknown')}':")
+                                    for reason in classification.exclusion_reasons:
+                                        print(f"    - {reason}")
+                                # Continue checking other areas
+                                break
+                        else:
+                            return area
         
         # Default to 'other' if no match
         return 'other'

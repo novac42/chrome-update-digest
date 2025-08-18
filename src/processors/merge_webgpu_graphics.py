@@ -170,6 +170,10 @@ class WebGPUGraphicsMerger:
             skip_until_h2 = True
             
             for line in lines:
+                # Skip any top-level H1 headers containing "What's New in WebGPU"
+                if line.startswith('# ') and 'What\'s New in WebGPU' in line:
+                    continue
+                
                 # Skip everything until we find the first H2 (##)
                 if skip_until_h2:
                     if line.startswith('## ') and not 'What\'s New in WebGPU' in line:

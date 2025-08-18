@@ -27,8 +27,7 @@ from mcp_tools.feature_splitter import FeatureSplitterTool
 from mcp_tools.release_monitor import ReleaseMonitorTool
 from mcp_tools.profile_feature_extractor import ProfileFeatureExtractorTool
 from mcp_tools.enterprise_notes_processor import EnterpriseNotesProcessorTool
-from mcp_tools.webgpu_yaml_processor import WebGPUYAMLProcessorTool
-from mcp_tools.webgpu_merger import WebGPUMergerTool
+# WebGPU tools removed - functionality integrated into main pipeline
 
 # Import resource classes
 from mcp_resources.processed_releasenotes import ProcessedReleaseNotesResource
@@ -76,8 +75,7 @@ feature_splitter = FeatureSplitterTool(BASE_PATH)
 release_monitor_tool = ReleaseMonitorTool(BASE_PATH)
 profile_extractor_tool = ProfileFeatureExtractorTool(BASE_PATH)
 enterprise_processor_tool = EnterpriseNotesProcessorTool(BASE_PATH)
-webgpu_yaml_processor_tool = WebGPUYAMLProcessorTool(BASE_PATH)
-webgpu_merger_tool = WebGPUMergerTool(BASE_PATH)
+# WebGPU tools initialization removed - use split_and_process_release_notes.py instead
 
 # Initialize resource handler
 release_notes_resource = ProcessedReleaseNotesResource(BASE_PATH)
@@ -275,42 +273,12 @@ async def process_enterprise_notes(ctx: Context, version: int,
     )
 
 
-@mcp.tool()
-async def process_webgpu_yaml(ctx: Context, version: str,
-                             merge_first: bool = True,
-                             target_areas: Optional[List[str]] = None) -> str:
-    """Process merged WebGPU markdown to generate structured YAML files
-    
-    Args:
-        version: Chrome version number
-        merge_first: Whether to merge WebGPU content first
-        target_areas: Optional list of specific areas to generate
-    
-    Returns:
-        JSON with processing results
-    """
-    return await webgpu_yaml_processor_tool.process_webgpu_yaml(
-        ctx, version, merge_first, target_areas
-    )
+# WebGPU YAML processing removed - use split_and_process_release_notes.py instead
+# python3 src/processors/split_and_process_release_notes.py --version VERSION
 
 
-@mcp.tool()
-async def merge_webgpu_notes(ctx: Context, version: str,
-                            save_output: bool = True,
-                            include_metadata: bool = False) -> str:
-    """Merge WebGPU release notes into Chrome release notes
-    
-    Args:
-        version: Chrome version number
-        save_output: Whether to save the merged output to file
-        include_metadata: Whether to include WebGPU metadata sections
-    
-    Returns:
-        Merged markdown content or error message
-    """
-    return await webgpu_merger_tool.merge_webgpu_notes(
-        ctx, version, save_output, include_metadata
-    )
+# WebGPU merge removed - use split_and_process_release_notes.py instead
+# python3 src/processors/split_and_process_release_notes.py --version VERSION
 
 
 # Register all processed release notes as individual resources
