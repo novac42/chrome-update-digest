@@ -1,16 +1,16 @@
 version: '139'
 channel: stable
 area: performance
-extraction_timestamp: '2025-08-17T23:20:02.960913'
+extraction_timestamp: '2025-08-18T15:01:09.504446'
 extraction_method: deterministic
 statistics:
-  total_features: 2
-  total_links: 5
+  total_features: 1
+  total_links: 3
   primary_tags:
     devices: 1
-    performance: 2
+    performance: 1
   cross_cutting:
-    privacy: 2
+    privacy: 1
 features:
 - title: WebXR depth sensing performance improvements
   content: 'Exposes several new mechanisms to customize the behavior of the depth sensing feature within a WebXR session,
@@ -44,30 +44,6 @@ features:
     priority: primary
     source: heading
     confidence: 1.0
-  - name: performance
-    priority: primary
-    source: heading
-    confidence: 1.0
-  cross_cutting_concerns:
-  - privacy
-- title: Faster background freezing on Android
-  content: 'Shortens the time to freezing background pages (and associated workers) from five minutes to one minute on Android.
-
-
-    [Tracking bug #435623337](https://issues.chromium.org/issues/435623337) | [ChromeStatus.com entry](https://chromestatus.com/feature/5386725031149568)'
-  heading_path:
-  - Chrome 139
-  - Performance
-  - Faster background freezing on Android
-  links:
-  - url: https://issues.chromium.org/issues/435623337
-    link_type: other
-    title: 'Tracking bug #435623337'
-  - url: https://chromestatus.com/feature/5386725031149568
-    link_type: chromestatus
-    title: ChromeStatus.com entry
-  line_number: 160
-  primary_tags:
   - name: performance
     priority: primary
     source: heading

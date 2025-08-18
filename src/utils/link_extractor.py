@@ -159,8 +159,8 @@ class LinkExtractor:
                     heading_stack.pop()
                 heading_stack.append((level, title))
                 
-                # Create new feature for level 3 headings (###)
-                if level == 3:
+                # Create new feature for level 2 or 3 headings (## or ###)
+                if level in [2, 3]:
                     heading_path = [h[1] for h in heading_stack]
                     current_feature = ExtractedFeature(
                         title=title,

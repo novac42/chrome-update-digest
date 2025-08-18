@@ -1,0 +1,169 @@
+version: '138'
+channel: stable
+area: css
+extraction_timestamp: '2025-08-18T15:01:09.410825'
+extraction_method: deterministic
+statistics:
+  total_features: 5
+  total_links: 16
+  primary_tags:
+    css: 5
+  cross_cutting:
+    privacy: 5
+features:
+- title: 'CSS Sign-Related Functions: abs(), sign()'
+  content: 'The sign-related functions `abs()` and `sign()` compute various functions related to the sign of their argument.
+    The `abs(A)` function contains one calculation A, and returns the absolute value of A, as the same type as the input:
+    if A''s numeric value is positive or 0⁺, just A again; otherwise -1 * A. The `sign(A)` function contains one calculation
+    A, and returns -1 if A''s numeric value is negative, +1 if A''s numeric value is positive, 0⁺ if A''s numeric value is
+    0⁺, and 0⁻ if A''s numeric value is 0⁻. The return type is a `<number>`, made consistent with the type of the input calculation.
+
+
+    **References:** [MDN Docs:abs()](https://developer.mozilla.org/docs/Web/CSS/abs) | [Tracking bug #40253181](https://bugs.chromium.org/p/chromium/issues/detail?id=40253181)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5196860094464000) | [Spec](https://www.w3.org/TR/css-values-4/#sign-funcs)'
+  heading_path:
+  - Chrome 138 Release Notes
+  - CSS and UI
+  - 'CSS Sign-Related Functions: abs(), sign()'
+  links:
+  - url: https://developer.mozilla.org/docs/Web/CSS/abs
+    link_type: mdn
+    title: MDN Docs:abs()
+  - url: https://bugs.chromium.org/p/chromium/issues/detail?id=40253181
+    link_type: tracking_bug
+    title: 'Tracking bug #40253181'
+  - url: https://chromestatus.com/feature/5196860094464000
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://www.w3.org/TR/css-values-4/#sign-funcs
+    link_type: spec
+    title: Spec
+  line_number: 9
+  primary_tags:
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: 'Interpolation progress functional notation: CSS progress() function'
+  content: 'The `progress()` functional notation returns a `<number>` value representing the position of one calculation (the
+    progress value) between two other calculations (the progress start value and progress end value). The `progress()` function
+    is a math function.
+
+
+    **References:** [Tracking bug #40944203](https://bugs.chromium.org/p/chromium/issues/detail?id=40944203) | [ChromeStatus.com
+    entry](https://chromestatus.com/feature/5096136905244672) | [Spec](https://www.w3.org/TR/css-values-5/#progress-notation)'
+  heading_path:
+  - Chrome 138 Release Notes
+  - CSS and UI
+  - 'Interpolation progress functional notation: CSS progress() function'
+  links:
+  - url: https://bugs.chromium.org/p/chromium/issues/detail?id=40944203
+    link_type: tracking_bug
+    title: 'Tracking bug #40944203'
+  - url: https://chromestatus.com/feature/5096136905244672
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://www.w3.org/TR/css-values-5/#progress-notation
+    link_type: spec
+    title: Spec
+  line_number: 15
+  primary_tags:
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: CSS sibling-index() and sibling-count()
+  content: 'The `sibling-index()` and `sibling-count()` functions can be used as integers in CSS property values to style
+    elements based on their position among its siblings, or the total number of siblings respectively. These functions can
+    be used directly as integer values, but more interestingly inside `calc()` expressions.
+
+
+    **References:** [Tracking bug #40282719](https://bugs.chromium.org/p/chromium/issues/detail?id=40282719) | [ChromeStatus.com
+    entry](https://chromestatus.com/feature/5649901281918976) | [Spec](https://www.w3.org/TR/css-values-5/#sibling-functions)'
+  heading_path:
+  - Chrome 138 Release Notes
+  - CSS and UI
+  - CSS sibling-index() and sibling-count()
+  links:
+  - url: https://bugs.chromium.org/p/chromium/issues/detail?id=40282719
+    link_type: tracking_bug
+    title: 'Tracking bug #40282719'
+  - url: https://chromestatus.com/feature/5649901281918976
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://www.w3.org/TR/css-values-5/#sibling-functions
+    link_type: spec
+    title: Spec
+  line_number: 21
+  primary_tags:
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: CSS stretch sizing keyword
+  content: 'A keyword for CSS sizing properties (for example, `width` and `height`) that lets elements grow to exactly fill
+    their containing block''s available space. It is similar to ''100%'', except the resulting size is applied to the element''s
+    margin box instead of the box indicated by `box-sizing`. Using this keyword lets the element keep its margins while still
+    being as large as possible. An unprefixed version of `-webkit-fill-available`.
+
+
+    **References:** [Tracking bug #41253915](https://bugs.chromium.org/p/chromium/issues/detail?id=41253915) | [ChromeStatus.com
+    entry](https://chromestatus.com/feature/5102457485459456) | [Spec](https://www.w3.org/TR/css-sizing-4/#valdef-width-stretch)'
+  heading_path:
+  - Chrome 138 Release Notes
+  - CSS and UI
+  - CSS stretch sizing keyword
+  links:
+  - url: https://bugs.chromium.org/p/chromium/issues/detail?id=41253915
+    link_type: tracking_bug
+    title: 'Tracking bug #41253915'
+  - url: https://chromestatus.com/feature/5102457485459456
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://www.w3.org/TR/css-sizing-4/#valdef-width-stretch
+    link_type: spec
+    title: Spec
+  line_number: 27
+  primary_tags:
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: CSS env variable for OS-level font scale
+  content: 'Exposes a user''s preferred font scale to CSS. Without this, it''s not practical for a page to detect if the user
+    has changed their preferred font size using the Operating System''s preferences. This CSS environment variable will reflect
+    the scale chosen by the user.
+
+
+    **References:** [Tracking bug #397737223](https://bugs.chromium.org/p/chromium/issues/detail?id=397737223) | [ChromeStatus.com
+    entry](https://chromestatus.com/feature/5106542883938304) | [Spec](https://www.w3.org/TR/css-env-1/#os-font-scale)'
+  heading_path:
+  - Chrome 138 Release Notes
+  - CSS and UI
+  - CSS env variable for OS-level font scale
+  links:
+  - url: https://bugs.chromium.org/p/chromium/issues/detail?id=397737223
+    link_type: tracking_bug
+    title: 'Tracking bug #397737223'
+  - url: https://chromestatus.com/feature/5106542883938304
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://www.w3.org/TR/css-env-1/#os-font-scale
+    link_type: spec
+    title: Spec
+  line_number: 33
+  primary_tags:
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
