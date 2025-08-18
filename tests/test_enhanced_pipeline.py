@@ -14,7 +14,7 @@ import tempfile
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.utils.focus_area_manager import FocusAreaManager, FocusAreaConfig, MatchingConfig
+from src.utils.focus_area_manager import FocusAreaManager
 from src.utils.yaml_pipeline import YAMLPipeline, PipelineStatistics
 from src.utils.link_extractor import LinkExtractor, ExtractedFeature, ExtractedLink
 from src.models.feature_tagging import HeadingBasedTagger, TaggedFeature, FeatureTag, TagPriority

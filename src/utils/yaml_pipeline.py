@@ -10,9 +10,9 @@ from typing import List, Dict, Optional, Any
 from datetime import datetime
 from dataclasses import dataclass, asdict
 
-from utils.link_extractor import LinkExtractor, ExtractedFeature
-from models.feature_tagging import HeadingBasedTagger, TaggedFeature
-from utils.focus_area_manager import FocusAreaManager
+from src.utils.link_extractor import LinkExtractor, ExtractedFeature
+from src.models.feature_tagging import HeadingBasedTagger, TaggedFeature
+from src.utils.focus_area_manager import FocusAreaManager
 
 
 @dataclass
@@ -84,7 +84,8 @@ class YAMLPipeline:
             'enterprise': ['Enterprise'],
             'browser': ['Browser changes'],
             'trials': ['Origin trials', 'New origin trials'],
-            'deprecations': ['Deprecations and removals']
+            'deprecations': ['Deprecations and removals'],
+            'on-device-ai': ['On-device AI', 'AI', 'Machine Learning', 'Language Model', 'Prompt API']
         }
     
     def process_release_notes(
@@ -339,23 +340,25 @@ class YAMLPipeline:
         Generate YAML file path for a version and optional area.
         
         Structure:
-        - With area: processed_forwebplatform/{area}/chrome-{version}-{channel}.yml
-        - Without area: processed_forwebplatform/chrome-{version}-{channel}-tagged.yml
+        - With area: processed_forwebplatform/processed_yaml/{area}-chrome-{version}-{channel}.yml
+        - Without area: processed_forwebplatform/processed_yaml/chrome-{version}-{channel}-tagged.yml
         """
         # Ensure channel is set (default to stable if not specified)
         if not channel:
             channel = 'stable'
             
+        # All YAML files go in centralized processed_yaml directory
+        yaml_dir = self.base_output_dir / 'processed_yaml'
+        yaml_dir.mkdir(parents=True, exist_ok=True)
+        
         if area:
-            # Area-specific files go in subdirectories
-            area_dir = self.base_output_dir / area
-            area_dir.mkdir(parents=True, exist_ok=True)
-            filename = f"chrome-{version}-{channel}.yml"
-            return area_dir / filename
+            # Area-specific files with area prefix in filename
+            filename = f"{area}-chrome-{version}-{channel}.yml"
+            return yaml_dir / filename
         else:
-            # General tagged file stays in root directory
+            # General tagged file
             filename = f"chrome-{version}-{channel}-tagged.yml"
-            return self.base_output_dir / filename
+            return yaml_dir / filename
     
     def _determine_area(self, feature: Dict) -> str:
         """
