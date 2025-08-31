@@ -1,0 +1,36 @@
+area: enterprise
+channel: stable
+features:
+- content: 'Chrome Enterprise is enhancing security monitoring and incident response
+    capabilities by collecting and reporting local and remote IP addresses and sending
+    those IP addresses to the Security Investigation Logs (SIT). In addition, Chrome
+    Enterprise will allow admins to optionally send the IP addresses to first-party
+    and third-party SIEM providers through the Chrome Enterprise Reporting connector.
+    This is available for Chrome Enterprise Core customers.
+
+
+    **References:** [ChromeStatus.com entry](https://chromestatus.com/feature/5110849951309824)'
+  cross_cutting_concerns:
+  - security
+  - privacy
+  - enterprise
+  heading_path:
+  - Enterprise
+  - IP address logging and reporting
+  line_number: 3
+  links:
+  - link_type: chromestatus
+    title: ChromeStatus.com entry
+    url: https://chromestatus.com/feature/5110849951309824
+  primary_tags: []
+  title: IP address logging and reporting
+generated_at: '2025-08-31T23:44:59.405814'
+statistics:
+  cross_cutting:
+    enterprise: 1
+    privacy: 1
+    security: 1
+  primary_tags: {}
+  total_features: 1
+  total_links: 1
+version: '137'

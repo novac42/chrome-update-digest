@@ -1,5 +1,15 @@
 #!/usr/bin/env python3
 """
+DEPRECATED: This legacy pipeline has been replaced by clean_data_pipeline.py
+
+This file is deprecated and should not be used for new development.
+Use src/processors/clean_data_pipeline.py instead, which provides:
+- Configuration-driven area mapping via config/focus_areas.yaml
+- Smart area classification with fallback to original headings
+- Improved WebGPU deduplication logic
+- Better support for new focus areas (payment, devtools, etc.)
+
+Legacy description:
 Improved pipeline that splits Chrome release notes by heading2 before processing.
 This ensures accurate categorization and prevents mixing of different feature areas.
 """
@@ -18,9 +28,16 @@ from processors.merge_webgpu_graphics import WebGPUGraphicsMerger
 
 
 class ReleaseNoteSplitter:
-    """Split Chrome release notes by heading2 sections."""
+    """
+    DEPRECATED: Split Chrome release notes by heading2 sections.
+    
+    Use clean_data_pipeline.py instead for improved area classification.
+    """
     
     def __init__(self):
+        print("WARNING: split_and_process_release_notes.py is DEPRECATED!")
+        print("Please use clean_data_pipeline.py for better area classification and configuration management.")
+        print("See CLAUDE.md for migration guidance.")
         self.section_mappings = {
             'css': ['CSS and UI', 'CSS'],
             'webapi': ['Web APIs'],
