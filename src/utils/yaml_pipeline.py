@@ -11,10 +11,10 @@ from typing import List, Dict, Optional, Any
 from datetime import datetime
 from dataclasses import dataclass, asdict
 
-from utils.link_extractor import LinkExtractor, ExtractedFeature
-from models.feature_tagging import HeadingBasedTagger, TaggedFeature
-from utils.focus_area_manager import FocusAreaManager
-from utils.area_classifier import WebGPUClassifier
+from src.utils.link_extractor import LinkExtractor, ExtractedFeature
+from src.models.feature_tagging import HeadingBasedTagger, TaggedFeature
+from src.utils.focus_area_manager import FocusAreaManager
+from src.utils.area_classifier import WebGPUClassifier
 
 
 @dataclass
@@ -64,36 +64,44 @@ class YAMLPipeline:
         # Keep output_dir for backward compatibility, pointing to base dir
         self.output_dir = self.base_output_dir
         
+        # Set base path for project root
+        self.base_path = Path(__file__).parent.parent.parent
+        
         self.link_extractor = LinkExtractor()
         self.tagger = HeadingBasedTagger()
-        self.focus_manager = FocusAreaManager(Path('config/focus_areas.yaml'))
         
         # Initialize WebGPU classifier with strict mode enabled by default
         # Can be disabled by setting STRICT_WEBGPU_AREA=0
         strict_webgpu = os.environ.get('STRICT_WEBGPU_AREA', '1') != '0'
         self.webgpu_classifier = WebGPUClassifier(strict_mode=strict_webgpu)
         
-        # Define area mappings based on heading2
-        self.area_mappings = {
-            'css': ['CSS and UI', 'CSS'],
-            'webapi': ['Web APIs'],
-            'graphics-webgpu': ['WebGPU', 'Graphics', 'Detailed WebGPU Updates', 'Additional WebGPU Updates'],
-            'javascript': ['JavaScript'],
-            'security': ['Security', 'Privacy and security'],
-            'performance': ['Performance'],
-            'media': ['Multimedia', 'Images and media'],
-            'devices': ['Devices'],
-            'html-dom': ['HTML and DOM'],
-            'service-worker': ['Service Worker'],
-            'webassembly': ['WebAssembly'],
-            'identity': ['Identity'],
-            'payments': ['Payments'],
-            'enterprise': ['Enterprise'],
-            'browser': ['Browser changes'],
-            'trials': ['Origin trials', 'New origin trials'],
-            'deprecations': ['Deprecations and removals'],
-            'on-device-ai': ['On-device AI', 'AI', 'Machine Learning', 'Language Model', 'Prompt API']
-        }
+        # Load focus areas configuration for dynamic area mapping
+        self.focus_manager = FocusAreaManager(self.base_path / 'config' / 'focus_areas.yaml')
+        
+        # Generate area mappings from focus_areas.yaml for backward compatibility
+        self.area_mappings = self._build_area_mappings_from_config()
+    
+    def _build_area_mappings_from_config(self) -> Dict[str, List[str]]:
+        """
+        Build area mappings from focus_areas.yaml configuration.
+        
+        Returns:
+            Dictionary mapping area keys to heading patterns for backward compatibility.
+        """
+        mappings = {}
+        focus_areas = self.focus_manager.config.get('focus_areas', {})
+        
+        for area_key, area_config in focus_areas.items():
+            heading_patterns = area_config.get('heading_patterns', [])
+            if heading_patterns:
+                mappings[area_key] = heading_patterns
+                
+        # Add special cases for backward compatibility
+        # Graphics-webgpu gets additional patterns for WebGPU merging
+        if 'graphics-webgpu' in mappings:
+            mappings['graphics-webgpu'].extend(['Detailed WebGPU Updates', 'Additional WebGPU Updates'])
+            
+        return mappings
     
     def process_release_notes(
         self,
