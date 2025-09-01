@@ -120,9 +120,16 @@ Raw Release Notes → Clean Data Pipeline → Area-Specific YAML → Digest Gene
 
 ### Output Structure
 ```
-upstream_docs/processed_releasenotes/processed_forwebplatform/
-├── areas/{area}/chrome-{version}-{channel}.md           # Area-specific content
-└── processed_yaml/{area}/chrome-{version}-{channel}.yml # Structured data
+upstream_docs/processed_releasenotes/processed_forwebplatform/areas/
+├── css/
+│   ├── chrome-{version}-{channel}.md                    # Human-readable content  
+│   └── chrome-{version}-{channel}.yml                   # Structured data
+├── webapi/
+│   ├── chrome-{version}-{channel}.md                    # Human-readable content
+│   └── chrome-{version}-{channel}.yml                   # Structured data
+└── graphics-webgpu/
+    ├── chrome-{version}-{channel}.md                    # Human-readable content
+    └── chrome-{version}-{channel}.yml                   # Structured data
 ```
 
 ## Key Implementation Patterns
