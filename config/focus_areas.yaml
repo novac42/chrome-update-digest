@@ -22,7 +22,6 @@ focus_areas:
     description: "HTML elements and DOM manipulation"
     priority: 2
     heading_patterns:
-      - "HTML and DOM"
       - "HTML"
       - "DOM"
     
@@ -41,11 +40,6 @@ focus_areas:
     keywords:
       - "on-device ai"
       - "language model"
-      - "prompt api"
-      - "ai api"
-      - "rewriter api"
-      - "writer api"
-      - "backed by an on-device ai"
     heading_patterns:
       - "On-device AI"
     # Special flag: this area also searches keywords in feature content
@@ -58,7 +52,6 @@ focus_areas:
     heading_patterns:
       - "Web APIs"
       - "Web API"
-      - "Browser APIs"
     # Note: Web API can have multiple tags since it contains APIs from many areas
     allow_multiple_tags: true
     
@@ -68,15 +61,12 @@ focus_areas:
     priority: 2
     heading_patterns:
       - "Origin trials"
-      - "New origin trials"
-      - "Origin trials in progress"
     
   deprecations:
     name: "Deprecations"
     description: "Deprecated and removed features"
     priority: 2
     heading_patterns:
-      - "Deprecations and removals"
       - "Deprecations"
       - "Removals"
     
@@ -87,8 +77,6 @@ focus_areas:
     heading_patterns:
       - "Security"
       - "Privacy"
-      - "Privacy and security"
-      - "Security and privacy"
     
   navigation-loading:
     name: "Navigation-Loading"
@@ -116,8 +104,6 @@ focus_areas:
     priority: 2
     heading_patterns:
       - "Performance"
-      - "Optimizations"
-      - "Performance improvements"
     
   devices:
     name: "Devices"
@@ -126,7 +112,6 @@ focus_areas:
     heading_patterns:
       - "Device"
       - "Devices"
-      - "Device APIs"
       - "Sensors"
 
     

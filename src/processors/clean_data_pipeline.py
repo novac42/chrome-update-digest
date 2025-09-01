@@ -193,65 +193,190 @@ class CleanDataPipeline:
         
         return cleaned.strip()
     
+    def detect_heading_hierarchy(self, content: str) -> Dict[str, int]:
+        """
+        Detect the heading hierarchy in the content.
+        Returns mapping of 'section' and 'feature' to their actual heading levels,
+        plus analysis of sub-headings that should be included in feature content.
+        """
+        lines = content.split('\n')
+        heading_info = []  # Store (level, line_number, title)
+        
+        for i, line in enumerate(lines):
+            # Skip the main title (usually h1)
+            if re.match(r'^#\s+[^#]', line):
+                continue
+            # Detect h2-h6 headings (extended range)
+            for level in range(2, 7):  # h2 to h6
+                pattern = rf'^{"#" * level}\s+(.+)$'
+                match = re.match(pattern, line)
+                if match:
+                    heading_info.append((level, i, match.group(1).strip()))
+                    break
+        
+        if not heading_info:
+            return {'section': 2, 'feature': 3, 'max_level': 3}
+        
+        # Analyze heading levels
+        levels = [info[0] for info in heading_info]
+        unique_levels = sorted(set(levels))
+        max_level = max(levels)
+        
+        if len(unique_levels) >= 2:
+            # Determine which levels represent sections vs features
+            # Look at the distribution and spacing between headings
+            level_counts = {level: levels.count(level) for level in unique_levels}
+            
+            # Usually the first level with multiple occurrences is features
+            # or if levels are close together, first is section, second is feature
+            if len(unique_levels) == 2:
+                return {
+                    'section': unique_levels[0] if level_counts[unique_levels[0]] <= 3 else None,
+                    'feature': unique_levels[0] if level_counts[unique_levels[0]] > 3 else unique_levels[1],
+                    'max_level': max_level
+                }
+            else:
+                # More complex case - analyze structure
+                primary_level = max(level_counts, key=level_counts.get)
+                if primary_level == unique_levels[0]:
+                    # First level is most common - likely features
+                    return {
+                        'section': None,
+                        'feature': unique_levels[0],
+                        'max_level': max_level
+                    }
+                else:
+                    # Later level is most common - first level is sections
+                    return {
+                        'section': unique_levels[0],
+                        'feature': primary_level,
+                        'max_level': max_level
+                    }
+        elif len(unique_levels) == 1:
+            # Only one heading level - treat as features
+            return {
+                'section': None,
+                'feature': unique_levels[0],
+                'max_level': max_level
+            }
+        else:
+            # No headings found - fallback to defaults
+            return {
+                'section': 2,
+                'feature': 3,
+                'max_level': 3
+            }
+
+    def parse_sections_dynamic(self, content: str, hierarchy: Optional[Dict[str, int]] = None) -> List[Section]:
+        """
+        Parse content into hierarchical sections with dynamic heading detection.
+        Features include all sub-headings as part of their content, not as separate features.
+        """
+        if hierarchy is None:
+            hierarchy = self.detect_heading_hierarchy(content)
+        
+        lines = content.split('\n')
+        sections = []
+        current_section = None
+        current_feature = None
+        
+        section_level = hierarchy.get('section')
+        feature_level = hierarchy.get('feature')
+        max_level = hierarchy.get('max_level', 6)
+        
+        # Build regex patterns for all heading levels
+        heading_patterns = {}
+        for level in range(2, max_level + 1):
+            heading_patterns[level] = rf'^{"#" * level}\s+(.+)$'
+        
+        for i, line in enumerate(lines):
+            # Check what level of heading this line is
+            current_heading_level = None
+            current_heading_match = None
+            
+            for level in range(2, max_level + 1):
+                match = re.match(heading_patterns[level], line)
+                if match:
+                    current_heading_level = level
+                    current_heading_match = match
+                    break
+            
+            # If this is a heading line
+            if current_heading_level:
+                # Check if this is a section heading
+                if section_level and current_heading_level == section_level:
+                    # Save previous section if exists
+                    if current_section:
+                        current_section.end_line = i - 1
+                        current_section.content = '\n'.join(lines[current_section.start_line:current_section.end_line + 1])
+                        sections.append(current_section)
+                    
+                    # Create new section
+                    current_section = Section(
+                        title=current_heading_match.group(1).strip(),
+                        level=section_level,
+                        content='',
+                        start_line=i,
+                        end_line=i
+                    )
+                    current_feature = None
+                    continue
+                
+                # Check if this is a feature heading
+                elif current_heading_level == feature_level:
+                    # Save previous feature if exists
+                    if current_feature:
+                        current_feature.end_line = i - 1
+                        current_feature.content = '\n'.join(lines[current_feature.start_line:current_feature.end_line + 1])
+                    
+                    # Create new feature
+                    current_feature = Section(
+                        title=current_heading_match.group(1).strip(),
+                        level=feature_level,
+                        content='',
+                        start_line=i,
+                        end_line=i
+                    )
+                    
+                    # Add to current section or create a default section
+                    if current_section:
+                        current_section.features.append(current_feature)
+                    else:
+                        # No section level, create a default container
+                        if not sections or sections[-1].title != "Features":
+                            default_section = Section(
+                                title="Features",
+                                level=2,
+                                content='',
+                                start_line=0,
+                                end_line=len(lines) - 1
+                            )
+                            sections.append(default_section)
+                        sections[-1].features.append(current_feature)
+                    continue
+                
+                # For other heading levels (h3, h4, etc. within features)
+                # These become part of the current feature's content - do not create new features
+                # Just continue processing as regular content
+        
+        # Close last sections
+        if current_feature:
+            current_feature.end_line = len(lines) - 1
+            current_feature.content = '\n'.join(lines[current_feature.start_line:current_feature.end_line + 1])
+        
+        if current_section:
+            current_section.end_line = len(lines) - 1
+            current_section.content = '\n'.join(lines[current_section.start_line:current_section.end_line + 1])
+            sections.append(current_section)
+        
+        return sections
+
     def parse_sections(self, content: str) -> List[Section]:
         """
         Parse content into hierarchical sections.
+        Now uses dynamic heading detection for better compatibility.
         """
-        lines = content.split('\n')
-        sections = []
-        current_h2 = None
-        current_h3 = None
-        
-        for i, line in enumerate(lines):
-            # Check for h2
-            h2_match = re.match(r'^##\s+(.+)$', line)
-            if h2_match:
-                # Save previous h2 if exists
-                if current_h2:
-                    current_h2.end_line = i - 1
-                    current_h2.content = '\n'.join(lines[current_h2.start_line:current_h2.end_line + 1])
-                    sections.append(current_h2)
-                
-                # Create new h2 section
-                current_h2 = Section(
-                    title=h2_match.group(1).strip(),
-                    level=2,
-                    content='',
-                    start_line=i,
-                    end_line=i
-                )
-                current_h3 = None
-                continue
-            
-            # Check for h3
-            h3_match = re.match(r'^###\s+(.+)$', line)
-            if h3_match and current_h2:
-                # Save previous h3 if exists
-                if current_h3:
-                    current_h3.end_line = i - 1
-                    current_h3.content = '\n'.join(lines[current_h3.start_line:current_h3.end_line + 1])
-                
-                # Create new h3 feature
-                current_h3 = Section(
-                    title=h3_match.group(1).strip(),
-                    level=3,
-                    content='',
-                    start_line=i,
-                    end_line=i
-                )
-                current_h2.features.append(current_h3)
-        
-        # Close last sections
-        if current_h3:
-            current_h3.end_line = len(lines) - 1
-            current_h3.content = '\n'.join(lines[current_h3.start_line:current_h3.end_line + 1])
-        
-        if current_h2:
-            current_h2.end_line = len(lines) - 1
-            current_h2.content = '\n'.join(lines[current_h2.start_line:current_h2.end_line + 1])
-            sections.append(current_h2)
-        
-        return sections
+        return self.parse_sections_dynamic(content)
     
     def extract_areas(self, content: str) -> Dict[str, str]:
         """
@@ -455,10 +580,22 @@ class CleanDataPipeline:
         
         webgpu_features = []
         if webgpu_content:
-            webgpu_sections = self.parse_sections(webgpu_content)
-            # Extract h3 features from WebGPU h2 sections
+            # Detect hierarchy for WebGPU content
+            hierarchy = self.detect_heading_hierarchy(webgpu_content)
+            webgpu_sections = self.parse_sections_dynamic(webgpu_content, hierarchy)
+            
+            # Extract features based on detected hierarchy
             for section in webgpu_sections:
-                webgpu_features.extend(section.features)
+                if section.features:
+                    # Standard case: features are sub-sections
+                    webgpu_features.extend(section.features)
+                else:
+                    # Special case: sections ARE the features (like WebGPU 138)
+                    # When there's only one heading level, sections are treated as features
+                    if hierarchy.get('feature') and not hierarchy.get('section'):
+                        # Skip meta sections
+                        if not any(skip in section.title.lower() for skip in ['what\'s new', 'dawn updates']):
+                            webgpu_features.append(section)
         
         # Deduplicate features
         unique_features = self.deduplicate_features(chrome_features, webgpu_features)
@@ -497,20 +634,32 @@ class CleanDataPipeline:
         
         return '\n'.join(merged)
     
-    def process_version(self, version: str, output_dir: Optional[Path] = None) -> Dict[str, Path]:
+    def process_version(self, version: str, output_dir: Optional[Path] = None, channel: str = "stable") -> Dict[str, Path]:
         """
         Process a specific Chrome version with validation and cleaning.
+        
+        Args:
+            version: Chrome version number
+            output_dir: Output directory for processed files
+            channel: Release channel ("stable" or "beta")
         
         Returns:
             Dictionary mapping area names to output file paths.
         """
-        return self.process_version_markdown_only(version, output_dir)
+        return self.process_version_markdown_only(version, output_dir, channel)
     
     def process_version_with_yaml(self, version: str, 
                                  markdown_output_dir: Optional[Path] = None,
-                                 yaml_output_dir: Optional[Path] = None) -> Dict[str, Dict[str, Path]]:
+                                 yaml_output_dir: Optional[Path] = None,
+                                 channel: str = "stable") -> Dict[str, Dict[str, Path]]:
         """
         Complete processing with both markdown and YAML output.
+        
+        Args:
+            version: Chrome version number
+            markdown_output_dir: Output directory for markdown files
+            yaml_output_dir: Output directory for YAML files
+            channel: Release channel ("stable" or "beta")
         
         Returns:
             Dictionary with 'markdown' and 'yaml' keys mapping to file paths.
@@ -526,12 +675,12 @@ class CleanDataPipeline:
         yaml_output_dir.mkdir(parents=True, exist_ok=True)
         
         print(f"\n{'='*60}")
-        print(f"Processing Chrome {version} with YAML output")
+        print(f"Processing Chrome {version} ({channel}) with YAML output")
         print(f"{'='*60}")
         
         # Step 1: Generate markdown files
         print("  Step 1: Generating markdown files...")
-        markdown_files = self.process_version(version, markdown_output_dir)
+        markdown_files = self.process_version(version, markdown_output_dir, channel)
         print(f"  ✓ Generated {len(markdown_files)} markdown files")
         
         # Step 2: Convert to YAML
@@ -546,39 +695,19 @@ class CleanDataPipeline:
                 # Read markdown content
                 markdown_content = markdown_file.read_text(encoding='utf-8')
                 
-                # Create area output directory
-                area_yaml_dir = yaml_output_dir / area
-                area_yaml_dir.mkdir(exist_ok=True)
-                
-                # Process with YAML pipeline  
+                # Process with YAML pipeline (saves to areas/{area}/ automatically)
                 result = yaml_pipeline.process_release_notes(
                     markdown_content=markdown_content,
                     version=version,
-                    channel='stable',
+                    channel=channel,
                     save_yaml=True,
-                    split_by_area=False,  # We're already area-specific
+                    split_by_area=True,   # Use area-specific processing
                     merge_webgpu=False    # Already merged in our pipeline
                 )
                 
                 # Check if we have features 
                 features = result.get('features', [])
                 if features:
-                    # Save YAML manually since we need custom path
-                    yaml_file = area_yaml_dir / f'chrome-{version}-stable.yml'
-                    
-                    yaml_data = {
-                        'version': version,
-                        'channel': 'stable', 
-                        'area': area,
-                        'features': features,
-                        'statistics': result.get('statistics', {}),
-                        'generated_at': datetime.now().isoformat()
-                    }
-                    
-                    with open(yaml_file, 'w', encoding='utf-8') as f:
-                        yaml.safe_dump(yaml_data, f, default_flow_style=False, allow_unicode=True)
-                    
-                    yaml_files[area] = yaml_file
                     features_count = len(features)
                     print(f"    ✓ {area:20s}: {features_count:2d} features → YAML")
                 else:
@@ -592,24 +721,37 @@ class CleanDataPipeline:
             'yaml': yaml_files
         }
 
-    def process_version_markdown_only(self, version: str, output_dir: Optional[Path] = None) -> Dict[str, Path]:
+    def process_version_markdown_only(self, version: str, output_dir: Optional[Path] = None, channel: str = "stable") -> Dict[str, Path]:
         """
         Process version and return markdown files only (refactored from original method).
+        
+        Args:
+            version: Chrome version number
+            output_dir: Output directory for processed files
+            channel: Release channel ("stable" or "beta")
         """
         if not output_dir:
             output_dir = Path('upstream_docs/processed_releasenotes/processed_forwebplatform/areas')
         
         output_dir.mkdir(parents=True, exist_ok=True)
         
-        # Input files
-        chrome_file = Path(f'upstream_docs/release_notes/WebPlatform/chrome-{version}.md')
+        # Input files - try channel-specific first, then fallback for stable
+        if channel == "stable":
+            # For stable, try without suffix first (as it's the common case)
+            chrome_file = Path(f'upstream_docs/release_notes/WebPlatform/chrome-{version}.md')
+            if not chrome_file.exists():
+                chrome_file = Path(f'upstream_docs/release_notes/WebPlatform/chrome-{version}-stable.md')
+        else:
+            # For beta or other channels, use channel suffix
+            chrome_file = Path(f'upstream_docs/release_notes/WebPlatform/chrome-{version}-{channel}.md')
+        
         webgpu_file = Path(f'upstream_docs/release_notes/WebPlatform/webgpu-{version}.md')
         
         if not chrome_file.exists():
             raise FileNotFoundError(f"Chrome release notes not found: {chrome_file}")
         
         print(f"\n{'='*60}")
-        print(f"Processing Chrome {version}")
+        print(f"Processing Chrome {version} ({channel})")
         print(f"{'='*60}")
         
         # Read Chrome content
@@ -660,7 +802,7 @@ class CleanDataPipeline:
             area_dir.mkdir(exist_ok=True)
             
             # Write file
-            output_file = area_dir / f'chrome-{version}-stable.md'
+            output_file = area_dir / f'chrome-{version}-{channel}.md'
             output_file.write_text(content, encoding='utf-8')
             output_files[area] = output_file
             
@@ -685,6 +827,12 @@ def main():
         help="Chrome version to process"
     )
     parser.add_argument(
+        "--channel",
+        default="stable",
+        choices=["stable", "beta"],
+        help="Release channel (default: stable)"
+    )
+    parser.add_argument(
         "--output-dir",
         type=Path,
         help="Output directory for area files"
@@ -707,7 +855,13 @@ def main():
     
     if args.validate_only:
         # Just validate
-        chrome_file = Path(f'upstream_docs/release_notes/WebPlatform/chrome-{args.version}.md')
+        if args.channel == "stable":
+            chrome_file = Path(f'upstream_docs/release_notes/WebPlatform/chrome-{args.version}.md')
+            if not chrome_file.exists():
+                chrome_file = Path(f'upstream_docs/release_notes/WebPlatform/chrome-{args.version}-stable.md')
+        else:
+            chrome_file = Path(f'upstream_docs/release_notes/WebPlatform/chrome-{args.version}-{args.channel}.md')
+        
         if not chrome_file.exists():
             print(f"❌ File not found: {chrome_file}")
             return 1
@@ -715,7 +869,7 @@ def main():
         content = chrome_file.read_text(encoding='utf-8')
         is_valid, warnings = pipeline.validate_structure(content)
         
-        print(f"Chrome {args.version} Structure Validation:")
+        print(f"Chrome {args.version} ({args.channel}) Structure Validation:")
         for warning in warnings:
             print(f"  {warning}")
         
@@ -729,21 +883,21 @@ def main():
     try:
         if args.with_yaml:
             # Full processing with YAML
-            result = pipeline.process_version_with_yaml(args.version)
+            result = pipeline.process_version_with_yaml(args.version, channel=args.channel)
             markdown_files = result['markdown']
             yaml_files = result['yaml']
             
             print(f"\n{'='*60}")
-            print(f"✅ Successfully processed Chrome {args.version}")
+            print(f"✅ Successfully processed Chrome {args.version} ({args.channel})")
             print(f"   Generated {len(markdown_files)} markdown files")
             print(f"   Generated {len(yaml_files)} YAML files")
             print(f"{'='*60}")
         else:
             # Markdown only
-            output_files = pipeline.process_version(args.version, args.output_dir)
+            output_files = pipeline.process_version(args.version, args.output_dir, args.channel)
             
             print(f"\n{'='*60}")
-            print(f"✅ Successfully processed Chrome {args.version}")
+            print(f"✅ Successfully processed Chrome {args.version} ({args.channel})")
             print(f"   Generated {len(output_files)} area files")
             print(f"{'='*60}")
         

@@ -193,7 +193,7 @@ class YAMLPipeline:
                     yaml_path = self._get_yaml_path(version, channel, area)
                     self.save_to_yaml(area_output, yaml_path)
                 
-                # Also save a combined file with area information
+                # Store area information but don't save combined file
                 output['areas'] = list(area_features.keys())
             else:
                 # Save single file with all features
@@ -355,23 +355,23 @@ class YAMLPipeline:
         Generate YAML file path for a version and optional area.
         
         Structure:
-        - With area: processed_forwebplatform/processed_yaml/{area}-chrome-{version}-{channel}.yml
+        - With area: processed_forwebplatform/areas/{area}/chrome-{version}-{channel}.yml
         - Without area: processed_forwebplatform/processed_yaml/chrome-{version}-{channel}-tagged.yml
         """
         # Ensure channel is set (default to stable if not specified)
         if not channel:
             channel = 'stable'
             
-        # All YAML files go in centralized processed_yaml directory
-        yaml_dir = self.base_output_dir / 'processed_yaml'
-        yaml_dir.mkdir(parents=True, exist_ok=True)
-        
         if area:
-            # Area-specific files with area prefix in filename
-            filename = f"{area}-chrome-{version}-{channel}.yml"
-            return yaml_dir / filename
+            # Area-specific files in areas subdirectory (aligned with markdown structure)
+            area_dir = self.base_output_dir / 'areas' / area
+            area_dir.mkdir(parents=True, exist_ok=True)
+            filename = f"chrome-{version}-{channel}.yml"
+            return area_dir / filename
         else:
-            # General tagged file
+            # General tagged files still go in processed_yaml directory
+            yaml_dir = self.base_output_dir / 'processed_yaml'
+            yaml_dir.mkdir(parents=True, exist_ok=True)
             filename = f"chrome-{version}-{channel}-tagged.yml"
             return yaml_dir / filename
     
