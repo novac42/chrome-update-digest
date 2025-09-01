@@ -45,16 +45,17 @@
 
 #### 2.2 输出结构调整
 ```
-upstream_docs/processed_releasenotes/processed_forwebplatform/
-├── areas/              # markdown files (intermediate)
-│   ├── css/chrome-139-stable.md
-│   ├── graphics-webgpu/chrome-139-stable.md  # 去重后的合并内容
-│   └── ...
-├── processed_yaml/     # YAML files (final output)
-│   ├── css/chrome-139-stable.yml
-│   ├── graphics-webgpu/chrome-139-stable.yml
-│   └── ...
-└── split_by_heading/   # 保留现有结构（兼容性）
+upstream_docs/processed_releasenotes/processed_forwebplatform/areas/
+├── css/
+│   ├── chrome-139-stable.md                    # Human-readable content
+│   └── chrome-139-stable.yml                   # Structured data
+├── graphics-webgpu/
+│   ├── chrome-139-stable.md                    # 去重后的合并内容  
+│   └── chrome-139-stable.yml                   # Structured data
+├── webapi/
+│   ├── chrome-139-stable.md                    # Human-readable content
+│   └── chrome-139-stable.yml                   # Structured data
+└── ...
 ```
 
 ### 第三阶段：Pipeline集成
