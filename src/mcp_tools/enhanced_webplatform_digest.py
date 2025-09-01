@@ -217,14 +217,14 @@ class EnhancedWebplatformDigestTool:
             YAML data dictionary or None
         """
         # Check for cached YAML with new folder structure
-        if target_area:
+        if target_area and target_area != "all":
             # Normalize area name: 'webgpu' -> 'graphics-webgpu' for consistency
             normalized_area = 'graphics-webgpu' if target_area in ['webgpu', 'graphics-webgpu'] else target_area
-            # Area-specific files are in subdirectories
-            yaml_path = self.cache_dir / normalized_area / f"chrome-{version}-{channel}.yml"
+            # Area-specific files are now in areas/{area}/ directories
+            yaml_path = self.cache_dir.parent / 'areas' / normalized_area / f"chrome-{version}-{channel}.yml"
         else:
-            # General tagged file in root directory
-            yaml_path = self.cache_dir / f"chrome-{version}-{channel}-tagged.yml"
+            # For "all" or no target_area, aggregate from all area-specific files
+            return await self._aggregate_area_files(ctx, version, channel, use_cache, debug)
         
         if use_cache and yaml_path.exists():
             if debug:
@@ -255,6 +255,88 @@ class EnhancedWebplatformDigestTool:
             print(f"Extracted {stats.get('total_features', 0)} features with {stats.get('total_links', 0)} links")
         
         return yaml_data
+    
+    async def _aggregate_area_files(
+        self,
+        ctx: Context,
+        version: str,
+        channel: str,
+        use_cache: bool,
+        debug: bool
+    ) -> Dict:
+        """
+        Aggregate all area-specific files into a single comprehensive result.
+        
+        Args:
+            ctx: MCP context
+            version: Chrome version
+            channel: Release channel  
+            use_cache: Whether to use cached files
+            debug: Debug mode
+            
+        Returns:
+            Aggregated YAML data dictionary
+        """
+        aggregated_features = []
+        all_areas = []
+        total_stats = {'total_features': 0, 'total_links': 0, 'primary_tags': {}, 'cross_cutting': {}}
+        
+        # Get all area subdirectories from areas/ directory
+        areas_dir = self.cache_dir.parent / 'areas'
+        if not areas_dir.exists():
+            if debug:
+                print(f"Areas directory not found: {areas_dir}")
+            return None
+            
+        for area_dir in areas_dir.iterdir():
+            if not area_dir.is_dir():
+                continue
+                
+            area_name = area_dir.name
+            yaml_path = area_dir / f"chrome-{version}-{channel}.yml"
+            
+            if yaml_path.exists():
+                try:
+                    area_data = self.yaml_pipeline.load_from_yaml(yaml_path)
+                    if area_data and 'features' in area_data:
+                        aggregated_features.extend(area_data['features'])
+                        all_areas.append(area_name)
+                        
+                        # Aggregate statistics
+                        area_stats = area_data.get('statistics', {})
+                        total_stats['total_features'] += area_stats.get('total_features', 0)
+                        total_stats['total_links'] += area_stats.get('total_links', 0)
+                        
+                        # Merge tag counts
+                        for tag, count in area_stats.get('primary_tags', {}).items():
+                            total_stats['primary_tags'][tag] = total_stats['primary_tags'].get(tag, 0) + count
+                            
+                        for concern, count in area_stats.get('cross_cutting', {}).items():
+                            total_stats['cross_cutting'][concern] = total_stats['cross_cutting'].get(concern, 0) + count
+                            
+                        if debug:
+                            print(f"Aggregated {len(area_data['features'])} features from {area_name}")
+                            
+                except Exception as e:
+                    if debug:
+                        print(f"Failed to load {yaml_path}: {e}")
+                    continue
+        
+        if not aggregated_features:
+            if debug:
+                print(f"No area files found for Chrome {version} {channel}")
+            return None
+            
+        # Build aggregated result
+        return {
+            'version': version,
+            'channel': channel,
+            'extraction_timestamp': datetime.now().isoformat(),
+            'extraction_method': 'aggregated',
+            'statistics': total_stats,
+            'features': aggregated_features,
+            'areas': all_areas
+        }
     
     async def _load_release_notes(
         self,
