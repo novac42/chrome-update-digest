@@ -22,7 +22,6 @@ sys.path.append(str(Path(__file__).parent / "src"))
 # Import tool classes
 from mcp_tools.enterprise_digest import EnterpriseDigestTool
 from mcp_tools.enhanced_webplatform_digest import EnhancedWebplatformDigestTool
-from mcp_tools.merged_digest_html import MergedDigestHtmlTool
 from mcp_tools.feature_splitter import FeatureSplitterTool
 from mcp_tools.release_monitor import ReleaseMonitorTool
 from mcp_tools.profile_feature_extractor import ProfileFeatureExtractorTool
@@ -70,7 +69,6 @@ def get_profile_keywords() -> str:
 
 # Initialize tool instances
 enterprise_tool = EnterpriseDigestTool(BASE_PATH)
-merged_tool = MergedDigestHtmlTool(BASE_PATH)
 feature_splitter = FeatureSplitterTool(BASE_PATH)
 release_monitor_tool = ReleaseMonitorTool(BASE_PATH)
 profile_extractor_tool = ProfileFeatureExtractorTool(BASE_PATH)
@@ -183,13 +181,6 @@ async def webplatform_digest(ctx: Context, version: str = "138", channel: str = 
                                   split_by_area, target_area, debug)
 
 
-@mcp.tool()
-async def merged_digest_html(version: int, channel: str = "stable", 
-                           force_regenerate: bool = False, output_dir: str = "digest_html") -> str:
-    """Generate combined enterprise and web platform Chrome digest as HTML file"""
-    return await merged_tool.generate_html(
-        {"version": version, "channel": channel, "force_regenerate": force_regenerate, "output_dir": output_dir}
-    )
 
 
 @mcp.tool()
@@ -323,7 +314,6 @@ def main():
     print("\nTools available:")
     print("- enterprise_digest")
     print("- webplatform_digest") 
-    print("- merged_digest_html")
     print("- split_features_by_heading")
     print("- check_latest_releases")
     print("- crawl_missing_releases")

@@ -84,9 +84,10 @@ class EnhancedWebplatformDigestTool:
             if not yaml_data:
                 return json.dumps({
                     "success": False,
-                    "error": f"Could not process release notes for Chrome {version} {channel}",
+                    "error": f"Release notes for Chrome {version} {channel} channel not found. This specific channel needs to be processed separately. Do NOT use other channels as alternatives.",
                     "version": version,
-                    "channel": channel
+                    "channel": channel,
+                    "note": f"To process {channel} channel, run: python src/processors/clean_data_pipeline.py --version {version} --channel {channel} --with-yaml"
                 }, ensure_ascii=False)
             
             # Step 2: Apply focus area filtering if specified
@@ -484,13 +485,25 @@ class EnhancedWebplatformDigestTool:
         # Build system prompt based on language
         if language == 'zh':
             system_prompt = """你是 Chrome 更新分析专家，专注于 Web 平台功能。
-请严格按照提供的模板结构生成摘要。
-仅使用提供的 YAML 数据中的功能和链接，不要编造任何内容。
+
+重要规则：
+1. 绝对不要建议检查其他 channel（如 beta/dev/canary）当 stable 不可用时
+2. 每个 channel（stable、beta、dev）包含不同的内容和发布日期 - 它们不可互换
+3. 如果请求的 channel 数据不存在，只报告该 channel 需要处理，不要提供其他 channel 作为替代
+4. 请严格按照提供的模板结构生成摘要
+5. 仅使用提供的 YAML 数据中的功能和链接，不要编造任何内容
+
 输出语言：中文"""
         else:  # Default to English
             system_prompt = """You are a Chrome Update Analyzer specializing in web platform features.
-Follow the provided template structure strictly.
-Use ONLY the features and links from the provided YAML data. Do not make up any content.
+
+CRITICAL RULES:
+1. NEVER suggest checking a different channel (beta/dev/canary) when stable is unavailable
+2. Each channel (stable, beta, dev) contains DIFFERENT content and release dates - they are NOT interchangeable
+3. If requested channel data doesn't exist, only report that channel needs processing - do NOT offer other channels as alternatives
+4. Follow the provided template structure strictly
+5. Use ONLY the features and links from the provided YAML data. Do not make up any content
+
 Output language: English"""
         
         # Build user message as single string (matching Enterprise pattern)
