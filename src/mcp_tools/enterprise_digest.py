@@ -114,7 +114,10 @@ class EnterpriseDigestTool:
             if not processed_data:
                 return json.dumps({
                     "success": False,
-                    "error": f"No processed enterprise data found for Chrome {version if version else 'any version'}"
+                    "error": f"No processed enterprise data found for Chrome {version if version else 'any version'} {channel} channel. This specific channel needs to be processed separately. Do NOT use other channels as alternatives.",
+                    "version": version,
+                    "channel": channel,
+                    "note": f"To process {channel} channel, run: python src/processors/clean_data_pipeline.py --version {version} --channel {channel} --with-yaml"
                 })
             
             # 构建用于LLM的内容
@@ -132,6 +135,11 @@ CRITICAL REQUIREMENTS:
 4. Include ALL required sections as specified in the template
 5. Follow the specific markdown formatting rules
 6. Never invent your own section structure - use only what's specified in the prompt
+
+CRITICAL CHANNEL RULES:
+7. NEVER suggest checking a different channel (beta/dev/canary) when stable is unavailable
+8. Each channel (stable, beta, dev) contains DIFFERENT content and release dates - they are NOT interchangeable
+9. If requested channel data doesn't exist, only report that channel needs processing - do NOT offer other channels as alternatives
 
 Your task is to analyze the provided Chrome release notes and create a digest that follows the prompt template EXACTLY. Do not deviate from the specified format, structure, or language requirements."""
             

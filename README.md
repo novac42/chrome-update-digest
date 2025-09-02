@@ -29,12 +29,13 @@ This MCP server provides access to:
 ### Prerequisites
 - Python 3.8 or higher
 - pip package manager
+- Claude Desktop or MCP-compatible client
 
 ### Installation
 
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/yourusername/chrome-update-digest.git
 cd chrome-update-digest
 
 # Create and activate virtual environment
@@ -52,17 +53,42 @@ pip install -r requirements.txt
 Add to your config file:
 - **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
 - **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+- **Linux**: `~/.config/Claude/claude_desktop_config.json`
 
+**Configuration Example (macOS/Linux):**
 ```json
 {
   "mcpServers": {
     "chrome-digest": {
       "command": "/path/to/chrome-update-digest/.venv/bin/python",
-      "args": ["/path/to/chrome-update-digest/fast_mcp_server.py"]
+      "args": ["/path/to/chrome-update-digest/fast_mcp_server.py"],
+      "env": {
+        "PYTHONPATH": "/path/to/chrome-update-digest"
+      }
     }
   }
 }
 ```
+
+**Configuration Example (Windows):**
+```json
+{
+  "mcpServers": {
+    "chrome-digest": {
+      "command": "C:\\path\\to\\chrome-update-digest\\.venv\\Scripts\\python.exe",
+      "args": ["C:\\path\\to\\chrome-update-digest\\fast_mcp_server.py"],
+      "env": {
+        "PYTHONPATH": "C:\\path\\to\\chrome-update-digest"
+      }
+    }
+  }
+}
+```
+
+**Important Notes:**
+- Replace `/path/to/chrome-update-digest` with your actual project path
+- Ensure the virtual environment is properly created before configuration
+- Restart Claude Desktop after modifying the configuration
 
 #### Test the Server
 
@@ -150,13 +176,24 @@ python fast_mcp_server.py
 
 ```
 chrome-update-digest/
-├── upstream_docs/           # Source data
-│   ├── release_notes/      # Raw release notes
-│   └── processed_releasenotes/  # Processed data
-├── digest_markdown/        # Generated digests (MD)
-├── digest_html/           # Generated digests (HTML)
-├── feature_details/       # Feature-specific data
-└── prompts/              # AI prompt templates
+├── upstream_docs/                      # Source data
+│   ├── release_notes/                  # Raw release notes
+│   │   ├── Enterprise/                 # Enterprise release notes
+│   │   └── WebPlatform/               # Web platform & WebGPU notes
+│   └── processed_releasenotes/         # Processed data
+│       └── processed_forwebplatform/
+│           └── areas/                  # Area-specific processed data
+│               ├── css/                # CSS features (MD + YAML)
+│               ├── webapi/             # Web API features
+│               ├── graphics-webgpu/    # WebGPU features
+│               ├── on-device-ai/       # AI features
+│               └── security/           # Security updates
+├── digest_markdown/                    # Generated digests (MD)
+├── digest_html/                       # Generated digests (HTML)
+├── feature_details/                   # Feature-specific data
+├── config/                            # Configuration files
+│   └── focus_areas.yaml              # Area definitions
+└── prompts/                          # AI prompt templates
 ```
 
 ## 🔧 Direct Python Usage
@@ -164,10 +201,16 @@ chrome-update-digest/
 For batch processing or automation, you can also use the Python scripts directly:
 
 ```bash
+# Process release notes using the clean data pipeline (Recommended)
+python3 src/processors/clean_data_pipeline.py --version 139 --with-yaml
+
+# Process beta channel
+python3 src/processors/clean_data_pipeline.py --version 139 --channel beta --with-yaml
+
 # Process enterprise release notes
 python src/process_enterprise_release_note.py
 
-# Process release notes with WebGPU merge (integrated pipeline)
+# Legacy pipeline (deprecated but functional)
 python3 src/processors/split_and_process_release_notes.py --version 139
 
 # Monitor releases
@@ -199,6 +242,12 @@ A: Generally Chrome 100+ with better support for recent versions (130+).
 **Q: Can I get digests in other languages?**
 A: Currently supports English, Chinese, and bilingual. More languages can be added via prompt templates.
 
+**Q: What's the difference between stable and beta channels?**
+A: Beta releases come earlier (e.g., June) with preview features, while stable releases come later (e.g., August) with finalized features. Beta may have fewer features or different focus areas.
+
+**Q: How are WebGPU features handled?**
+A: WebGPU features are extracted from both Chrome Graphics sections and dedicated WebGPU release notes, then deduplicated with WebGPU-specific content taking priority.
+
 ### Troubleshooting
 
 If the MCP server doesn't start:
@@ -217,8 +266,12 @@ If tools aren't working:
 - **Bilingual Support**: Native English and Chinese digest generation
 - **Focus Area Filtering**: Get only the updates relevant to your needs
 - **Enterprise & Developer**: Separate tracks for different audiences
+- **Multi-Channel Support**: Process stable, beta, and other release channels
+- **WebGPU Deduplication**: Smart merging of WebGPU features from multiple sources
+- **Dynamic Hierarchy Detection**: Handles inconsistent heading structures across versions
 - **Fault Tolerant**: Smart file discovery and fallback mechanisms
 - **Fast Processing**: Efficient YAML pipeline for quick analysis
+- **Area-Based Classification**: Automatic feature categorization into functional areas
 
 ## 📄 License
 
