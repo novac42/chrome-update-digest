@@ -1,0 +1,38 @@
+{
+  "version": "139",
+  "channel": "stable",
+  "languages": [
+    "en",
+    "zh"
+  ],
+  "areas": [
+    "css",
+    "deprecation",
+    "devices",
+    "graphics-webgpu",
+    "javascript",
+    "multimedia",
+    "network",
+    "performance",
+    "security-privacy",
+    "webapi"
+  ],
+  "total_areas": 10,
+  "completed_areas": 0,
+  "per_area": {
+    "css": {
+      "en": "in_progress",
+      "zh": "pending"
+    },
+    "deprecation": {
+      "en": "in_progress",
+      "zh": "pending"
+    },
+    "devices": {
+      "en": "in_progress",
+      "zh": "pending"
+    }
+  },
+  "started_at": "2025-09-03T22:06:05.309312",
+  "updated_at": "2025-09-03T22:06:05.325568"
+}

@@ -187,7 +187,7 @@ async def get_webplatform_progress() -> str:
 @mcp.tool()
 async def webplatform_digest(ctx: Context, version: str = "138", channel: str = "stable",
                                      focus_areas: Optional[str] = None, use_cache: bool = True,
-                                     language: str = "bilingual", split_by_area: bool = False,
+                                     language: str = "bilingual", split_by_area: bool = True,
                                      target_area: Optional[str] = None, debug: bool = False) -> str:
     """Generate webplatform digest with deterministic link extraction
     
