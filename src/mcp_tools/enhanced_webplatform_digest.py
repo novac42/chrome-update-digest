@@ -554,11 +554,15 @@ YAML Data:
             Generated digest content or raises exception
         """
         import asyncio
+        import os
+        
+        # Get max tokens from environment variable with reasonable default
+        max_tokens = int(os.getenv("WEBPLATFORM_MAX_TOKENS", "12000"))
         
         for attempt in range(max_retries):
             try:
                 if debug:
-                    print(f"Sampling attempt {attempt + 1}/{max_retries}...")
+                    print(f"Sampling attempt {attempt + 1}/{max_retries}... (max_tokens={max_tokens})")
                 
                 # Use asyncio.wait_for for timeout control (matching Enterprise)
                 response = await asyncio.wait_for(
@@ -567,7 +571,7 @@ YAML Data:
                         system_prompt=system_prompt,  # Pass as separate parameter (aligned with Enterprise)
                         model_preferences=["claude-4-sonnet", "gpt5"],  # Aligned with Enterprise
                         temperature=0.7,  # Aligned with Enterprise (was 0.4)
-                        max_tokens=50000  # Aligned with Enterprise (was 40000)
+                        max_tokens=max_tokens  # Now configurable via environment
                     ),
                     timeout=timeout
                 )
@@ -909,6 +913,36 @@ Language: """ + language
                 print(f"Error saving digest: {e}")
             raise
     
+    async def _update_progress(self, progress_data: Dict, debug: bool = False) -> None:
+        """
+        Update progress JSON file in .monitoring directory.
+        
+        Args:
+            progress_data: Progress data dictionary
+            debug: Debug mode
+        """
+        try:
+            # Ensure monitoring directory exists
+            monitoring_dir = self.base_path / '.monitoring'
+            monitoring_dir.mkdir(parents=True, exist_ok=True)
+            
+            # Save progress JSON
+            progress_file = monitoring_dir / 'webplatform-progress.json'
+            progress_data["updated_at"] = datetime.now().isoformat()
+            
+            with open(progress_file, 'w', encoding='utf-8') as f:
+                json.dump(progress_data, f, indent=2, ensure_ascii=False)
+            
+            if debug and progress_data.get("completed_areas", 0) > 0:
+                total = progress_data.get("total_areas", 1)
+                completed = progress_data.get("completed_areas", 0)
+                percentage = (completed / total) * 100
+                print(f"Progress: {completed}/{total} areas ({percentage:.0f}%)")
+        except Exception as e:
+            if debug:
+                print(f"Failed to update progress: {e}")
+            # Don't raise - progress tracking should not break the main flow
+    
     async def _generate_per_area_digests(
         self,
         ctx: Context,
@@ -919,7 +953,7 @@ Language: """ + language
         debug: bool
     ) -> str:
         """
-        Generate digests for each area separately.
+        Generate digests for each area separately with parallel processing.
         
         Args:
             ctx: FastMCP context
@@ -932,6 +966,10 @@ Language: """ + language
         Returns:
             JSON response with status and output paths
         """
+        import os
+        import time
+        from datetime import datetime
+        
         # Determine languages to generate
         languages = ['en', 'zh'] if language in [None, 'bilingual'] else [language]
         
@@ -953,120 +991,212 @@ Language: """ + language
             "translation_status": {}
         }
         
-        # Process each area
-        for area in areas:
-            if debug:
-                print(f"\nProcessing area: {area}")
-            
-            # Normalize area name
-            normalized_area = self.focus_manager.normalize_area(area)
-            
-            # Load area-specific YAML
-            area_yaml = await self._load_area_yaml(ctx, version, channel, normalized_area, yaml_data, debug)
-            if not area_yaml or len(area_yaml.get('features', [])) == 0:
+        # Initialize progress tracking
+        progress_data = {
+            "version": version,
+            "channel": channel,
+            "languages": languages,
+            "areas": areas,
+            "total_areas": len(areas),
+            "completed_areas": 0,
+            "per_area": {},
+            "started_at": datetime.now().isoformat(),
+            "updated_at": datetime.now().isoformat()
+        }
+        
+        # Save initial progress
+        await self._update_progress(progress_data, debug)
+        
+        # Get concurrency limit from environment
+        max_concurrency = int(os.getenv("WEBPLATFORM_MAX_CONCURRENCY", "3"))
+        if debug:
+            print(f"Using parallel processing with max concurrency: {max_concurrency}")
+        
+        # Create semaphore for concurrency control
+        sem = asyncio.Semaphore(max_concurrency)
+        # Lock for thread-safe result updates
+        lock = asyncio.Lock()
+        
+        # Define async function to process single area
+        async def process_area(area: str) -> None:
+            async with sem:  # Control concurrency
+                start_time = time.time()
                 if debug:
-                    print(f"No features for area {area}, generating fallback")
-                # Generate minimal fallback
-                fallback_content = self._generate_minimal_fallback(version, channel, area, 'en')
-                fallback_path = self._get_digest_path(version, channel, normalized_area, 'en')
-                await self._save_digest(fallback_content, fallback_path, debug)
-                results["outputs"][normalized_area] = {"en": str(fallback_path)}
-                if 'zh' in languages:
-                    fallback_zh = self._generate_minimal_fallback(version, channel, area, 'zh')
-                    fallback_zh_path = self._get_digest_path(version, channel, normalized_area, 'zh')
-                    await self._save_digest(fallback_zh, fallback_zh_path, debug)
-                    results["outputs"][normalized_area]["zh"] = str(fallback_zh_path)
-                continue
+                    print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Starting area: {area}")
+                
+                # Normalize area name
+                normalized_area = self.focus_manager.normalize_area(area)
             
-            # Generate English digest first (canonical)
-            try:
-                if debug:
-                    print(f"Generating English digest for {area}")
-                
-                english_digest = await self._generate_area_digest(
-                    ctx, area_yaml, 'en', normalized_area, debug
-                )
-                
-                # Validate English digest
-                validation_result = self._validate_digest(english_digest, area_yaml)
-                if not validation_result['valid']:
+                # Load area-specific YAML
+                area_yaml = await self._load_area_yaml(ctx, version, channel, normalized_area, yaml_data, debug)
+                if not area_yaml or len(area_yaml.get('features', [])) == 0:
                     if debug:
-                        print(f"Validation failed for {area}: {validation_result['issues']}")
-                    # Retry once with corrective prompt
+                        print(f"No features for area {area}, generating fallback")
+                    # Generate minimal fallback
+                    fallback_content = self._generate_minimal_fallback(version, channel, area, 'en')
+                    fallback_path = self._get_digest_path(version, channel, normalized_area, 'en')
+                    await self._save_digest(fallback_content, fallback_path, debug)
+                    
+                    async with lock:
+                        results["outputs"][normalized_area] = {"en": str(fallback_path)}
+                        progress_data["per_area"][area] = {"en": "fallback", "zh": "pending"}
+                    
+                    if 'zh' in languages:
+                        fallback_zh = self._generate_minimal_fallback(version, channel, area, 'zh')
+                        fallback_zh_path = self._get_digest_path(version, channel, normalized_area, 'zh')
+                        await self._save_digest(fallback_zh, fallback_zh_path, debug)
+                        async with lock:
+                            results["outputs"][normalized_area]["zh"] = str(fallback_zh_path)
+                            progress_data["per_area"][area]["zh"] = "fallback"
+                    
+                    async with lock:
+                        progress_data["completed_areas"] += 1
+                        await self._update_progress(progress_data, debug)
+                    return
+            
+                # Update progress to show area is in progress
+                async with lock:
+                    progress_data["per_area"][area] = {"en": "in_progress", "zh": "pending"}
+                    await self._update_progress(progress_data, debug)
+                
+                # Generate English digest first (canonical)
+                try:
+                    if debug:
+                        print(f"Generating English digest for {area}")
+                    
                     english_digest = await self._generate_area_digest(
-                        ctx, area_yaml, 'en', normalized_area, debug,
-                        retry_context=validation_result['issues']
+                        ctx, area_yaml, 'en', normalized_area, debug
                     )
+                    
+                    # Validate English digest
                     validation_result = self._validate_digest(english_digest, area_yaml)
                     if not validation_result['valid']:
-                        # Generate fallback
-                        english_digest = self._generate_area_fallback(
-                            area_yaml, 'en', normalized_area, "LLM generation failed validation"
+                        if debug:
+                            print(f"Validation failed for {area}: {validation_result['issues']}")
+                        # Retry once with corrective prompt
+                        english_digest = await self._generate_area_digest(
+                            ctx, area_yaml, 'en', normalized_area, debug,
+                            retry_context=validation_result['issues']
                         )
-                
-                # Save English digest
-                en_path = self._get_digest_path(version, channel, normalized_area, 'en')
-                await self._save_digest(english_digest, en_path, debug)
-                
-                if normalized_area not in results["outputs"]:
-                    results["outputs"][normalized_area] = {}
-                results["outputs"][normalized_area]["en"] = str(en_path)
-                
-                # Generate Chinese translation if needed
-                if 'zh' in languages:
-                    if debug:
-                        print(f"Translating to Chinese for {area}")
-                    
-                    try:
-                        chinese_digest = await self._translate_digest(
-                            ctx, english_digest, normalized_area, version, channel, debug
-                        )
-                        
-                        # Validate translation
-                        translation_valid = self._validate_translation(english_digest, chinese_digest)
-                        if not translation_valid['valid']:
-                            if debug:
-                                print(f"Translation validation failed: {translation_valid['issues']}")
-                            # Retry translation once
-                            chinese_digest = await self._translate_digest(
-                                ctx, english_digest, normalized_area, version, channel, debug,
-                                retry_context=translation_valid['issues']
+                        validation_result = self._validate_digest(english_digest, area_yaml)
+                        if not validation_result['valid']:
+                            # Generate fallback
+                            english_digest = self._generate_area_fallback(
+                                area_yaml, 'en', normalized_area, "LLM generation failed validation"
                             )
+                    
+                    # Save English digest
+                    en_path = self._get_digest_path(version, channel, normalized_area, 'en')
+                    await self._save_digest(english_digest, en_path, debug)
+                    
+                    async with lock:
+                        if normalized_area not in results["outputs"]:
+                            results["outputs"][normalized_area] = {}
+                        results["outputs"][normalized_area]["en"] = str(en_path)
+                        progress_data["per_area"][area]["en"] = "done"
+                        progress_data["per_area"][area]["en_path"] = str(en_path)
+                        await self._update_progress(progress_data, debug)
+                    
+                    # Generate Chinese translation if needed
+                    if 'zh' in languages:
+                        if debug:
+                            print(f"Translating to Chinese for {area}")
+                        
+                        async with lock:
+                            progress_data["per_area"][area]["zh"] = "in_progress"
+                            await self._update_progress(progress_data, debug)
+                        
+                        try:
+                            chinese_digest = await self._translate_digest(
+                                ctx, english_digest, normalized_area, version, channel, debug
+                            )
+                            
+                            # Validate translation
                             translation_valid = self._validate_translation(english_digest, chinese_digest)
                             if not translation_valid['valid']:
-                                # Translation fallback
-                                chinese_digest = self._generate_translation_fallback(
-                                    version, channel, normalized_area, en_path
+                                if debug:
+                                    print(f"Translation validation failed: {translation_valid['issues']}")
+                                # Retry translation once
+                                chinese_digest = await self._translate_digest(
+                                    ctx, english_digest, normalized_area, version, channel, debug,
+                                    retry_context=translation_valid['issues']
                                 )
-                                results["translation_status"][normalized_area] = "fallback"
+                                translation_valid = self._validate_translation(english_digest, chinese_digest)
+                                if not translation_valid['valid']:
+                                    # Translation fallback
+                                    chinese_digest = self._generate_translation_fallback(
+                                        version, channel, normalized_area, en_path
+                                    )
+                                    async with lock:
+                                        results["translation_status"][normalized_area] = "fallback"
+                                else:
+                                    async with lock:
+                                        results["translation_status"][normalized_area] = "retry_success"
                             else:
-                                results["translation_status"][normalized_area] = "retry_success"
-                        else:
-                            results["translation_status"][normalized_area] = "ok"
-                        
-                        # Save Chinese digest
-                        zh_path = self._get_digest_path(version, channel, normalized_area, 'zh')
-                        await self._save_digest(chinese_digest, zh_path, debug)
-                        results["outputs"][normalized_area]["zh"] = str(zh_path)
-                        
-                    except Exception as e:
-                        if debug:
-                            print(f"Translation failed for {area}: {e}")
-                        results["errors"][f"{normalized_area}:zh"] = str(e)
-                        results["translation_status"][normalized_area] = "error"
-                        # Generate translation fallback
-                        fallback = self._generate_translation_fallback(
-                            version, channel, normalized_area, en_path
-                        )
-                        zh_path = self._get_digest_path(version, channel, normalized_area, 'zh')
-                        await self._save_digest(fallback, zh_path, debug)
-                        results["outputs"][normalized_area]["zh"] = str(zh_path)
+                                async with lock:
+                                    results["translation_status"][normalized_area] = "ok"
+                            
+                            # Save Chinese digest
+                            zh_path = self._get_digest_path(version, channel, normalized_area, 'zh')
+                            await self._save_digest(chinese_digest, zh_path, debug)
+                            
+                            async with lock:
+                                results["outputs"][normalized_area]["zh"] = str(zh_path)
+                                progress_data["per_area"][area]["zh"] = "done"
+                                progress_data["per_area"][area]["zh_path"] = str(zh_path)
+                                await self._update_progress(progress_data, debug)
+                            
+                        except Exception as e:
+                            if debug:
+                                print(f"Translation failed for {area}: {e}")
+                            async with lock:
+                                results["errors"][f"{normalized_area}:zh"] = str(e)
+                                results["translation_status"][normalized_area] = "error"
+                                progress_data["per_area"][area]["zh"] = "error"
+                                progress_data["per_area"][area]["zh_error"] = str(e)
+                            
+                            # Generate translation fallback
+                            fallback = self._generate_translation_fallback(
+                                version, channel, normalized_area, en_path
+                            )
+                            zh_path = self._get_digest_path(version, channel, normalized_area, 'zh')
+                            await self._save_digest(fallback, zh_path, debug)
+                            async with lock:
+                                results["outputs"][normalized_area]["zh"] = str(zh_path)
+                                await self._update_progress(progress_data, debug)
+                    
+                except Exception as e:
+                    if debug:
+                        print(f"Failed to generate digest for {area}: {e}")
+                    async with lock:
+                        results["errors"][f"{normalized_area}:en"] = str(e)
+                        results["success"] = False
+                        progress_data["per_area"][area]["en"] = "error"
+                        progress_data["per_area"][area]["error"] = str(e)
+                        await self._update_progress(progress_data, debug)
                 
-            except Exception as e:
+                # Mark area as completed
+                elapsed = time.time() - start_time
                 if debug:
-                    print(f"Failed to generate digest for {area}: {e}")
-                results["errors"][f"{normalized_area}:en"] = str(e)
-                results["success"] = False
+                    print(f"[{datetime.now().strftime('%H:%M:%S')}] Completed {area} in {elapsed:.1f}s")
+                
+                async with lock:
+                    progress_data["completed_areas"] += 1
+                    await self._update_progress(progress_data, debug)
+        
+        # Execute all areas in parallel with concurrency control
+        start_time = time.time()
+        await asyncio.gather(*(process_area(area) for area in areas))
+        
+        total_time = time.time() - start_time
+        if debug:
+            print(f"\n[COMPLETED] All {len(areas)} areas processed in {total_time:.1f} seconds")
+            print(f"Average time per area: {total_time/len(areas):.1f} seconds")
+        
+        # Final progress update
+        progress_data["completed_at"] = datetime.now().isoformat()
+        progress_data["total_time_seconds"] = total_time
+        await self._update_progress(progress_data, debug)
         
         return json.dumps(results, ensure_ascii=False, indent=2)
     

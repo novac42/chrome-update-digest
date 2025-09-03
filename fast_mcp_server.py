@@ -151,6 +151,40 @@ async def enterprise_digest(ctx: Context, version: int, channel: str = "stable",
 
 
 @mcp.tool()
+async def get_webplatform_progress() -> str:
+    """Get the current progress of WebPlatform digest generation
+    
+    Returns progress information from the monitoring JSON file if available.
+    """
+    progress_file = BASE_PATH / ".monitoring" / "webplatform-progress.json"
+    
+    if not progress_file.exists():
+        return json.dumps({
+            "status": "idle",
+            "message": "No digest generation in progress"
+        })
+    
+    try:
+        with open(progress_file, 'r', encoding='utf-8') as f:
+            progress_data = json.load(f)
+        
+        # Calculate percentage
+        total = progress_data.get("total_areas", 0)
+        completed = progress_data.get("completed_areas", 0)
+        
+        if total > 0:
+            percentage = (completed / total) * 100
+            progress_data["percentage"] = f"{percentage:.0f}%"
+        
+        return json.dumps(progress_data, indent=2)
+    except Exception as e:
+        return json.dumps({
+            "status": "error",
+            "message": f"Failed to read progress: {str(e)}"
+        })
+
+
+@mcp.tool()
 async def webplatform_digest(ctx: Context, version: str = "138", channel: str = "stable",
                                      focus_areas: Optional[str] = None, use_cache: bool = True,
                                      language: str = "bilingual", split_by_area: bool = False,
