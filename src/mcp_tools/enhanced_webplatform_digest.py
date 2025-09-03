@@ -222,7 +222,7 @@ class EnhancedWebplatformDigestTool:
             # Normalize area name: 'webgpu' -> 'graphics-webgpu' for consistency
             normalized_area = 'graphics-webgpu' if target_area in ['webgpu', 'graphics-webgpu'] else target_area
             # Area-specific files are now in areas/{area}/ directories
-            yaml_path = self.cache_dir.parent / 'areas' / normalized_area / f"chrome-{version}-{channel}.yml"
+            yaml_path = self.cache_dir / 'areas' / normalized_area / f"chrome-{version}-{channel}.yml"
         else:
             # For "all" or no target_area, aggregate from all area-specific files
             return await self._aggregate_area_files(ctx, version, channel, use_cache, debug)
@@ -283,7 +283,7 @@ class EnhancedWebplatformDigestTool:
         total_stats = {'total_features': 0, 'total_links': 0, 'primary_tags': {}, 'cross_cutting': {}}
         
         # Get all area subdirectories from areas/ directory
-        areas_dir = self.cache_dir.parent / 'areas'
+        areas_dir = self.cache_dir / 'areas'
         if not areas_dir.exists():
             if debug:
                 print(f"Areas directory not found: {areas_dir}")
