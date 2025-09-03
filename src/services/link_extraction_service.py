@@ -24,7 +24,7 @@ class LinkExtractionService:
             base_path: Base path of the project
         """
         self.base_path = Path(base_path)
-        self.release_notes_dir = self.base_path / "upstream_docs" / "release_notes" / "webplatform"
+        self.release_notes_dir = self.base_path / "upstream_docs" / "release_notes" / "WebPlatform"
         self.cache_dir = self.base_path / ".cache" / "link_extraction"
         self.output_dir = self.base_path / "upstream_docs" / "processed_releasenotes" / "extracted_links"
         
