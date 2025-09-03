@@ -1,7 +1,7 @@
 version: '139'
 channel: stable
 area: origin-trials
-extraction_timestamp: '2025-09-03T16:38:58.970076'
+extraction_timestamp: '2025-09-03T14:29:32.594476'
 extraction_method: deterministic
 statistics:
   total_features: 6
@@ -32,7 +32,6 @@ features:
     [Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/2533837740349325313) | [Origin trial blog post](/blog/prompt-multimodal-origin-trial)
     | [Tracking bug #417530643](https://issues.chromium.org/issues/417530643) | [ChromeStatus.com entry](https://chromestatus.com/feature/5134603979063296)'
   heading_path:
-  - Chrome 139
   - Origin trials
   - Prompt API
   links:
@@ -45,7 +44,7 @@ features:
   - url: https://chromestatus.com/feature/5134603979063296
     link_type: chromestatus
     title: ChromeStatus.com entry
-  line_number: 214
+  line_number: 14
   primary_tags: []
   cross_cutting_concerns:
   - ai
@@ -60,7 +59,6 @@ features:
     [Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/3056255297124302849) | [Origin trial blog post](/blog/extended-lifetime-shared-workers-origin-trial)
     | [Tracking bug #400473072](https://issues.chromium.org/issues/400473072) | [ChromeStatus.com entry](https://chromestatus.com/feature/5138641357373440)'
   heading_path:
-  - Chrome 139
   - Origin trials
   - Extended lifetime shared workers
   links:
@@ -73,7 +71,7 @@ features:
   - url: https://chromestatus.com/feature/5138641357373440
     link_type: chromestatus
     title: ChromeStatus.com entry
-  line_number: 222
+  line_number: 22
   primary_tags: []
   cross_cutting_concerns:
   - privacy
@@ -86,7 +84,6 @@ features:
     \ | [Tracking bug #1338390](https://issues.chromium.org/issues/1338390) | [ChromeStatus.com entry](https://chromestatus.com/feature/5144837209194496)\
     \ | [Spec](https://wicg.github.io/soft-navigations)"
   heading_path:
-  - Chrome 139
   - Origin trials
   - '`SoftNavigation` performance entry'
   links:
@@ -102,7 +99,7 @@ features:
   - url: https://wicg.github.io/soft-navigations
     link_type: spec
     title: Spec
-  line_number: 228
+  line_number: 28
   primary_tags:
   - name: performance
     priority: primary
@@ -121,7 +118,6 @@ features:
     [Tracking bug #408002783](https://issues.chromium.org/issues/408002783) | [ChromeStatus.com entry](https://chromestatus.com/feature/5164322780872704)
     | [Spec](https://github.com/w3c/webauthn/pull/2291)'
   heading_path:
-  - Chrome 139
   - Origin trials
   - Web Authentication immediate mediation
   links:
@@ -134,7 +130,7 @@ features:
   - url: https://github.com/w3c/webauthn/pull/2291
     link_type: github
     title: Spec
-  line_number: 239
+  line_number: 39
   primary_tags:
   - name: multimedia
     priority: primary
@@ -150,7 +146,6 @@ features:
     [Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/3578672853899280385) | [Tracking bug #397832388](https://issues.chromium.org/issues/397832388)
     | [ChromeStatus.com entry](https://chromestatus.com/feature/5207202081800192)'
   heading_path:
-  - Chrome 139
   - Origin trials
   - Full frame rate render blocking attribute
   links:
@@ -163,7 +158,7 @@ features:
   - url: https://chromestatus.com/feature/5207202081800192
     link_type: chromestatus
     title: ChromeStatus.com entry
-  line_number: 245
+  line_number: 45
   primary_tags: []
   cross_cutting_concerns:
   - privacy
@@ -176,7 +171,6 @@ features:
     [Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/1489002626799370241) | [Tracking bug #40266903](https://issues.chromium.org/issues/40266903)
     | [ChromeStatus.com entry](https://chromestatus.com/feature/6436406437871616) | [Spec](https://github.com/gpuweb/gpuweb/blob/main/proposals/compatibility-mode.md)'
   heading_path:
-  - Chrome 139
   - Origin trials
   - WebGPU compatibility mode
   links:
@@ -192,7 +186,7 @@ features:
   - url: https://github.com/gpuweb/gpuweb/blob/main/proposals/compatibility-mode.md
     link_type: github
     title: Spec
-  line_number: 251
+  line_number: 51
   primary_tags:
   - name: webgpu
     priority: primary

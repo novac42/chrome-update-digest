@@ -1,7 +1,7 @@
 version: '139'
 channel: stable
 area: graphics-webgpu
-extraction_timestamp: '2025-09-03T16:38:58.925290'
+extraction_timestamp: '2025-09-03T14:29:32.653841'
 extraction_method: deterministic
 statistics:
   total_features: 5
@@ -31,7 +31,8 @@ features:
     \ WebGPU.](/static/blog/new-in-webgpu-139/image/brain-scans.png) A brain scan image from a 3D texture with ASTC compressed\
     \ format."
   heading_path:
-  - Graphics and WebGPU - Chrome 139 Stable
+  - Graphics and WebGPU - Chrome 139
+  - WebGPU Features
   - 3D texture support for BC and ASTC compressed formats
   links:
   - url: https://webgpu.github.io/webgpu-samples/?sample=volumeRenderingTexture3D
@@ -40,10 +41,10 @@ features:
   - url: https://chromestatus.com/feature/5080855386783744
     link_type: chromestatus
     title: chromestatus entry
-  line_number: 12
+  line_number: 5
   primary_tags:
   - name: webgpu
-    priority: primary
+    priority: secondary
     source: heading
     confidence: 1.0
   cross_cutting_concerns:
@@ -63,7 +64,8 @@ features:
     For a detailed explanation and usage in WebGPU compatibility mode, refer to the [explainer](https://gist.github.com/greggman/0dea9995e33393c546a4c2bd2a12e50e)
     and the following section. See [issue 418025721](https://issues.chromium.org/issues/418025721).'
   heading_path:
-  - Graphics and WebGPU - Chrome 139 Stable
+  - Graphics and WebGPU - Chrome 139
+  - WebGPU Features
   - New "core-features-and-limits" feature
   links:
   - url: https://gist.github.com/greggman/0dea9995e33393c546a4c2bd2a12e50e
@@ -72,10 +74,10 @@ features:
   - url: https://issues.chromium.org/issues/418025721
     link_type: other
     title: issue 418025721
-  line_number: 50
+  line_number: 44
   primary_tags:
   - name: webgpu
-    priority: primary
+    priority: secondary
     source: heading
     confidence: 1.0
   cross_cutting_concerns:
@@ -103,7 +105,8 @@ features:
     ] : []),\n    });\n    \n    if (device?.features.has(\"core-features-and-limits\")) {\n      // Compatibility mode restrictions\
     \ will apply\n    }"
   heading_path:
-  - Graphics and WebGPU - Chrome 139 Stable
+  - Graphics and WebGPU - Chrome 139
+  - WebGPU Features
   - Origin trial for WebGPU compatibility mode
   links:
   - url: https://developer.mozilla.org/docs/Web/API/GPU/requestAdapter
@@ -115,10 +118,10 @@ features:
   - url: https://webgpu.github.io/webgpu-samples/?sample=generateMipmap
     link_type: github
     title: Generate Mipmap WebGPU sample
-  line_number: 58
+  line_number: 53
   primary_tags:
   - name: webgpu
-    priority: primary
+    priority: secondary
     source: heading
     confidence: 1.0
   cross_cutting_concerns:
@@ -133,14 +136,14 @@ features:
     and set to end in Chrome 145 (Apr 21, 2026). To participate in the trial, refer to the [Get started with origin trials](/docs/web-platform/origin-trials#take_part_in_an_origin_trial)
     post.'
   heading_path:
-  - Graphics and WebGPU - Chrome 139 Stable
-  - Origin trial for WebGPU compatibility mode
+  - Graphics and WebGPU - Chrome 139
+  - WebGPU Features
   - Enable the feature
   links:
   - url: https://chromestatus.com/feature/6436406437871616
     link_type: chromestatus
     title: WebGPU compatibility mode
-  line_number: 88
+  line_number: 83
   primary_tags:
   - name: webgpu
     priority: secondary
@@ -160,11 +163,10 @@ features:
     This covers only some of the key highlights. Check out the exhaustive [list of commits](https://dawn.googlesource.com/dawn/+log/chromium/7204..chromium/7258?n=1000).
 
 
-    ---
-
-    *Generated from 2 source(s): dedicated_webgpu, rendering_graphics*'
+    <!-- Deduplication: 4 → 4 features -->'
   heading_path:
-  - Graphics and WebGPU - Chrome 139 Stable
+  - Graphics and WebGPU - Chrome 139
+  - WebGPU Features
   - Dawn updates
   links:
   - url: https://github.com/webgpu-native/webgpu-headers/pull/528
@@ -176,10 +178,10 @@ features:
   - url: https://dawn.googlesource.com/dawn/+log/chromium/7204..chromium/7258?n=1000
     link_type: other
     title: list of commits
-  line_number: 94
+  line_number: 90
   primary_tags:
   - name: webgpu
-    priority: primary
+    priority: secondary
     source: heading
     confidence: 1.0
   cross_cutting_concerns:

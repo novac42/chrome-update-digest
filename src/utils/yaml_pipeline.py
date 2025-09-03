@@ -439,6 +439,44 @@ class YAMLPipeline:
         
         return area_features
     
+    def _normalize_webgpu_title(self, title: str) -> str:
+        """
+        Normalize WebGPU feature titles for comprehensive deduplication.
+        
+        Handles various title formats to detect semantic duplicates:
+        - "WebGPU: feature" vs "feature" 
+        - "New feature" vs "feature"
+        - "`feature`" vs '"feature"' vs "feature"
+        - "feature name" vs "feature name feature"
+        
+        Args:
+            title: Original feature title
+            
+        Returns:
+            Normalized title for comparison
+        """
+        normalized = title.strip()
+        
+        # Remove common prefixes
+        prefixes_to_remove = ['WebGPU: ', 'New ', 'WebGPU ']
+        for prefix in prefixes_to_remove:
+            if normalized.startswith(prefix):
+                normalized = normalized[len(prefix):].strip()
+        
+        # Remove common suffixes  
+        suffixes_to_remove = [' feature', ' Feature']
+        for suffix in suffixes_to_remove:
+            if normalized.endswith(suffix):
+                normalized = normalized[:-len(suffix)].strip()
+        
+        # Normalize quotes and backticks
+        normalized = normalized.replace('`', '"').replace('"', '').replace("'", '')
+        
+        # Convert to lowercase and normalize whitespace
+        normalized = ' '.join(normalized.lower().split())
+        
+        return normalized
+
     def _deduplicate_webgpu_features(self, features: List[Dict]) -> List[Dict]:
         """
         Deduplicate WebGPU features, preferring the more detailed version.
@@ -458,8 +496,8 @@ class YAMLPipeline:
         
         for feature in features:
             title = feature.get('title', '')
-            # Normalize title by removing "WebGPU:" prefix for comparison
-            normalized_title = title.replace('WebGPU: ', '').strip()
+            # Normalize title for comprehensive deduplication
+            normalized_title = self._normalize_webgpu_title(title)
             
             if normalized_title not in seen_features:
                 # First time seeing this feature

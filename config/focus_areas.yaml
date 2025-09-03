@@ -91,12 +91,10 @@ focus_areas:
     description: "Media, audio, and video features"
     priority: 2
     heading_patterns:
-      - "Media"
       - "Multimedia"
-      - "Images and media"
-      - "Audio and video"
-      - "Video"
-      - "Audio"
+      - "audio and video"
+      - "video and audio"
+
     
   performance:
     name: "Performance"
