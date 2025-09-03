@@ -1,0 +1,39 @@
+version: '139'
+channel: stable
+area: other
+extraction_timestamp: '2025-09-03T16:38:58.950336'
+extraction_method: deterministic
+statistics:
+  total_features: 1
+  total_links: 2
+  primary_tags:
+    network: 1
+  cross_cutting:
+    privacy: 1
+features:
+- title: Reduce fingerprinting in Accept-Language header information
+  content: 'Reduces the amount of information the `Accept-Language` header value string exposes in HTTP requests and in `navigator.languages`.
+    Instead of sending a full list of the user''s preferred languages on every HTTP request using the `Accept-Language` header,
+    Chrome only sends the user''s most preferred language.
+
+
+    [Tracking bug #1306905](https://issues.chromium.org/issues/1306905) | [ChromeStatus.com entry](https://chromestatus.com/feature/5188040623390720)'
+  heading_path:
+  - Chrome 139
+  - Network
+  - Reduce fingerprinting in Accept-Language header information
+  links:
+  - url: https://issues.chromium.org/issues/1306905
+    link_type: other
+    title: 'Tracking bug #1306905'
+  - url: https://chromestatus.com/feature/5188040623390720
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 146
+  primary_tags:
+  - name: network
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
