@@ -36,6 +36,11 @@ class EnterpriseDigestTool:
     async def _safe_sample_with_retry(self, ctx: Context, messages: str, system_prompt: str, 
                                      max_retries: int = 3, timeout: int = 60) -> str:
         """带重试机制的安全sampling调用"""
+        import os
+        
+        # Get max tokens from environment variable with reasonable default
+        max_tokens = int(os.getenv("ENTERPRISE_MAX_TOKENS", "12000"))
+        
         for attempt in range(max_retries):
             try:
                 # 使用asyncio.wait_for添加超时
@@ -45,7 +50,7 @@ class EnterpriseDigestTool:
                         system_prompt=system_prompt,
                         model_preferences=["claude-4-sonnet", "gpt5"],
                         temperature=0.7,
-                        max_tokens=50000
+                        max_tokens=max_tokens
                     ),
                     timeout=timeout
                 )
