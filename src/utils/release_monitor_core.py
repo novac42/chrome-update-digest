@@ -5,7 +5,6 @@ Core release monitoring functionality shared between scripts and MCP tools.
 import json
 import logging
 import re
-import fcntl
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -14,6 +13,39 @@ from typing import Dict, List, Set, Optional, Tuple
 import requests
 from bs4 import BeautifulSoup
 import html2text
+
+# Cross-platform file locking support
+try:
+    import fcntl  # type: ignore
+except ImportError:  # Windows
+    fcntl = None  # type: ignore
+    import msvcrt  # type: ignore
+
+
+def _lock_file(f):
+    """Acquire an exclusive lock on the file handle cross-platform."""
+    if fcntl is not None:
+        fcntl.flock(f.fileno(), fcntl.LOCK_EX)
+    else:
+        # On Windows, lock 1 byte from the start of the file
+        try:
+            f.seek(0)
+            msvcrt.locking(f.fileno(), msvcrt.LK_LOCK, 1)
+        except Exception:
+            # Best-effort: if locking fails, proceed without strict locking
+            pass
+
+
+def _unlock_file(f):
+    """Release a previously acquired lock cross-platform."""
+    if fcntl is not None:
+        fcntl.flock(f.fileno(), fcntl.LOCK_UN)
+    else:
+        try:
+            f.seek(0)
+            msvcrt.locking(f.fileno(), msvcrt.LK_UNLCK, 1)
+        except Exception:
+            pass
 
 from utils.config_manager import (
     get_webplatform_base_url, 
@@ -460,7 +492,7 @@ class ReleaseMonitorCore:
                 # Use file locking to prevent concurrent access issues
                 with open(self.versions_file, 'r+') as f:
                     # Acquire exclusive lock (will block until lock is available)
-                    fcntl.flock(f.fileno(), fcntl.LOCK_EX)
+                    _lock_file(f)
                     try:
                         # Read current content
                         f.seek(0)
@@ -498,7 +530,7 @@ class ReleaseMonitorCore:
                         
                     finally:
                         # Release lock
-                        fcntl.flock(f.fileno(), fcntl.LOCK_UN)
+                        _unlock_file(f)
                 
                 # Successfully updated
                 return

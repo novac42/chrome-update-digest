@@ -1,0 +1,37 @@
+version: '139'
+channel: stable
+area: multimedia
+extraction_timestamp: '2025-09-03T16:38:58.959464'
+extraction_method: deterministic
+statistics:
+  total_features: 1
+  total_links: 3
+  primary_tags: {}
+  cross_cutting:
+    privacy: 1
+features:
+- title: Audio level for RTC encoded frames
+  content: 'This feature exposes to the web the audio level of an encoded frame transmitted using `RTCPeerConnection` and
+    exposed using WebRTC encoded transform.
+
+
+    [Tracking bug #418116079](https://issues.chromium.org/issues/418116079) | [ChromeStatus.com entry](https://chromestatus.com/feature/5206106602995712)
+    | [Spec](https://w3c.github.io/webrtc-encoded-transform/#dom-rtcencodedaudioframemetadata-audiolevel)'
+  heading_path:
+  - Chrome 139
+  - WebRTC
+  - Audio level for RTC encoded frames
+  links:
+  - url: https://issues.chromium.org/issues/418116079
+    link_type: other
+    title: 'Tracking bug #418116079'
+  - url: https://chromestatus.com/feature/5206106602995712
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://w3c.github.io/webrtc-encoded-transform/#dom-rtcencodedaudioframemetadata-audiolevel
+    link_type: spec
+    title: Spec
+  line_number: 176
+  primary_tags: []
+  cross_cutting_concerns:
+  - privacy

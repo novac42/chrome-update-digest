@@ -1,0 +1,43 @@
+version: '139'
+channel: stable
+area: on-device-ai
+extraction_timestamp: '2025-09-03T16:38:58.941352'
+extraction_method: deterministic
+statistics:
+  total_features: 1
+  total_links: 2
+  primary_tags:
+    devices: 1
+  cross_cutting:
+    privacy: 1
+features:
+- title: On-device Web Speech API
+  content: 'This feature adds on-device speech recognition support to the Web Speech API, allowing websites to ensure that
+    neither audio nor transcribed speech are sent to a third-party service for processing.
+
+
+    Websites can query the availability of on-device speech recognition for specific languages, prompt users to install the
+    necessary resources for on-device speech recognition, and choose between on-device or cloud-based speech recognition as
+    needed.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/6090916291674112) | [Spec](https://webaudio.github.io/web-speech-api)'
+  heading_path:
+  - Chrome 139
+  - On-device AI
+  - On-device Web Speech API
+  links:
+  - url: https://chromestatus.com/feature/6090916291674112
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://webaudio.github.io/web-speech-api
+    link_type: github
+    title: Spec
+  line_number: 128
+  primary_tags:
+  - name: devices
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy

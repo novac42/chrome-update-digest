@@ -363,7 +363,7 @@ class EnhancedWebplatformDigestTool:
         """
         # Load from file system
         # Note: In future, this could be enhanced to use MCP resource system
-        base_dir = self.base_path / 'upstream_docs' / 'release_notes' / 'webplatform'
+        base_dir = self.base_path / 'upstream_docs' / 'release_notes' / 'WebPlatform'
         
         # Try different file patterns
         # For stable channel, also try without channel suffix

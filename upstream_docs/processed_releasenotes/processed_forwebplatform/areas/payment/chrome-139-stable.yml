@@ -1,0 +1,65 @@
+version: '139'
+channel: stable
+area: payment
+extraction_timestamp: '2025-09-03T16:38:58.936960'
+extraction_method: deterministic
+statistics:
+  total_features: 2
+  total_links: 6
+  primary_tags: {}
+  cross_cutting:
+    privacy: 2
+features:
+- title: The `securePaymentConfirmationAvailability` API
+  content: 'This is a JavaScript API to provide an easier way to check if the Secure Payment Confirmation (SPC) feature is
+    available. With this API, the only way to determine SPC''s availability was to create a `PaymentRequest` with the required
+    parameters, which is clunky and difficult in the case where a developer wants to check for SPC before starting to process
+    a payment.
+
+
+    [Tracking bug #40258712](https://issues.chromium.org/issues/40258712) | [ChromeStatus.com entry](https://chromestatus.com/feature/5165040614768640)
+    | [Spec](https://github.com/w3c/secure-payment-confirmation/pull/285)'
+  heading_path:
+  - Chrome 139
+  - Secure Payment Confirmation (SPC)
+  - The `securePaymentConfirmationAvailability` API
+  links:
+  - url: https://issues.chromium.org/issues/40258712
+    link_type: other
+    title: 'Tracking bug #40258712'
+  - url: https://chromestatus.com/feature/5165040614768640
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/w3c/secure-payment-confirmation/pull/285
+    link_type: github
+    title: Spec
+  line_number: 114
+  primary_tags: []
+  cross_cutting_concerns:
+  - privacy
+- title: 'Secure Payment Confirmation: Browser Bound Keys'
+  content: 'Adds an additional cryptographic signature over Secure Payment Confirmation assertions and credential creation.
+    The corresponding private key is not synced across devices. This helps web developers meet requirements for device binding
+    for payment transactions.
+
+
+    [Tracking bug #377278827](https://issues.chromium.org/issues/377278827) | [ChromeStatus.com entry](https://chromestatus.com/feature/5106102997614592)
+    | [Spec](https://w3c.github.io/secure-payment-confirmation/#sctn-browser-bound-key-store)'
+  heading_path:
+  - Chrome 139
+  - Secure Payment Confirmation (SPC)
+  - 'Secure Payment Confirmation: Browser Bound Keys'
+  links:
+  - url: https://issues.chromium.org/issues/377278827
+    link_type: other
+    title: 'Tracking bug #377278827'
+  - url: https://chromestatus.com/feature/5106102997614592
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://w3c.github.io/secure-payment-confirmation/#sctn-browser-bound-key-store
+    link_type: spec
+    title: Spec
+  line_number: 120
+  primary_tags: []
+  cross_cutting_concerns:
+  - privacy
