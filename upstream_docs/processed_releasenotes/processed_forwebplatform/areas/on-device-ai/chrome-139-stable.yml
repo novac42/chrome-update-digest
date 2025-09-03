@@ -1,7 +1,7 @@
 version: '139'
 channel: stable
 area: on-device-ai
-extraction_timestamp: '2025-09-03T16:38:58.941352'
+extraction_timestamp: '2025-09-03T14:29:32.553337'
 extraction_method: deterministic
 statistics:
   total_features: 1
@@ -23,7 +23,6 @@ features:
 
     [ChromeStatus.com entry](https://chromestatus.com/feature/6090916291674112) | [Spec](https://webaudio.github.io/web-speech-api)'
   heading_path:
-  - Chrome 139
   - On-device AI
   - On-device Web Speech API
   links:
@@ -33,7 +32,7 @@ features:
   - url: https://webaudio.github.io/web-speech-api
     link_type: github
     title: Spec
-  line_number: 128
+  line_number: 3
   primary_tags:
   - name: devices
     priority: primary
