@@ -182,7 +182,7 @@ class EnhancedWebplatformDigestTool:
                 }, ensure_ascii=False)
             
         except Exception as e:
-            # Return structured error response (aligned with Enterprise)
+            # Return structured error response
             return json.dumps({
                 "success": False,
                 "error": str(e),
@@ -506,7 +506,7 @@ CRITICAL RULES:
 
 Output language: English"""
         
-        # Build user message as single string (matching Enterprise pattern)
+        # Build user message as single string
         version = yaml_data.get('version', 'Unknown')
         stats = yaml_data.get('statistics', {})
         
@@ -522,7 +522,7 @@ YAML Data:
 {yaml_text}
 ```"""
         
-        # Use safe sampling with retry (no fallback - fail explicitly)
+        # Use safe sampling with retry
         if hasattr(ctx, 'sample'):
             if debug:
                 print("Generating digest with LLM sampling...")
@@ -540,11 +540,11 @@ YAML Data:
     
     async def _safe_sample_with_retry(self, ctx: Context, messages: str, system_prompt: str, 
                                      debug: bool, max_retries: int = 3, timeout: int = 60) -> str:
-        """Safe sampling with exponential backoff retry and timeout (aligned with Enterprise).
+        """Safe sampling with exponential backoff retry and timeout.
         
         Args:
             ctx: FastMCP context
-            messages: User message as string (matching Enterprise pattern)
+            messages: User message as string
             system_prompt: System prompt as separate parameter
             debug: Debug mode
             max_retries: Maximum number of retry attempts
@@ -564,19 +564,19 @@ YAML Data:
                 if debug:
                     print(f"Sampling attempt {attempt + 1}/{max_retries}... (max_tokens={max_tokens})")
                 
-                # Use asyncio.wait_for for timeout control (matching Enterprise)
+                # Use asyncio.wait_for for timeout control
                 response = await asyncio.wait_for(
                     ctx.sample(
                         messages=messages,
-                        system_prompt=system_prompt,  # Pass as separate parameter (aligned with Enterprise)
-                        model_preferences=["claude-4-sonnet", "gpt5"],  # Aligned with Enterprise
-                        temperature=0.7,  # Aligned with Enterprise (was 0.4)
+                        system_prompt=system_prompt,  # Pass as separate parameter
+                        model_preferences=["claude-4-sonnet", "gpt5"],
+                        temperature=0.7,
                         max_tokens=max_tokens  # Now configurable via environment
                     ),
                     timeout=timeout
                 )
                 
-                # Extract result (matching Enterprise pattern)
+                # Extract result
                 if isinstance(response, str):
                     if debug:
                         print("Successfully generated digest")

@@ -1,10 +1,10 @@
-# PRD: Upstream Digest Server v1.0
+# PRD: WebPlatform Digest Server v1.0
 
 ## Background & Context
-This product is developed for internal use by a Chromium-based browser development team. The primary users are product managers and engineers who need to stay informed about Chrome updates to guide their own browser development efforts. As an internal tool for a technical team, the focus is on accurate information delivery and efficient monitoring of both stable and pre-release Chrome versions.
+This product is developed for internal use by a Chromium-based browser development team. The primary users are product managers and engineers who need to stay informed about Chrome WebPlatform updates to guide their own browser development efforts. As an internal tool for a technical team, the focus is on accurate information delivery and efficient monitoring of stable and pre-release Chrome versions for web platform features.
 
 ## Problem Statement
-The current v0.5 upstream digest server produces functional but basic HTML outputs with limited visual appeal and no internationalization support. Our browser development team needs professional presentation with bilingual support (English default, Chinese optional) for tracking Chrome updates across all release channels. The system requires production-ready error handling, accurate technical terminology preservation, and comprehensive coverage of pre-release versions (beta, dev, canary) that are critical for browser development planning.
+The current v0.5 webplatform digest server produces functional but basic HTML outputs with limited visual appeal and no internationalization support. Our browser development team needs professional presentation with bilingual support (English default, Chinese optional) for tracking Chrome WebPlatform updates across all release channels. The system requires production-ready error handling, accurate technical terminology preservation, and comprehensive coverage of pre-release versions (beta, dev, canary) that are critical for web platform development planning.
 
 ## Success Metrics
 - Primary: 100% successful generation of both Chinese and English versions for all digest types
@@ -27,9 +27,9 @@ As a technical documentation manager, I want digest content presented in profess
 
 ### Implementation Progress Summary
 
-- **✅ COMPLETE (4/7)**: WebPlatform Digest, Enterprise Digest, Release Monitoring, Error Handling
-- **⚠️ IN PROGRESS (3/7)**: Enhanced HTML Cards (needs design template adoption), Internationalization Infrastructure (Chinese support required for v1.0), Unified Language Management
-- **Overall Status**: 57% complete, design template adoption and Chinese language implementation are next priorities for v1.0
+- **✅ COMPLETE (3/6)**: WebPlatform Digest, Release Monitoring, Error Handling
+- **⚠️ IN PROGRESS (3/6)**: Enhanced HTML Cards (needs design template adoption), Internationalization Infrastructure (Chinese support required for v1.0), Unified Language Management
+- **Overall Status**: 50% complete, design template adoption and Chinese language implementation are next priorities for v1.0
 
 ### Functional Requirements
 
@@ -63,17 +63,7 @@ As a technical documentation manager, I want digest content presented in profess
 - **Acceptance Criteria**: WebPlatform digests generated successfully in both languages with developer-focused content organization
 - **Implementation Status**: ✅ COMPLETE - WebPlatform digest tool implemented with WebGPU merger functionality in `src/mcp_tools/webplatform_digest.py`
 
-#### 4. Enterprise Digest Optimization ✅ IMPLEMENTED
-
-**Requirement**: Streamline enterprise digest generation for improved clarity
-- Remove "Version Comparison Context" section from generated digests
-- Generate both Chinese and English versions using separate prompt templates
-- Maintain all existing enterprise-focused content sections (Highlights, Updates by Area)
-- Preserve existing policy reference formatting and technical accuracy
-- **Acceptance Criteria**: Enterprise digests generated in both languages without version comparison section, maintaining content quality and accuracy
-- **Implementation Status**: ✅ COMPLETE - Enterprise digest tool implemented in `src/mcp_tools/enterprise_digest.py` with retry mechanisms and AI sampling
-
-#### 5. Unified Language Management System ⚠️ IN PROGRESS - REQUIRED FOR V1.0
+#### 4. Unified Language Management System ⚠️ IN PROGRESS - REQUIRED FOR V1.0
 
 **Requirement**: Create consistent language handling across all digest types
 - Centralized language configuration and prompt management
@@ -83,18 +73,17 @@ As a technical documentation manager, I want digest content presented in profess
 - **Acceptance Criteria**: All digest types use unified language system, generating consistent bilingual outputs
 - **Implementation Status**: ⚠️ IN PROGRESS - MCP resource system ready, Chinese prompts needed for v1.0 completion
 
-#### 6. Release Version Monitoring System ✅ IMPLEMENTED
+#### 5. Release Version Monitoring System ✅ IMPLEMENTED
 
 **Requirement**: Monitor and track Chrome release versions with focus on pre-release channels for browser development
 - WebPlatform: Automatic monitoring of stable and beta channels (v1.0), with dev/canary planned for v1.1
-- Enterprise: Monitor stable channel only (enterprise notes only available for stable)
 - WebGPU: Track versions without channel distinctions (WebGPU follows single release track)
 - Priority on pre-release detection for browser development planning
 - Automatic detection and downloading of new versions across monitored channels
 - **Acceptance Criteria**: System automatically detects and downloads stable and beta releases, with clear indication of channel type in digests
 - **Implementation Status**: ✅ COMPLETE - Full monitoring system implemented with MCP tool (`src/mcp_tools/release_monitor.py`) and core functionality (`utils/release_monitor_core.py`), supports stable and beta channels as specified
 
-#### 7. Production-Ready Error Handling ✅ IMPLEMENTED
+#### 6. Production-Ready Error Handling ✅ IMPLEMENTED
 
 **Requirement**: Implement comprehensive error handling for production deployment
 - Graceful fallbacks when language-specific content unavailable
@@ -138,12 +127,6 @@ As a technical documentation manager, I want digest content presented in profess
 
 ### Digest Content Specifications
 
-#### Enterprise Digest Requirements
-- **Remove Version Comparison Context**: The enterprise digest must NOT include any "Version Comparison Context" section
-- **Prompt Modification**: Update enterprise prompt templates to exclude version comparison generation
-- **Content Sections**: Maintain existing sections (Highlights, Updates by Area) without version comparisons
-- **Technical Terms**: All API names, features, and policies remain in English across all language versions
-
 #### WebPlatform Digest Requirements
 - **Remove Version Comparison Context**: The webplatform digest must NOT include any "Version Comparison Context" section
 - **Remove Executive Summary**: No executive summary section in webplatform digests
@@ -166,7 +149,7 @@ As a technical documentation manager, I want digest content presented in profess
 
 ### HTML Template Architecture
 
-- Base template supporting both webplatform and enterprise digest types
+- Base template supporting webplatform digest types
 - Card component system with consistent styling and spacing
 - CSS Grid layout for responsive card organization
 - JavaScript language switching with smooth transitions
@@ -239,7 +222,7 @@ As a technical documentation manager, I want digest content presented in profess
 ## v1.0 MVP Scope Summary
 
 Based on user decisions, the v1.0 MVP will focus on:
-- ✅ **Core functionality**: All digest generation (WebPlatform, Enterprise, WebGPU)
+- ✅ **Core functionality**: WebPlatform digest generation (including WebGPU)
 - ✅ **Professional presentation**: Card-based HTML layout
 - ✅ **Chinese language support**: Required for v1.0 (confirmed by user)
 - ✅ **Error handling & monitoring**: Production-ready implementation

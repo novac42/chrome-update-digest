@@ -23,51 +23,6 @@ from fast_mcp_server import (
 
 # 直接导入FastMCP工具函数的实际实现
 # 我们需要重新实现这些函数来进行测试，因为装饰器会改变函数签名
-async def test_enterprise_digest(version: int, channel: str = "stable", 
-                          focus_area: str = "all", custom_instruction: str = "") -> str:
-    """测试版本的enterprise_digest函数"""
-    try:
-        # 读取处理过的数据
-        processed_data = load_processed_data("enterprise", version, channel)
-        
-        # 暂时返回基本信息
-        digest_content = f"""# Chrome {version} Enterprise Digest
-
-## Summary
-This is a test placeholder digest for Chrome {version} enterprise features.
-
-Focus Area: {focus_area}
-Channel: {channel}
-
-Data loaded: {len(processed_data)} characters
-
-## Test Data Preview
-```
-{processed_data[:500]}{'...' if len(processed_data) > 500 else ''}
-```
-"""
-        
-        # 保存到文件
-        from fast_mcp_server import save_digest_to_file
-        output_path = BASE_PATH / "digest_markdown" / "enterprise" / f"test-digest-chrome-{version}-enterprise.md"
-        await save_digest_to_file(digest_content, output_path)
-        
-        return json.dumps({
-            "success": True,
-            "version": version,
-            "channel": channel,
-            "focus_area": focus_area,
-            "output_path": str(output_path),
-            "message": f"Test Enterprise digest for Chrome {version} generated successfully"
-        })
-        
-    except Exception as e:
-        return json.dumps({
-            "success": False,
-            "error": str(e),
-            "message": f"Failed to generate test enterprise digest for Chrome {version}"
-        })
-
 
 async def test_webplatform_digest(version: int, channel: str = "stable", 
                            focus_areas: list = None, custom_instruction: str = "") -> str:

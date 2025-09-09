@@ -51,8 +51,7 @@ from utils.config_manager import (
     get_webplatform_base_url, 
     get_webplatform_version_url,
     get_webgpu_base_url,
-    get_webgpu_version_url,
-    get_enterprise_url
+    get_webgpu_version_url
 )
 
 logger = logging.getLogger(__name__)
@@ -65,7 +64,7 @@ class ReleaseMonitorCore:
         self.base_path = base_path
         self.monitoring_dir = base_path / ".monitoring"
         self.versions_file = self.monitoring_dir / "versions.json"
-        self.release_notes_dir = base_path / "upstream_docs" / "release_notes"
+        self.release_notes_dir = base_path / "upstream_docs" / "release_notes" / "WebPlatform"
         
         # Ensure directories exist
         self.monitoring_dir.mkdir(exist_ok=True)
@@ -76,9 +75,8 @@ class ReleaseMonitorCore:
         
         Args:
             channel: Release channel for webplatform ("stable", "beta", "dev", "canary")
-                    Enterprise always uses stable.
         """
-        versions = {"webplatform": set(), "enterprise": set(), "webgpu": set()}
+        versions = {"webplatform": set(), "webgpu": set()}
         
         # Scan WebPlatform release notes
         webplatform_dir = self.release_notes_dir / "webplatform"
@@ -105,17 +103,6 @@ class ReleaseMonitorCore:
                 match = re.search(r'webgpu-(\d+)\.md$', file.name)
                 if match:
                     versions["webgpu"].add(int(match.group(1)))
-        
-        # Scan Enterprise release notes (always stable)
-        enterprise_dir = self.release_notes_dir / "enterprise"
-        if enterprise_dir.exists():
-            for file in enterprise_dir.glob("*-chrome-enterprise.md"):
-                # Extract Chrome version from filename (e.g., "137-chrome-enterprise.md")
-                match = re.search(r'^(\d+)-chrome-enterprise', file.stem)
-                if match:
-                    chrome_version = int(match.group(1))
-                    if chrome_version >= 100:  # Sanity check for reasonable Chrome version
-                        versions["enterprise"].add(chrome_version)
         
         return versions
     
@@ -246,49 +233,6 @@ class ReleaseMonitorCore:
         
         return None
     
-    def detect_latest_enterprise_version(self) -> Optional[Tuple[int, str]]:
-        """
-        Detect the latest Enterprise version from the main page.
-        Returns tuple of (chrome_version, url) or None.
-        
-        Note: Enterprise release notes don't have version in URL. 
-        We need to fetch the page and extract the version from content.
-        """
-        try:
-            url = get_enterprise_url()
-            response = requests.get(url, timeout=30)
-            response.raise_for_status()
-            
-            soup = BeautifulSoup(response.text, 'html.parser')
-            
-            # Look for "Chrome XXX release summary" pattern in the content
-            # This is the most reliable way to find the current version
-            version_pattern = re.compile(r'Chrome\s+(\d+)\s+release\s+summary', re.IGNORECASE)
-            
-            # Search in all text content
-            for text in soup.stripped_strings:
-                match = version_pattern.search(text)
-                if match:
-                    chrome_version = int(match.group(1))
-                    logger.info(f"Detected Enterprise Chrome version {chrome_version} from page content")
-                    return (chrome_version, url)
-            
-            # Alternative: Look for "Chrome XXX" pattern in headers
-            for header in soup.find_all(['h1', 'h2', 'h3']):
-                text = header.get_text(strip=True)
-                match = re.search(r'Chrome\s+(\d+)(?:\s|$)', text)
-                if match:
-                    chrome_version = int(match.group(1))
-                    if chrome_version >= 100:  # Sanity check for reasonable version
-                        logger.info(f"Detected Enterprise Chrome version {chrome_version} from header")
-                        return (chrome_version, url)
-            
-            logger.warning("Could not detect Chrome version from Enterprise page content")
-                
-        except Exception as e:
-            logger.error(f"Error detecting latest Enterprise version: {e}")
-        
-        return None
     
     def download_chrome_release(self, version: int, channel: str = "stable") -> Dict[str, any]:
         """Download Chrome release notes.
@@ -408,73 +352,6 @@ class ReleaseMonitorCore:
                 "error": f"Error downloading WebGPU release {version}: {str(e)}"
             }
     
-    def download_enterprise_release(self, chrome_version: int, url: str) -> Dict[str, any]:
-        """Download Enterprise release notes.
-        
-        Args:
-            chrome_version: Chrome version number (e.g., 137, 138)
-            url: URL to the enterprise release notes page
-        """
-        try:
-            response = requests.get(url, timeout=30)
-            response.raise_for_status()
-            
-            soup = BeautifulSoup(response.text, 'html.parser')
-            
-            # Find main content using known patterns from crawl_script.py
-            main_content = (
-                soup.find('div', class_='zippy-wrapper') or
-                soup.find('div', class_='article-container') or
-                soup.find('div', class_='article-content') or
-                soup.find('div', id='article-content')
-            )
-            
-            if not main_content:
-                # Fallback to body
-                main_content = soup.body
-            
-            if not main_content:
-                return {
-                    "success": False,
-                    "error": f"Could not find content for Enterprise Chrome {chrome_version}"
-                }
-            
-            # Convert to markdown
-            h = html2text.HTML2Text()
-            h.body_width = 0
-            h.ignore_links = False
-            h.ignore_images = False
-            h.unicode_snob = True
-            h.skip_internal_links = True
-            h.inline_links = False
-            h.protect_links = True
-            h.single_line_break = True
-            
-            markdown_content = h.handle(str(main_content))
-            
-            # Clean up
-            markdown_content = re.sub(r'\n\s*\n\s*\n+', '\n\n', markdown_content)
-            
-            # Use Chrome version in filename for consistency
-            output_file = self.release_notes_dir / "enterprise" / f"{chrome_version}-chrome-enterprise.md"
-            output_file.parent.mkdir(parents=True, exist_ok=True)
-            
-            with open(output_file, 'w', encoding='utf-8') as f:
-                f.write(f"# Chrome Enterprise Release Notes (Chrome {chrome_version})\n\n")
-                f.write(f"Source: {url}\n\n")
-                f.write(markdown_content)
-            
-            return {
-                "success": True,
-                "file_path": str(output_file),
-                "url": url
-            }
-            
-        except Exception as e:
-            return {
-                "success": False,
-                "error": f"Error downloading Enterprise Chrome {chrome_version}: {str(e)}"
-            }
     
     def update_version_tracking(self, release_type: str, version: int):
         """Update the version tracking JSON file with file locking for concurrent access protection."""
@@ -509,16 +386,12 @@ class ReleaseMonitorCore:
                             versions["chrome"] = []
                         if "webgpu" not in versions:
                             versions["webgpu"] = []
-                        if "enterprise" not in versions:
-                            versions["enterprise"] = []
                         
                         # Add version if not already tracked
                         if release_type == "chrome" and version not in versions["chrome"]:
                             versions["chrome"].append(version)
                         elif release_type == "webgpu" and version not in versions["webgpu"]:
                             versions["webgpu"].append(version)
-                        elif release_type == "enterprise" and version not in versions["enterprise"]:
-                            versions["enterprise"].append(version)
                         
                         # Update timestamp
                         versions["last_check"] = datetime.now(timezone.utc).isoformat()

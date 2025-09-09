@@ -1,7 +1,7 @@
-# Product Roadmap: Upstream Digest Server v1.0
+# Product Roadmap: WebPlatform Digest Server v1.0
 
 ## Vision
-Provide our Chromium-based browser development team with comprehensive, timely Chrome update intelligence across all release channels, enabling proactive planning and implementation of browser compatibility and feature development.
+Provide our Chromium-based browser development team with comprehensive, timely Chrome WebPlatform update intelligence across all release channels, enabling proactive planning and implementation of web platform compatibility and feature development.
 
 ## Target Users (Internal)
 - Primary: Browser development engineers tracking Chrome changes for compatibility
@@ -13,30 +13,30 @@ Provide our Chromium-based browser development team with comprehensive, timely C
 - ✅ WebPlatform digest development (in progress)
 - ✅ MCP server implementation with FastMCP framework
 - ✅ Markdown to HTML conversion pipeline
-- ✅ Enterprise digest generation with AI-powered feature extraction
 - ✅ Feature splitting and categorization
 - ✅ Chinese language digest content
+- ✅ WebGPU integration and processing
 
 ### Version 1.0 (Production Ready)
-**Goal**: Launch internal tool with stable and beta monitoring, English-first bilingual support, and professional presentation
+**Goal**: Launch internal WebPlatform tool with stable and beta monitoring, English-first bilingual support, and professional presentation
 **Timeline**: Sprint-based implementation
 
 #### Core Modules
-1. Channel Monitoring - Automatic tracking of Stable + Beta channels
-2. Enhanced HTML Presentation Engine - Card-based layout optimized for technical content
+1. Channel Monitoring - Automatic tracking of Stable + Beta channels for WebPlatform releases
+2. Enhanced HTML Presentation Engine - Card-based layout optimized for web platform content
 3. English-First Bilingual System - English default with manual Chinese toggle
-4. WebPlatform Digest Engine - Comprehensive coverage for browser development needs
+4. WebPlatform Digest Engine - Comprehensive coverage for web platform development needs
 5. Technical Term Preservation - All APIs, features, policies remain in English
 
 #### Feature List (MVP v1.0)
 - **Beta Channel Monitoring**: Automatic detection and processing of beta releases
-- **Enhanced HTML Cards**: Technical content in professional card layout
+- **Enhanced HTML Cards**: WebPlatform content in professional card layout
 - **Manual Language Toggle**: English default with optional Chinese (upper-right selector)
 - **Full Content Display**: No truncation for internal technical users
 - **Technical Term Preservation**: All feature names, APIs, policies in English
 - **WebPlatform Digest**: Complete implementation for browser team needs
-- **Enterprise Digest**: Stable channel coverage for product planning
-- **Unified Templates**: Consistent presentation across all digest types
+- **WebGPU Integration**: Comprehensive WebGPU feature processing and deduplication
+- **Unified Templates**: Consistent presentation across all WebPlatform digest types
 
 #### Key Improvements Over v0.5
 - Professional visual presentation replacing basic HTML output
@@ -55,10 +55,10 @@ Provide our Chromium-based browser development team with comprehensive, timely C
 Note: External integrations (Slack/Teams/Email) are not planned as the team has existing internal integration tools.
 
 ## Success Metrics v1.0
-- **Primary**: 100% coverage of Stable and Beta channel releases
+- **Primary**: 100% coverage of Stable and Beta channel WebPlatform releases
 - **Secondary**: All technical terms preserved in English across both language versions
-- **Quality**: Zero missing pre-release versions after automatic monitoring
-- **Performance**: Sub-15 second digest generation for any Chrome version
+- **Quality**: Zero missing pre-release WebPlatform versions after automatic monitoring
+- **Performance**: Sub-15 second WebPlatform digest generation for any Chrome version
 
 ## Technical Architecture Changes
 - Template system supporting bilingual content generation
@@ -70,9 +70,9 @@ Note: External integrations (Slack/Teams/Email) are not planned as the team has 
 ## Release Strategy
 
 ### Phase 1 (v1.0 MVP) - Core Implementation
-1. **Sprint 1**: Complete Chinese language support (prompts and UI toggle)
-2. **Sprint 2**: Finalize beta channel monitoring implementation  
-3. **Sprint 3**: Testing, bug fixes, and internal deployment
+1. **Sprint 1**: Complete Chinese language support for WebPlatform content (prompts and UI toggle)
+2. **Sprint 2**: Finalize beta channel monitoring implementation for WebPlatform releases
+3. **Sprint 3**: Testing, bug fixes, and internal deployment of WebPlatform-focused system
 
 ### Phase 2 (v2.0) - Future Enhancements (Low Priority)
 Only implement if specifically requested by users:

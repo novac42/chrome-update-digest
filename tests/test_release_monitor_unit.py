@@ -149,26 +149,6 @@ class TestReleaseMonitorCore:
         
         assert latest == 136  # Should detect 136 as the latest
     
-    @patch('utils.release_monitor_core.requests.get')
-    def test_detect_latest_enterprise_version(self, mock_get, monitor):
-        """Test detecting latest Enterprise version from web."""
-        # Mock HTML response with Enterprise release link
-        mock_response = Mock()
-        mock_response.status_code = 200
-        mock_response.text = """
-        <html>
-        <body>
-            <a href="/138-chrome-enterprise/">Chrome 138 Enterprise</a>
-        </body>
-        </html>
-        """
-        mock_get.return_value = mock_response
-        
-        latest = monitor.detect_latest_enterprise_version()
-        
-        assert latest is not None
-        assert latest[0] == 138  # Version number
-        assert "138-chrome-enterprise" in latest[1]  # URL contains version
     
     @patch('utils.release_monitor_core.requests.get')
     @patch('utils.release_monitor_core.html2text.html2text')
@@ -226,7 +206,6 @@ class TestReleaseMonitorCore:
         monitor.update_version_tracking("chrome", 138)
         monitor.update_version_tracking("chrome", 139)
         monitor.update_version_tracking("webgpu", 136)
-        monitor.update_version_tracking("enterprise", 138)
         
         # Read the tracking file
         versions_file = versions_dir / "downloaded_versions.json"
@@ -238,7 +217,6 @@ class TestReleaseMonitorCore:
         assert 138 in data["chrome"]
         assert 139 in data["chrome"]
         assert 136 in data["webgpu"]
-        assert 138 in data["enterprise"]
         assert "last_check" in data
     
     @patch('utils.release_monitor_core.fcntl.flock')
@@ -291,20 +269,19 @@ class TestReleaseMonitorTool:
         assert "Unsupported release_type" in data["error"]
         
         # Test valid parameters
-        with patch.object(tool.core, 'scan_existing_versions', return_value={"webplatform": set(), "enterprise": set(), "webgpu": set()}):
+        with patch.object(tool.core, 'scan_existing_versions', return_value={"webplatform": set(), "webgpu": set()}):
             with patch.object(tool.core, 'detect_latest_webplatform_version', return_value=None):
                 with patch.object(tool.core, 'detect_latest_webgpu_version', return_value=None):
-                    with patch.object(tool.core, 'detect_latest_enterprise_version', return_value=None):
-                        result = await tool.check_latest_releases(ctx, {"channel": "stable", "release_type": "both"})
-                        data = json.loads(result)
-                        assert data["status"] == "success"
+                    result = await tool.check_latest_releases(ctx, {"channel": "stable", "release_type": "webplatform"})
+                    data = json.loads(result)
+                    assert data["status"] == "success"
     
     @pytest.mark.asyncio
     async def test_check_latest_releases_missing_stable_detection(self, tool):
         """Test that missing stable versions are properly reported."""
         ctx = Mock()
         
-        with patch.object(tool.core, 'scan_existing_versions', return_value={"webplatform": {138}, "enterprise": set(), "webgpu": set()}):
+        with patch.object(tool.core, 'scan_existing_versions', return_value={"webplatform": {138}, "webgpu": set()}):
             with patch.object(tool.core, 'detect_missing_stable_versions', return_value=[139, 140]):
                 with patch.object(tool.core, 'detect_latest_webplatform_version', return_value=140):
                     with patch.object(tool.core, 'detect_latest_webgpu_version', return_value=None):
@@ -346,8 +323,7 @@ class TestReleaseMonitorTool:
                     "latest_available": 139,
                     "is_missing": True
                 }
-            },
-            "enterprise": {}
+            }
         }
         
         with patch.object(tool, 'check_latest_releases', return_value=json.dumps(check_result)):

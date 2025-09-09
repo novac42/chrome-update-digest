@@ -24,16 +24,16 @@ class ReleaseMonitorTool:
         Check for latest available release versions and compare with local files.
         
         Parameters:
-        - release_type: "webplatform" | "enterprise" | "both" (default: "both")
-        - channel: "stable" | "beta" | "dev" | "canary" (default: "stable") - Only for webplatform
+        - release_type: "webplatform" (default: "webplatform")
+        - channel: "stable" | "beta" | "dev" | "canary" (default: "stable")
         
         Returns JSON with latest versions and missing releases.
         """
         # Input validation
-        SUPPORTED_RELEASE_TYPES = ["webplatform", "enterprise", "both"]
+        SUPPORTED_RELEASE_TYPES = ["webplatform"]
         SUPPORTED_CHANNELS = ["stable", "beta", "dev", "canary"]
         
-        release_type = arguments.get("release_type", "both")
+        release_type = arguments.get("release_type", "webplatform")
         channel = arguments.get("channel", "stable")
         
         # Validate release_type
@@ -56,13 +56,12 @@ class ReleaseMonitorTool:
             
             results = {
                 "webplatform": {},
-                "enterprise": {},
                 "channel": channel,
                 "status": "success"
             }
             
             # Check WebPlatform releases
-            if release_type in ["webplatform", "both"]:
+            if release_type == "webplatform":
                 # Check Chrome
                 latest_chrome = self.core.detect_latest_webplatform_version()
                 if latest_chrome:
@@ -91,33 +90,17 @@ class ReleaseMonitorTool:
                         "is_missing": latest_webgpu not in webgpu_versions
                     }
             
-            # Check Enterprise releases
-            if release_type in ["enterprise", "both"]:
-                latest_enterprise = self.core.detect_latest_enterprise_version()
-                if latest_enterprise:
-                    chrome_version, url = latest_enterprise
-                    results["enterprise"] = {
-                        "latest_available": chrome_version,
-                        "latest_url": url,
-                        "latest_local": max(existing_versions["enterprise"]) if existing_versions["enterprise"] else None,
-                        "is_missing": chrome_version not in existing_versions["enterprise"]
-                    }
             
             # Add summary
             missing_releases = []
-            if release_type in ["webplatform", "both"]:
-                if results["webplatform"].get("chrome", {}).get("is_missing"):
-                    missing_releases.append(f"Chrome {results['webplatform']['chrome']['latest_available']}")
-                # Add missing stable versions where beta exists
-                missing_stable = results["webplatform"].get("missing_stable_with_beta", [])
-                for version in missing_stable:
-                    missing_releases.append(f"Chrome {version} (stable - beta exists)")
-                if results["webplatform"].get("webgpu", {}).get("is_missing"):
-                    missing_releases.append(f"WebGPU {results['webplatform']['webgpu']['latest_available']}")
-            
-            if release_type in ["enterprise", "both"]:
-                if results["enterprise"].get("is_missing"):
-                    missing_releases.append(f"Enterprise {results['enterprise']['latest_available']}")
+            if results["webplatform"].get("chrome", {}).get("is_missing"):
+                missing_releases.append(f"Chrome {results['webplatform']['chrome']['latest_available']}")
+            # Add missing stable versions where beta exists
+            missing_stable = results["webplatform"].get("missing_stable_with_beta", [])
+            for version in missing_stable:
+                missing_releases.append(f"Chrome {version} (stable - beta exists)")
+            if results["webplatform"].get("webgpu", {}).get("is_missing"):
+                missing_releases.append(f"WebGPU {results['webplatform']['webgpu']['latest_available']}")
             
             results["summary"] = {
                 "missing_releases": missing_releases,
@@ -138,18 +121,18 @@ class ReleaseMonitorTool:
         Crawl missing release notes after user confirmation.
         
         Parameters:
-        - release_type: "webplatform" | "enterprise" | "both" (default: "both")
-        - channel: "stable" | "beta" | "dev" | "canary" (default: "stable") - Only for webplatform
+        - release_type: "webplatform" (default: "webplatform")
+        - channel: "stable" | "beta" | "dev" | "canary" (default: "stable")
         - confirmed: boolean - Must be true to proceed with crawling
         - force_redownload: boolean (default: false) - Download even if file exists
         
         Returns JSON with download results.
         """
         # Input validation
-        SUPPORTED_RELEASE_TYPES = ["webplatform", "enterprise", "both"]
+        SUPPORTED_RELEASE_TYPES = ["webplatform"]
         SUPPORTED_CHANNELS = ["stable", "beta", "dev", "canary"]
         
-        release_type = arguments.get("release_type", "both")
+        release_type = arguments.get("release_type", "webplatform")
         channel = arguments.get("channel", "stable")
         confirmed = arguments.get("confirmed", False)
         force_redownload = arguments.get("force_redownload", False)
@@ -189,7 +172,7 @@ class ReleaseMonitorTool:
             }
             
             # Download WebPlatform releases
-            if release_type in ["webplatform", "both"]:
+            if release_type == "webplatform":
                 # Chrome
                 chrome_info = check_data.get("webplatform", {}).get("chrome", {})
                 if chrome_info.get("is_missing") or force_redownload:
@@ -239,23 +222,6 @@ class ReleaseMonitorTool:
                         else:
                             results["errors"].append(download_result["error"])
             
-            # Download Enterprise releases
-            if release_type in ["enterprise", "both"]:
-                enterprise_info = check_data.get("enterprise", {})
-                if enterprise_info.get("is_missing") or force_redownload:
-                    chrome_version = enterprise_info.get("latest_available")
-                    url = enterprise_info.get("latest_url")
-                    if chrome_version and url:
-                        download_result = self.core.download_enterprise_release(chrome_version, url)
-                        if download_result["success"]:
-                            results["downloaded"].append({
-                                "type": "enterprise",
-                                "version": chrome_version,
-                                "file_path": download_result["file_path"]
-                            })
-                            self.core.update_version_tracking("enterprise", chrome_version)
-                        else:
-                            results["errors"].append(download_result["error"])
             
             # Set status based on results
             if results["errors"] and not results["downloaded"]:
