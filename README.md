@@ -7,7 +7,7 @@ A comprehensive MCP (Model Context Protocol) server for accessing and analyzing 
 This MCP server provides access to:
 
 ### 📊 Processed Chrome Release Data
-- **Web Platform Updates**: CSS, JavaScript, Web APIs, performance improvements  
+- **Web Platform Updates**: CSS, JavaScript, Web APIs, performance improvements, etc.
 - **WebGPU Features**: Graphics and compute capabilities
 
 ### 📝 AI-Generated Digests
