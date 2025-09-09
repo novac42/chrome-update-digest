@@ -2,7 +2,7 @@
 """
 Chrome Digest FastMCP Server
 Modern MCP server implementation using FastMCP with sampling and resource management.
-Provides tools for generating enterprise and web platform digests from processed Chrome release notes.
+Provides tools for generating web platform digests from processed Chrome release notes.
 """
 
 import asyncio
@@ -20,12 +20,9 @@ from fastmcp.resources import FileResource
 sys.path.append(str(Path(__file__).parent / "src"))
 
 # Import tool classes
-from mcp_tools.enterprise_digest import EnterpriseDigestTool
 from mcp_tools.enhanced_webplatform_digest import EnhancedWebplatformDigestTool
 from mcp_tools.feature_splitter import FeatureSplitterTool
 from mcp_tools.release_monitor import ReleaseMonitorTool
-from mcp_tools.profile_feature_extractor import ProfileFeatureExtractorTool
-from mcp_tools.enterprise_notes_processor import EnterpriseNotesProcessorTool
 # WebGPU tools removed - functionality integrated into main pipeline
 
 # Import resource classes
@@ -39,15 +36,6 @@ BASE_PATH = Path(__file__).parent
 
 
 # Setup static resources
-@mcp.resource("file://enterprise-prompt", mime_type="text/markdown")
-def get_enterprise_prompt() -> str:
-    """Enterprise digest generation prompt (bilingual)"""
-    enterprise_prompt_path = BASE_PATH / "prompts" / "enterprise-prompts" / "enterprise-prompt-bilingual.md"
-    if enterprise_prompt_path.exists():
-        with open(enterprise_prompt_path, "r", encoding="utf-8") as f:
-            return f.read()
-    return "Enterprise prompt file not found"
-
 @mcp.resource("file://webplatform-prompt", mime_type="text/markdown")
 def get_webplatform_prompt() -> str:
     """WebPlatform digest generation prompt (bilingual)"""
@@ -57,22 +45,11 @@ def get_webplatform_prompt() -> str:
             return f.read()
     return "WebPlatform prompt file not found"
 
-@mcp.resource("file://profile-keywords", mime_type="text/plain")
-def get_profile_keywords() -> str:
-    """Profile keywords for feature identification"""
-    profile_keywords_path = BASE_PATH / "prompts" / "profile-keywords.txt"
-    if profile_keywords_path.exists():
-        with open(profile_keywords_path, "r", encoding="utf-8") as f:
-            return f.read()
-    return "Profile keywords file not found"
 
 
 # Initialize tool instances
-enterprise_tool = EnterpriseDigestTool(BASE_PATH)
 feature_splitter = FeatureSplitterTool(BASE_PATH)
 release_monitor_tool = ReleaseMonitorTool(BASE_PATH)
-profile_extractor_tool = ProfileFeatureExtractorTool(BASE_PATH)
-enterprise_processor_tool = EnterpriseNotesProcessorTool(BASE_PATH)
 # WebGPU tools initialization removed - use split_and_process_release_notes.py instead
 
 # Initialize resource handler
@@ -82,12 +59,8 @@ release_notes_resource = ProcessedReleaseNotesResource(BASE_PATH)
 async def load_prompt_from_resource(resource_name: str) -> str:
     """从本地文件读取prompt内容（暂时直接读取文件，后续可改为resource读取）"""
     try:
-        if resource_name == "enterprise-prompt":
-            file_path = BASE_PATH / "prompts" / "enterprise-prompts" / "enterprise-prompt-bilingual.md"
-        elif resource_name == "webplatform-prompt":
+        if resource_name == "webplatform-prompt":
             file_path = BASE_PATH / "prompts" / "webplatform-prompts" / "webplatform-prompt-bilingual.md"
-        elif resource_name == "profile-keywords":
-            file_path = BASE_PATH / "prompts" / "profile-keywords.txt"
         else:
             raise ValueError(f"Unknown resource: {resource_name}")
         
@@ -103,9 +76,7 @@ async def load_prompt_from_resource(resource_name: str) -> str:
 def load_processed_data(data_type: str, version: int, channel: str = "stable") -> str:
     """加载处理过的release notes数据"""
     try:
-        if data_type == "enterprise":
-            data_path = BASE_PATH / "upstream_docs" / "processed_releasenotes" / "processed_forenterprise" / f"{version}-organized_chromechanges-enterprise.md"
-        elif data_type == "webplatform":
+        if data_type == "webplatform":
             data_path = BASE_PATH / "upstream_docs" / "processed_releasenotes" / "processed_forwebplatform" / f"{version}-webplatform-with-webgpu.md"
         else:
             raise ValueError(f"Unknown data type: {data_type}")
@@ -134,20 +105,6 @@ async def save_digest_to_file(content: str, output_path: Path) -> None:
         raise Exception(f"Failed to save digest to {output_path}: {str(e)}")
 
 
-@mcp.tool()
-async def enterprise_digest(ctx: Context, version: int, channel: str = "stable", 
-                          focus_area: str = "all", custom_instruction: str = "") -> str:
-    """Generate enterprise digest using FastMCP sampling and resources
-    
-    Args:
-        version: Chrome version number (e.g., 138)
-        channel: Chrome release channel (default: stable)  
-        focus_area: Enterprise area to emphasize (productivity, security, management, all)
-        custom_instruction: Additional custom instructions for digest generation
-    """
-    return await enterprise_tool.generate_digest_with_sampling(
-        ctx, {"version": version, "channel": channel, "focus_area": focus_area, "custom_instruction": custom_instruction}
-    )
 
 
 @mcp.tool()
@@ -226,11 +183,11 @@ async def split_features_by_heading(content: str, target_heading_level: int = 3)
 
 
 @mcp.tool()
-async def check_latest_releases(ctx: Context, release_type: str = "both", channel: str = "stable") -> str:
+async def check_latest_releases(ctx: Context, release_type: str = "webplatform", channel: str = "stable") -> str:
     """Check for latest available release versions and compare with local files
     
     Args:
-        release_type: Type of releases to check ("webplatform", "enterprise", "both")
+        release_type: Type of releases to check ("webplatform")
         channel: Release channel for webplatform ("stable", "beta", "dev", "canary")
         
     Returns:
@@ -242,12 +199,12 @@ async def check_latest_releases(ctx: Context, release_type: str = "both", channe
 
 
 @mcp.tool()
-async def crawl_missing_releases(ctx: Context, release_type: str = "both", channel: str = "stable",
+async def crawl_missing_releases(ctx: Context, release_type: str = "webplatform", channel: str = "stable",
                                confirmed: bool = False, force_redownload: bool = False) -> str:
     """Crawl missing release notes after user confirmation
     
     Args:
-        release_type: Type of releases to crawl ("webplatform", "enterprise", "both")
+        release_type: Type of releases to crawl ("webplatform")
         channel: Release channel for webplatform ("stable", "beta", "dev", "canary")
         confirmed: Must be true to proceed with crawling
         force_redownload: Download even if file exists
@@ -260,42 +217,8 @@ async def crawl_missing_releases(ctx: Context, release_type: str = "both", chann
     )
 
 
-@mcp.tool()
-async def extract_profile_features(ctx: Context, version: int, 
-                                  output_format: str = "markdown",
-                                  keywords_override: Optional[str] = None) -> str:
-    """Extract profile-related features from Chrome Enterprise Release Notes
-    
-    Args:
-        version: Chrome version number
-        output_format: Output format ("markdown", "json", "yaml")
-        keywords_override: Optional custom keywords (comma-separated)
-    
-    Returns:
-        Formatted profile features report
-    """
-    return await profile_extractor_tool.extract_profile_features(
-        ctx, version, output_format, keywords_override
-    )
 
 
-@mcp.tool()
-async def process_enterprise_notes(ctx: Context, version: int,
-                                  format_override: Optional[str] = None,
-                                  generate_organized: bool = True) -> str:
-    """Process Chrome Enterprise release notes to extract and organize features
-    
-    Args:
-        version: Chrome version number
-        format_override: Override format detection ("new", "legacy", None for auto)
-        generate_organized: Whether to generate organized markdown output
-    
-    Returns:
-        JSON with processing results
-    """
-    return await enterprise_processor_tool.process_enterprise_notes(
-        ctx, version, format_override, generate_organized
-    )
 
 
 # WebGPU YAML processing removed - use split_and_process_release_notes.py instead
@@ -341,12 +264,9 @@ def main():
     
     print("Starting FastMCP Digest Server...")
     print("Resources registered:")
-    print("- file://enterprise-prompt")
     print("- file://webplatform-prompt") 
-    print("- file://profile-keywords")
     print(f"- {len(release_notes_resource.list_resources())} dynamic release note resources")
     print("\nTools available:")
-    print("- enterprise_digest")
     print("- webplatform_digest") 
     print("- split_features_by_heading")
     print("- check_latest_releases")

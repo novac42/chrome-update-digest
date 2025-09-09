@@ -21,14 +21,12 @@ class ProcessedReleaseNotesResource:
         # Define resource categories
         self.categories = {
             "features": "Chrome feature updates",
-            "processed_forenterprise": "Enterprise-focused Chrome updates",
             "processed_forwebplatform": "Web platform and developer updates",
             "processed_given_feature": "Feature-specific reports"
         }
         
         # Tag mappings for auto-tagging
         self.tag_mappings = {
-            "enterprise": ["enterprise", "admin", "policy", "management"],
             "security": ["security", "safe", "protect", "2sv", "authentication"],
             "webplatform": ["webplatform", "web", "api", "css", "javascript"],
             "ai": ["ai", "ml", "machine-learning", "artificial"],
@@ -45,11 +43,11 @@ class ProcessedReleaseNotesResource:
         # Define paths to check - features and processed_given_feature will be in feature_details
         paths_to_check = []
         
-        # Add old processed_releasenotes path for enterprise and webplatform docs
+        # Add old processed_releasenotes path for webplatform docs
         if self.processed_path.exists():
             # Only check non-feature subdirectories in the old location
             for item in self.processed_path.iterdir():
-                if item.is_dir() and item.name not in ["features", "processed_given_feature"]:
+                if item.is_dir() and item.name not in ["features", "processed_given_feature", "processed_forenterprise"]:
                     paths_to_check.append((self.processed_path, item.name))
         
         # Add feature_details path for features and processed_given_feature
@@ -214,9 +212,7 @@ class ProcessedReleaseNotesResource:
             metadata["feature_type"] = parts[1].replace(f"profile-{metadata['version']}", "").strip("-") or "profile"
         
         # Extract subcategory from filename patterns
-        if "enterprise" in filename.lower():
-            metadata["subcategory"] = "enterprise"
-        elif "webplatform" in filename.lower() or "webgpu" in filename.lower():
+        if "webplatform" in filename.lower() or "webgpu" in filename.lower():
             metadata["subcategory"] = "webplatform"
         elif "profile" in filename.lower():
             metadata["subcategory"] = "profile"

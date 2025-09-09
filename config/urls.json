@@ -1,9 +1,5 @@
 {
   "chrome": {
-    "enterprise": {
-      "base_url": "https://support.google.com/chrome/a/answer/7679408",
-      "description": "Chrome Enterprise release notes main page"
-    },
     "webplatform": {
       "base_url": "https://developer.chrome.com/release-notes",
       "version_url_template": "https://developer.chrome.com/release-notes/{version}",

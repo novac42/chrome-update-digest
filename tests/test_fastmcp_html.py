@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-测试FastMCP服务器中的merged_digest_html工具
+测试FastMCP服务器中的webplatform_digest_html工具
 """
 
 import asyncio

@@ -1,10 +1,10 @@
-# Technical Overview - Chrome Update Digest
+# Technical Overview - Chrome WebPlatform Digest
 
 **Last Updated**: 2025-08-31
 
 ## Project Overview
 
-The Chrome Update Digest is a comprehensive system for processing, analyzing, and generating digests from Chrome release notes. It provides both direct Python script execution and MCP (Model Context Protocol) tool interfaces for accessing its capabilities. The system uses a **configuration-driven, area-splitting pipeline** for precise content processing and multi-language digest generation.
+The Chrome WebPlatform Digest is a comprehensive system for processing, analyzing, and generating digests from Chrome WebPlatform release notes. It provides both direct Python script execution and MCP (Model Context Protocol) tool interfaces for accessing its capabilities. The system uses a **configuration-driven, area-splitting pipeline** for precise WebPlatform content processing and multi-language digest generation.
 
 ## System Architecture
 
@@ -18,9 +18,9 @@ The Chrome Update Digest is a comprehensive system for processing, analyzing, an
 │  │  MCP Tools         │  MCP Resources              │    │
 │  │  - enhanced_       │  - Processed Release Notes  │    │
 │  │    webplatform     │  - Prompts (EN/ZH)          │    │
-│  │  - enterprise      │  - Focus Areas Config       │    │
-│  │  - feature_splitter│  - Area-specific YAMLs      │    │
-│  │  - merged_digest   │  - Profile Keywords         │    │
+│  │  - feature_splitter│  - Focus Areas Config       │    │
+│  │  - merged_digest   │  - Area-specific YAMLs      │    │
+│  │  - release_monitor │  - WebGPU Integration       │    │
 │  └─────────────────────────────────────────────────┘    │
 └─────────────────────────────────────────────────────────┘
                             │
@@ -69,7 +69,7 @@ chrome-update-digest/
 ├── src/
 │   ├── mcp_tools/           # MCP tool implementations
 │   │   ├── enhanced_webplatform_digest.py  # Main WebPlatform tool
-│   │   ├── enterprise_digest.py            # Enterprise processing
+│   │   ├── release_monitor.py              # Release monitoring
 │   │   └── feature_splitter.py             # H3 splitting utility
 │   ├── processors/          # Processing scripts (STREAMLINED ARCHITECTURE)
 │   │   ├── clean_data_pipeline.py          # PRIMARY: Config-driven processor
@@ -86,26 +86,22 @@ chrome-update-digest/
 │   └── output_configuration.md
 ├── upstream_docs/
 │   ├── release_notes/      # Raw input files
-│   │   ├── WebPlatform/    # Chrome & WebGPU release notes
-│   │   └── Enterprise/     # Enterprise release notes
+│   │   └── WebPlatform/    # Chrome & WebGPU release notes
 │   └── processed_releasenotes/
-│       ├── processed_forwebplatform/
-│       │   ├── {area}/     # Area-specific directories
-│       │   │   └── chrome-{version}-{channel}.yml
-│       │   └── split_by_heading/  # H2 section splits
-│       └── processed_forenterprise/
+│       └── processed_forwebplatform/
+│           ├── {area}/     # Area-specific directories
+│           │   └── chrome-{version}-{channel}.yml
+│           └── split_by_heading/  # H2 section splits
 ├── digest_markdown/        # Generated digests
-│   ├── webplatform/
-│   │   ├── {area}/         # Per-area digests
-│   │   │   ├── chrome-{version}-{channel}-en.md
-│   │   │   └── chrome-{version}-{channel}-zh.md
-│   │   └── enterprise/
+│   └── webplatform/
+│       └── {area}/         # Per-area digests
+│           ├── chrome-{version}-{channel}-en.md
+│           └── chrome-{version}-{channel}-zh.md
 ├── prompts/               # AI prompts
-│   ├── webplatform-prompts/
-│   │   ├── webplatform-prompt-en.md
-│   │   ├── webplatform-prompt-zh.md
-│   │   └── webplatform-translation-prompt-zh.md
-│   └── enterprise-update-prompt-en.md
+│   └── webplatform-prompts/
+│       ├── webplatform-prompt-en.md
+│       ├── webplatform-prompt-zh.md
+│       └── webplatform-translation-prompt-zh.md
 └── tests/                # Test suites
 ```
 
@@ -163,28 +159,8 @@ graph TD
 python3 src/processors/clean_data_pipeline.py --version 139 --with-yaml
 ```
 
-### 3. Enterprise Processing Pipeline
 
-```mermaid
-graph LR
-    A[Enterprise Release Notes] --> B[Format Detection]
-    B --> C[Feature Extraction]
-    C --> D[Categorization]
-    D --> E[YAML Generation]
-    E --> F[Profile Feature Extraction]
-    F --> G[Enterprise Digest]
-```
-
-**Access Methods**:
-- **MCP Tools**: 
-  - `process_enterprise_notes` - Process raw notes
-  - `extract_profile_features` - Extract profile features
-  - `enterprise_digest` - Generate final digest
-- **Python Scripts**:
-  - `src/process_enterprise_release_note.py`
-  - `src/processors/extract_profile_features.py`
-
-### 4. Digest Generation Pipeline
+### 3. Digest Generation Pipeline
 
 ```mermaid
 graph TD
@@ -211,14 +187,13 @@ graph TD
 - **Validation & retry**: Quality assurance with fallback mechanisms
 - **Area-specific prompts**: Customized prompts for different technical areas
 
-### 5. Output Generation Pipeline
+### 4. Output Generation Pipeline
 
 ```mermaid
 graph LR
-    A[Per-area Digests] --> C[Merged HTML]
-    B[Enterprise Digest] --> C
-    C --> D[HTML Template]
-    D --> E[Final HTML Output]
+    A[Per-area WebPlatform Digests] --> B[Merged HTML]
+    B --> C[HTML Template]
+    C --> D[Final HTML Output]
 ```
 
 **Access Methods**:
@@ -232,15 +207,11 @@ graph LR
 | **Data Acquisition** |
 | Check latest releases | ✅ `check_latest_releases` | ✅ `monitor_releases.py` | ✅ | Active |
 | Crawl missing releases | ✅ `crawl_missing_releases` | ✅ `monitor_releases.py` | ✅ | Active |
-| **WebPlatform Processing (NEW)** |
+| **WebPlatform Processing (PRIMARY)** |
 | Primary processing pipeline | ❌ | ✅ `clean_data_pipeline.py --with-yaml` | ✅ | **PRIMARY** |
 | Legacy processing pipeline | ❌ | ✅ `split_and_process_release_notes.py` | ✅ | **DEPRECATED** |
 | Generate per-area digests | ✅ `enhanced_webplatform_digest` | ✅ Via MCP | ❌ | **PRIMARY** |
-| Generate bilingual digests | ✅ `enhanced_webplatform_digest` | ✅ Via MCP | ❌ | **NEW** |
-| **Enterprise Processing** |
-| Process enterprise notes | ✅ `process_enterprise_notes` | ✅ `process_enterprise_release_note.py` | ✅ | Active |
-| Extract profile features | ✅ `extract_profile_features` | ✅ `extract_profile_features.py` | ✅ | Active |
-| Generate enterprise digest | ✅ `enterprise_digest` | ✅ Via MCP | ❌ | Active |
+| Generate bilingual digests | ✅ `enhanced_webplatform_digest` | ✅ Via MCP | ❌ | **PRIMARY** |
 | **Configuration & Management** |
 | Focus areas configuration | ❌ | ✅ `config/focus_areas.yaml` | ❌ | **NEW** |
 | Area classification validation | ❌ | ✅ Built into pipelines | ✅ | **NEW** |
@@ -349,13 +320,7 @@ Combining both approaches for maximum flexibility:
    - `upstream_docs/processed_releasenotes/processed_forwebplatform/{area}/chrome-139-stable.yml`
    - `upstream_docs/processed_releasenotes/processed_forwebplatform/areas/{area}/chrome-139-stable.md`
 
-3. **Enterprise Processing**:
-   ```bash
-   python src/process_enterprise_release_note.py
-   python src/processors/extract_profile_features.py
-   ```
-
-4. **Digest Generation** (via MCP):
+3. **Digest Generation** (via MCP):
    ```bash
    # Start MCP server
    python fast_mcp_server.py
@@ -364,22 +329,22 @@ Combining both approaches for maximum flexibility:
    # Output: digest_markdown/webplatform/{area}/chrome-139-stable-{en|zh}.md
    ```
 
-5. **HTML Generation**:
+4. **HTML Generation**:
    ```bash
    python src/convert_md2html.py  # Convert to HTML
    ```
 
 ### Key Differences from Legacy Approach
 
-| Aspect | Legacy Approach | New Approach |
-|--------|----------------|--------------|
-| **Processing** | Single monolithic script | Modular, config-driven pipeline |
-| **Output Structure** | Flat file structure | Area-based directory hierarchy |
+| Aspect | Legacy Approach | WebPlatform Approach |
+|--------|----------------|---------------------|
+| **Processing** | Single monolithic script | Modular, config-driven WebPlatform pipeline |
+| **Output Structure** | Flat file structure | WebPlatform area-based directory hierarchy |
 | **Configuration** | Hardcoded in multiple places | Centralized in `focus_areas.yaml` |
-| **WebGPU Handling** | Basic merging | Advanced deduplication logic |
-| **Language Support** | English only | Bilingual with translation validation |
-| **Validation** | Manual checking | Built-in validation and retry |
-| **Area Classification** | Fixed patterns | Configurable with smart fallbacks |
+| **WebGPU Handling** | Basic merging | Advanced WebGPU deduplication logic |
+| **Language Support** | English only | Bilingual WebPlatform with translation validation |
+| **Validation** | Manual checking | Built-in WebPlatform validation and retry |
+| **Area Classification** | Fixed patterns | Configurable WebPlatform areas with smart fallbacks |
 
 ## Configuration
 

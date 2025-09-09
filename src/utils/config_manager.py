@@ -54,15 +54,6 @@ class ConfigManager:
         
         return self._urls_cache
     
-    def get_enterprise_url(self) -> str:
-        """
-        Get Chrome Enterprise release notes URL.
-        
-        Returns:
-            Chrome Enterprise base URL
-        """
-        urls = self.load_urls()
-        return urls["chrome"]["enterprise"]["base_url"]
     
     def get_webplatform_base_url(self) -> str:
         """
@@ -150,9 +141,6 @@ def get_config_manager() -> ConfigManager:
     return _config_manager
 
 
-def get_enterprise_url() -> str:
-    """Convenience function to get enterprise URL."""
-    return get_config_manager().get_enterprise_url()
 
 
 def get_webplatform_base_url() -> str:

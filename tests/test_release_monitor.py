@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Test script for the release monitor functionality
+Test script for the webplatform release monitor functionality
 """
 
 import sys
@@ -24,7 +24,7 @@ def test_release_monitor():
     print("\n1. Scanning existing versions...")
     existing = monitor.scan_existing_versions()
     print(f"   WebPlatform versions: {sorted(existing['webplatform'])}")
-    print(f"   Enterprise versions: {sorted(existing['enterprise'])}")
+    print(f"   WebGPU versions: {sorted(existing.get('webgpu', set()))}")
     
     # Test 2: Detect latest versions
     print("\n2. Detecting latest versions from web...")
@@ -35,13 +35,6 @@ def test_release_monitor():
     latest_webgpu = monitor.detect_latest_webgpu_version()
     print(f"   Latest WebGPU version: {latest_webgpu}")
     
-    latest_enterprise = monitor.detect_latest_enterprise_version()
-    if latest_enterprise:
-        version_id, url = latest_enterprise
-        print(f"   Latest Enterprise version: {version_id}")
-        print(f"   Enterprise URL: {url}")
-    else:
-        print("   Could not detect Enterprise version")
     
     # Test 3: Check what's missing
     print("\n3. Checking for missing releases...")
@@ -50,13 +43,8 @@ def test_release_monitor():
     if latest_chrome and latest_chrome not in existing['webplatform']:
         missing.append(f"Chrome {latest_chrome}")
     
-    if latest_webgpu and latest_webgpu not in existing['webplatform']:
+    if latest_webgpu and latest_webgpu not in existing.get('webgpu', set()):
         missing.append(f"WebGPU {latest_webgpu}")
-    
-    if latest_enterprise:
-        version_id, _ = latest_enterprise
-        if version_id not in existing['enterprise']:
-            missing.append(f"Enterprise {version_id}")
     
     if missing:
         print(f"   Missing releases: {', '.join(missing)}")

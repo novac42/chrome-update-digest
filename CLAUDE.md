@@ -108,8 +108,8 @@ python3 src/processors/split_and_process_release_notes.py --version {VERSION}
 
 ### MCP Server
 FastMCP-based server providing:
-- **Tools**: `enterprise_digest`, `webplatform_digest`, `merged_digest_html`
-- **Resources**: Prompts, keywords, processed release notes
+- **Tools**: `webplatform_digest`
+- **Resources**: Prompts, processed release notes
 - **Sampling**: AI-powered content analysis
 
 ### Processing Flow

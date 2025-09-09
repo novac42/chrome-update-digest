@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-FastMCP 基础功能测试
+FastMCP WebPlatform 基础功能测试
 测试FastMCP服务器启动、resource读取等核心功能
 """
 
@@ -24,7 +24,6 @@ async def test_load_prompt_resources():
     print("🧪 测试Resource读取功能...")
     
     test_cases = [
-        ("enterprise-prompt", "enterprise-update-prompt-en.md"),
         ("webplatform-prompt", "chrome-update-analyzer-prompt-webplatform.md"),
         ("profile-keywords", "profile-keywords.txt")
     ]
@@ -60,8 +59,6 @@ async def test_load_processed_data():
     print("🧪 测试处理数据加载功能...")
     
     test_cases = [
-        ("enterprise", 137, "stable"),
-        ("enterprise", 138, "stable"),
         ("webplatform", 137, "stable"),
         ("webplatform", 138, "stable")
     ]
@@ -94,12 +91,10 @@ def test_file_structure():
     required_dirs = [
         "prompts",
         "digest_markdown",
-        "digest_markdown/enterprise", 
         "digest_markdown/webplatform",
         "digest_html",
         "upstream_docs",
         "upstream_docs/processed_releasenotes",
-        "upstream_docs/processed_releasenotes/processed_forenterprise",
         "upstream_docs/processed_releasenotes/processed_forwebplatform",
         "src/mcp_tools",
         "templates"
@@ -114,11 +109,10 @@ def test_file_structure():
     
     # 检查必要的文件
     required_files = [
-        "prompts/enterprise-update-prompt-en.md",
         "prompts/chrome-update-analyzer-prompt-webplatform.md", 
         "prompts/profile-keywords.txt",
         "src/convert_md2html.py",
-        "templates/digest_combined.html"
+        "templates/digest_webplatform.html"
     ]
     
     for file_name in required_files:

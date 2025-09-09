@@ -53,7 +53,6 @@ class ReleaseNoteSplitter:
             'webassembly': ['WebAssembly'],
             'identity': ['Identity'],
             'payments': ['Payments'],
-            'enterprise': ['Enterprise'],
             'browser': ['Browser changes'],
             'trials': ['Origin trials', 'New origin trials'],
             'deprecations': ['Deprecations and removals']
@@ -268,7 +267,6 @@ class ReleaseNoteSplitter:
             'Service Worker',
             'Identity',
             'Payments',
-            'Enterprise',
             'Browser changes',
             'Origin trials', 'New origin trials',
             'Deprecations and removals'
