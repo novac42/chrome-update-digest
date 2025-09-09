@@ -1,11 +1,7 @@
 ---
 layout: default
-title: Chrome 139 - Network
+title: chrome-139
 ---
-
-# Chrome 139 - Network
-
-[← Back to Network](./) | [View Full Chrome 139 Release](/versions/chrome-139/)
 
 ## Network
 
@@ -20,11 +16,3 @@ Reduces the amount of information the `Accept-Language` header value string expo
 This launch enables TCP port randomization on versions of Windows (2020 or later) where we don't expect to see issues with re-use of prior ports occurring too fast (causing rejection due to timeouts on port re-use). The rapid port re-use issue arises from the Birthday problem, where the probability of randomly re-picking a port already seen rapidly converges with 100% for each new port chosen when compared to port re-use in a sequential model.
 
 [Tracking bug #40744069](https://issues.chromium.org/issues/40744069) | [ChromeStatus.com entry](https://chromestatus.com/feature/5106900286570496)
-
-
----
-
-## Navigation
-- [← Previous Version](./chrome-138) | [Next Version →](./chrome-140)
-- [All Network Updates](./)
-- [All Chrome 139 Updates](/versions/chrome-139/)

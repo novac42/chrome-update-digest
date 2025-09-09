@@ -1,30 +1,15 @@
 ---
 layout: default
-title: Browse by Chrome Version
+title: Chrome Versions
 ---
 
-# Browse by Chrome Version
+# Chrome Release Digests by Version
 
-Select a Chrome version to see all updates in that release.
+Browse Chrome release notes organized by version number.
 
 ## Available Versions
 
-### [Chrome 139 (Latest)](./chrome-139/) ⭐
-*7 areas updated*
-
-### [Chrome 138](./chrome-138/)
-*8 areas updated*
-
-### [Chrome 137](./chrome-137/)
-*3 areas updated*
-
-### [Chrome 136](./chrome-136/)
-*5 areas updated*
-
----
-
-## Navigation
-- [Browse by Feature Area](/areas/)
-- [Home](/)
-
-*Select a version to explore what's new in that Chrome release.*
+- [Chrome 139 **(Latest Stable)**](./chrome-139/) - 14 areas with updates
+- [Chrome 138](./chrome-138/) - 11 areas with updates
+- [Chrome 137](./chrome-137/) - 7 areas with updates
+- [Chrome 136](./chrome-136/) - 10 areas with updates

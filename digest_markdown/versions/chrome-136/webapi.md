@@ -1,11 +1,7 @@
 ---
 layout: default
-title: Chrome 136 - Web APIs
+title: webapi
 ---
-
-# Chrome 136 - Web APIs
-
-[← Back to Chrome 136](./) | [View All Web APIs Updates](/areas/webapi/)
 
 ## Web APIs
 
@@ -60,11 +56,3 @@ This enables developers to add `tag` field to speculation rules. This optional f
 The `ProgressEvent` has attributes `loaded` and `total` indicating the progress, and their type is `unsigned long long` now. With this feature, the type for these two attributes is changed to `double` instead, which gives the developer more control over the value. For example, the developers can now create a `ProgressEvent` with the total of 1 and the loaded increasing from 0 to 1 gradually. This is aligned with the default behavior of the `<progress>` HTML element if the max attribute is omitted.
 
 **References:** [ChromeStatus.com entry](https://chromestatus.com/feature/5084700244254720) | [Spec](https://xhr.spec.whatwg.org/#interface-progressevent)
-
-
----
-
-## Navigation
-- [Chrome 136 Overview](./)
-- [All Web APIs Updates](/areas/webapi/)
-- [Browse Other Areas](./)

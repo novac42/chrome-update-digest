@@ -1,11 +1,7 @@
 ---
 layout: default
-title: Chrome 138 - Graphics & WebGPU
+title: Graphics and WebGPU - Chrome 138
 ---
-
-# Chrome 138 - Graphics & WebGPU
-
-[← Back to Chrome 138](./) | [View All Graphics & WebGPU Updates](/areas/graphics-webgpu/)
 
 # Graphics and WebGPU - Chrome 138
 
@@ -61,10 +57,3 @@ The `isFallbackAdapter` attribute for `GPUAdapter` is deprecated. It's replaced 
 - Switching to Emdawnwebgpu is now a single flag change from `emcc -sUSE_WEBGPU` to `emcc --use-port=emdawnwebgpu`
 
 <!-- Deduplication: 5 → 5 features -->
-
----
-
-## Navigation
-- [Chrome 138 Overview](./)
-- [All Graphics & WebGPU Updates](/areas/graphics-webgpu/)
-- [Browse Other Areas](./)

@@ -1,28 +1,12 @@
-title: Chrome Update Digest
-description: Chrome Release Notes Digest Collection
-# theme: jekyll-theme-cayman
-remote_theme: pages-themes/cayman@v0.2.0
-baseurl: "/chrome-update-digest"
-url: "https://novac42.github.io"
-
-markdown: kramdown
-kramdown:
-  input: GFM
-  syntax_highlighter: rouge
-  auto_ids: true
-  hard_wrap: false
-
-plugins:
-  - jekyll-feed
-  - jekyll-seo-tag
-  - jekyll-remote-theme
-
-collections:
-  digests:
-    output: true
-
 defaults:
-  - scope:
-      path: ""
-    values:
-      layout: default
+- scope:
+    path: ''
+    type: pages
+  values:
+    layout: default
+description: Comprehensive Chrome web platform release notes with version selection
+plugins:
+- jekyll-feed
+- jekyll-sitemap
+theme: minima
+title: Chrome Release Digests

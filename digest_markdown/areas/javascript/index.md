@@ -1,22 +1,21 @@
 ---
 layout: default
-title: JavaScript - All Versions
+title: JavaScript Updates
 ---
 
 # JavaScript Updates
 
-Track javascript changes across Chrome versions.
+[← Back to all areas](../)
 
-## Available Versions
+## Version History
 
-### [Chrome 138](./chrome-138)
-*Previously, when the web platform wants to tell you when you've exceeded quota, it will use `DOMException` with the specific name property set to `Quo...*
+Track the evolution of JavaScript features across Chrome releases.
 
----
+### Available Versions
+
+- [Chrome 138 **(Latest)**](./chrome-138.html)
 
 ## Navigation
-- [← Back to All Areas](../)
-- [Home](/)
-- [Browse by Version](/versions/)
 
-*Last updated: 2025-09-06*
+- [View all feature areas](../)
+- [Browse by Chrome version](../../versions/)

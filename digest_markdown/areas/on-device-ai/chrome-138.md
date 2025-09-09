@@ -1,0 +1,10 @@
+---
+layout: default
+title: chrome-138
+---
+
+### Summarizer API
+
+Summarizer API is a JavaScript API for producing summaries of input text, backed by an AI language model. Browsers and operating systems are increasingly expected to gain access to a language model. By exposing this built-in model, we avoid every website needing to download their own multi-gigabyte language model, or send input text to third-party APIs. The summarizer API in particular exposes a high-level API for interfacing with a language model in order to summarize inputs for a variety of use cases, in a way that does not depend on the specific language model in question. An enterprise policy (`GenAILocalFoundationalModelSettings`) is available to disable the underlying model downloading which would render this API unavailable.
+
+**References:** [MDN Docs](https://developer.mozilla.org/docs/Web/API/Summarizer) | [Tracking bug #351744634](https://bugs.chromium.org/p/chromium/issues/detail?id=351744634) | [ChromeStatus.com entry](https://chromestatus.com/feature/5134971702001664) | [Spec](https://wicg.github.io/summarization-api/)

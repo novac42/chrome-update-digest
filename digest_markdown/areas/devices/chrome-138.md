@@ -1,11 +1,7 @@
 ---
 layout: default
-title: Chrome 138 - Devices
+title: chrome-138
 ---
-
-# Chrome 138 - Devices
-
-[← Back to Devices](./) | [View Full Chrome 138 Release](/versions/chrome-138/)
 
 ## Devices
 
@@ -20,11 +16,3 @@ This feature lets web pages and web apps connect to serial ports over Bluetooth 
 The Viewport Segments API allows developers to adapt their web layout to target foldable devices. The viewport segments defines the position and dimensions of a logically separate region of the viewport. Viewport segments are created when the viewport is split by one or more hardware features (such as a fold or a hinge between separate displays) that act as a divider; segments are the regions of the viewport that can be treated as logically distinct by the developer.
 
 **References:** [Tracking bug #1039050](https://bugs.chromium.org/p/chromium/issues/detail?id=1039050) | [ChromeStatus.com entry](https://chromestatus.com/feature/5131631321964544) | [Spec](https://wicg.github.io/visual-viewport/)
-
-
----
-
-## Navigation
-- [← Previous Version](./chrome-137) | [Next Version →](./chrome-139)
-- [All Devices Updates](./)
-- [All Chrome 138 Updates](/versions/chrome-138/)

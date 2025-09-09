@@ -1,25 +1,22 @@
 ---
 layout: default
-title: Performance - All Versions
+title: Performance Updates
 ---
 
 # Performance Updates
 
-Track performance changes across Chrome versions.
+[← Back to all areas](../)
 
-## Available Versions
+## Version History
 
-### [Chrome 139](./chrome-139)
-*Shortens the time to freezing background pages (and associated workers) from five minutes to one minute on Android....*
+Track the evolution of Performance features across Chrome releases.
 
-### [Chrome 138](./chrome-138)
-*Two new values for the Clear-Site-Data header to help developers target clearing the prerender and prefetch cache: "prefetchCache" and "prerenderCache...*
+### Available Versions
 
----
+- [Chrome 139 **(Latest)**](./chrome-139.html)
+- [Chrome 138](./chrome-138.html)
 
 ## Navigation
-- [← Back to All Areas](../)
-- [Home](/)
-- [Browse by Version](/versions/)
 
-*Last updated: 2025-09-06*
+- [View all feature areas](../)
+- [Browse by Chrome version](../../versions/)

@@ -1,11 +1,7 @@
 ---
 layout: default
-title: Chrome 138 - Web APIs
+title: chrome-138
 ---
-
-# Chrome 138 - Web APIs
-
-[← Back to Web APIs](./) | [View Full Chrome 138 Release](/versions/chrome-138/)
 
 ## Web APIs
 
@@ -44,11 +40,3 @@ This feature adds `is_top_level` and `visibility_state` string fields to the cra
 Fire the `pushsubscriptionchange` event in service workers when an origin for which a push subscription existed in the past, but which was revoked because of a permission change (from granted to deny/default), is re-granted notification permission. The event will be fired with an empty `oldSubscription` and `newSubscription`.
 
 **References:** [Tracking bug #407523313](https://bugs.chromium.org/p/chromium/issues/detail?id=407523313) | [ChromeStatus.com entry](https://chromestatus.com/feature/5115983529336832) | [Spec](https://w3c.github.io/push-api/#the-pushsubscriptionchange-event)
-
-
----
-
-## Navigation
-- [← Previous Version](./chrome-137) | [Next Version →](./chrome-139)
-- [All Web APIs Updates](./)
-- [All Chrome 138 Updates](/versions/chrome-138/)

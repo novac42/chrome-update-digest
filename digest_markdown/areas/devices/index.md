@@ -1,25 +1,22 @@
 ---
 layout: default
-title: Devices - All Versions
+title: Devices Updates
 ---
 
 # Devices Updates
 
-Track devices changes across Chrome versions.
+[← Back to all areas](../)
 
-## Available Versions
+## Version History
 
-### [Chrome 139](./chrome-139)
-*Exposes several new mechanisms to customize the behavior of the depth sensing feature within a WebXR session, with the goal of improving the performan...*
+Track the evolution of Devices features across Chrome releases.
 
-### [Chrome 138](./chrome-138)
-*This feature lets web pages and web apps connect to serial ports over Bluetooth on Android devices. Chrome on Android now supports Web Serial API over...*
+### Available Versions
 
----
+- [Chrome 139 **(Latest)**](./chrome-139.html)
+- [Chrome 138](./chrome-138.html)
 
 ## Navigation
-- [← Back to All Areas](../)
-- [Home](/)
-- [Browse by Version](/versions/)
 
-*Last updated: 2025-09-06*
+- [View all feature areas](../)
+- [Browse by Chrome version](../../versions/)

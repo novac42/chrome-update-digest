@@ -1,11 +1,7 @@
 ---
 layout: default
-title: Chrome 136 - Graphics & WebGPU
+title: Graphics and WebGPU - Chrome 136
 ---
-
-# Chrome 136 - Graphics & WebGPU
-
-[← Back to Chrome 136](./) | [View All Graphics & WebGPU Updates](/areas/graphics-webgpu/)
 
 # Graphics and WebGPU - Chrome 136
 
@@ -19,10 +15,3 @@ The `GPUAdapterInfo` `isFallbackAdapter` boolean attribute indicates if an adapt
 
 
 <!-- Deduplication: 1 → 1 features -->
-
----
-
-## Navigation
-- [Chrome 136 Overview](./)
-- [All Graphics & WebGPU Updates](/areas/graphics-webgpu/)
-- [Browse Other Areas](./)

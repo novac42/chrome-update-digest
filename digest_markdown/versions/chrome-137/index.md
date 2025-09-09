@@ -5,25 +5,21 @@ title: Chrome 137 Release Notes
 
 # Chrome 137 Release Notes
 
-## What's New in Chrome 137
+[← Back to all versions](../)
 
-This release includes updates across the following areas:
+## Areas with Updates
 
-### [CSS & Styling](./css)
-*10 features/changes*
-
-### [Graphics & WebGPU](./graphics-webgpu)
-*7 features/changes*
-
-### [Web APIs](./webapi)
-*5 features/changes*
-
----
+- [CSS](./css.html)
+- [Graphics & WebGPU](./graphics-webgpu.html)
+- [On-Device AI](./on-device-ai.html)
+- [Origin Trials](./origin-trials.html)
+- [Payment](./payment.html)
+- [Web APIs](./webapi.html)
+- [WebAssembly](./webassembly.html)
 
 ## Navigation
-- [← Chrome 136](../chrome-136/) | [Chrome 138 →](../chrome-138/)
-- [All Versions](../)
-- [Browse by Feature Area](/areas/)
-- [Home](/)
 
-*Chrome 137 was released in September 2024*
+- [← Chrome 138 (Newer)](../chrome-138/)
+- [Chrome 136 (Older) →](../chrome-136/)
+- [View all versions](../)
+- [Browse by feature area](../../areas/)

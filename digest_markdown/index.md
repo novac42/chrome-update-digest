@@ -1,57 +1,55 @@
 ---
-layout: home
+layout: default
 title: Chrome Release Digests
 ---
 
 # Chrome Release Digests
 
-Welcome to the Chrome Release Notes Digest collection. Choose how you'd like to explore Chrome updates:
+Comprehensive release notes for Chrome web platform features, organized for easy navigation.
 
-## 🔍 Browse by Version
-View all changes in a specific Chrome release:
+## Browse by Version
 
-- [**Chrome 139** (Latest Stable)](/versions/chrome-139/) ⭐
-- [Chrome 138](/versions/chrome-138/)
-- [Chrome 137](/versions/chrome-137/)
-- [View All Versions →](/versions/)
+Explore what's new in each Chrome release:
 
-## 📚 Browse by Feature Area
-Track how specific features evolve across Chrome versions:
+- [Chrome 139 **(Latest Stable)**](./versions/chrome-139/) - 14 areas with updates
+- [Chrome 138](./versions/chrome-138/) - 11 areas with updates
+- [Chrome 137](./versions/chrome-137/) - 7 areas with updates
+- [View all 4 versions →](./versions/)
 
-### Core Web Platform
-- [**CSS & Styling**](/areas/css/) - Layout, animations, and visual updates
-- [**JavaScript**](/areas/javascript/) - JS engine improvements and features
-- [**Web APIs**](/areas/webapi/) - New and updated browser APIs
 
-### Performance & Graphics
-- [**Performance**](/areas/performance/) - Speed and optimization updates
-- [**Graphics & WebGPU**](/areas/graphics-webgpu/) - GPU and rendering features
+## Browse by Feature Area
 
-### Security & Network
-- [**Security & Privacy**](/areas/security-privacy/) - Security enhancements
-- [**Network**](/areas/network/) - Protocol and connectivity updates
+Track the evolution of specific features across Chrome versions:
 
-### Media & Devices
-- [**Multimedia**](/areas/multimedia/) - Audio, video, and media features
-- [**Devices**](/areas/devices/) - Hardware and device integration
+- [CSS](./areas/css/) - Updates in 4 versions
+- [Graphics & WebGPU](./areas/graphics-webgpu/) - Updates in 4 versions
+- [Web APIs](./areas/webapi/) - Updates in 4 versions
+- [Deprecations](./areas/deprecations/) - Updates in 3 versions
+- [On-Device AI](./areas/on-device-ai/) - Updates in 3 versions
+- [View all 20 feature areas →](./areas/)
 
-### Maintenance
-- [**Deprecations**](/areas/deprecation/) - Removed and deprecated features
 
-[View All Areas →](/areas/)
+## Quick Links
 
-## 📊 Quick Stats
-
-- **Latest Stable:** Chrome 139
-- **Total Versions Tracked:** 4
-- **Feature Areas:** 10
-
----
+- **Latest Release**: [Chrome 139](./versions/chrome-139/)
+- **Most Active Areas**: CSS, Web APIs, Graphics & WebGPU
+- **Version Comparison**: Compare changes between releases
+- **Search**: Use browser search (Ctrl+F) on any page
 
 ## About
 
-This site provides structured, digestible summaries of Chrome release notes, organized for easy navigation and discovery. Whether you're tracking a specific feature's evolution or exploring what's new in the latest release, we've got you covered.
+This site provides structured, searchable release notes for Chrome's web platform features. Content is automatically generated from official Chrome release notes and organized for developer convenience.
+
+### Navigation Tips
+
+- **By Version**: See all changes in a specific Chrome release
+- **By Area**: Track how a feature area evolves over time
+- **Breadcrumbs**: Use navigation links on each page to explore related content
+
+### Update Frequency
+
+New Chrome stable releases are typically published every 4 weeks. This site is updated shortly after each stable release.
 
 ---
 
-*Last updated: 2025-09-06 08:31 UTC*
+*Generated from [Chrome Release Notes](https://developer.chrome.com/release-notes/)*

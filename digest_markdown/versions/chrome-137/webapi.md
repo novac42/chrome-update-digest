@@ -1,11 +1,7 @@
 ---
 layout: default
-title: Chrome 137 - Web APIs
+title: webapi
 ---
-
-# Chrome 137 - Web APIs
-
-[← Back to Chrome 137](./) | [View All Web APIs Updates](/areas/webapi/)
 
 ## Web APIs
 
@@ -40,11 +36,3 @@ This feature adds support for Curve25519 algorithms in the Web Cryptography API,
 Mitigates user tracking by third-parties using the HSTS cache. This feature only allows HSTS upgrades for top-level navigations and blocks HSTS upgrades for sub-resource requests. Doing so makes it infeasible for third-party sites to use the HSTS cache in order to track users across the web.
 
 **References:** [Tracking bug #40725781](https://bugs.chromium.org/p/chromium/issues/detail?id=40725781) | [ChromeStatus.com entry](https://chromestatus.com/feature/5065878464307200)
-
-
----
-
-## Navigation
-- [Chrome 137 Overview](./)
-- [All Web APIs Updates](/areas/webapi/)
-- [Browse Other Areas](./)

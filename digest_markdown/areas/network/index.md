@@ -1,22 +1,21 @@
 ---
 layout: default
-title: Network - All Versions
+title: Network Updates
 ---
 
 # Network Updates
 
-Track network changes across Chrome versions.
+[← Back to all areas](../)
 
-## Available Versions
+## Version History
 
-### [Chrome 139](./chrome-139)
-*Reduces the amount of information the `Accept-Language` header value string exposes in HTTP requests and in `navigator.languages`. Instead of sending ...*
+Track the evolution of Network features across Chrome releases.
 
----
+### Available Versions
+
+- [Chrome 139 **(Latest)**](./chrome-139.html)
 
 ## Navigation
-- [← Back to All Areas](../)
-- [Home](/)
-- [Browse by Version](/versions/)
 
-*Last updated: 2025-09-06*
+- [View all feature areas](../)
+- [Browse by Chrome version](../../versions/)

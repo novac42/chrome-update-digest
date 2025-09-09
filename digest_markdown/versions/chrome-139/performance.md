@@ -1,11 +1,7 @@
 ---
 layout: default
-title: Chrome 139 - Performance
+title: performance
 ---
-
-# Chrome 139 - Performance
-
-[← Back to Chrome 139](./) | [View All Performance Updates](/areas/performance/)
 
 ## Performance
 
@@ -14,11 +10,3 @@ title: Chrome 139 - Performance
 Shortens the time to freezing background pages (and associated workers) from five minutes to one minute on Android.
 
 [Tracking bug #435623337](https://issues.chromium.org/issues/435623337) | [ChromeStatus.com entry](https://chromestatus.com/feature/5386725031149568)
-
-
----
-
-## Navigation
-- [Chrome 139 Overview](./)
-- [All Performance Updates](/areas/performance/)
-- [Browse Other Areas](./)

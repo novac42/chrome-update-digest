@@ -1,11 +1,7 @@
 ---
 layout: default
-title: Chrome 137 - Graphics & WebGPU
+title: Graphics and WebGPU - Chrome 137
 ---
-
-# Chrome 137 - Graphics & WebGPU
-
-[← Back to Graphics & WebGPU](./) | [View Full Chrome 137 Release](/versions/chrome-137/)
 
 # Graphics and WebGPU - Chrome 137
 
@@ -85,10 +81,3 @@ function checkPowerPreferenceForGpuDevice(device) {
 - Replaced by standardized approach for compatibility
 
 <!-- Deduplication: 7 → 7 features -->
-
----
-
-## Navigation
-- [← Previous Version](./chrome-136) | [Next Version →](./chrome-138)
-- [All Graphics & WebGPU Updates](./)
-- [All Chrome 137 Updates](/versions/chrome-137/)

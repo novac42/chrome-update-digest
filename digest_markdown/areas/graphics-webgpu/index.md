@@ -1,27 +1,24 @@
 ---
 layout: default
-title: Graphics & WebGPU - All Versions
+title: Graphics & WebGPU Updates
 ---
 
 # Graphics & WebGPU Updates
 
-Track graphics & webgpu changes across Chrome versions.
+[← Back to all areas](../)
 
-## Available Versions
+## Version History
 
-### [Chrome 139](./chrome-139)
+Track the evolution of Graphics & WebGPU features across Chrome releases.
 
-### [Chrome 138](./chrome-138)
+### Available Versions
 
-### [Chrome 137](./chrome-137)
-
-### [Chrome 136](./chrome-136)
-
----
+- [Chrome 139 **(Latest)**](./chrome-139.html)
+- [Chrome 138](./chrome-138.html)
+- [Chrome 137](./chrome-137.html)
+- [Chrome 136](./chrome-136.html)
 
 ## Navigation
-- [← Back to All Areas](../)
-- [Home](/)
-- [Browse by Version](/versions/)
 
-*Last updated: 2025-09-06*
+- [View all feature areas](../)
+- [Browse by Chrome version](../../versions/)

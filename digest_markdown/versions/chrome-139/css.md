@@ -1,11 +1,7 @@
 ---
 layout: default
-title: Chrome 139 - CSS & Styling
+title: css
 ---
-
-# Chrome 139 - CSS & Styling
-
-[← Back to Chrome 139](./) | [View All CSS & Styling Updates](/areas/css/)
 
 ## CSS and UI
 
@@ -72,11 +68,3 @@ The `request-close` command brings that new ability to the declarative invoker c
 Changes the scroll anchoring algorithm. Instead of selecting the priority candidate as the anchor, choose the candidate as the scope or root of the regular anchor selection algorithm which will select the deepest onscreen element as the anchor.
 
 [ChromeStatus.com entry](https://chromestatus.com/feature/5070370113323008)
-
-
----
-
-## Navigation
-- [Chrome 139 Overview](./)
-- [All CSS & Styling Updates](/areas/css/)
-- [Browse Other Areas](./)

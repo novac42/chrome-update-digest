@@ -1,11 +1,7 @@
 ---
 layout: default
-title: Chrome 137 - CSS & Styling
+title: chrome-137
 ---
-
-# Chrome 137 - CSS & Styling
-
-[← Back to CSS & Styling](./) | [View Full Chrome 137 Release](/versions/chrome-137/)
 
 ## CSS and UI
 
@@ -113,11 +109,3 @@ Introduces the ability to use floating point pixel formats (as opposed to 8-bit 
 The `match-element` value generates a unique ID based on the element's identity and renames the same for this element. This is used in Single Page App cases where the element is being moved around and you want to animate it with a view transition.
 
 **References:** [Tracking bug #365997248](https://bugs.chromium.org/p/chromium/issues/detail?id=365997248) | [ChromeStatus.com entry](https://chromestatus.com/feature/5092488609931264) | [Spec](https://drafts.csswg.org/css-view-transitions-2/#view-transition-name-prop)
-
-
----
-
-## Navigation
-- [← Previous Version](./chrome-136) | [Next Version →](./chrome-138)
-- [All CSS & Styling Updates](./)
-- [All Chrome 137 Updates](/versions/chrome-137/)
