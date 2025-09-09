@@ -1,11 +1,7 @@
 ---
 layout: default
-title: Chrome 138 - CSS & Styling
+title: chrome-138
 ---
-
-# Chrome 138 - CSS & Styling
-
-[← Back to CSS & Styling](./) | [View Full Chrome 138 Release](/versions/chrome-138/)
 
 ## CSS and UI
 
@@ -38,11 +34,3 @@ A keyword for CSS sizing properties (for example, `width` and `height`) that let
 Exposes a user's preferred font scale to CSS. Without this, it's not practical for a page to detect if the user has changed their preferred font size using the Operating System's preferences. This CSS environment variable will reflect the scale chosen by the user.
 
 **References:** [Tracking bug #397737223](https://bugs.chromium.org/p/chromium/issues/detail?id=397737223) | [ChromeStatus.com entry](https://chromestatus.com/feature/5106542883938304) | [Spec](https://www.w3.org/TR/css-env-1/#os-font-scale)
-
-
----
-
-## Navigation
-- [← Previous Version](./chrome-137) | [Next Version →](./chrome-139)
-- [All CSS & Styling Updates](./)
-- [All Chrome 138 Updates](/versions/chrome-138/)

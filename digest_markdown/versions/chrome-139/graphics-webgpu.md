@@ -1,11 +1,7 @@
 ---
 layout: default
-title: Chrome 139 - Graphics & WebGPU
+title: Graphics and WebGPU - Chrome 139
 ---
-
-# Chrome 139 - Graphics & WebGPU
-
-[← Back to Chrome 139](./) | [View All Graphics & WebGPU Updates](/areas/graphics-webgpu/)
 
 # Graphics and WebGPU - Chrome 139
 
@@ -105,10 +101,3 @@ When emdawnwebgpu is linked with `-sSHARED_MEMORY`, its webgpu.cpp file is also 
 This covers only some of the key highlights. Check out the exhaustive [list of commits](https://dawn.googlesource.com/dawn/+log/chromium/7204..chromium/7258?n=1000).
 
 <!-- Deduplication: 4 → 4 features -->
-
----
-
-## Navigation
-- [Chrome 139 Overview](./)
-- [All Graphics & WebGPU Updates](/areas/graphics-webgpu/)
-- [Browse Other Areas](./)

@@ -1,25 +1,22 @@
 ---
 layout: default
-title: Multimedia - All Versions
+title: Multimedia Updates
 ---
 
 # Multimedia Updates
 
-Track multimedia changes across Chrome versions.
+[← Back to all areas](../)
 
-## Available Versions
+## Version History
 
-### [Chrome 138](./chrome-138)
-*Introduces `rotation: int` and `flip: bool` values to various video related interfaces in WebCodecs so that developers can work with frame sources tha...*
+Track the evolution of Multimedia features across Chrome releases.
 
-### [Chrome 136](./chrome-136)
-*Adds an "interrupted" state to `AudioContextState`. This new state lets the User Agent pause playback during exclusive audio access (VoIP) or when a l...*
+### Available Versions
 
----
+- [Chrome 138 **(Latest)**](./chrome-138.html)
+- [Chrome 136](./chrome-136.html)
 
 ## Navigation
-- [← Back to All Areas](../)
-- [Home](/)
-- [Browse by Version](/versions/)
 
-*Last updated: 2025-09-06*
+- [View all feature areas](../)
+- [Browse by Chrome version](../../versions/)

@@ -5,40 +5,25 @@ title: Chrome 138 Release Notes
 
 # Chrome 138 Release Notes
 
-## What's New in Chrome 138
+[← Back to all versions](../)
 
-This release includes updates across the following areas:
+## Areas with Updates
 
-### [CSS & Styling](./css)
-*5 features/changes*
-
-### [JavaScript](./javascript)
-*1 features/changes*
-
-### [Graphics & WebGPU](./graphics-webgpu)
-*5 features/changes*
-
-### [Performance](./performance)
-*2 features/changes*
-
-### [Security & Privacy](./security-privacy)
-*1 features/changes*
-
-### [Web APIs](./webapi)
-*6 features/changes*
-
-### [Multimedia](./multimedia)
-*1 features/changes*
-
-### [Devices](./devices)
-*2 features/changes*
-
----
+- [CSS](./css.html)
+- [Deprecations](./deprecations.html)
+- [Devices](./devices.html)
+- [Graphics & WebGPU](./graphics-webgpu.html)
+- [JavaScript](./javascript.html)
+- [Multimedia](./multimedia.html)
+- [On-Device AI](./on-device-ai.html)
+- [Performance](./performance.html)
+- [PWA & Service Worker](./pwa-service-worker.html)
+- [Security & Privacy](./security-privacy.html)
+- [Web APIs](./webapi.html)
 
 ## Navigation
-- [← Chrome 137](../chrome-137/) | [Chrome 139 →](../chrome-139/)
-- [All Versions](../)
-- [Browse by Feature Area](/areas/)
-- [Home](/)
 
-*Chrome 138 was released in October 2024*
+- [← Chrome 139 (Newer)](../chrome-139/)
+- [Chrome 137 (Older) →](../chrome-137/)
+- [View all versions](../)
+- [Browse by feature area](../../areas/)

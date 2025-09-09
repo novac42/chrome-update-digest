@@ -1,11 +1,7 @@
 ---
 layout: default
-title: Chrome 136 - Security & Privacy
+title: chrome-136
 ---
-
-# Chrome 136 - Security & Privacy
-
-[← Back to Security & Privacy](./) | [View Full Chrome 136 Release](/versions/chrome-136/)
 
 ## Privacy and security
 
@@ -20,11 +16,3 @@ Introduces a new violation type called "Potential Permissions Policy violation",
 Reduces the amount of information the Accept-Language header value string exposes in HTTP requests and in `navigator.languages`. Instead of sending a full list of the user's preferred languages on every HTTP request, Chrome now sends the user's most preferred language in the Accept-Language header.
 
 **References:** [Tracking bug #1306905](https://bugs.chromium.org/p/chromium/issues/detail?id=1306905) | [ChromeStatus.com entry](https://chromestatus.com/feature/5042348942655488)
-
-
----
-
-## Navigation
-- [← Previous Version](./chrome-135) | [Next Version →](./chrome-137)
-- [All Security & Privacy Updates](./)
-- [All Chrome 136 Updates](/versions/chrome-136/)

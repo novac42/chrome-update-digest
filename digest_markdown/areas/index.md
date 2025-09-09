@@ -1,81 +1,31 @@
 ---
 layout: default
-title: Browse by Feature Area
+title: Feature Areas
 ---
 
-# Browse Chrome Updates by Feature Area
+# Chrome Release Digests by Feature Area
 
-Select a feature area to track changes across all Chrome versions.
+Browse Chrome release notes organized by feature area to track evolution over time.
 
-## Feature Areas
+## Available Feature Areas
 
-### [CSS & Styling](./css/)
-Track css & styling evolution across Chrome releases.
-
-- **Versions available:** 4
-- **Latest:** Chrome 139
-- **Range:** Chrome 136 - 139
-
-### [JavaScript](./javascript/)
-Track javascript evolution across Chrome releases.
-
-- **Versions available:** 1
-- **Latest:** Chrome 138
-- **Range:** Chrome 138 - 138
-
-### [Graphics & WebGPU](./graphics-webgpu/)
-Track graphics & webgpu evolution across Chrome releases.
-
-- **Versions available:** 4
-- **Latest:** Chrome 139
-- **Range:** Chrome 136 - 139
-
-### [Network](./network/)
-Track network evolution across Chrome releases.
-
-- **Versions available:** 1
-- **Latest:** Chrome 139
-- **Range:** Chrome 139 - 139
-
-### [Performance](./performance/)
-Track performance evolution across Chrome releases.
-
-- **Versions available:** 2
-- **Latest:** Chrome 139
-- **Range:** Chrome 138 - 139
-
-### [Security & Privacy](./security-privacy/)
-Track security & privacy evolution across Chrome releases.
-
-- **Versions available:** 3
-- **Latest:** Chrome 139
-- **Range:** Chrome 136 - 139
-
-### [Web APIs](./webapi/)
-Track web apis evolution across Chrome releases.
-
-- **Versions available:** 4
-- **Latest:** Chrome 139
-- **Range:** Chrome 136 - 139
-
-### [Multimedia](./multimedia/)
-Track multimedia evolution across Chrome releases.
-
-- **Versions available:** 2
-- **Latest:** Chrome 138
-- **Range:** Chrome 136 - 138
-
-### [Devices](./devices/)
-Track devices evolution across Chrome releases.
-
-- **Versions available:** 2
-- **Latest:** Chrome 139
-- **Range:** Chrome 138 - 139
-
----
-
-## Navigation
-- [Browse by Version](/versions/)
-- [Home](/)
-
-*Explore how Chrome features evolve over time by selecting an area above.*
+- [Browser Changes](./browser-changes/) - Updates in 1 versions
+- [CSS](./css/) - Updates in 4 versions
+- [Deprecations](./deprecations/) - Updates in 3 versions
+- [Devices](./devices/) - Updates in 2 versions
+- [Graphics & WebGPU](./graphics-webgpu/) - Updates in 4 versions
+- [HTML & DOM](./html-dom/) - Updates in 2 versions
+- [Identity](./identity/) - Updates in 1 versions
+- [JavaScript](./javascript/) - Updates in 1 versions
+- [Multimedia](./multimedia/) - Updates in 2 versions
+- [Navigation & Loading](./navigation-loading/) - Updates in 1 versions
+- [Network](./network/) - Updates in 1 versions
+- [On-Device AI](./on-device-ai/) - Updates in 3 versions
+- [Origin Trials](./origin-trials/) - Updates in 3 versions
+- [Payment](./payment/) - Updates in 2 versions
+- [Performance](./performance/) - Updates in 2 versions
+- [PWA & Service Worker](./pwa-service-worker/) - Updates in 1 versions
+- [Security & Privacy](./security-privacy/) - Updates in 3 versions
+- [Web APIs](./webapi/) - Updates in 4 versions
+- [WebAssembly](./webassembly/) - Updates in 1 versions
+- [WebRTC](./webrtc/) - Updates in 1 versions

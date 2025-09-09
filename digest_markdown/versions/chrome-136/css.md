@@ -1,11 +1,7 @@
 ---
 layout: default
-title: Chrome 136 - CSS & Styling
+title: css
 ---
-
-# Chrome 136 - CSS & Styling
-
-[← Back to Chrome 136](./) | [View All CSS & Styling Updates](/areas/css/)
 
 ## CSS and UI
 
@@ -38,11 +34,3 @@ The CSS Working Group has resolved to replace `string` `attr()` type with `raw-s
 The fallback part of a `var()` function does not validate against the type of the custom property being referenced.
 
 **References:** [Tracking bug #372475301](https://bugs.chromium.org/p/chromium/issues/detail?id=372475301) | [ChromeStatus.com entry](https://chromestatus.com/feature/5049845796618240)
-
-
----
-
-## Navigation
-- [Chrome 136 Overview](./)
-- [All CSS & Styling Updates](/areas/css/)
-- [Browse Other Areas](./)

@@ -1,11 +1,7 @@
 ---
 layout: default
-title: Chrome 139 - Web APIs
+title: webapi
 ---
-
-# Chrome 139 - Web APIs
-
-[← Back to Chrome 139](./) | [View All Web APIs Updates](/areas/webapi/)
 
 ## Web APIs
 
@@ -36,11 +32,3 @@ The `core-features-and-limits` feature signifies a WebGPU adapter and device sup
 This feature ensures developers receive only crash reports by specifying the endpoint named `crash-reporting`. By default, crash reports are delivered to the `default` endpoint which receives many other kinds of reports besides crash reports. Developers can supply a separate URL to the well-known endpoint named `crash-reporting`, to direct crash reports there, instead of the `default` endpoint.
 
 [Tracking bug #414723480](https://issues.chromium.org/issues/414723480) | [ChromeStatus.com entry](https://chromestatus.com/feature/5129218731802624) | [Spec](https://wicg.github.io/crash-reporting/#crash-reports-delivery-priority)
-
-
----
-
-## Navigation
-- [Chrome 139 Overview](./)
-- [All Web APIs Updates](/areas/webapi/)
-- [Browse Other Areas](./)

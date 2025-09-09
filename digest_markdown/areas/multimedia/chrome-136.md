@@ -1,11 +1,7 @@
 ---
 layout: default
-title: Chrome 136 - Multimedia
+title: chrome-136
 ---
-
-# Chrome 136 - Multimedia
-
-[← Back to Multimedia](./) | [View Full Chrome 136 Release](/versions/chrome-136/)
 
 ## Images and media
 
@@ -46,11 +42,3 @@ Chromium's MediaRecorder API now supports HEVC encoding, introducing the `hvc1.*
 This change brings Chromium code in line with the latest W3C specification for `SVGGeometryElement` and `SVGPathElement` in terms of use of `DOMPointInit` over `SVGPoint` for `getCharNumAtPosition`, `isPointInFill`, `isPointInStroke`.
 
 **References:** [Tracking bug #40572887](https://bugs.chromium.org/p/chromium/issues/detail?id=40572887) | [ChromeStatus.com entry](https://chromestatus.com/feature/5084627093929984) | [Spec](https://www.w3.org/TR/SVG2/types.html#InterfaceDOMPointInit)
-
-
----
-
-## Navigation
-- [← Previous Version](./chrome-135) | [Next Version →](./chrome-137)
-- [All Multimedia Updates](./)
-- [All Chrome 136 Updates](/versions/chrome-136/)
