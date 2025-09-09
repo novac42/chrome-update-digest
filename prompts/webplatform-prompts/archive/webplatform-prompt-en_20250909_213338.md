@@ -14,19 +14,55 @@ You will receive Chrome release notes data for the **[AREA]** area in YAML forma
 
 ## Output Structure
 
-### 1. Summary
+### 1. Executive Summary
 
 A concise overview of the most significant changes in **[AREA]** for Chrome [version].
 
-### 2. Feature Details
+### 2. Key Implications
+
+#### Technical Impact
+- How these changes affect existing implementations
+- New capabilities now available
+- Technical debt considerations
+
+### 3. Risk Assessment
+
+**Critical Risks**:
+- Breaking changes
+- Security considerations
+
+**Medium Risks**:
+- Deprecations
+- Performance impacts
+
+### 4. Recommended Actions
+
+#### Immediate Actions
+Actions to take this sprint
+
+#### Short-term Planning
+Next quarter priorities
+
+#### Long-term Strategy
+Next year considerations
+
+### 5. Feature Analysis
 
 For each feature in **[AREA]**:
 
 ```markdown
 ### [Feature Title]
 
+**Impact Level**: 🔴 Critical | 🟡 Important | 🟢 Nice-to-have
+
 **What Changed**:
-[Detailed description of what this feature does and how it works]
+[Description of the change]
+
+**Why It Matters**:
+[Explanation of importance]
+
+**Implementation Guidance**:
+- [Guidance points]
 
 **References**:
 [All provided links - keep as-is]
@@ -53,7 +89,8 @@ Based on **[AREA]**, demonstrate expertise in:
 1. **Accuracy**: Use only provided YAML data
 2. **Language Consistency**: All content in English
 3. **Area Focus**: Keep all content relevant to **[AREA]**
-4. **Link Preservation**: Never modify provided URLs
+4. **Actionability**: Provide concrete recommendations
+5. **Link Preservation**: Never modify provided URLs
 
 ## Output File Storage
 
