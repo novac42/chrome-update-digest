@@ -15,6 +15,7 @@ from src.utils.link_extractor import LinkExtractor, ExtractedFeature
 from src.models.feature_tagging import HeadingBasedTagger, TaggedFeature
 from src.utils.focus_area_manager import FocusAreaManager
 from src.utils.area_classifier import WebGPUClassifier
+from src.utils.release_note_locator import find_webgpu_release_note
 
 
 @dataclass
@@ -609,9 +610,9 @@ class YAMLPipeline:
             Merged content with WebGPU features included
         """
         # Check for WebGPU file in the release notes directory
-        webgpu_path = Path(f'upstream_docs/release_notes/WebPlatform/webgpu-{version}.md')
-        
-        if not webgpu_path.exists():
+        webgpu_path = find_webgpu_release_note(version)
+
+        if not webgpu_path:
             # No WebGPU file, return original content
             return chrome_content
         

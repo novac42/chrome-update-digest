@@ -180,12 +180,11 @@ class ReleaseMonitorTool:
                     if version:
                         download_result = self.core.download_chrome_release(version, channel)
                         if download_result["success"]:
-                            results["downloaded"].append({
-                                "type": "chrome",
-                                "version": version,
-                                "channel": channel,
-                                "file_path": download_result["file_path"]
-                            })
+                            file_path = download_result.get("file_path") or download_result.get("file")
+                            description = f"Chrome {version} ({channel})"
+                            if file_path:
+                                description += f" -> {file_path}"
+                            results["downloaded"].append(description)
                             self.core.update_version_tracking("chrome", version)
                         else:
                             results["errors"].append(download_result["error"])
@@ -197,11 +196,11 @@ class ReleaseMonitorTool:
                     if version:
                         download_result = self.core.download_webgpu_release(version)
                         if download_result["success"]:
-                            results["downloaded"].append({
-                                "type": "webgpu",
-                                "version": version,
-                                "file_path": download_result["file_path"]
-                            })
+                            file_path = download_result.get("file_path") or download_result.get("file")
+                            description = f"WebGPU {version}"
+                            if file_path:
+                                description += f" -> {file_path}"
+                            results["downloaded"].append(description)
                             self.core.update_version_tracking("webgpu", version)
                         else:
                             results["errors"].append(download_result["error"])
@@ -212,12 +211,11 @@ class ReleaseMonitorTool:
                     for version in missing_stable:
                         download_result = self.core.download_chrome_release(version, "stable")
                         if download_result["success"]:
-                            results["downloaded"].append({
-                                "type": "chrome",
-                                "version": version,
-                                "channel": "stable",
-                                "file_path": download_result["file_path"]
-                            })
+                            file_path = download_result.get("file_path") or download_result.get("file")
+                            description = f"Chrome {version} (stable)"
+                            if file_path:
+                                description += f" -> {file_path}"
+                            results["downloaded"].append(description)
                             self.core.update_version_tracking("chrome", version)
                         else:
                             results["errors"].append(download_result["error"])

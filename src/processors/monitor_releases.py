@@ -44,7 +44,7 @@ class ReleaseMonitor:
         self.base_dir = Path(__file__).parent.parent
         self.monitoring_dir = self.base_dir / ".monitoring"
         self.versions_file = self.monitoring_dir / "versions.json"
-        self.release_notes_dir = self.base_dir / "upstream_docs" / "release_notes"
+        self.release_notes_dir = self.base_dir / "upstream_docs" / "release_notes" / "WebPlatform"
         
         # Ensure directories exist
         self.monitoring_dir.mkdir(exist_ok=True)
@@ -85,17 +85,21 @@ class ReleaseMonitor:
         """Scan existing release note files to extract version numbers."""
         versions = {"chrome": set(), "webgpu": set()}
         
-        # Scan Chrome release notes
-        chrome_dir = self.release_notes_dir / "webplatform"
-        if chrome_dir.exists():
-            for file in chrome_dir.glob("chrome-*.md"):
+        search_dirs = [self.release_notes_dir]
+        nested_dir = self.release_notes_dir / "webplatform"
+        if nested_dir.exists():
+            search_dirs.append(nested_dir)
+
+        for directory in search_dirs:
+            if not directory.exists():
+                continue
+
+            for file in directory.glob("chrome-*.md"):
                 match = re.search(r'chrome-(\d+)', file.stem)
                 if match:
                     versions["chrome"].add(int(match.group(1)))
-        
-        # Scan WebGPU release notes
-        if chrome_dir.exists():
-            for file in chrome_dir.glob("webgpu-*.md"):
+
+            for file in directory.glob("webgpu-*.md"):
                 match = re.search(r'webgpu-(\d+)', file.stem)
                 if match:
                     versions["webgpu"].add(int(match.group(1)))
@@ -279,10 +283,10 @@ class ReleaseMonitor:
                 
                 # Include channel in filename for non-stable versions
                 if channel == 'beta':
-                    output_file = self.release_notes_dir / "webplatform" / f"chrome-{version}-beta.md"
+                    output_file = self.release_notes_dir / f"chrome-{version}-beta.md"
                     title = f"# Chrome {version} Release Notes (Beta)\n\n"
                 else:
-                    output_file = self.release_notes_dir / "webplatform" / f"chrome-{version}.md"
+                    output_file = self.release_notes_dir / f"chrome-{version}.md"
                     title = f"# Chrome {version} Release Notes\n\n"
                     
                 output_file.parent.mkdir(parents=True, exist_ok=True)
@@ -331,7 +335,7 @@ class ReleaseMonitor:
                 # Clean up
                 markdown_content = re.sub(r'\n{3,}', '\n\n', markdown_content)
                 
-                output_file = self.release_notes_dir / "webplatform" / f"webgpu-{version}.md"
+                output_file = self.release_notes_dir / f"webgpu-{version}.md"
                 output_file.parent.mkdir(parents=True, exist_ok=True)
                 
                 with open(output_file, 'w', encoding='utf-8') as f:

@@ -8,7 +8,7 @@ import re
 import time
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, List, Set, Optional, Tuple
+from typing import Any, Dict, List, Set, Optional, Tuple
 
 import requests
 from bs4 import BeautifulSoup
@@ -77,33 +77,35 @@ class ReleaseMonitorCore:
             channel: Release channel for webplatform ("stable", "beta", "dev", "canary")
         """
         versions = {"webplatform": set(), "webgpu": set()}
-        
-        # Scan WebPlatform release notes
-        webplatform_dir = self.release_notes_dir / "webplatform"
-        if webplatform_dir.exists():
-            # Chrome versions - handle stable vs channel-specific
+
+        # Scan WebPlatform release notes across supported layouts
+        search_dirs = [self.release_notes_dir]
+        nested_dir = self.release_notes_dir / "webplatform"
+        if nested_dir.exists():
+            search_dirs.append(nested_dir)
+
+        for directory in search_dirs:
+            if not directory.exists():
+                continue
+
             if channel == "stable":
-                # For stable, look for chrome-XXX.md (without channel suffix)
-                for file in webplatform_dir.glob("chrome-*.md"):
-                    # Exclude files with channel suffixes (beta, dev, canary)
+                for file in directory.glob("chrome-*.md"):
                     if re.search(r'-(?:beta|dev|canary)\.md$', file.name):
                         continue
                     match = re.search(r'chrome-(\d+)\.md$', file.name)
                     if match:
                         versions["webplatform"].add(int(match.group(1)))
             else:
-                # For non-stable channels, look for chrome-XXX-channel.md
-                for file in webplatform_dir.glob(f"chrome-*-{channel}.md"):
+                for file in directory.glob(f"chrome-*-{channel}.md"):
                     match = re.search(rf'chrome-(\d+)-{channel}\.md$', file.name)
                     if match:
                         versions["webplatform"].add(int(match.group(1)))
-            
-            # WebGPU versions - always without channel suffix (WebGPU doesn't have channels)
-            for file in webplatform_dir.glob("webgpu-*.md"):
+
+            for file in directory.glob("webgpu-*.md"):
                 match = re.search(r'webgpu-(\d+)\.md$', file.name)
                 if match:
                     versions["webgpu"].add(int(match.group(1)))
-        
+
         return versions
     
     def detect_missing_stable_versions(self) -> List[int]:
@@ -114,26 +116,29 @@ class ReleaseMonitorCore:
         """
         missing_stable = []
         
-        webplatform_dir = self.release_notes_dir / "webplatform"
-        if not webplatform_dir.exists():
-            return missing_stable
-        
-        # Find all beta versions
-        beta_versions = set()
-        for file in webplatform_dir.glob("chrome-*-beta.md"):
-            match = re.search(r'chrome-(\d+)-beta\.md$', file.name)
-            if match:
-                beta_versions.add(int(match.group(1)))
-        
-        # Find all stable versions (no channel suffix)
-        stable_versions = set()
-        for file in webplatform_dir.glob("chrome-*.md"):
-            # Exclude files with channel suffixes
-            if re.search(r'-(?:beta|dev|canary)\.md$', file.name):
+        search_dirs = [self.release_notes_dir]
+        nested_dir = self.release_notes_dir / "webplatform"
+        if nested_dir.exists():
+            search_dirs.append(nested_dir)
+
+        beta_versions: Set[int] = set()
+        stable_versions: Set[int] = set()
+
+        for directory in search_dirs:
+            if not directory.exists():
                 continue
-            match = re.search(r'chrome-(\d+)\.md$', file.name)
-            if match:
-                stable_versions.add(int(match.group(1)))
+
+            for file in directory.glob("chrome-*-beta.md"):
+                match = re.search(r'chrome-(\d+)-beta\.md$', file.name)
+                if match:
+                    beta_versions.add(int(match.group(1)))
+
+            for file in directory.glob("chrome-*.md"):
+                if re.search(r'-(?:beta|dev|canary)\.md$', file.name):
+                    continue
+                match = re.search(r'chrome-(\d+)\.md$', file.name)
+                if match:
+                    stable_versions.add(int(match.group(1)))
         
         # Find versions that have beta but no stable
         for version in beta_versions:
@@ -155,14 +160,14 @@ class ReleaseMonitorCore:
             chrome_versions = [v for v in existing["webplatform"] if v >= 100]
             
             # Start from the highest local version, or 135 as fallback
-            start_version = max(chrome_versions) if chrome_versions else 135
+            start_version = (max(chrome_versions) + 1) if chrome_versions else 135
             
             # Probe upwards to find the latest available version
             latest_found = None
             for version in range(start_version, start_version + 10):
                 url = get_webplatform_version_url(version)
                 try:
-                    response = requests.head(url, timeout=5, allow_redirects=True)
+                    response = requests.get(url, timeout=5, allow_redirects=True)
                     if response.status_code == 200:
                         latest_found = version
                         logger.debug(f"Chrome {version} exists")
@@ -172,7 +177,6 @@ class ReleaseMonitorCore:
                         if latest_found and latest_found >= start_version:
                             break
                 except requests.RequestException:
-                    # If we found versions and hit an error, return what we have
                     if latest_found:
                         break
                     continue
@@ -186,8 +190,9 @@ class ReleaseMonitorCore:
             blog_url = "https://developer.chrome.com/blog"
             response = requests.get(blog_url, timeout=10)
             if response.status_code == 200:
+                blog_text = getattr(response, "text", "") or ""
                 # Look for "New in Chrome XXX" which indicates stable releases
-                matches = re.findall(r'New in Chrome\s+(\d{3})', response.text, re.IGNORECASE)
+                matches = re.findall(r'New in Chrome\s+(\d{3})', blog_text, re.IGNORECASE)
                 if matches:
                     versions = [int(m) for m in matches if 100 <= int(m) <= 200]
                     if versions:
@@ -234,7 +239,7 @@ class ReleaseMonitorCore:
         return None
     
     
-    def download_chrome_release(self, version: int, channel: str = "stable") -> Dict[str, any]:
+    def download_chrome_release(self, version: int, channel: str = "stable") -> Dict[str, Any]:
         """Download Chrome release notes.
         
         Args:
@@ -250,8 +255,13 @@ class ReleaseMonitorCore:
             
             soup = BeautifulSoup(response.text, 'html.parser')
             
-            # Find main content
-            main_content = soup.find('main') or soup.find('article') or soup.find('div', class_='content')
+            # Find main content (fallback to <body> if needed)
+            main_content = (
+                soup.find('main')
+                or soup.find('article')
+                or soup.find('div', class_='content')
+                or soup.body
+            )
             if not main_content:
                 return {
                     "success": False,
@@ -272,9 +282,9 @@ class ReleaseMonitorCore:
             
             # Include channel suffix in filename for non-stable channels
             if channel == "stable":
-                output_file = self.release_notes_dir / "webplatform" / f"chrome-{version}.md"
+                output_file = self.release_notes_dir / f"chrome-{version}.md"
             else:
-                output_file = self.release_notes_dir / "webplatform" / f"chrome-{version}-{channel}.md"
+                output_file = self.release_notes_dir / f"chrome-{version}-{channel}.md"
                 
             output_file.parent.mkdir(parents=True, exist_ok=True)
             
@@ -285,6 +295,8 @@ class ReleaseMonitorCore:
             
             return {
                 "success": True,
+                "version": version,
+                "channel": channel,
                 "file_path": str(output_file),
                 "url": url
             }
@@ -295,9 +307,9 @@ class ReleaseMonitorCore:
                 "error": f"Error downloading Chrome release {version}: {str(e)}"
             }
     
-    def download_webgpu_release(self, version: int) -> Dict[str, any]:
+    def download_webgpu_release(self, version: int) -> Dict[str, Any]:
         """Download WebGPU release notes.
-        
+
         Args:
             version: WebGPU version number
         
@@ -310,8 +322,12 @@ class ReleaseMonitorCore:
             
             soup = BeautifulSoup(response.text, 'html.parser')
             
-            # Find main content
-            main_content = soup.find('main') or soup.find('article') or soup.find('div', class_='content')
+            main_content = (
+                soup.find('main')
+                or soup.find('article')
+                or soup.find('div', class_='content')
+                or soup.body
+            )
             if not main_content:
                 return {
                     "success": False,
@@ -331,7 +347,7 @@ class ReleaseMonitorCore:
             markdown_content = re.sub(r'\n{3,}', '\n\n', markdown_content)
             
             # WebGPU files never have channel suffix
-            output_file = self.release_notes_dir / "webplatform" / f"webgpu-{version}.md"
+            output_file = self.release_notes_dir / f"webgpu-{version}.md"
                 
             output_file.parent.mkdir(parents=True, exist_ok=True)
             
@@ -342,6 +358,7 @@ class ReleaseMonitorCore:
             
             return {
                 "success": True,
+                "version": version,
                 "file_path": str(output_file),
                 "url": url
             }
@@ -351,8 +368,18 @@ class ReleaseMonitorCore:
                 "success": False,
                 "error": f"Error downloading WebGPU release {version}: {str(e)}"
             }
-    
-    
+
+    def _sync_legacy_versions_file(self, data: Dict[str, Any]) -> None:
+        """Persist version tracking to the historical location used by older tools."""
+        legacy_path = self.base_path / "upstream_docs" / "processed_releasenotes" / "downloaded_versions.json"
+        try:
+            legacy_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(legacy_path, 'w', encoding='utf-8') as f:
+                json.dump(data, f, indent=2)
+        except IOError as exc:
+            logger.warning(f"Unable to sync legacy versions file: {exc}")
+
+
     def update_version_tracking(self, release_type: str, version: int):
         """Update the version tracking JSON file with file locking for concurrent access protection."""
         versions = {}
@@ -400,11 +427,14 @@ class ReleaseMonitorCore:
                         f.seek(0)
                         f.truncate()
                         json.dump(versions, f, indent=2)
-                        
+
                     finally:
                         # Release lock
                         _unlock_file(f)
-                
+
+                # Also update legacy tracking location for downstream tools
+                self._sync_legacy_versions_file(versions)
+
                 # Successfully updated
                 return
                 
