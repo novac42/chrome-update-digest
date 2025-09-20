@@ -24,6 +24,10 @@ import yaml
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from utils.yaml_pipeline import YAMLPipeline
+from utils.release_note_locator import (
+    find_chrome_release_note,
+    find_webgpu_release_note,
+)
 from processors.merge_webgpu_graphics import WebGPUGraphicsMerger
 
 
@@ -296,13 +300,13 @@ def process_with_split_pipeline(version: str):
     print(f"Processing Chrome {version} with split pipeline...")
     
     # Paths
-    chrome_file = Path(f'upstream_docs/release_notes/WebPlatform/chrome-{version}.md')
-    webgpu_file = Path(f'upstream_docs/release_notes/WebPlatform/webgpu-{version}.md')
+    chrome_file = find_chrome_release_note(version)
+    webgpu_file = find_webgpu_release_note(version)
     output_dir = Path('upstream_docs/processed_releasenotes/processed_forwebplatform')
     
     # Read Chrome release notes
-    if not chrome_file.exists():
-        print(f"  ❌ Chrome release notes not found: {chrome_file}")
+    if not chrome_file:
+        print(f"  ❌ Chrome release notes not found for version {version}")
         return False
     
     with open(chrome_file, 'r', encoding='utf-8') as f:

@@ -685,7 +685,11 @@ class CleanDataPipeline:
         
         # Step 2: Convert to YAML
         print("\n  Step 2: Converting to YAML...")
-        from utils.yaml_pipeline import YAMLPipeline
+from utils.yaml_pipeline import YAMLPipeline
+from utils.release_note_locator import (
+    find_chrome_release_note,
+    find_webgpu_release_note,
+)
         
         yaml_pipeline = YAMLPipeline()
         yaml_files = {}
@@ -735,25 +739,20 @@ class CleanDataPipeline:
         
         output_dir.mkdir(parents=True, exist_ok=True)
         
-        # Input files - try channel-specific first, then fallback for stable
-        if channel == "stable":
-            # For stable, try without suffix first (as it's the common case)
-            chrome_file = Path(f'upstream_docs/release_notes/WebPlatform/chrome-{version}.md')
-            if not chrome_file.exists():
-                chrome_file = Path(f'upstream_docs/release_notes/WebPlatform/chrome-{version}-stable.md')
-        else:
-            # For beta or other channels, use channel suffix
-            chrome_file = Path(f'upstream_docs/release_notes/WebPlatform/chrome-{version}-{channel}.md')
-        
-        webgpu_file = Path(f'upstream_docs/release_notes/WebPlatform/webgpu-{version}.md')
-        
-        if not chrome_file.exists():
-            raise FileNotFoundError(f"Chrome release notes not found: {chrome_file}")
-        
+        # Locate Chrome release notes (supports legacy and new webplatform/ layout)
+        chrome_file = find_chrome_release_note(version, channel)
+        if not chrome_file:
+            raise FileNotFoundError(
+                f"Chrome release notes not found for version {version} ({channel})"
+            )
+
+        # WebGPU notes are optional but we look in both possible locations
+        webgpu_file = find_webgpu_release_note(version)
+
         print(f"\n{'='*60}")
         print(f"Processing Chrome {version} ({channel})")
         print(f"{'='*60}")
-        
+
         # Read Chrome content
         chrome_content = chrome_file.read_text(encoding='utf-8')
         
@@ -771,7 +770,7 @@ class CleanDataPipeline:
         print(f"  ✓ Found {len(areas)} areas")
         
         # Process WebGPU if exists
-        if webgpu_file.exists():
+        if webgpu_file and webgpu_file.exists():
             print("\n  Processing WebGPU release notes...")
             webgpu_raw = webgpu_file.read_text(encoding='utf-8')
             
