@@ -1,21 +1,5 @@
 # Graphics and WebGPU - Chrome 137
 
-## Graphics (from Chrome Release Notes)
-
-### GPUTextureView for externalTexture binding
-
-A `GPUTextureView` is now allowed to be used for an `externalTexture` binding when creating a `GPUBindGroup`.
-
-**References:** [Tracking bug #398752857](https://bugs.chromium.org/p/chromium/issues/detail?id=398752857) | [ChromeStatus.com entry](https://chromestatus.com/feature/5107071463104512) | [Spec](https://gpuweb.github.io/gpuweb/#gpubindgroup)
-
-
-### copyBufferToBuffer overload
-
-The `GPUCommandEncoder` `copyBufferToBuffer()` method now includes a simpler way to copy entire buffers using a new overload with optional offsets and size parameters.
-
-**References:** [ChromeStatus.com entry](https://chromestatus.com/feature/5103419089608704) | [Spec](https://gpuweb.github.io/gpuweb/#dom-gpucommandencoder-copybuffertobuffer)
-
-
 ## WebGPU Features
 
 ### 1. Texture View for External Texture Binding
@@ -75,4 +59,4 @@ function checkPowerPreferenceForGpuDevice(device) {
 - Experimental `compatibilityMode` attribute removed
 - Replaced by standardized approach for compatibility
 
-<!-- Deduplication: 7 → 7 features -->
+<!-- Deduplication: 5 → 5 features -->
