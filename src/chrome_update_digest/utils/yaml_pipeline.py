@@ -16,7 +16,7 @@ from src.models.feature_tagging import HeadingBasedTagger, TaggedFeature
 from src.utils.focus_area_manager import FocusAreaManager
 from src.utils.area_classifier import WebGPUClassifier
 from src.utils.release_note_locator import find_webgpu_release_note
-from .project_paths import PROJECT_ROOT, get_config_path
+from src.chrome_update_digest.utils.project_paths import PROJECT_ROOT, get_config_path
 
 
 @dataclass
