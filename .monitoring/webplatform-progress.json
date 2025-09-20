@@ -6,13 +6,27 @@
     "zh"
   ],
   "areas": [
+    "css",
+    "deprecation",
     "devices",
     "graphics-webgpu",
-    "storage"
+    "pwa-service-worker",
+    "storage",
+    "webapi"
   ],
-  "total_areas": 3,
-  "completed_areas": 3,
+  "total_areas": 7,
+  "completed_areas": 7,
   "per_area": {
+    "css": {
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: Unknown error: Error: Unknown tokenizer: undefined\n    at m4.acquireTokenizer (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:609:26873)\n    at new xt (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5058)\n    at /Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5414\n    at t.invokeFunction (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:453:942)\n    at xt.create (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5377)\n    at TT._provideLanguageModelResponse (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:618:5850)"
+    },
+    "deprecation": {
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: Unknown error: Error: Unknown tokenizer: undefined\n    at m4.acquireTokenizer (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:609:26873)\n    at new xt (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5058)\n    at /Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5414\n    at t.invokeFunction (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:453:942)\n    at xt.create (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5377)\n    at TT._provideLanguageModelResponse (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:618:5850)"
+    },
     "devices": {
       "en": "error",
       "zh": "pending",
@@ -23,14 +37,24 @@
       "zh": "pending",
       "error": "Sampling failed after 3 retries: Unknown error: Error: Unknown tokenizer: undefined\n    at m4.acquireTokenizer (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:609:26873)\n    at new xt (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5058)\n    at /Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5414\n    at t.invokeFunction (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:453:942)\n    at xt.create (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5377)\n    at TT._provideLanguageModelResponse (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:618:5850)"
     },
+    "pwa-service-worker": {
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: Unknown error: Error: Unknown tokenizer: undefined\n    at m4.acquireTokenizer (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:609:26873)\n    at new xt (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5058)\n    at /Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5414\n    at t.invokeFunction (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:453:942)\n    at xt.create (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5377)\n    at TT._provideLanguageModelResponse (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:618:5850)"
+    },
     "storage": {
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: Unknown error: Error: Unknown tokenizer: undefined\n    at m4.acquireTokenizer (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:609:26873)\n    at new xt (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5058)\n    at /Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5414\n    at t.invokeFunction (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:453:942)\n    at xt.create (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5377)\n    at TT._provideLanguageModelResponse (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:618:5850)"
+    },
+    "webapi": {
       "en": "error",
       "zh": "pending",
       "error": "Sampling failed after 3 retries: Unknown error: Error: Unknown tokenizer: undefined\n    at m4.acquireTokenizer (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:609:26873)\n    at new xt (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5058)\n    at /Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5414\n    at t.invokeFunction (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:453:942)\n    at xt.create (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5377)\n    at TT._provideLanguageModelResponse (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:618:5850)"
     }
   },
-  "started_at": "2025-09-20T22:52:17.494959",
-  "updated_at": "2025-09-20T22:52:32.522390",
-  "completed_at": "2025-09-20T22:52:32.522355",
-  "total_time_seconds": 15.026975870132446
+  "started_at": "2025-09-20T23:32:39.055097",
+  "updated_at": "2025-09-20T23:32:50.460972",
+  "completed_at": "2025-09-20T23:32:50.460921",
+  "total_time_seconds": 11.405472040176392
 }
