@@ -1,0 +1,41 @@
+version: '140'
+channel: stable
+area: isolated-web-apps
+extraction_timestamp: '2025-09-20T23:17:00.479270'
+extraction_method: deterministic
+statistics:
+  total_features: 1
+  total_links: 4
+  primary_tags: {}
+  cross_cutting:
+    privacy: 1
+features:
+- title: Controlled Frame API (available only to IWAs)
+  content: 'This feature adds a Controlled Frame API available only to Isolated Web Apps (IWAs). Like similarly-named APIs
+    on other platforms, Controlled Frame allows embedding all content, even third-party content that cannot be embedded in
+    `<iframe>`. Controlled Frame also allows controlling embedded content with a collection of API methods and events. For
+    more information about Isolated Web Apps, see the [Isolated Web Apps explainer](https://github.com/WICG/isolated-web-apps/blob/main/README.md).
+
+
+    [Tracking bug #40191772](https://issues.chromium.org/issues/40191772) | [ChromeStatus.com entry](https://chromestatus.com/feature/5199572022853632)
+    | [Spec](https://wicg.github.io/controlled-frame)'
+  heading_path:
+  - Isolated Web Apps (IWAs)
+  - Controlled Frame API (available only to IWAs)
+  links:
+  - url: https://github.com/WICG/isolated-web-apps/blob/main/README.md
+    link_type: github
+    title: Isolated Web Apps explainer
+  - url: https://issues.chromium.org/issues/40191772
+    link_type: other
+    title: 'Tracking bug #40191772'
+  - url: https://chromestatus.com/feature/5199572022853632
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/controlled-frame
+    link_type: spec
+    title: Spec
+  line_number: 3
+  primary_tags: []
+  cross_cutting_concerns:
+  - privacy

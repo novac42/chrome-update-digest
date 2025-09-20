@@ -17,17 +17,14 @@ from src.chrome_update_digest.utils.release_note_locator import (
     find_chrome_release_note,
     find_webgpu_release_note,
 )
+from src.chrome_update_digest.processors.area_extractors import (
+    Section,
+    AreaExtractorFactory,
+    WebGPUAreaExtractor,
+)
 
 
-@dataclass
-class Section:
-    """Represents a document section."""
-    title: str
-    level: int  # 2=h2, 3=h3, etc.
-    content: str  # Full content including the header
-    start_line: int
-    end_line: int
-    features: List['Section'] = field(default_factory=list)  # h3 features under h2
+# Section class is now imported from area_extractors module
 
 
 class CleanDataPipeline:
@@ -39,14 +36,20 @@ class CleanDataPipeline:
         """Initialize with expected areas for validation."""
         # Load focus areas configuration
         if not focus_areas_config_path:
-            focus_areas_config_path = Path(__file__).parent.parent.parent.parent.parent / 'config' / 'focus_areas.yaml'
-        
+            # Navigate up to the project root and find config
+            current_file = Path(__file__)
+            project_root = current_file.parent.parent.parent.parent  # Go up from src/chrome_update_digest/processors/
+            focus_areas_config_path = project_root / 'config' / 'focus_areas.yaml'
+
         self.focus_areas_config = self._load_focus_areas_config(focus_areas_config_path)
-        
+
+        # Initialize extractor factory
+        self.extractor_factory = AreaExtractorFactory(self.focus_areas_config)
+
         # Core areas that should exist in Chrome release notes (for validation)
         self.expected_areas = {
-            'CSS', 'Web APIs', 'Graphics', 'JavaScript', 
-            'Security', 'Performance', 'Origin trials', 
+            'CSS', 'Web APIs', 'Graphics', 'JavaScript',
+            'Security', 'Performance', 'Origin trials',
             'Deprecations and removals'
         }
     
@@ -229,14 +232,30 @@ class CleanDataPipeline:
             # Look at the distribution and spacing between headings
             level_counts = {level: levels.count(level) for level in unique_levels}
             
-            # Usually the first level with multiple occurrences is features
-            # or if levels are close together, first is section, second is feature
+            # Usually if we have two levels, the first is sections and second is features
+            # Chrome standard is h2 for sections (CSS, Web APIs) and h3 for features
             if len(unique_levels) == 2:
-                return {
-                    'section': unique_levels[0] if level_counts[unique_levels[0]] <= 3 else None,
-                    'feature': unique_levels[0] if level_counts[unique_levels[0]] > 3 else unique_levels[1],
-                    'max_level': max_level
-                }
+                # Check if this is standard Chrome format (h2 sections, h3 features)
+                if unique_levels[0] == 2 and unique_levels[1] == 3:
+                    return {
+                        'section': 2,
+                        'feature': 3,
+                        'max_level': max_level
+                    }
+                # Otherwise use heuristic: if first level has few items, it's sections
+                elif level_counts[unique_levels[0]] <= 10:
+                    return {
+                        'section': unique_levels[0],
+                        'feature': unique_levels[1],
+                        'max_level': max_level
+                    }
+                # Many items at first level means features only
+                else:
+                    return {
+                        'section': None,
+                        'feature': unique_levels[0],
+                        'max_level': max_level
+                    }
             else:
                 # More complex case - analyze structure
                 primary_level = max(level_counts, key=level_counts.get)
@@ -382,32 +401,33 @@ class CleanDataPipeline:
     
     def extract_areas(self, content: str) -> Dict[str, str]:
         """
-        Extract content by area based on h2 sections using focus_areas.yaml mapping.
-        Supports content keyword search for areas like on-device-ai at feature level.
-        
+        Extract content by area using appropriate extraction strategies.
+
         Returns:
             Dictionary mapping focus area keys to content.
         """
         sections = self.parse_sections(content)
         areas = {}
-        
-        for section in sections:
-            # Skip meta sections
-            if any(skip in section.title.lower() for skip in ['what\'s new', 'chrome 1']):
+
+        # Get all extractors
+        extractors = self.extractor_factory.get_all_extractors()
+
+        # Process each extractor
+        for area_key, extractor in extractors.items():
+            # Skip WebGPU for now (handled separately in merge_graphics_webgpu)
+            if area_key == 'graphics-webgpu':
                 continue
-            
-            # Map to focus area using configuration
-            area_key = self._map_area_name(section.title)
-            
-            # Combine content if area already exists (multiple headings map to same area)
-            if area_key in areas:
-                areas[area_key] += '\n\n' + section.content
-            else:
-                areas[area_key] = section.content
-            
-            # Check for additional areas that search content keywords at FEATURE level
-            self._extract_keyword_features(section, area_key, areas)
-        
+
+            # Extract content for this area
+            area_content = extractor.extract(sections, content)
+
+            # Merge content if we got any
+            for key, value in area_content.items():
+                if key in areas:
+                    areas[key] = areas[key] + '\n\n' + value
+                else:
+                    areas[key] = value
+
         return areas
     
     def _extract_keyword_features(self, section, area_key, areas):
@@ -559,82 +579,49 @@ class CleanDataPipeline:
         
         return unique_features
     
-    def merge_graphics_webgpu(self, chrome_graphics: Optional[str], 
+    def merge_graphics_webgpu(self, chrome_graphics: Optional[str],
                              webgpu_content: str, version: str) -> str:
         """
         Merge Graphics section from Chrome with cleaned WebGPU content.
-        Includes deduplication with WebGPU taking priority.
-        
+        Uses WebGPUAreaExtractor for proper deduplication.
+
         Args:
             chrome_graphics: Graphics section from Chrome release notes
             webgpu_content: Cleaned WebGPU release notes
             version: Chrome version number
-            
+
         Returns:
             Merged and deduplicated content for graphics-webgpu area.
         """
-        # Parse features from both sources
-        chrome_features = []
+        # Get WebGPU extractor
+        webgpu_extractor = self.extractor_factory.create_extractor(
+            'graphics-webgpu',
+            self.focus_areas_config.get('focus_areas', {}).get('graphics-webgpu', {})
+        )
+
+        # Parse Chrome sections
+        chrome_sections = []
         if chrome_graphics:
             chrome_sections = self.parse_sections(chrome_graphics)
-            for section in chrome_sections:
-                chrome_features.extend(section.features)
-        
-        webgpu_features = []
+
+        # Parse WebGPU sections
+        webgpu_sections = []
         if webgpu_content:
-            # Detect hierarchy for WebGPU content
             hierarchy = self.detect_heading_hierarchy(webgpu_content)
             webgpu_sections = self.parse_sections_dynamic(webgpu_content, hierarchy)
-            
-            # Extract features based on detected hierarchy
-            for section in webgpu_sections:
-                if section.features:
-                    # Standard case: features are sub-sections
-                    webgpu_features.extend(section.features)
-                else:
-                    # Special case: sections ARE the features (like WebGPU 138)
-                    # When there's only one heading level, sections are treated as features
-                    if hierarchy.get('feature') and not hierarchy.get('section'):
-                        # Skip meta sections
-                        if not any(skip in section.title.lower() for skip in ['what\'s new', 'dawn updates']):
-                            webgpu_features.append(section)
-        
-        # Deduplicate features
-        unique_features = self.deduplicate_features(chrome_features, webgpu_features)
-        
-        # Build merged content
-        merged = [f"# Graphics and WebGPU - Chrome {version}\n"]
-        
-        # Separate Chrome and WebGPU features
-        chrome_unique = [f for f in unique_features if f in chrome_features]
-        webgpu_unique = [f for f in unique_features if f in webgpu_features]
-        
-        # Add Chrome Graphics features (non-duplicates)
-        if chrome_unique:
-            merged.append("## Graphics (from Chrome Release Notes)\n")
-            for feature in chrome_unique:
-                merged.append(f"### {feature.title}")
-                # Get content without the header
-                content_lines = feature.content.split('\n')[1:]
-                merged.append('\n'.join(content_lines))
-                merged.append("")
-        
-        # Add WebGPU features
-        if webgpu_unique:
-            merged.append("## WebGPU Features\n")
-            for feature in webgpu_unique:
-                merged.append(f"### {feature.title}")
-                # Get content without the header  
-                content_lines = feature.content.split('\n')[1:]
-                merged.append('\n'.join(content_lines))
-                merged.append("")
-        
-        # Add stats comment
-        total_before = len(chrome_features) + len(webgpu_features)
-        total_after = len(unique_features)
-        merged.append(f"<!-- Deduplication: {total_before} → {total_after} features -->")
-        
-        return '\n'.join(merged)
+
+        # Set WebGPU content for the extractor
+        if isinstance(webgpu_extractor, WebGPUAreaExtractor):
+            webgpu_extractor.set_webgpu_content(webgpu_content, webgpu_sections)
+
+        # Extract merged content
+        areas = webgpu_extractor.extract(chrome_sections, chrome_graphics or '')
+
+        # Return merged content with version header
+        if 'graphics-webgpu' in areas:
+            return f"# Graphics and WebGPU - Chrome {version}\n\n{areas['graphics-webgpu']}"
+
+        return f"# Graphics and WebGPU - Chrome {version}\n\n<!-- No WebGPU features found -->"
     
     def process_version(self, version: str, output_dir: Optional[Path] = None, channel: str = "stable") -> Dict[str, Path]:
         """

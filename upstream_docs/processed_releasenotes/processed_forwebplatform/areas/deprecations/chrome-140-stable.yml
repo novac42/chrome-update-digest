@@ -1,0 +1,105 @@
+version: '140'
+channel: stable
+area: deprecations
+extraction_timestamp: '2025-09-20T23:17:00.472450'
+extraction_method: deterministic
+statistics:
+  total_features: 2
+  total_links: 10
+  primary_tags:
+    deprecation: 2
+  cross_cutting:
+    privacy: 2
+features:
+- title: 'Stop sending `Purpose: prefetch` header from prefetches and prerenders'
+  content: 'Prefetches and prerenders now use the `Sec-Purpose` header, therefore the legacy `Purpose: prefetch` header is
+    being removed.
+
+
+    This will be scoped to speculation rules `prefetch`, speculation rules `prerender`, `<link rel=prefetch>`, and Chromium''s
+    non-standard `<link rel=prerender>`.
+
+
+    [Tracking bug #420724819](https://issues.chromium.org/issues/420724819) | [ChromeStatus.com entry](https://chromestatus.com/feature/5088012836536320)
+    | [Spec](https://wicg.github.io/nav-speculation/prerendering.html#interaction-with-fetch)'
+  heading_path:
+  - Removals
+  - 'Stop sending `Purpose: prefetch` header from prefetches and prerenders'
+  links:
+  - url: https://issues.chromium.org/issues/420724819
+    link_type: other
+    title: 'Tracking bug #420724819'
+  - url: https://chromestatus.com/feature/5088012836536320
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/nav-speculation/prerendering.html#interaction-with-fetch
+    link_type: spec
+    title: Spec
+  line_number: 3
+  primary_tags:
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Deprecate special font size rules for H1 within some elements
+  content: 'The HTML spec contains [a list of special rules](https://html.spec.whatwg.org/multipage/rendering.html#sections-and-headings)
+    for `<h1>` tags nested within `<article>`, `<aside>`, `<nav>`, or `<section>` tags:
+
+
+    These special rules are deprecated, because they cause accessibility issues. Namely, they visually reduce the font size
+    for nested `<h1>` elements so that they "look" like `<h2>` elements, but nothing in the accessibility tree reflects this
+    demotion.
+
+
+    [Tracking bug #394111284](https://issues.chromium.org/issues/394111284) | [ChromeStatus.com entry](https://chromestatus.com/feature/6192419898654720)
+    | [Spec](https://github.com/whatwg/html/pull/11102)
+
+
+    Except as otherwise noted, the content of this page is licensed under the [Creative Commons Attribution 4.0 License](https://creativecommons.org/licenses/by/4.0/),
+    and code samples are licensed under the [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0). For details,
+    see the [Google Developers Site Policies](https://developers.google.com/site-policies). Java is a registered trademark
+    of Oracle and/or its affiliates.
+
+
+    Last updated 2025-09-02 UTC.
+
+
+    [[["Easy to understand","easyToUnderstand","thumb-up"],["Solved my problem","solvedMyProblem","thumb-up"],["Other","otherUp","thumb-up"]],[["Missing
+    the information I need","missingTheInformationINeed","thumb-down"],["Too complicated / too many steps","tooComplicatedTooManySteps","thumb-down"],["Out
+    of date","outOfDate","thumb-down"],["Samples / code issue","samplesCodeIssue","thumb-down"],["Other","otherDown","thumb-down"]],["Last
+    updated 2025-09-02 UTC."],[],[],null,[]]'
+  heading_path:
+  - Removals
+  - Deprecate special font size rules for H1 within some elements
+  links:
+  - url: https://html.spec.whatwg.org/multipage/rendering.html#sections-and-headings
+    link_type: spec
+    title: a list of special rules
+  - url: https://issues.chromium.org/issues/394111284
+    link_type: other
+    title: 'Tracking bug #394111284'
+  - url: https://chromestatus.com/feature/6192419898654720
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/whatwg/html/pull/11102
+    link_type: github
+    title: Spec
+  - url: https://creativecommons.org/licenses/by/4.0/
+    link_type: other
+    title: Creative Commons Attribution 4.0 License
+  - url: https://www.apache.org/licenses/LICENSE-2.0
+    link_type: other
+    title: Apache 2.0 License
+  - url: https://developers.google.com/site-policies
+    link_type: other
+    title: Google Developers Site Policies
+  line_number: 11
+  primary_tags:
+  - name: deprecation
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy

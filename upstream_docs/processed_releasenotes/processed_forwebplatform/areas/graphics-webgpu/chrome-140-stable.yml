@@ -1,0 +1,197 @@
+version: '140'
+channel: stable
+area: graphics-webgpu
+extraction_timestamp: '2025-09-20T23:17:00.483469'
+extraction_method: deterministic
+statistics:
+  total_features: 6
+  total_links: 17
+  primary_tags:
+    webgpu: 6
+    devices: 1
+    storage: 1
+  cross_cutting:
+    webgpu: 6
+features:
+- title: Device requests consume adapter
+  content: "According to the [WebGPU specification](https://gpuweb.github.io/gpuweb/#ref-for-dom-adapter-state-consumed%E2%91%A1),\
+    \ an adapter is marked as \"consumed\" upon a successful device request. Consequently, any subsequent `requestDevice()`\
+    \ calls using the same adapter will now result in a rejected promise. Previously, these calls would return a device that\
+    \ was lost at creation. See [issue 415825174](https://issues.chromium.org/issues/415825174).\n    \n    \n    const adapter\
+    \ = await navigator.gpu.requestAdapter();\n    const device = await adapter.requestDevice();\n    \n    await adapter.requestDevice();\
+    \ // Fails because adapter has been consumed."
+  heading_path:
+  - Graphics and WebGPU - Chrome 140
+  - Device requests consume adapter
+  links:
+  - url: https://gpuweb.github.io/gpuweb/#ref-for-dom-adapter-state-consumed%E2%91%A1
+    link_type: github
+    title: WebGPU specification
+  - url: https://issues.chromium.org/issues/415825174
+    link_type: other
+    title: issue 415825174
+  line_number: 5
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: devices
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Shorthand for using texture where texture view is used
+  content: "A [GPUTexture](https://gpuweb.github.io/gpuweb/#gputexture) can now be used directly as a [GPUBindingResource](https://gpuweb.github.io/gpuweb/#typedefdef-gpubindingresource)\
+    \ to expose to the shader for binding. It can also be used as a GPURenderPassColorAttachment `view`, a GPURenderPassColorAttachment\
+    \ `resolveTarget`, and a GPURenderPassDepthStencilAttachment `view` for improved ergonomics. This offers a simpler approach\
+    \ than using a [GPUTextureView](https://gpuweb.github.io/gpuweb/#dictdef-gpubufferbinding) to get a default view. See[\
+    \ issue 425906323](https://issues.chromium.org/issues/425906323).\n    \n    \n    const bindGroup = myDevice.createBindGroup({\n\
+    \      layout: myPipeline.getBindGroupLayout(0),\n      entries: [\n        { binding: 0, resource: mySampler },\n   \
+    \     { binding: 1, resource: myTexture }, // Same as myTexture.createView()\n        { binding: 2, resource: myExternalTexture\
+    \ },\n        { binding: 3, resource: myBuffer },\n      ],\n    });"
+  heading_path:
+  - Graphics and WebGPU - Chrome 140
+  - Shorthand for using texture where texture view is used
+  links:
+  - url: https://gpuweb.github.io/gpuweb/#gputexture
+    link_type: github
+    title: GPUTexture
+  - url: https://gpuweb.github.io/gpuweb/#typedefdef-gpubindingresource
+    link_type: github
+    title: GPUBindingResource
+  - url: https://gpuweb.github.io/gpuweb/#dictdef-gpubufferbinding
+    link_type: github
+    title: GPUTextureView
+  - url: https://issues.chromium.org/issues/425906323
+    link_type: other
+    title: issue 425906323
+  line_number: 17
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: WGSL textureSampleLevel supports 1D textures
+  content: 1D textures can now be [sampled](https://gpuweb.github.io/gpuweb/wgsl/#texturesamplelevel) using `textureSampleLevel()`
+    for consistency with 2D textures. This lets you sample a 1D texture from a vertex shader which was previously only possible
+    from a fragment shader with `textureSample()`. See[ issue 382514673](https://issues.chromium.org/issues/382514673).
+  heading_path:
+  - Graphics and WebGPU - Chrome 140
+  - WGSL textureSampleLevel supports 1D textures
+  links:
+  - url: https://gpuweb.github.io/gpuweb/wgsl/#texturesamplelevel
+    link_type: github
+    title: sampled
+  - url: https://issues.chromium.org/issues/382514673
+    link_type: other
+    title: issue 382514673
+  line_number: 34
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Deprecate bgra8unorm read-only storage texture usage
+  content: Using `"bgra8unorm"` format with read-only storage textures is now deprecated. The WebGPU specification explicitly
+    disallows this, and its prior allowance in Chrome was a bug, as this format is intended for write-only access and is not
+    portable. See [issue 427681156](https://issues.chromium.org/issues/427681156).
+  heading_path:
+  - Graphics and WebGPU - Chrome 140
+  - Deprecate bgra8unorm read-only storage texture usage
+  links:
+  - url: https://issues.chromium.org/issues/427681156
+    link_type: other
+    title: issue 427681156
+  line_number: 39
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: storage
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Remove GPUAdapter isFallbackAdapter attribute
+  content: As previously [announced](/blog/new-in-webgpu-138#deprecate_gpuadapter_isfallbackadapter_attribute), the GPUAdapter
+    `isFallbackAdapter` attribute is now removed. It's replaced by the GPUAdapterInfo `isFallbackAdapter` attribute that was
+    introduced in Chrome 136. See [intent to remove](https://groups.google.com/a/chromium.org/g/blink-dev/c/Wzr22XXV3s8).
+  heading_path:
+  - Graphics and WebGPU - Chrome 140
+  - Remove GPUAdapter isFallbackAdapter attribute
+  links:
+  - url: https://groups.google.com/a/chromium.org/g/blink-dev/c/Wzr22XXV3s8
+    link_type: other
+    title: intent to remove
+  line_number: 44
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Dawn updates
+  content: 'The `wgpuInstanceGetWGSLLanguageFeatures()` function is used to get a list of WGSL language features supported
+    by the instance. Previously it returned a `WGPUStatus` value. It has been updated to not return a value since it can''t
+    fail. See [issue 429178774](https://issues.chromium.org/issues/429178774).
+
+
+    The `wgpuSurfacePresent()` function now returns a `WGPUStatus` error if the surface doesn''t have a current texture. See
+    [issue 425930323](https://issues.chromium.org/issues/425930323)
+
+
+    The new `wgpu::InstanceFeatureName::MultipleDevicesPerAdapter` feature lets adapters create multiple devices without being
+    "consumed". See [issue 415825174](https://issues.chromium.org/issues/415825174).
+
+
+    The `dump_shaders_on_failure` device toggle lets you dump shaders only on failure for [debugging purposes](https://dawn.googlesource.com/dawn/+/refs/heads/main/docs/dawn/debugging.md).
+    It applies exclusively to D3 backends, though future expansion to other backends is possible. See [issue 429187478](http://issues.chromium.org/issues/429187478).
+
+
+    Multiple changes have been made to the Vulkan backend to reduce overhead when submitting render passes, especially for
+    improved performance on mobile GPUs. For example: [caching VkFramebuffers](https://dawn.googlesource.com/dawn/+/ddf2e1f61d20171ecd10ae3be70acb750a56686d).
+
+
+    This covers only some of the key highlights. Check out the exhaustive [list of commits](https://dawn.googlesource.com/dawn/+log/chromium/7258..chromium/7339?n=1000).'
+  heading_path:
+  - Graphics and WebGPU - Chrome 140
+  - Dawn updates
+  links:
+  - url: https://issues.chromium.org/issues/429178774
+    link_type: other
+    title: issue 429178774
+  - url: https://issues.chromium.org/issues/425930323
+    link_type: other
+    title: issue 425930323
+  - url: https://issues.chromium.org/issues/415825174
+    link_type: other
+    title: issue 415825174
+  - url: https://dawn.googlesource.com/dawn/+/refs/heads/main/docs/dawn/debugging.md
+    link_type: other
+    title: debugging purposes
+  - url: http://issues.chromium.org/issues/429187478
+    link_type: other
+    title: issue 429187478
+  - url: https://dawn.googlesource.com/dawn/+/ddf2e1f61d20171ecd10ae3be70acb750a56686d
+    link_type: other
+    title: caching VkFramebuffers
+  - url: https://dawn.googlesource.com/dawn/+log/chromium/7258..chromium/7339?n=1000
+    link_type: other
+    title: list of commits
+  line_number: 49
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu

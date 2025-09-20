@@ -121,6 +121,15 @@ focus_areas:
       - "PWA"
       - "Service Worker"
       - "Progressive Web Apps"
+
+  isolated-web-apps:
+    name: "Isolated Web Apps"
+    description: "Isolated Web Apps (IWAs) and related features"
+    priority: 2
+    heading_patterns:
+      - "Isolated Web Apps"
+      - "IWAs"
+      - "Isolated Web Apps (IWAs)"
     
   payment:
     name: "Payment"

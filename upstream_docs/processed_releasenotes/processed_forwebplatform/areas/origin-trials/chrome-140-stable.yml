@@ -1,0 +1,124 @@
+version: '140'
+channel: stable
+area: origin-trials
+extraction_timestamp: '2025-09-20T23:17:00.466217'
+extraction_method: deterministic
+statistics:
+  total_features: 4
+  total_links: 15
+  primary_tags: {}
+  cross_cutting:
+    privacy: 3
+features:
+- title: Enable incoming call notifications
+  content: 'This feature extends the Notifications API to allow installed PWAs to send incoming call notifications—notifications
+    with call-styled buttons and a ringtone. This extension helps VoIP web apps create more engaging experiences by making
+    it easier for users to recognize and answer calling notifications. Additionally, this feature helps bridge the gap between
+    native and web implementations of apps that have them both.
+
+
+    [Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/2876111312029483009) | [Tracking bug #detail?id=1383570](https://issues.chromium.org/issues/detail?id=1383570)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5110990717321216) | [Spec](https://notifications.spec.whatwg.org)'
+  heading_path:
+  - Origin trials
+  - Enable incoming call notifications
+  links:
+  - url: https://developer.chrome.com/origintrials/#/register_trial/2876111312029483009
+    link_type: other
+    title: Origin Trial
+  - url: https://issues.chromium.org/issues/detail?id=1383570
+    link_type: other
+    title: 'Tracking bug #detail?id=1383570'
+  - url: https://chromestatus.com/feature/5110990717321216
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://notifications.spec.whatwg.org
+    link_type: spec
+    title: Spec
+  line_number: 3
+  primary_tags: []
+  cross_cutting_concerns:
+  - privacy
+- title: Crash Reporting key-value API
+  content: 'This feature introduces a new key-value API, tentatively `window.crashReport`, backed by a per-document map that
+    holds data appended to crash reports.
+
+
+    The data placed in this API''s backing map is sent in the `CrashReportBody` if any renderer process crashes occur on the
+    site. This lets developers debug what specific state in their application might be causing a given crash.
+
+
+    [Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/1304355042077179905) | [Tracking bug #400432195](https://issues.chromium.org/issues/400432195)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/6228675846209536) | [Spec](https://github.com/WICG/crash-reporting/pull/37)'
+  heading_path:
+  - Origin trials
+  - Crash Reporting key-value API
+  links:
+  - url: https://developer.chrome.com/origintrials/#/register_trial/1304355042077179905
+    link_type: other
+    title: Origin Trial
+  - url: https://issues.chromium.org/issues/400432195
+    link_type: other
+    title: 'Tracking bug #400432195'
+  - url: https://chromestatus.com/feature/6228675846209536
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/WICG/crash-reporting/pull/37
+    link_type: github
+    title: Spec
+  line_number: 9
+  primary_tags: []
+  cross_cutting_concerns:
+  - privacy
+- title: Add the `clipboardchange` event
+  content: 'The `clipboardchange` event fires whenever a web app or any other system application changes the system clipboard
+    contents. This allows web apps like remote desktop clients to keep their clipboards synchronized with the system clipboard.
+    It provides an efficient alternative to polling the clipboard with JavaScript for changes.
+
+
+    [Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/137922738588221441) | [Tracking bug #41442253](https://issues.chromium.org/issues/41442253)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5085102657503232) | [Spec](https://github.com/w3c/clipboard-apis/pull/239)'
+  heading_path:
+  - Origin trials
+  - Add the `clipboardchange` event
+  links:
+  - url: https://developer.chrome.com/origintrials/#/register_trial/137922738588221441
+    link_type: other
+    title: Origin Trial
+  - url: https://issues.chromium.org/issues/41442253
+    link_type: other
+    title: 'Tracking bug #41442253'
+  - url: https://chromestatus.com/feature/5085102657503232
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/w3c/clipboard-apis/pull/239
+    link_type: github
+    title: Spec
+  line_number: 17
+  primary_tags: []
+  cross_cutting_concerns:
+  - privacy
+- title: Enable `SharedWorker` on Android
+  content: "The long-standing demand for SharedWorker support on Android stems from several needs expressed by web developers:\n\
+    \n  * **Resource sharing and efficiency** : Developers aim to share a single WebSocket or Server-Sent Events (SSE) connection\
+    \ across multiple tabs, thereby conserving resources.\n  * **Persistent resource management** : A requirement to share\
+    \ and persist resources across tabs, particularly for technologies like WASM-based SQLite.\n  * **Closing a feature gap**\
+    \ : Other major mobile browsers, including Safari on iOS and Firefox on Android, already support SharedWorker, making\
+    \ Chrome on Android the last major browser to address this gap.\n\n[Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/4101090410674257921)\
+    \ | [ChromeStatus.com entry](https://chromestatus.com/feature/6265472244514816) | [Spec](https://html.spec.whatwg.org/multipage/workers.html#shared-workers-and-the-sharedworker-interface)"
+  heading_path:
+  - Origin trials
+  - Enable `SharedWorker` on Android
+  links:
+  - url: https://developer.chrome.com/origintrials/#/register_trial/4101090410674257921
+    link_type: other
+    title: Origin Trial
+  - url: https://chromestatus.com/feature/6265472244514816
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://html.spec.whatwg.org/multipage/workers.html#shared-workers-and-the-sharedworker-interface
+    link_type: spec
+    title: Spec
+  line_number: 23
+  primary_tags: []
+  cross_cutting_concerns: []
