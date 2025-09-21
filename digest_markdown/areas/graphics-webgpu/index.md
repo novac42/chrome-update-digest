@@ -13,8 +13,6 @@ Track the evolution of Graphics and WebGPU features across Chrome releases.
 
 Graphics rendering and WebGPU features
 
-
-
 ### Available Versions
 
 - [Chrome 136 **(Latest)**](./chrome-136.html)

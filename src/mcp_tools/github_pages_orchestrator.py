@@ -275,7 +275,7 @@ class GithubPagesOrchestratorTool:
             return "en"
         normalized = language.lower()
         if normalized == "bilingual":
-            return "en"
+            return "bilingual"
         if normalized in {"en", "zh"}:
             return normalized
         return "en"

@@ -13,8 +13,6 @@ Track the evolution of Performance features across Chrome releases.
 
 Performance optimizations and improvements
 
-
-
 ### Available Versions
 
 - [Chrome 136 **(Latest)**](./chrome-136.html)

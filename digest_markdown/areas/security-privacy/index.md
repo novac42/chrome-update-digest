@@ -13,8 +13,6 @@ Track the evolution of Security-Privacy features across Chrome releases.
 
 Security and privacy features
 
-
-
 ### Available Versions
 
 - [Chrome 136 **(Latest)**](./chrome-136.html)

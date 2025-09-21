@@ -13,8 +13,6 @@ Track the evolution of Browser changes features across Chrome releases.
 
 Platform-level browser behavior updates
 
-
-
 ### Available Versions
 
 - [Chrome 136 **(Latest)**](./chrome-136.html)

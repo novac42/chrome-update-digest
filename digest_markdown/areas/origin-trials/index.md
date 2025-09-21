@@ -13,8 +13,6 @@ Track the evolution of Origin trials features across Chrome releases.
 
 Experimental features in origin trials
 
-
-
 ### Available Versions
 
 - [Chrome 136 **(Latest)**](./chrome-136.html)

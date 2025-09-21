@@ -13,8 +13,6 @@ Track the evolution of Devices features across Chrome releases.
 
 Device APIs and sensor features
 
-
-
 ### Available Versions
 
 - [Chrome 136 **(Latest)**](./chrome-136.html)
