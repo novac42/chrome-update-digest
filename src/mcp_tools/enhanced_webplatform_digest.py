@@ -1389,16 +1389,34 @@ YAML Data:
                     expected_links.add(str(link))
         
         # Extract titles and links from digest
-        # Look for H3 headers (feature titles)
-        found_titles = set(re.findall(r'^###\s+(.+)$', digest, re.MULTILINE))
+        # Prefer H3 feature headings; fall back to H4 if none found to guard against prompt drift
+        h3_titles = re.findall(r'^###\s+(.+)$', digest, re.MULTILINE)
+        h4_titles = re.findall(r'^####\s+(.+)$', digest, re.MULTILINE)
+
+        def _normalize_title(title: str) -> str:
+            """Normalize feature titles for resilient comparison."""
+            # Replace smart quotes and dashes before collapsing whitespace for consistent matching
+            normalized = title.replace('“', '"').replace('”', '"').replace('’', "'").replace('‘', "'")
+            normalized = normalized.replace('–', '-').replace('—', '-')
+            normalized = re.sub(r'\s+', ' ', normalized.strip().lower())
+            return normalized
+
+        # Decide which heading level to treat as the feature marker
+        raw_found_titles = h3_titles if h3_titles else h4_titles
+        found_titles = {_normalize_title(title) for title in raw_found_titles}
+
+        # Normalize expected titles for comparison but keep originals for reporting
+        normalized_expected = {_normalize_title(title) for title in expected_titles}
+
         # Look for markdown links
         found_links = set(re.findall(r'\[([^\]]+)\]\(([^\)]+)\)', digest))
         found_link_urls = {url for _, url in found_links}
-        
+
         # Calculate missing elements
-        missing_titles = expected_titles - found_titles
+        missing_normalized = normalized_expected - found_titles
+        missing_titles = [title for title in expected_titles if _normalize_title(title) in missing_normalized]
         extra_links = found_link_urls - expected_links
-        
+
         # Determine if valid
         missing_ratio = len(missing_titles) / len(expected_titles) if expected_titles else 0
         valid = missing_ratio <= 0.3 and len(extra_links) <= 2
