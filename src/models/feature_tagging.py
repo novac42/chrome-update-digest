@@ -67,15 +67,21 @@ class HeadingBasedTagger:
         self.heading_to_tag = {
             # Primary categories - compound patterns first
             "css and ui": "css",  # Handle "CSS and UI" as CSS only
+            "html and dom": "html-dom",
             "deprecations and removals": "deprecation",
             "progressive web app": "pwa",
             "service worker": "serviceworker",
             "web apis": "webapi",
             "web api": "webapi",
-            
+            "isolated web apps": "isolated-web-apps",
+            "isolated web apps (iwas)": "isolated-web-apps",
+            "secure payment confirmation": "payment",
+            "images and media": "multimedia",
+
             # Single-word patterns
             "css": "css",
             # "ui": "ui",  # Removed - UI is not a valid standalone tag
+            "dom": "html-dom",
             "javascript": "javascript",
             "js": "javascript",
             "devices": "devices",
@@ -88,52 +94,84 @@ class HeadingBasedTagger:
             "serviceworker": "serviceworker",
             "deprecation": "deprecation",
             "removal": "deprecation",
-            
+
             # Additional categories
+            "origin trials": "origin-trials",
+            "on-device ai": "on-device-ai",
             "webgpu": "webgpu",
             "gpu": "webgpu",
             "graphics": "webgpu",  # Map "Graphics" to webgpu
             "storage": "storage",
             "network": "network",
+            "payments": "payment",
+            "webassembly": "webassembly",
+            "wasm": "webassembly",
+            "enterprise": "enterprise",
+            "navigation": "navigation-loading",
+            "loading": "navigation-loading",
             "privacy": "privacy",
             "accessibility": "accessibility",
             "a11y": "accessibility",
             "pwa": "pwa",
+            "iwa": "isolated-web-apps",
+            "iwas": "isolated-web-apps",
+            "webrtc": "multimedia",
+            "identity": "identity",
+            "browser changes": "browser-changes",
         }
-        
+
         # Use list of tuples to preserve order
         self.ordered_heading_patterns = [
             # Compound patterns first (more specific)
             ("css and ui", "css"),
+            ("html and dom", "html-dom"),
             ("deprecations and removals", "deprecation"),
             ("progressive web app", "pwa"),
             ("service worker", "serviceworker"),
             ("web apis", "webapi"),
             ("web api", "webapi"),
-            
+            ("isolated web apps (iwas)", "isolated-web-apps"),
+            ("isolated web apps", "isolated-web-apps"),
+            ("secure payment confirmation", "payment"),
+            ("images and media", "multimedia"),
+
             # Single-word patterns (less specific)
             ("css", "css"),
+            ("dom", "html-dom"),
             ("javascript", "javascript"),
             ("js", "javascript"),
             ("devices", "devices"),
             ("device", "devices"),
             ("multimedia", "multimedia"),
             ("media", "multimedia"),
+            ("webrtc", "multimedia"),
             ("performance", "performance"),
             ("perf", "performance"),
             ("security", "security"),
             ("serviceworker", "serviceworker"),
             ("deprecation", "deprecation"),
             ("removal", "deprecation"),
+            ("origin trials", "origin-trials"),
+            ("on-device ai", "on-device-ai"),
             ("webgpu", "webgpu"),
             ("gpu", "webgpu"),
             ("graphics", "webgpu"),
             ("storage", "storage"),
+            ("webassembly", "webassembly"),
+            ("wasm", "webassembly"),
+            ("navigation", "navigation-loading"),
+            ("loading", "navigation-loading"),
             ("network", "network"),
+            ("payments", "payment"),
             ("privacy", "privacy"),
             ("accessibility", "accessibility"),
             ("a11y", "accessibility"),
             ("pwa", "pwa"),
+            ("enterprise", "enterprise"),
+            ("iwa", "isolated-web-apps"),
+            ("iwas", "isolated-web-apps"),
+            ("identity", "identity"),
+            ("browser changes", "browser-changes"),
         ]
         
         # Cross-cutting concern patterns
