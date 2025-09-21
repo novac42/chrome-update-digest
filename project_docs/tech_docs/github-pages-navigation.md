@@ -6,27 +6,40 @@ The Chrome Release Digests site now features a dual navigation system that allow
 1. **By Version** - See all changes in a specific Chrome release
 2. **By Feature Area** - Track how a feature area evolves over time
 
+All navigation is emitted in both English and Chinese. Each language currently lives in its own top-level tree (for example, `versions/` vs `versions-zh/`) and stays fully in sync when the generator runs in bilingual mode.
+
 ## Directory Structure
 
 ```
 digest_markdown/
-├── index.md                    # Main landing page with dual navigation
-├── _config.yml                 # Jekyll configuration
-├── versions/                   # Version-centric navigation
-│   ├── index.md               # Version selector page
-│   ├── chrome-139/
-│   │   ├── index.md          # Chrome 139 overview
-│   │   ├── css.md            # CSS changes in 139
-│   │   ├── webapi.md         # WebAPI changes in 139
-│   │   └── [other areas].md
-│   └── chrome-[version]/      # Other versions
-└── areas/                      # Area-centric navigation
-    ├── index.md               # Area selector page
+├── _config.yml                  # Jekyll configuration
+├── _layouts/                    # Shared page layouts
+├── assets/                      # Shared assets (CSS, JS, images)
+├── index.md                     # English landing page
+├── index-zh.md                  # Chinese landing page
+├── versions/                    # Version-centric navigation (English)
+│   ├── index.md                # Version selector
+│   └── chrome-136/
+│       ├── index.md            # Chrome 136 overview
+│       └── css.md              # Example area digest (linking to staging copy)
+├── versions-zh/                 # Version-centric navigation (Chinese)
+│   └── chrome-136/
+│       ├── index.md            # Chrome 136 overview (zh)
+│       └── css.md
+├── areas/                       # Area-centric navigation (English)
+│   ├── index.md
+│   └── css/
+│       ├── index.md            # CSS hub with version list
+│       └── chrome-136.md       # CSS in Chrome 136 (en)
+├── areas-zh/                    # Area-centric navigation (Chinese)
+│   └── css/
+│       ├── index.md            # CSS hub (zh)
+│       └── chrome-136.md
+└── webplatform/                 # Staging digests copied from the pipeline
     ├── css/
-    │   ├── index.md          # CSS hub with version list
-    │   ├── chrome-139.md     # CSS in Chrome 139
-    │   └── chrome-[version].md
-    └── [other areas]/         # Other feature areas
+    │   ├── chrome-136-stable-en.md
+    │   └── chrome-136-stable-zh.md
+    └── [other areas]/
 ```
 
 ## Usage
@@ -41,6 +54,9 @@ source .venv/bin/activate
 
 # Generate navigation
 python3 src/tools/generate_github_pages_navigation.py
+
+# Bilingual run (produces /versions, /versions-zh, /areas, /areas-zh)
+python3 src/tools/generate_github_pages_navigation.py --language bilingual
 
 # Clean and regenerate (removes existing structure first)
 python3 src/tools/generate_github_pages_navigation.py --clean
@@ -110,46 +126,29 @@ When new Chrome versions are processed:
 
 ## Content Sources
 
-The navigation system pulls content from:
+The navigation generator copies pre-processed digests staged in:
 ```
-upstream_docs/processed_releasenotes/processed_forwebplatform/areas/
+digest_markdown/webplatform/
 ├── [area]/
-│   ├── chrome-[version]-stable.md   # Stable channel content
-│   ├── chrome-[version]-stable.yml  # Structured data
-│   └── chrome-[version]-beta.md     # Beta channel content (if available)
+│   ├── chrome-[version]-stable-en.md   # English digest
+│   └── chrome-[version]-stable-zh.md   # Chinese digest (when available)
 ```
+
+That staging directory is produced by the clean data pipeline (see `src/chrome_update_digest/processors/clean_data_pipeline.py`) using the focus-area metadata in `config/focus_areas.yaml`. The pipeline itself reads the upstream inputs in `upstream_docs/processed_releasenotes/processed_forwebplatform/` and normalises them before the navigation generator runs.
+
+*Implementation note:* the validator in `src/tools/validate_github_pages.py` deliberately skips the `webplatform/` staging tree because those files serve as source material rather than published pages.
+
+## Language Structure
+
+Running the generator with `--language bilingual` creates parallel English and Chinese navigation trees at the top level (`versions/` + `versions-zh/`, `areas/` + `areas-zh/`). The long-term goal is to collapse that split so that language variants become leaf files (for example, `css-en.md` and `css-zh.md` inside the same directory). Until that refactor lands, tooling that consumes the generated site should expect the top-level language forks.
 
 ## Supported Versions
 
-Currently includes:
-- Chrome 139 (Latest Stable)
-- Chrome 138
-- Chrome 137
-- Chrome 136
+The generator derives the available versions by scanning `digest_markdown/webplatform/*/chrome-*-stable-*.md`. Any version present in the staging tree appears automatically in the published navigation. In the current repository snapshot, only Chrome 136 digests are present, so the rendered site exposes Chrome 136 for both languages.
 
 ## Supported Areas
 
-20 feature areas including:
-- CSS
-- Web APIs
-- Graphics & WebGPU
-- Security & Privacy
-- JavaScript
-- HTML & DOM
-- Navigation & Loading
-- Network
-- Payment
-- PWA & Service Worker
-- Performance
-- Multimedia
-- Devices
-- Identity
-- Browser Changes
-- Deprecations
-- On-Device AI
-- Origin Trials
-- WebAssembly
-- WebRTC
+Areas are driven by the entries in `config/focus_areas.yaml`. When that configuration changes, the next pipeline run updates the staging digests and the navigation generator picks up the new set automatically. Recent additions such as `isolated-web-apps`, `enterprise`, and `devtools` therefore appear without code changes.
 
 ## Benefits
 
@@ -179,13 +178,14 @@ Planned improvements include:
 - Search functionality
 - Feature adoption timeline
 - Browser compatibility matrix
+- Collapse language forks so English/Chinese variants share directories (e.g., `css-en.md`, `css-zh.md`)
 
 ## Troubleshooting
 
 ### Missing Content
 If some versions or areas are missing:
-1. Check that source files exist in `upstream_docs/processed_releasenotes/`
-2. Run the clean data pipeline for missing versions
+1. Confirm the staged files exist in `digest_markdown/webplatform/[area]/chrome-[version]-stable-*.md`
+2. If they are absent, run the clean data pipeline to rebuild `digest_markdown/webplatform`
 3. Regenerate navigation with `--clean` flag
 
 ### Broken Links
