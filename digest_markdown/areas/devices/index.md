@@ -11,6 +11,10 @@ title: Devices Updates
 
 Track the evolution of Devices features across Chrome releases.
 
+Device APIs and sensor features
+
+
+
 ### Available Versions
 
 - [Chrome 139 **(Latest)**](./chrome-139.html)

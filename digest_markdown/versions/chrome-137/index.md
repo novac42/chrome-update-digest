@@ -9,13 +9,13 @@ title: Chrome 137 Release Notes
 
 ## Areas with Updates
 
-- [CSS](./css.html)
-- [Graphics & WebGPU](./graphics-webgpu.html)
-- [On-Device AI](./on-device-ai.html)
-- [Origin Trials](./origin-trials.html)
-- [Payment](./payment.html)
-- [Web APIs](./webapi.html)
-- [WebAssembly](./webassembly.html)
+- [CSS](./css.html) — CSS styling, layout, and UI features
+- [Graphics and WebGPU](./graphics-webgpu.html) — Graphics rendering and WebGPU features
+- [On-device AI](./on-device-ai.html) — On-device AI and LLM features
+- [Web API](./webapi.html) — Web APIs and browser interfaces
+- [Origin trials](./origin-trials.html) — Experimental features in origin trials
+- [WebAssembly](./webassembly.html) — WebAssembly runtime and tooling updates
+- [Payment](./payment.html) — Payment and payment-related features
 
 ## Navigation
 

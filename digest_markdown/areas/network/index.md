@@ -11,6 +11,10 @@ title: Network Updates
 
 Track the evolution of Network features across Chrome releases.
 
+Networking and connectivity features
+
+
+
 ### Available Versions
 
 - [Chrome 139 **(Latest)**](./chrome-139.html)

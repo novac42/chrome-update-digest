@@ -11,6 +11,10 @@ title: Performance Updates
 
 Track the evolution of Performance features across Chrome releases.
 
+Performance optimizations and improvements
+
+
+
 ### Available Versions
 
 - [Chrome 139 **(Latest)**](./chrome-139.html)

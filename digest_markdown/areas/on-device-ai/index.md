@@ -1,15 +1,19 @@
 ---
 layout: default
-title: On-Device AI Updates
+title: On-device AI Updates
 ---
 
-# On-Device AI Updates
+# On-device AI Updates
 
 [← Back to all areas](../)
 
 ## Version History
 
-Track the evolution of On-Device AI features across Chrome releases.
+Track the evolution of On-device AI features across Chrome releases.
+
+On-device AI and LLM features
+
+
 
 ### Available Versions
 

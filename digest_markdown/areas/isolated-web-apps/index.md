@@ -1,24 +1,23 @@
 ---
 layout: default
-title: PWA and service worker Updates
+title: Isolated Web Apps Updates
 ---
 
-# PWA and service worker Updates
+# Isolated Web Apps Updates
 
 [← Back to all areas](../)
 
 ## Version History
 
-Track the evolution of PWA and service worker features across Chrome releases.
+Track the evolution of Isolated Web Apps features across Chrome releases.
 
-Progressive Web Apps and service worker features
+Isolated Web Apps (IWAs) and related features
 
 
 
 ### Available Versions
 
 - [Chrome 140 **(Latest)**](./chrome-140.html)
-- [Chrome 138](./chrome-138.html)
 
 ## Navigation
 
