@@ -24,25 +24,25 @@ Provide a high-level summary (3-5 sentences) that:
 
 ### 2. Detailed Updates
 
-Introduce this section with a brief transition from the summary, then list each feature:
+Introduce this section with a brief transition from the summary, then list each feature. **Every feature must begin with an H3 heading in the exact format `### [Feature Title]`.** Supporting details can use H4 (`####`) or H5 (`#####`) headings inside the feature block.
 
 ```markdown
-### Detailed Updates
+## Detailed Updates
 
 [Brief introduction connecting to the summary above]
 
-#### [Feature Title]
+### [Feature Title]
 
-**What's New**:
+#### What's New
 [Concise description of what this feature enables]
 
-**Technical Details**:
+#### Technical Details
 [How it works technically, key implementation notes]
 
-**Use Cases**:
+#### Use Cases
 [Practical applications and developer benefits]
 
-**References**:
+#### References
 [All provided links - keep as-is]
 ```
 

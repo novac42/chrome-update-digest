@@ -10,6 +10,7 @@ from pathlib import Path
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
 import sys
 import os
+import yaml
 
 # Add parent directory to path for imports
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -541,64 +542,75 @@ Feature description
         assert truncated['features'][0]['content'].endswith('...')
     
     def test_validate_digest(self, tool):
-        """Test digest validation logic."""
-        yaml_data = {
-            'features': [
-                {
-                    'title': 'Feature One',
-                    'links': [{'url': 'https://example.com/1'}]
-                },
-                {
-                    'title': 'Feature Two',
-                    'links': [{'url': 'https://example.com/2'}]
-                }
-            ]
-        }
-        
-        # Valid digest
-        valid_digest = """# Chrome Digest
+        """Test digest validation logic with heading normalization and link limits."""
+        fixture_path = Path(__file__).parent / 'fixtures' / 'chrome-136-security-privacy.yml'
+        yaml_data = yaml.safe_load(fixture_path.read_text())
 
-### Feature One
-Description
-[Link](https://example.com/1)
+        valid_digest = """# Chrome 136 Security & Privacy Digest
 
-### Feature Two
-Description
-[Link](https://example.com/2)
+## Detailed Updates
+
+###    permissions policy reports for iframes   
+Chrome tightened iframe permissions.
+[Spec](https://w3c.github.io/webappsec-permissions-policy/#reporting)
+[Tracking bug #40941424](https://bugs.chromium.org/p/chromium/issues/detail?id=40941424)
+
+### Reduce fingerprinting in Accept—Language header information
+Accept-Language now sends the primary locale only.
+[ChromeStatus.com entry](https://chromestatus.com/feature/5042348942655488)
 """
-        
+
         result = tool._validate_digest(valid_digest, yaml_data)
         assert result['valid'] is True
-        assert len(result['missing_titles']) == 0
-        assert len(result['extra_links']) == 0
-        
-        # Invalid digest - missing features
-        invalid_digest = """# Chrome Digest
+        assert result['missing_titles'] == []
+        assert result['extra_links'] == []
 
-### Feature One
-[Link](https://example.com/1)
+        h4_digest = """# Chrome 136 Security & Privacy Digest
+
+## Detailed Updates
+
+#### Permissions Policy reports for iframes
+Details
+[Spec](https://w3c.github.io/webappsec-permissions-policy/#reporting)
+
+#### Reduce fingerprinting in Accept-Language header information
+Details
+[ChromeStatus.com entry](https://chromestatus.com/feature/5042348942655488)
 """
-        
-        result = tool._validate_digest(invalid_digest, yaml_data)
-        assert result['valid'] is False
-        assert 'Feature Two' in result['missing_titles']
-        
-        # Invalid digest - extra links
-        extra_link_digest = """# Chrome Digest
 
-### Feature One
-[Link](https://example.com/1)
+        fallback_result = tool._validate_digest(h4_digest, yaml_data)
+        assert fallback_result['valid'] is True
+        assert fallback_result['missing_titles'] == []
+
+        missing_digest = """# Chrome 136 Security & Privacy Digest
+
+## Detailed Updates
+
+### Permissions Policy reports for iframes
+[Spec](https://w3c.github.io/webappsec-permissions-policy/#reporting)
+"""
+
+        missing_result = tool._validate_digest(missing_digest, yaml_data)
+        assert missing_result['valid'] is False
+        assert 'Reduce fingerprinting in Accept-Language header information' in missing_result['missing_titles']
+
+        extra_link_digest = """# Chrome 136 Security & Privacy Digest
+
+## Detailed Updates
+
+### Permissions Policy reports for iframes
+[Spec](https://w3c.github.io/webappsec-permissions-policy/#reporting)
 [Extra](https://example.com/extra1)
 [Extra2](https://example.com/extra2)
 [Extra3](https://example.com/extra3)
 
-### Feature Two
-[Link](https://example.com/2)
+### Reduce fingerprinting in Accept-Language header information
+[ChromeStatus.com entry](https://chromestatus.com/feature/5042348942655488)
 """
-        
-        result = tool._validate_digest(extra_link_digest, yaml_data)
-        assert result['valid'] is False
-        assert len(result['extra_links']) > 2
+
+        extra_link_result = tool._validate_digest(extra_link_digest, yaml_data)
+        assert extra_link_result['valid'] is False
+        assert len(extra_link_result['extra_links']) > 2
     
     def test_validate_translation(self, tool):
         """Test translation validation."""

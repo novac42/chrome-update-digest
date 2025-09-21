@@ -1,0 +1,16 @@
+version: '136'
+channel: stable
+area: security-privacy
+statistics:
+  total_features: 2
+  total_links: 5
+features:
+  - title: Permissions Policy reports for iframes
+    links:
+      - url: https://bugs.chromium.org/p/chromium/issues/detail?id=40941424
+      - url: https://chromestatus.com/feature/5061997434142720
+      - url: https://w3c.github.io/webappsec-permissions-policy/#reporting
+  - title: Reduce fingerprinting in Accept-Language header information
+    links:
+      - url: https://bugs.chromium.org/p/chromium/issues/detail?id=1306905
+      - url: https://chromestatus.com/feature/5042348942655488
