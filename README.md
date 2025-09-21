@@ -112,9 +112,9 @@ python fast_mcp_server.py
   - Reuses existing digests when present; re-generates only if content is missing or `force_regenerate` is `true`
   - Parameters: `version`, `channel`, `language`, `force_regenerate`, `skip_clean`, `skip_digest`, `skip_validation`
   - `language` accepts `en`, `zh`, or `bilingual`
-    - `en` → updates `digest_markdown/versions/` & `digest_markdown/areas/`
-    - `zh` → updates `digest_markdown/versions-zh/` & `digest_markdown/areas-zh/`
-    - `bilingual` → refreshes both sets in one run (with separate pages per language)
+    - `en` → writes `*-en.md` pages inside `digest_markdown/versions/` and `digest_markdown/areas/`
+    - `zh` → writes `*-zh.md` pages in the same directories
+    - `bilingual` → refreshes both variants in one run (shared tree, language-suffixed leaves)
 
 ### Data Processing
 - **`split_features_by_heading`**: Split content by heading levels

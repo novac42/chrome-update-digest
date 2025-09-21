@@ -26,15 +26,14 @@ class GitHubPagesNavigationGenerator:
         self.channel = "stable"
         self.source_dir = self.base_path / "digest_markdown" / "webplatform"
         self.digest_dir = self.base_path / "digest_markdown"
-        self.versions_dir = self.digest_dir / "versions"  # default English output
+        self.versions_dir = self.digest_dir / "versions"
         self.areas_dir = self.digest_dir / "areas"
         self.language_configs: Dict[str, Dict[str, Path]] = {}
         for lang in self.languages:
-            suffix = "" if lang == "en" else f"-{lang}"
             self.language_configs[lang] = {
-                "versions_dir": self.digest_dir / f"versions{suffix}",
-                "areas_dir": self.digest_dir / f"areas{suffix}",
-                "index_path": self.digest_dir / ("index.md" if suffix == "" else f"index{suffix}.md")
+                "versions_dir": self.versions_dir,
+                "areas_dir": self.areas_dir,
+                "index_path": self.digest_dir / self.build_index_filename(lang)
             }
         
         # Area metadata sourced from config/focus_areas.yaml
@@ -45,6 +44,28 @@ class GitHubPagesNavigationGenerator:
         self.fallback_display_names = {
             "webrtc": "WebRTC"
         }
+
+    @staticmethod
+    def leaf_suffix(language: str) -> str:
+        """Return language suffix for leaf files (always includes language code)."""
+        return f"-{language}"
+
+    @staticmethod
+    def index_suffix(language: str) -> str:
+        """Return suffix for index files (English remains default index)."""
+        return "" if language == "en" else f"-{language}"
+
+    def build_leaf_filename(self, base: str, language: str, extension: str = "md") -> str:
+        """Construct filename for language-specific leaf content."""
+        return f"{base}{self.leaf_suffix(language)}.{extension}"
+
+    def build_index_filename(self, language: str, extension: str = "md") -> str:
+        """Construct filename for language-specific index pages."""
+        return f"index{self.index_suffix(language)}.{extension}"
+
+    def build_index_link(self, language: str, relative_prefix: str) -> str:
+        """Produce relative link to a language-specific index page."""
+        return f"{relative_prefix}{self.build_index_filename(language, 'html')}"
 
     @staticmethod
     def _trans(language: str, english: str, chinese: str) -> str:
@@ -262,18 +283,20 @@ title: {title}
             areas_count = len(version_areas[version])
             area_label = self.pluralize(areas_count, "area")
 
+            latest_index_link_en = f"./chrome-{version}/{self.build_index_filename('en', 'html')}"
+            latest_index_link_zh = f"./chrome-{version}/{self.build_index_filename('zh', 'html')}"
             english_line = (
-                f"- [Chrome {version}{en_latest_badge}](./chrome-{version}/) - "
+                f"- [Chrome {version}{en_latest_badge}]({latest_index_link_en}) - "
                 f"{areas_count} {area_label} with updates"
             )
             chinese_line = (
-                f"- [Chrome {version}{zh_latest_badge}](./chrome-{version}/) - "
+                f"- [Chrome {version}{zh_latest_badge}]({latest_index_link_zh}) - "
                 f"包含 {areas_count} 个更新领域"
             )
             index_lines.append(self._trans(language, english_line, chinese_line))
 
         index_lines.append("")
-        with open(versions_dir / "index.md", 'w', encoding='utf-8') as f:
+        with open(versions_dir / self.build_index_filename(language), 'w', encoding='utf-8') as f:
             f.write("\n".join(index_lines).rstrip() + "\n")
 
         for version in versions:
@@ -285,6 +308,8 @@ title: {title}
                 f"Chrome {version} Release Notes",
                 f"Chrome {version} 发布说明"
             )
+            back_to_versions_en = self.build_index_link('en', "../")
+            back_to_versions_zh = self.build_index_link('zh', "../")
             overview_lines = [
                 "---",
                 "layout: default",
@@ -293,7 +318,11 @@ title: {title}
                 "",
                 f"# {self._trans(language, f'Chrome {version} Release Notes', f'Chrome {version} 发布说明')}",
                 "",
-                self._trans(language, "[← Back to all versions](../)", "[← 返回所有版本](../)"),
+                self._trans(
+                    language,
+                    f"[← Back to all versions]({back_to_versions_en})",
+                    f"[← 返回所有版本]({back_to_versions_zh})"
+                ),
                 "",
                 f"## {self._trans(language, 'Areas with Updates', '包含更新的领域')}",
                 ""
@@ -306,12 +335,16 @@ title: {title}
                 description = self.get_area_description(area)
                 description_suffix = f" — {description}" if description else ""
 
-                english_bullet = f"- [{display_name}](./{area}.html){description_suffix}"
-                chinese_bullet = f"- [{display_name}](./{area}.html){description_suffix}"
+                english_bullet = (
+                    f"- [{display_name}](./{self.build_leaf_filename(area, 'en', 'html')}){description_suffix}"
+                )
+                chinese_bullet = (
+                    f"- [{display_name}](./{self.build_leaf_filename(area, 'zh', 'html')}){description_suffix}"
+                )
                 overview_lines.append(self._trans(language, english_bullet, chinese_bullet))
 
                 source_file = self.source_dir / area / f"chrome-{version}-{self.channel}-{language}.md"
-                dest_file = version_dir / f"{area}.md"
+                dest_file = version_dir / self.build_leaf_filename(area, language)
                 if not self.write_single_language_page(source_file, dest_file):
                     print(
                         f"Warning: missing digest for area '{area}' in Chrome {version} ({language}); "
@@ -328,8 +361,8 @@ title: {title}
                 overview_lines.append(
                     self._trans(
                         language,
-                        f"- [← Chrome {newer_version} (Newer)](../chrome-{newer_version}/)",
-                        f"- [← Chrome {newer_version}（较新版本）](../chrome-{newer_version}/)"
+                        f"- [← Chrome {newer_version} (Newer)]({self.build_index_link('en', f'../chrome-{newer_version}/')})",
+                        f"- [← Chrome {newer_version}（较新版本）]({self.build_index_link('zh', f'../chrome-{newer_version}/')})"
                     )
                 )
             if version_idx < len(versions) - 1:
@@ -337,17 +370,27 @@ title: {title}
                 overview_lines.append(
                     self._trans(
                         language,
-                        f"- [Chrome {older_version} (Older) →](../chrome-{older_version}/)",
-                        f"- [Chrome {older_version}（较旧版本） →](../chrome-{older_version}/)"
+                        f"- [Chrome {older_version} (Older) →]({self.build_index_link('en', f'../chrome-{older_version}/')})",
+                        f"- [Chrome {older_version}（较旧版本） →]({self.build_index_link('zh', f'../chrome-{older_version}/')})"
                     )
                 )
 
-            overview_lines.append(self._trans(language, "- [View all versions](../)", "- [查看全部版本](../)"))
             overview_lines.append(
-                self._trans(language, "- [Browse by feature area](../../areas/)", "- [按功能领域浏览](../../areas/)")
+                self._trans(
+                    language,
+                    f"- [View all versions]({self.build_index_link('en', '../')})",
+                    f"- [查看全部版本]({self.build_index_link('zh', '../')})"
+                )
+            )
+            overview_lines.append(
+                self._trans(
+                    language,
+                    f"- [Browse by feature area]({self.build_index_link('en', '../../areas/')})",
+                    f"- [按功能领域浏览]({self.build_index_link('zh', '../../areas/')})"
+                )
             )
 
-            with open(version_dir / "index.md", 'w', encoding='utf-8') as f:
+            with open(version_dir / self.build_index_filename(language), 'w', encoding='utf-8') as f:
                 f.write("\n".join(overview_lines).rstrip() + "\n")
 
 
@@ -388,15 +431,17 @@ title: {title}
             description_suffix = f" — {description}" if description else ""
 
             english_line = (
-                f"- [{display_name}](./{area}/) - Updates in {versions_count} {versions_label}{description_suffix}"
+                f"- [{display_name}](./{area}/{self.build_index_filename('en', 'html')}) - "
+                f"Updates in {versions_count} {versions_label}{description_suffix}"
             )
             chinese_line = (
-                f"- [{display_name}](./{area}/) - 在 {versions_count} 个版本中有更新{description_suffix}"
+                f"- [{display_name}](./{area}/{self.build_index_filename('zh', 'html')}) - "
+                f"在 {versions_count} 个版本中有更新{description_suffix}"
             )
             index_lines.append(self._trans(language, english_line, chinese_line))
 
         index_lines.append("")
-        with open(areas_dir / "index.md", 'w', encoding='utf-8') as f:
+        with open(areas_dir / self.build_index_filename(language), 'w', encoding='utf-8') as f:
             f.write("\n".join(index_lines).rstrip() + "\n")
 
         for area in areas:
@@ -408,6 +453,8 @@ title: {title}
             versions = sorted(area_versions[area], reverse=True)
 
             area_title = self._trans(language, f"{display_name} Updates", f"{display_name} 更新")
+            back_to_areas_en = self.build_index_link('en', "../")
+            back_to_areas_zh = self.build_index_link('zh', "../")
             hub_lines = [
                 "---",
                 "layout: default",
@@ -416,7 +463,11 @@ title: {title}
                 "",
                 f"# {self._trans(language, f'{display_name} Updates', f'{display_name} 更新')}",
                 "",
-                self._trans(language, "[← Back to all areas](../)", "[← 返回所有领域](../)"),
+                self._trans(
+                    language,
+                    f"[← Back to all areas]({back_to_areas_en})",
+                    f"[← 返回所有领域]({back_to_areas_zh})"
+                ),
                 "",
                 f"## {self._trans(language, 'Version History', '版本历史')}",
                 "",
@@ -440,12 +491,16 @@ title: {title}
                 en_badge = " **(Latest)**" if is_latest else ""
                 zh_badge = " **（最新）**" if is_latest else ""
 
-                english_line = f"- [Chrome {version}{en_badge}](./chrome-{version}.html)"
-                chinese_line = f"- [Chrome {version}{zh_badge}](./chrome-{version}.html)"
+                english_line = (
+                    f"- [Chrome {version}{en_badge}](./{self.build_leaf_filename(f'chrome-{version}', 'en', 'html')})"
+                )
+                chinese_line = (
+                    f"- [Chrome {version}{zh_badge}](./{self.build_leaf_filename(f'chrome-{version}', 'zh', 'html')})"
+                )
                 hub_lines.append(self._trans(language, english_line, chinese_line))
 
                 source_file = self.source_dir / area / f"chrome-{version}-{self.channel}-{language}.md"
-                dest_file = area_dir / f"chrome-{version}.md"
+                dest_file = area_dir / self.build_leaf_filename(f"chrome-{version}", language)
                 if not self.write_single_language_page(source_file, dest_file):
                     print(
                         f"Warning: missing digests for area '{area}' in Chrome {version} ({language}); skipping area detail copy."
@@ -454,12 +509,22 @@ title: {title}
             hub_lines.append("")
             hub_lines.append(f"## {self._trans(language, 'Navigation', '页面导航')}")
             hub_lines.append("")
-            hub_lines.append(self._trans(language, "- [View all feature areas](../)", "- [查看全部领域](../)"))
             hub_lines.append(
-                self._trans(language, "- [Browse by Chrome version](../../versions/)", "- [按 Chrome 版本浏览](../../versions/)")
+                self._trans(
+                    language,
+                    f"- [View all feature areas]({self.build_index_link('en', '../')})",
+                    f"- [查看全部领域]({self.build_index_link('zh', '../')})"
+                )
+            )
+            hub_lines.append(
+                self._trans(
+                    language,
+                    f"- [Browse by Chrome version]({self.build_index_link('en', '../../versions/')})",
+                    f"- [按 Chrome 版本浏览]({self.build_index_link('zh', '../../versions/')})"
+                )
             )
 
-            with open(area_dir / "index.md", 'w', encoding='utf-8') as f:
+            with open(area_dir / self.build_index_filename(language), 'w', encoding='utf-8') as f:
                 f.write("\n".join(hub_lines).rstrip() + "\n")
 
 
@@ -503,12 +568,15 @@ title: {title}
             areas_count = len(version_areas[version])
             area_label = self.pluralize(areas_count, "area")
 
+            version_link_en = self.build_index_link('en', f"./versions/chrome-{version}/")
+            version_link_zh = self.build_index_link('zh', f"./versions/chrome-{version}/")
+
             english_line = (
-                f"- [Chrome {version}{en_badge}](./versions/chrome-{version}/) - "
+                f"- [Chrome {version}{en_badge}]({version_link_en}) - "
                 f"{areas_count} {area_label} with updates"
             )
             chinese_line = (
-                f"- [Chrome {version}{zh_badge}](./versions/chrome-{version}/) - "
+                f"- [Chrome {version}{zh_badge}]({version_link_zh}) - "
                 f"包含 {areas_count} 个更新领域"
             )
             index_lines.append(self._trans(language, english_line, chinese_line))
@@ -516,8 +584,8 @@ title: {title}
         index_lines.append(
             self._trans(
                 language,
-                f"- [View all {len(versions)} versions →](./versions/)",
-                f"- [查看全部 {len(versions)} 个版本 →](./versions/)"
+                f"- [View all {len(versions)} versions →]({self.build_index_link('en', './versions/')})",
+                f"- [查看全部 {len(versions)} 个版本 →]({self.build_index_link('zh', './versions/')})"
             )
         )
         index_lines.append("")
@@ -539,18 +607,20 @@ title: {title}
             versions_label = self.pluralize(versions_count, "version")
 
             english_line = (
-                f"- [{display_name}](./areas/{area}/) - Updates in {versions_count} {versions_label}"
+                f"- [{display_name}](./areas/{area}/{self.build_index_filename('en', 'html')}) - "
+                f"Updates in {versions_count} {versions_label}"
             )
             chinese_line = (
-                f"- [{display_name}](./areas/{area}/) - 在 {versions_count} 个版本中有更新"
+                f"- [{display_name}](./areas/{area}/{self.build_index_filename('zh', 'html')}) - "
+                f"在 {versions_count} 个版本中有更新"
             )
             index_lines.append(self._trans(language, english_line, chinese_line))
 
         index_lines.append(
             self._trans(
                 language,
-                f"- [View all {len(areas)} feature areas →](./areas/)",
-                f"- [查看全部 {len(areas)} 个功能领域 →](./areas/)"
+                f"- [View all {len(areas)} feature areas →]({self.build_index_link('en', './areas/')})",
+                f"- [查看全部 {len(areas)} 个功能领域 →]({self.build_index_link('zh', './areas/')})"
             )
         )
         index_lines.append("")
@@ -563,8 +633,8 @@ title: {title}
         index_lines.append(
             self._trans(
                 language,
-                f"- **Latest Release**: [Chrome {latest_version}](./versions/chrome-{latest_version}/)",
-                f"- **最新版本**：[Chrome {latest_version}](./versions/chrome-{latest_version}/)"
+                f"- **Latest Release**: [Chrome {latest_version}]({self.build_index_link('en', f'./versions/chrome-{latest_version}/')})",
+                f"- **最新版本**：[Chrome {latest_version}]({self.build_index_link('zh', f'./versions/chrome-{latest_version}/')})"
             )
         )
         index_lines.append(
@@ -577,15 +647,15 @@ title: {title}
         index_lines.append(
             self._trans(
                 language,
-                "- **All Versions**: [Browse every release](./versions/)",
-                "- **全部版本**：[查看所有发布](./versions/)"
+                f"- **All Versions**: [Browse every release]({self.build_index_link('en', './versions/')})",
+                f"- **全部版本**：[查看所有发布]({self.build_index_link('zh', './versions/')})"
             )
         )
         index_lines.append(
             self._trans(
                 language,
-                "- **All Areas**: [Explore feature areas](./areas/)",
-                "- **全部领域**：[浏览功能领域](./areas/)"
+                f"- **All Areas**: [Explore feature areas]({self.build_index_link('en', './areas/')})",
+                f"- **全部领域**：[浏览功能领域]({self.build_index_link('zh', './areas/')})"
             )
         )
         index_lines.append(
@@ -655,12 +725,12 @@ title: {title}
             index_lines.append("")
             index_lines.append("## Other Languages")
             index_lines.append("")
-            index_lines.append("- [中文版](./index-zh.md)")
+            index_lines.append("- [中文版](./index-zh.html)")
         elif self.language_mode == 'bilingual' and language == 'zh':
             index_lines.append("")
             index_lines.append("## 其他语言")
             index_lines.append("")
-            index_lines.append("- [English](./index.md)")
+            index_lines.append("- [English](./index.html)")
 
         with open(config["index_path"], 'w', encoding='utf-8') as f:
             f.write("\n".join(index_lines).rstrip() + "\n")
