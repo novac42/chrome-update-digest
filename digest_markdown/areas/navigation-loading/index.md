@@ -17,7 +17,7 @@ Navigation and resource loading features
 
 ### Available Versions
 
-- [Chrome 139 **(Latest)**](./chrome-139.html)
+- [Chrome 136 **(Latest)**](./chrome-136.html)
 
 ## Navigation
 

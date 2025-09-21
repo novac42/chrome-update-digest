@@ -17,9 +17,7 @@ Security and privacy features
 
 ### Available Versions
 
-- [Chrome 139 **(Latest)**](./chrome-139.html)
-- [Chrome 138](./chrome-138.html)
-- [Chrome 136](./chrome-136.html)
+- [Chrome 136 **(Latest)**](./chrome-136.html)
 
 ## Navigation
 

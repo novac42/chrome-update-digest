@@ -17,8 +17,7 @@ Media, audio, and video features
 
 ### Available Versions
 
-- [Chrome 138 **(Latest)**](./chrome-138.html)
-- [Chrome 136](./chrome-136.html)
+- [Chrome 136 **(Latest)**](./chrome-136.html)
 
 ## Navigation
 

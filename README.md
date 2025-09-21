@@ -107,6 +107,11 @@ python fast_mcp_server.py
   - Parameters: `version`, `channel`, `focus_areas`, `language`, `target_area`
   - Focus areas: ai, webgpu, devices, css, security, performance
 
+### Site Publishing
+- **`generate_github_pages`**: Refresh `digest_markdown/versions` and area navigation
+  - Reuses existing digests when present; re-generates only if content is missing or `force_regenerate` is `true`
+  - Parameters: `version`, `channel`, `language`, `force_regenerate`, `skip_clean`, `skip_digest`, `skip_validation`
+
 ### Data Processing
 - **`split_features_by_heading`**: Split content by heading levels
 
