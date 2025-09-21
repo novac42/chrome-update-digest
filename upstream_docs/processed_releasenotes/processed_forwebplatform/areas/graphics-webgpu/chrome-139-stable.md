@@ -1,8 +1,6 @@
 # Graphics and WebGPU - Chrome 139
 
-## WebGPU Features
-
-### 3D texture support for BC and ASTC compressed formats
+## 3D texture support for BC and ASTC compressed formats
 
 The `"texture-compression-bc-sliced-3d"` and `"texture-compression-astc-sliced-3d"` WebGPU features add support for 3D textures using Block Compression (BC) and Adaptive Scalable Texture Compression (ASTC) formats. This lets you take advantage of the efficient compression capabilities of BC and ASTC formats for volumetric texture data, offering significant reductions in memory footprint and bandwidth requirements without substantial loss in visual quality. This is particularly valuable in fields such as scientific visualization, medical imaging, and advanced rendering techniques.
 
@@ -41,7 +39,7 @@ Explore 3D brain scans by checking out the [Volume Rendering - Texture 3D WebGPU
 ![3D brain scans rendered using WebGPU.](/static/blog/new-in-webgpu-139/image/brain-scans.png) A brain scan image from a 3D texture with ASTC compressed format.
 
 
-### New "core-features-and-limits" feature
+## New "core-features-and-limits" feature
 
 A new `"core-features-and-limits"` feature is being introduced for the upcoming WebGPU compatibility mode. This feature indicates that the adapter or device supports core features and limits of the WebGPU spec. "core" WebGPU is the only version available at the moment, so all WebGPU implementations must include `"core-features-and-limits"` in their supported features.
 
@@ -50,7 +48,7 @@ In the future, when WebGPU compatibility mode ships, an adapter or a device may 
 For a detailed explanation and usage in WebGPU compatibility mode, refer to the [explainer](https://gist.github.com/greggman/0dea9995e33393c546a4c2bd2a12e50e) and the following section. See [issue 418025721](https://issues.chromium.org/issues/418025721).
 
 
-### Origin trial for WebGPU compatibility mode
+## Origin trial for WebGPU compatibility mode
 
 WebGPU is a powerful API designed for modern graphics, aligning with technologies like Vulkan, Metal, and Direct3D 12. However, a significant number of devices still lack support for these newer APIs. For example, on Windows, 31% of Chrome users don't have Direct3D 11.1 or higher. On Android, 15% of Android users don't have Vulkan 1.1, including 10% who don't have Vulkan at all.
 
@@ -87,12 +85,12 @@ By default, [WebGPU compatibility mode](https://chromestatus.com/feature/6436406
 To enable it for all visitors to your app, an [origin trial](/origintrials#/view_trial/1489002626799370241) is underway and set to end in Chrome 145 (Apr 21, 2026). To participate in the trial, refer to the [Get started with origin trials](/docs/web-platform/origin-trials#take_part_in_an_origin_trial) post.
 
 
-### Dawn updates
+
+
+## Dawn updates
 
 A `message` argument is added to the `WGPUQueueWorkDoneCallback` function to be more consistent with other callback functions that take a status as well. See [webgpu-headers PR](https://github.com/webgpu-native/webgpu-headers/pull/528).
 
 When emdawnwebgpu is linked with `-sSHARED_MEMORY`, its webgpu.cpp file is also compiled with this flag. See [Dawn CL 244075](https://dawn-review.googlesource.com/c/dawn/+/244075).
 
 This covers only some of the key highlights. Check out the exhaustive [list of commits](https://dawn.googlesource.com/dawn/+log/chromium/7204..chromium/7258?n=1000).
-
-<!-- Deduplication: 4 → 4 features -->

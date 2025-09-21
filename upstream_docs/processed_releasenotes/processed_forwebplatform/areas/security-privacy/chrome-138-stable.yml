@@ -1,7 +1,7 @@
 version: '138'
 channel: stable
 area: security-privacy
-extraction_timestamp: '2025-09-21T15:05:40.476189'
+extraction_timestamp: '2025-09-21T15:28:01.595792'
 extraction_method: deterministic
 statistics:
   total_features: 1
@@ -22,7 +22,6 @@ features:
 
     **References:** [ChromeStatus.com entry](https://chromestatus.com/feature/5104518463627264) | [Spec](https://w3c.github.io/webappsec-csp/#integrityPolicy)'
   heading_path:
-  - Chrome 138 Release Notes
   - Security
   - Integrity Policy for scripts
   links:
@@ -32,7 +31,7 @@ features:
   - url: https://w3c.github.io/webappsec-csp/#integrityPolicy
     link_type: spec
     title: Spec
-  line_number: 123
+  line_number: 3
   primary_tags:
   - name: security
     priority: primary

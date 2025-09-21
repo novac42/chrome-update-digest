@@ -1,0 +1,35 @@
+version: '135'
+channel: stable
+area: other
+extraction_timestamp: '2025-09-21T15:26:56.528678'
+extraction_method: deterministic
+statistics:
+  total_features: 1
+  total_links: 1
+  primary_tags:
+    webgpu: 1
+  cross_cutting: {}
+features:
+- title: Allow viewports to extend past the render targets bounds
+  content: "The requirements for viewport validation have been relaxed to allow viewports to go beyond the render target boundaries.\
+    \ This is especially useful for drawing 2D elements such as UI that may extend outside the current viewport. See [issue\
+    \ 390162929](https://issues.chromium.org/issues/390162929).\n    \n    \n    const passEncoder = myCommandEncoder.beginRenderPass({\n\
+    \      colorAttachments: [\n        {\n          view: myColorTexture.createView(),\n          loadOp: \"clear\",\n  \
+    \        storeOp: \"store\",\n        },\n      ],\n    });\n    \n    // Set a viewport that extends past the render\
+    \ target's bounds by 8 pixels\n    // in all directions.\n    passEncoder.setViewport(\n      /*x=*/ -8,\n      /*y=*/\
+    \ -8,\n      /*width=*/ myColorTexture.width + 16,\n      /*height=*/ myColorTexture.height + 16,\n      /*minDepth=*/\
+    \ 0,\n      /*maxDepth=*/ 1,\n    );\n    \n    // Draw geometry and complete the render pass as usual."
+  heading_path:
+  - Graphics and WebGPU - Chrome 135
+  - Allow viewports to extend past the render targets bounds
+  links:
+  - url: https://issues.chromium.org/issues/390162929
+    link_type: other
+    title: issue 390162929
+  line_number: 23
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []

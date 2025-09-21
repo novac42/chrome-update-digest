@@ -1,0 +1,70 @@
+version: '136'
+channel: stable
+area: security-privacy
+extraction_timestamp: '2025-09-21T15:27:14.323066'
+extraction_method: deterministic
+statistics:
+  total_features: 2
+  total_links: 5
+  primary_tags:
+    security: 2
+  cross_cutting:
+    privacy: 2
+    enterprise: 1
+features:
+- title: Permissions Policy reports for iframes
+  content: 'Introduces a new violation type called "Potential Permissions Policy violation", which will only look at Permissions
+    Policy (including report-only policy) and the allow attribute set in iframes to detect the conflict between Permissions
+    Policy enforced versus permissions propagated to iframes.
+
+
+    **References:** [Tracking bug #40941424](https://bugs.chromium.org/p/chromium/issues/detail?id=40941424) | [ChromeStatus.com
+    entry](https://chromestatus.com/feature/5061997434142720) | [Spec](https://w3c.github.io/webappsec-permissions-policy/#reporting)'
+  heading_path:
+  - Privacy and security
+  - Permissions Policy reports for iframes
+  links:
+  - url: https://bugs.chromium.org/p/chromium/issues/detail?id=40941424
+    link_type: tracking_bug
+    title: 'Tracking bug #40941424'
+  - url: https://chromestatus.com/feature/5061997434142720
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://w3c.github.io/webappsec-permissions-policy/#reporting
+    link_type: spec
+    title: Spec
+  line_number: 3
+  primary_tags:
+  - name: security
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+  - enterprise
+- title: Reduce fingerprinting in Accept-Language header information
+  content: 'Reduces the amount of information the Accept-Language header value string exposes in HTTP requests and in `navigator.languages`.
+    Instead of sending a full list of the user''s preferred languages on every HTTP request, Chrome now sends the user''s
+    most preferred language in the Accept-Language header.
+
+
+    **References:** [Tracking bug #1306905](https://bugs.chromium.org/p/chromium/issues/detail?id=1306905) | [ChromeStatus.com
+    entry](https://chromestatus.com/feature/5042348942655488)'
+  heading_path:
+  - Privacy and security
+  - Reduce fingerprinting in Accept-Language header information
+  links:
+  - url: https://bugs.chromium.org/p/chromium/issues/detail?id=1306905
+    link_type: tracking_bug
+    title: 'Tracking bug #1306905'
+  - url: https://chromestatus.com/feature/5042348942655488
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 9
+  primary_tags:
+  - name: security
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy

@@ -1,0 +1,122 @@
+version: '136'
+channel: stable
+area: origin-trials
+extraction_timestamp: '2025-09-21T15:27:14.317972'
+extraction_method: deterministic
+statistics:
+  total_features: 3
+  total_links: 10
+  primary_tags:
+    origin-trials: 3
+    devices: 1
+    performance: 1
+  cross_cutting:
+    privacy: 2
+features:
+- title: 'Audio Output Devices API: setDefaultSinkId()'
+  content: 'This feature adds `setDefaultSinkId()` to `MediaDevices`, which enables the top-level frame to change the default
+    audio output device used by its subframes.
+
+
+    **References:** [Origin Trial](https://developer.chrome.com/origintrials/#/trials/active) | [ChromeStatus.com entry](https://chromestatus.com/feature/5066644096548864)
+    | [Spec](https://webaudio.github.io/web-audio-api/#dom-mediadevices-setdefaultsinkid)'
+  heading_path:
+  - Origin trials
+  - 'Audio Output Devices API: setDefaultSinkId()'
+  links:
+  - url: https://developer.chrome.com/origintrials/#/trials/active
+    link_type: other
+    title: Origin Trial
+  - url: https://chromestatus.com/feature/5066644096548864
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://webaudio.github.io/web-audio-api/#dom-mediadevices-setdefaultsinkid
+    link_type: github
+    title: Spec
+  line_number: 3
+  primary_tags:
+  - name: origin-trials
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: devices
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
+- title: Enable web applications to understand bimodal performance timings
+  content: 'Web applications may suffer from bimodal distribution in page load performance, due to factors outside of the
+    web application''s control. For example:
+
+    - When a user agent first launches (a "cold start" scenario), it must perform many expensive initialization tasks that
+    compete for resources on the system.
+
+    - Browser extensions can affect the performance of a website. For instance, some extensions run additional code on every
+    page you visit, which can increase CPU usage and result in slower response times.
+
+    - When a machine is busy performing intensive tasks, it can lead to slower loading of web pages.
+
+
+    A new `confidence` field on the `PerformanceNavigationTiming` object will enable developers to discern if the navigation
+    timings are representative for their web application.
+
+
+    **References:** [Origin Trial](https://developer.chrome.com/origintrials/#/trials/active) | [Tracking bug #1413848](https://bugs.chromium.org/p/chromium/issues/detail?id=1413848)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5037395062800384) | [Spec](https://w3c.github.io/navigation-timing/)'
+  heading_path:
+  - Origin trials
+  - Enable web applications to understand bimodal performance timings
+  links:
+  - url: https://developer.chrome.com/origintrials/#/trials/active
+    link_type: other
+    title: Origin Trial
+  - url: https://bugs.chromium.org/p/chromium/issues/detail?id=1413848
+    link_type: tracking_bug
+    title: 'Tracking bug #1413848'
+  - url: https://chromestatus.com/feature/5037395062800384
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://w3c.github.io/navigation-timing/
+    link_type: spec
+    title: Spec
+  line_number: 9
+  primary_tags:
+  - name: origin-trials
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: performance
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Update of Canvas text rendering implementation
+  content: 'This is not a web-exposed change. The implementation of `CanvasRenderingContext2D` `measureText()`, `fillText()`,
+    and `strokeText()` has a drastic change. This might affect performance, so we''d like to run an origin trial so canvas-heavy
+    applications can try out the new implementation.
+
+
+    **References:** [Origin Trial](https://developer.chrome.com/origintrials/#/trials/active) | [Tracking bug #389726691](https://bugs.chromium.org/p/chromium/issues/detail?id=389726691)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5104000067985408)'
+  heading_path:
+  - Origin trials
+  - Update of Canvas text rendering implementation
+  links:
+  - url: https://developer.chrome.com/origintrials/#/trials/active
+    link_type: other
+    title: Origin Trial
+  - url: https://bugs.chromium.org/p/chromium/issues/detail?id=389726691
+    link_type: tracking_bug
+    title: 'Tracking bug #389726691'
+  - url: https://chromestatus.com/feature/5104000067985408
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 20
+  primary_tags:
+  - name: origin-trials
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
