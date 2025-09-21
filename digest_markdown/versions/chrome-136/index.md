@@ -14,14 +14,15 @@ title: Chrome 136 Release Notes
 - [Graphics and WebGPU](./graphics-webgpu.html) — Graphics rendering and WebGPU features
 - [Web API](./webapi.html) — Web APIs and browser interfaces
 - [Origin trials](./origin-trials.html) — Experimental features in origin trials
-- [Deprecations](./deprecations.html) — Deprecated and removed features
 - [Security-Privacy](./security-privacy.html) — Security and privacy features
+- [Navigation-Loading](./navigation-loading.html) — Navigation and resource loading features
 - [Multimedia](./multimedia.html) — Media, audio, and video features
+- [Performance](./performance.html) — Performance optimizations and improvements
+- [Devices](./devices.html) — Device APIs and sensor features
 - [Identity](./identity.html) — Identity, sign-in, and account features
 - [Browser changes](./browser-changes.html) — Platform-level browser behavior updates
 
 ## Navigation
 
-- [← Chrome 137 (Newer)](../chrome-137/)
 - [View all versions](../)
 - [Browse by feature area](../../areas/)

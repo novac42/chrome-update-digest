@@ -11,28 +11,26 @@ Comprehensive release notes for Chrome web platform features, organized for easy
 
 Explore what's new in each Chrome release:
 
-- [Chrome 140 **(Latest Stable)**](./versions/chrome-140/) - 8 areas with updates
-- [Chrome 139](./versions/chrome-139/) - 14 areas with updates
-- [Chrome 138](./versions/chrome-138/) - 11 areas with updates
-- [View all 5 versions →](./versions/)
+- [Chrome 136 **(Latest Stable)**](./versions/chrome-136/) - 12 areas with updates
+- [View all 1 versions →](./versions/)
 
 
 ## Browse by Feature Area
 
 Track the evolution of specific features across Chrome versions:
 
-- [CSS](./areas/css/) - Updates in 5 versions
-- [Graphics and WebGPU](./areas/graphics-webgpu/) - Updates in 5 versions
-- [Web API](./areas/webapi/) - Updates in 5 versions
-- [Origin trials](./areas/origin-trials/) - Updates in 4 versions
-- [Deprecations](./areas/deprecations/) - Updates in 4 versions
-- [View all 21 feature areas →](./areas/)
+- [CSS](./areas/css/) - Updates in 1 version
+- [HTML-DOM](./areas/html-dom/) - Updates in 1 version
+- [Graphics and WebGPU](./areas/graphics-webgpu/) - Updates in 1 version
+- [Web API](./areas/webapi/) - Updates in 1 version
+- [Origin trials](./areas/origin-trials/) - Updates in 1 version
+- [View all 12 feature areas →](./areas/)
 
 
 ## Quick Links
 
-- **Latest Release**: [Chrome 140](./versions/chrome-140/)
-- **Most Active Areas**: CSS, Graphics and WebGPU, Web API
+- **Latest Release**: [Chrome 136](./versions/chrome-136/)
+- **Most Active Areas**: CSS, HTML-DOM, Graphics and WebGPU
 - **All Versions**: [Browse every release](./versions/)
 - **All Areas**: [Explore feature areas](./areas/)
 - **Search**: Use browser search (Ctrl+F) on any page

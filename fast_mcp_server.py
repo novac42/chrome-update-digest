@@ -210,12 +210,16 @@ async def generate_github_pages(
     language: str = "bilingual",
     force_regenerate: bool = False,
     skip_clean: bool = False,
-    skip_digest: bool = True,
+    skip_digest: bool = False,
     skip_validation: bool = False,
     target_area: Optional[str] = None,
     debug: bool = False
 ) -> str:
-    """Orchestrate digest generation, navigation refresh, and validation."""
+    """Orchestrate digest generation, navigation refresh, and validation.
+
+    Reuses existing per-area digests when available, and only re-runs the
+    sampling pipeline when outputs are missing or force_regenerate is true.
+    """
 
     return await github_pages_orchestrator.run(
         ctx,

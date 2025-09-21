@@ -16,9 +16,14 @@ except ImportError:  # pragma: no cover - optional dependency
     yaml = None
 
 class GitHubPagesNavigationGenerator:
-    def __init__(self, base_path: str = "."):
+    def __init__(self, base_path: str = ".", language: str = "en"):
         self.base_path = Path(base_path)
-        self.source_dir = self.base_path / "upstream_docs/processed_releasenotes/processed_forwebplatform/areas"
+        normalized_language = (language or "en").lower()
+        if normalized_language not in {"en", "zh"}:
+            normalized_language = "en"
+        self.language = normalized_language
+        self.channel = "stable"
+        self.source_dir = self.base_path / "digest_markdown" / "webplatform"
         self.digest_dir = self.base_path / "digest_markdown"
         self.versions_dir = self.digest_dir / "versions"
         self.areas_dir = self.digest_dir / "areas"
@@ -144,24 +149,27 @@ class GitHubPagesNavigationGenerator:
         if not self.source_dir.exists():
             print(f"Source directory {self.source_dir} does not exist")
             return version_areas, area_versions
-            
+
+        pattern = re.compile(
+            rf"chrome-(\d+)-(\w+)-{re.escape(self.language)}\.md$"
+        )
+
         for area_dir in self.source_dir.iterdir():
             if not area_dir.is_dir():
                 continue
-                
+
             area_name = area_dir.name
-            
-            for md_file in area_dir.glob("chrome-*.md"):
-                # Parse version from filename (chrome-139-stable.md)
-                match = re.match(r'chrome-(\d+)-(\w+)\.md', md_file.name)
-                if match:
-                    version = match.group(1)
-                    channel = match.group(2)
-                    
-                    # For now, focus on stable channel
-                    if channel == 'stable':
-                        version_areas[version].add(area_name)
-                        area_versions[area_name].add(version)
+
+            for md_file in area_dir.glob(f"chrome-*-{self.language}.md"):
+                match = pattern.match(md_file.name)
+                if not match:
+                    continue
+
+                version, channel = match.groups()
+
+                if channel == self.channel:
+                    version_areas[version].add(area_name)
+                    area_versions[area_name].add(version)
                         
         return dict(version_areas), dict(area_versions)
     
@@ -258,9 +266,13 @@ title: Chrome {version} Release Notes
                 overview_content += f"- [{display_name}](./{area}.html){description_suffix}\n"
                 
                 # Copy area content to version directory
-                source_file = self.source_dir / area / f"chrome-{version}-stable.md"
+                source_file = self.source_dir / area / f"chrome-{version}-{self.channel}-{self.language}.md"
                 dest_file = version_dir / f"{area}.md"
-                self.copy_content_file(source_file, dest_file)
+                if not self.copy_content_file(source_file, dest_file):
+                    print(
+                        f"Warning: missing digest for area '{area}' in Chrome {version} "
+                        f"({self.language}); navigation entry will reference existing summaries only."
+                    )
                 
             # Add navigation links
             overview_content += "\n## Navigation\n\n"
@@ -352,9 +364,13 @@ Track the evolution of {display_name} features across Chrome releases.
                 hub_content += f"- [Chrome {version}{latest_badge}](./chrome-{version}.html)\n"
                 
                 # Copy version content to area directory
-                source_file = self.source_dir / area / f"chrome-{version}-stable.md"
+                source_file = self.source_dir / area / f"chrome-{version}-{self.channel}-{self.language}.md"
                 dest_file = area_dir / f"chrome-{version}.md"
-                self.copy_content_file(source_file, dest_file)
+                if not self.copy_content_file(source_file, dest_file):
+                    print(
+                        f"Warning: missing digest for area '{area}' in Chrome {version} "
+                        f"({self.language}); skipping area detail copy."
+                    )
                 
             # Add navigation
             hub_content += "\n## Navigation\n\n"
@@ -498,11 +514,8 @@ New Chrome stable releases are typically published every 4 weeks. This site is u
                 f.write("\n".join(content_lines) + "\n")
             
     def clean_old_structure(self):
-        """Clean up old webplatform directory if it exists."""
-        old_dir = self.digest_dir / "webplatform"
-        if old_dir.exists():
-            print(f"Removing old webplatform directory: {old_dir}")
-            shutil.rmtree(old_dir)
+        """Preserve source digests for reuse in future runs."""
+        print("Preserving digest_markdown/webplatform for subsequent orchestrations")
             
     def run(self):
         """Execute the complete migration."""
@@ -513,8 +526,8 @@ New Chrome stable releases are typically published every 4 weeks. This site is u
         version_areas, area_versions = self.scan_content()
         
         if not version_areas:
-            print("No content found to process")
-            return
+            print(f"No digest content found for language '{self.language}'")
+            return False
             
         print(f"Found {len(version_areas)} versions and {len(area_versions)} areas")
         
@@ -541,8 +554,9 @@ New Chrome stable releases are typically published every 4 weeks. This site is u
         print("\nGeneration complete!")
         print(f"- Versions: {', '.join(sorted(version_areas.keys(), reverse=True))}")
         print(f"- Areas: {len(area_versions)} total")
+        print(f"- Language: {self.language}")
         print(f"- Output: {self.digest_dir}")
-        
+
         return True
 
 
@@ -553,10 +567,22 @@ def main():
     parser = argparse.ArgumentParser(description='Generate GitHub Pages navigation for Chrome Release Digests')
     parser.add_argument('--base-path', default='.', help='Base path of the project')
     parser.add_argument('--clean', action='store_true', help='Clean existing structure before generating')
-    
+    parser.add_argument(
+        '--language',
+        default='en',
+        choices=['en', 'zh', 'bilingual'],
+        help='Language variant to use as the source for navigation content'
+    )
+
     args = parser.parse_args()
-    
-    generator = GitHubPagesNavigationGenerator(args.base_path)
+
+    selected_language = args.language.lower()
+    if selected_language == 'bilingual':
+        # Navigation scaffolding requires a single language source; default to English.
+        selected_language = 'en'
+        print("Using English digests as navigation source for bilingual content")
+
+    generator = GitHubPagesNavigationGenerator(args.base_path, selected_language)
     
     if args.clean:
         print("Cleaning existing structure...")
