@@ -569,7 +569,6 @@ YAML Data:
                     ctx.sample(
                         messages=messages,
                         system_prompt=system_prompt,  # Pass as separate parameter
-                        model_preferences=["claude-4-sonnet", "gpt5"],
                         temperature=0.7,
                         max_tokens=max_tokens  # Now configurable via environment
                     ),
