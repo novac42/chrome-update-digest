@@ -13,8 +13,6 @@ Track the evolution of Multimedia features across Chrome releases.
 
 Media, audio, and video features
 
-
-
 ### Available Versions
 
 - [Chrome 136 **(Latest)**](./chrome-136.html)

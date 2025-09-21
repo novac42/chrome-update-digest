@@ -111,6 +111,10 @@ python fast_mcp_server.py
 - **`generate_github_pages`**: Refresh `digest_markdown/versions` and area navigation
   - Reuses existing digests when present; re-generates only if content is missing or `force_regenerate` is `true`
   - Parameters: `version`, `channel`, `language`, `force_regenerate`, `skip_clean`, `skip_digest`, `skip_validation`
+  - `language` accepts `en`, `zh`, or `bilingual`
+    - `en` → updates `digest_markdown/versions/` & `digest_markdown/areas/`
+    - `zh` → updates `digest_markdown/versions-zh/` & `digest_markdown/areas-zh/`
+    - `bilingual` → refreshes both sets in one run (with separate pages per language)
 
 ### Data Processing
 - **`split_features_by_heading`**: Split content by heading levels

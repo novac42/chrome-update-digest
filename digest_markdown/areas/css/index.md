@@ -13,8 +13,6 @@ Track the evolution of CSS features across Chrome releases.
 
 CSS styling, layout, and UI features
 
-
-
 ### Available Versions
 
 - [Chrome 136 **(Latest)**](./chrome-136.html)

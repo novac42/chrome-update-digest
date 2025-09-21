@@ -14,7 +14,6 @@ Explore what's new in each Chrome release:
 - [Chrome 136 **(Latest Stable)**](./versions/chrome-136/) - 12 areas with updates
 - [View all 1 versions →](./versions/)
 
-
 ## Browse by Feature Area
 
 Track the evolution of specific features across Chrome versions:
@@ -25,7 +24,6 @@ Track the evolution of specific features across Chrome versions:
 - [Web API](./areas/webapi/) - Updates in 1 version
 - [Origin trials](./areas/origin-trials/) - Updates in 1 version
 - [View all 12 feature areas →](./areas/)
-
 
 ## Quick Links
 
@@ -52,3 +50,7 @@ New Chrome stable releases are typically published every 4 weeks. This site is u
 ---
 
 *Generated from [Chrome Release Notes](https://developer.chrome.com/release-notes/)*
+
+## Other Languages
+
+- [中文版](./index-zh.md)

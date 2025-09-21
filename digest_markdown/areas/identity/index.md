@@ -13,8 +13,6 @@ Track the evolution of Identity features across Chrome releases.
 
 Identity, sign-in, and account features
 
-
-
 ### Available Versions
 
 - [Chrome 136 **(Latest)**](./chrome-136.html)
