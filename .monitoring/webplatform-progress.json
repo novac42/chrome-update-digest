@@ -20,7 +20,7 @@
     "webapi"
   ],
   "total_areas": 12,
-  "completed_areas": 11,
+  "completed_areas": 12,
   "per_area": {
     "browser-changes": {
       "en": "done",
@@ -90,10 +90,13 @@
     },
     "webapi": {
       "en": "done",
-      "zh": "in_progress",
-      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/webapi/chrome-136-stable-en.md"
+      "zh": "done",
+      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/webapi/chrome-136-stable-en.md",
+      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/webapi/chrome-136-stable-zh.md"
     }
   },
-  "started_at": "2025-09-21T15:51:57.706731",
-  "updated_at": "2025-09-21T15:55:29.684133"
+  "started_at": "2025-09-21T21:12:38.519430",
+  "updated_at": "2025-09-21T21:15:48.623437",
+  "completed_at": "2025-09-21T21:15:48.623380",
+  "total_time_seconds": 190.10362005233765
 }

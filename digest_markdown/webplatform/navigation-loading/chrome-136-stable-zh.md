@@ -1,10 +1,30 @@
-# Chrome 136 导航加载摘要（备用版本）
-> LLM 生成失败：LLM 生成未通过验证。以下是原始功能列表。
+# Chrome 136 导航加载更新
 
-## 功能
+## 领域摘要
 
-### Incorporate navigation initiator into the HTTP cache partition key（将导航发起者纳入 HTTP 缓存分区键）
-链接：
-- [跟踪问题 #398784714](https://bugs.chromium.org/p/chromium/issues/detail?id=398784714)
+Chrome 136 为导航加载领域引入了一项重要的安全增强功能，更新了 HTTP 缓存分区键以纳入导航发起者信息。此更改通过防止恶意网站通过顶级导航操作利用缓存资源来加强浏览器对跨站泄漏攻击的防御。此更新体现了 Chrome 在保持 HTTP 缓存性能优势的同时持续改进 Web 安全性的承诺。这一以安全为重点的增强功能展示了现代浏览器如何不断发展以应对针对导航和资源加载机制的复杂攻击向量。
+
+## 详细更新
+
+基于上述安全改进，Chrome 136 提供了一项针对性增强功能，解决了跨不同导航上下文访问缓存资源方式中的关键漏洞。
+
+### Incorporate navigation initiator into the HTTP cache partition key
+
+#### 新功能
+Chrome 的 HTTP 缓存键方案现在包含一个 `is-cross-site-main-frame-navigation` 布尔标志，以防止利用顶级导航模式的跨站泄漏攻击。此增强功能为浏览器的缓存机制增加了额外的安全层，而不会影响性能。
+
+#### 技术细节
+更新的缓存分区键包含导航上下文信息，以区分同站和跨站主框架导航。当发生跨站导航时，缓存分区会被修改以防止攻击者访问可能泄漏敏感信息的缓存资源。此实现遵循 HTTP 缓存规范，同时添加了以前未强制执行的安全边界。
+
+#### 使用场景
+此安全增强功能保护用户免受恶意网站试图进行以下攻击的威胁：
+- 发起跨站导航以探测缓存资源
+- 利用缓存命中的时间差异来推断用户浏览历史
+- 通过基于导航的攻击访问其他源的缓存内容
+
+开发者无需修改现有代码即可从这种自动保护中受益，因为安全增强功能在 Chrome 的导航和缓存系统内透明运行。
+
+#### 参考资料
+- [跟踪错误 #398784714](https://bugs.chromium.org/p/chromium/issues/detail?id=398784714)
 - [ChromeStatus.com 条目](https://chromestatus.com/feature/5108419906535424)
 - [规范](https://httpwg.org/specs/rfc9110.html#caching)
