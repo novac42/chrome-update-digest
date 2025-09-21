@@ -1,0 +1,40 @@
+version: '136'
+channel: stable
+area: browser-changes
+extraction_timestamp: '2025-09-21T15:27:14.336667'
+extraction_method: deterministic
+statistics:
+  total_features: 1
+  total_links: 2
+  primary_tags:
+    browser-changes: 1
+  cross_cutting:
+    privacy: 1
+features:
+- title: Fluent scrollbars
+  content: 'This feature modernizes the Chromium scrollbars (both overlay and non-overlay) on Windows and Linux to fit the
+    Windows 11 Fluent design language. Non-overlay Fluent scrollbars will be enabled by default in Linux and Windows. This
+    change applies to Linux as well because Chromium''s Linux scrollbar design has historically been aligned with what ships
+    on Windows. How to expose enabling overlay Fluent scrollbars is still being decided.
+
+
+    **References:** [Tracking bug #1292117](https://bugs.chromium.org/p/chromium/issues/detail?id=1292117) | [ChromeStatus.com
+    entry](https://chromestatus.com/feature/5023688844812288)'
+  heading_path:
+  - Browser changes
+  - Fluent scrollbars
+  links:
+  - url: https://bugs.chromium.org/p/chromium/issues/detail?id=1292117
+    link_type: tracking_bug
+    title: 'Tracking bug #1292117'
+  - url: https://chromestatus.com/feature/5023688844812288
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 3
+  primary_tags:
+  - name: browser-changes
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy

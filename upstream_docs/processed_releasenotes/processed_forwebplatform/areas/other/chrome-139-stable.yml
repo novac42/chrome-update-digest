@@ -1,39 +1,38 @@
 version: '139'
 channel: stable
 area: other
-extraction_timestamp: '2025-09-03T16:38:58.950336'
+extraction_timestamp: '2025-09-21T15:28:14.203028'
 extraction_method: deterministic
 statistics:
   total_features: 1
-  total_links: 2
+  total_links: 1
   primary_tags:
-    network: 1
+    webgpu: 1
   cross_cutting:
-    privacy: 1
+    webgpu: 1
 features:
-- title: Reduce fingerprinting in Accept-Language header information
-  content: 'Reduces the amount of information the `Accept-Language` header value string exposes in HTTP requests and in `navigator.languages`.
-    Instead of sending a full list of the user''s preferred languages on every HTTP request using the `Accept-Language` header,
-    Chrome only sends the user''s most preferred language.
+- title: Enable the feature
+  content: 'By default, [WebGPU compatibility mode](https://chromestatus.com/feature/6436406437871616) is not enabled in Chrome,
+    but it can be experimented with in Chrome 139 by explicitly enabling the functionality. You can activate it locally by
+    enabling the "Experimental Web Platform Features" [flag](/docs/web-platform/chrome-flags#chromeflags) at `chrome://flags/#enable-experimental-web-platform-features`.
 
 
-    [Tracking bug #1306905](https://issues.chromium.org/issues/1306905) | [ChromeStatus.com entry](https://chromestatus.com/feature/5188040623390720)'
+    To enable it for all visitors to your app, an [origin trial](/origintrials#/view_trial/1489002626799370241) is underway
+    and set to end in Chrome 145 (Apr 21, 2026). To participate in the trial, refer to the [Get started with origin trials](/docs/web-platform/origin-trials#take_part_in_an_origin_trial)
+    post.'
   heading_path:
-  - Chrome 139
-  - Network
-  - Reduce fingerprinting in Accept-Language header information
+  - Graphics and WebGPU - Chrome 139
+  - Origin trial for WebGPU compatibility mode
+  - Enable the feature
   links:
-  - url: https://issues.chromium.org/issues/1306905
-    link_type: other
-    title: 'Tracking bug #1306905'
-  - url: https://chromestatus.com/feature/5188040623390720
+  - url: https://chromestatus.com/feature/6436406437871616
     link_type: chromestatus
-    title: ChromeStatus.com entry
-  line_number: 146
+    title: WebGPU compatibility mode
+  line_number: 81
   primary_tags:
-  - name: network
-    priority: primary
+  - name: webgpu
+    priority: secondary
     source: heading
     confidence: 1.0
   cross_cutting_concerns:
-  - privacy
+  - webgpu

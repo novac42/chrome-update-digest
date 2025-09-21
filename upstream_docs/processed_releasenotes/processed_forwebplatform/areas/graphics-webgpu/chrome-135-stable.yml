@@ -1,0 +1,135 @@
+version: '135'
+channel: stable
+area: graphics-webgpu
+extraction_timestamp: '2025-09-21T15:26:56.523752'
+extraction_method: deterministic
+statistics:
+  total_features: 4
+  total_links: 11
+  primary_tags:
+    webgpu: 4
+  cross_cutting:
+    webgpu: 4
+    enterprise: 1
+features:
+- title: Allow creating pipeline layout with null bind group layout
+  content: "Previously, creating an empty bind group layout required adding a bind group with zero bindings, which was inconvenient.\
+    \ This is no longer necessary as null bind group layouts are now allowed and ignored when creating a pipeline layout.\
+    \ This should make development easier.\n\nFor example, you might want to create a pipeline that uses only bind group layouts\
+    \ 0 and 2. You could assign bind group layout 1 to fragment data and bind group layout 2 to vertex data, and then render\
+    \ without a fragment shader. See [issue 377836524](https://issues.chromium.org/issues/377836524).\n    \n    \n    const\
+    \ bgl0 = myDevice.createBindGroupLayout({ entries: myGlobalEntries });\n    const bgl1 = myDevice.createBindGroupLayout({\
+    \ entries: myFragmentEntries });\n    const bgl2 = myDevice.createBindGroupLayout({ entries: myVertexEntries });\n   \
+    \ \n    // Create a pipeline layout that will be used to render without a fragment shader.\n    const myPipelineLayout\
+    \ = myDevice.createPipelineLayout({\n      bindGroupLayouts: [bgl0, null, bgl2],\n    });"
+  heading_path:
+  - Graphics and WebGPU - Chrome 135
+  - Allow creating pipeline layout with null bind group layout
+  links:
+  - url: https://issues.chromium.org/issues/377836524
+    link_type: other
+    title: issue 377836524
+  line_number: 5
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Easier access to the experimental compatibility mode on Android
+  content: "The `chrome://flags/#enable-unsafe-webgpu` flag alone now enables all capabilities required for the experimental\
+    \ [WebGPU compatibility mode](/blog/new-in-webgpu-122#expand_reach_with_compatibility_mode_feature_in_development) on\
+    \ Android. With that, you can request a GPUAdapter in compatibility mode with the `featureLevel: \"compatibility\"` option\
+    \ and even get access to the OpenGL ES backend on devices lacking support for Vulkan. See the following example and issue\
+    \ [dawn:389876644](https://issues.chromium.org/issues/389876644).\n    \n    \n    // Request a GPUAdapter in compatibility\
+    \ mode.\n    const adapter = await navigator.gpu.requestAdapter({ featureLevel: \"compatibility\" });\n    \n\n![WebGPU\
+    \ report page shows a GPUAdapter in compatibility mode on Android device.](/static/blog/new-in-webgpu-135/image/compatibility-mode-android.jpg)\
+    \ Compatibility mode adapter info in [webgpureport.org](https://webgpureport.org)."
+  heading_path:
+  - Graphics and WebGPU - Chrome 135
+  - Easier access to the experimental compatibility mode on Android
+  links:
+  - url: https://issues.chromium.org/issues/389876644
+    link_type: other
+    title: dawn:389876644
+  - url: https://webgpureport.org
+    link_type: other
+    title: webgpureport.org
+  line_number: 53
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Remove maxInterStageShaderComponents limit
+  content: "As [previously announced](/blog/new-in-webgpu-133#deprecate_maxinterstageshadercomponents_limit), the maxInterStageShaderComponents\
+    \ limit is removed due to a combination of factors:\n\n  * Redundancy with `maxInterStageShaderVariables`: This limit\
+    \ already serves a similar purpose, controlling the amount of data passed between shader stages.\n  * Minor discrepancies:\
+    \ While there are slight differences in how the two limits are calculated, these differences are minor and can be effectively\
+    \ managed within the `maxInterStageShaderVariables` limit.\n  * Simplification: Removing `maxInterStageShaderComponents`\
+    \ streamlines the shader interface and reduces complexity for developers. Instead of managing two separate limits with\
+    \ subtle differences, they can focus on the more appropriately named and comprehensive `maxInterStageShaderVariables`.\n\
+    \nSee [intent to remove](https://groups.google.com/a/chromium.org/g/blink-dev/c/i5oJu9lZPAk) and [issue 364338810](https://issues.chromium.org/issues/364338810)."
+  heading_path:
+  - Graphics and WebGPU - Chrome 135
+  - Remove maxInterStageShaderComponents limit
+  links:
+  - url: https://groups.google.com/a/chromium.org/g/blink-dev/c/i5oJu9lZPAk
+    link_type: other
+    title: intent to remove
+  - url: https://issues.chromium.org/issues/364338810
+    link_type: other
+    title: issue 364338810
+  line_number: 65
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+  - enterprise
+- title: Dawn updates
+  content: "It's no longer possible to use a filtering sampler to sample a depth texture. As a reminder, a depth texture can\
+    \ only be used with a non filtering or a comparison sampler. See [issue 379788112](https://issues.chromium.org/issues/379788112).\n\
+    \nThe `WGPURequiredLimits` and `WGPUSupportedLimits` structures have been flattened into `WGPULimits`. See [issue 374263404](https://issues.chromium.org/issues/374263404).\n\
+    \nThe following structs have been renamed. See [issue 42240793](https://issues.chromium.org/issues/42240793).\n\n  * `WGPUImageCopyBuffer`\
+    \ is now `WGPUTexelCopyBufferInfo`\n  * `WGPUImageCopyTexture` is now `WGPUTexelCopyTextureInfo`\n  * `WGPUTextureDataLayout`\
+    \ is now `WGPUTexelCopyBufferLayout`\n\nThe `subgroupMinSize` and `subgroupMaxSize` members have been added to the `WGPUAdapterInfo`\
+    \ struct. See [webgpu-headers PR](https://github.com/webgpu-native/webgpu-headers/pull/509).\n\nTracing Dawn API usage\
+    \ in Metal is now possible when running your program with the `DAWN_TRACE_FILE_BASE` environment variable which saves\
+    \ a .gputrace file that can be loaded later into XCode's Metal Debugger. See the [Debugging Dawn](https://dawn.googlesource.com/dawn/+/HEAD/docs/dawn/debugging.md#tracing-native-gpu-api-usage)\
+    \ documentation.\n\nThis covers only some of the key highlights. Check out the exhaustive [list of commits](https://dawn.googlesource.com/dawn/+log/chromium/6998..chromium/7049?n=1000)."
+  heading_path:
+  - Graphics and WebGPU - Chrome 135
+  - Dawn updates
+  links:
+  - url: https://issues.chromium.org/issues/379788112
+    link_type: other
+    title: issue 379788112
+  - url: https://issues.chromium.org/issues/374263404
+    link_type: other
+    title: issue 374263404
+  - url: https://issues.chromium.org/issues/42240793
+    link_type: other
+    title: issue 42240793
+  - url: https://github.com/webgpu-native/webgpu-headers/pull/509
+    link_type: github
+    title: webgpu-headers PR
+  - url: https://dawn.googlesource.com/dawn/+/HEAD/docs/dawn/debugging.md#tracing-native-gpu-api-usage
+    link_type: other
+    title: Debugging Dawn
+  - url: https://dawn.googlesource.com/dawn/+log/chromium/6998..chromium/7049?n=1000
+    link_type: other
+    title: list of commits
+  line_number: 76
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu

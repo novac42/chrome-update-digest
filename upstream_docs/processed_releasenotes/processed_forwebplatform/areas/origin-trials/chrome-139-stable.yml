@@ -1,12 +1,13 @@
 version: '139'
 channel: stable
 area: origin-trials
-extraction_timestamp: '2025-09-03T14:29:32.594476'
+extraction_timestamp: '2025-09-21T15:28:14.173821'
 extraction_method: deterministic
 statistics:
   total_features: 6
   total_links: 20
   primary_tags:
+    origin-trials: 6
     performance: 1
     multimedia: 1
     webgpu: 1
@@ -44,8 +45,12 @@ features:
   - url: https://chromestatus.com/feature/5134603979063296
     link_type: chromestatus
     title: ChromeStatus.com entry
-  line_number: 14
-  primary_tags: []
+  line_number: 3
+  primary_tags:
+  - name: origin-trials
+    priority: primary
+    source: heading
+    confidence: 1.0
   cross_cutting_concerns:
   - ai
   - privacy
@@ -71,8 +76,12 @@ features:
   - url: https://chromestatus.com/feature/5138641357373440
     link_type: chromestatus
     title: ChromeStatus.com entry
-  line_number: 22
-  primary_tags: []
+  line_number: 11
+  primary_tags:
+  - name: origin-trials
+    priority: primary
+    source: heading
+    confidence: 1.0
   cross_cutting_concerns:
   - privacy
 - title: '`SoftNavigation` performance entry'
@@ -99,8 +108,12 @@ features:
   - url: https://wicg.github.io/soft-navigations
     link_type: spec
     title: Spec
-  line_number: 28
+  line_number: 17
   primary_tags:
+  - name: origin-trials
+    priority: primary
+    source: heading
+    confidence: 1.0
   - name: performance
     priority: primary
     source: heading
@@ -130,8 +143,12 @@ features:
   - url: https://github.com/w3c/webauthn/pull/2291
     link_type: github
     title: Spec
-  line_number: 39
+  line_number: 28
   primary_tags:
+  - name: origin-trials
+    priority: primary
+    source: heading
+    confidence: 1.0
   - name: multimedia
     priority: primary
     source: heading
@@ -158,8 +175,12 @@ features:
   - url: https://chromestatus.com/feature/5207202081800192
     link_type: chromestatus
     title: ChromeStatus.com entry
-  line_number: 45
-  primary_tags: []
+  line_number: 34
+  primary_tags:
+  - name: origin-trials
+    priority: primary
+    source: heading
+    confidence: 1.0
   cross_cutting_concerns:
   - privacy
 - title: WebGPU compatibility mode
@@ -186,8 +207,12 @@ features:
   - url: https://github.com/gpuweb/gpuweb/blob/main/proposals/compatibility-mode.md
     link_type: github
     title: Spec
-  line_number: 51
+  line_number: 40
   primary_tags:
+  - name: origin-trials
+    priority: primary
+    source: heading
+    confidence: 1.0
   - name: webgpu
     priority: primary
     source: heading

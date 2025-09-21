@@ -1,7 +1,7 @@
 version: '138'
 channel: stable
 area: javascript
-extraction_timestamp: '2025-09-21T15:05:40.460444'
+extraction_timestamp: '2025-09-21T15:28:01.612927'
 extraction_method: deterministic
 statistics:
   total_features: 1
@@ -24,7 +24,6 @@ features:
 
     **References:** [ChromeStatus.com entry](https://chromestatus.com/feature/5647993867927552) | [Spec](https://whatpr.org/dom/1245.html)'
   heading_path:
-  - Chrome 138 Release Notes
   - JavaScript
   - Update QuotaExceededError to a DOMException derived interface
   links:
@@ -34,7 +33,7 @@ features:
   - url: https://whatpr.org/dom/1245.html
     link_type: spec
     title: Spec
-  line_number: 55
+  line_number: 3
   primary_tags:
   - name: javascript
     priority: primary

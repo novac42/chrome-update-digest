@@ -1,12 +1,75 @@
 # Graphics and WebGPU - Chrome 136
 
-## Graphics (from Chrome Release Notes)
-
-### GPUAdapterInfo isFallbackAdapter attribute
-
-The `GPUAdapterInfo` `isFallbackAdapter` boolean attribute indicates if an adapter has significant performance limitations in return for wider compatibility, more predictable behavior, or improved privacy. Note that a fallback adapter may not be present on all systems.
-
-**References:** [Tracking bug #403172841](https://bugs.chromium.org/p/chromium/issues/detail?id=403172841) | [ChromeStatus.com entry](https://chromestatus.com/feature/5113344043884544) | [Spec](https://gpuweb.github.io/gpuweb/#gpuadapterinfo)
 
 
-<!-- Deduplication: 1 → 1 features -->
+## GPUAdapterInfo isFallbackAdapter attribute
+
+The GPUAdapterInfo `isFallbackAdapter` boolean attribute indicates whether a GPUAdapter has significant performance limitations in exchange for wider compatibility, more predictable behavior, or improved privacy. This addition was necessary because libraries that take user-provided GPUDevice objects couldn't access this information through the `adapterInfo` attribute on GPUDevice. See the following example and [issue 403172841](https://issues.chromium.org/issues/403172841).
+    
+    
+    const adapter = await navigator.gpu.requestAdapter();
+    
+    if (adapter?.info.isFallbackAdapter) {
+      // The returned adapter is a software-backed fallback adapter, which
+      // may have significantly lower performance and fewer features.
+    }
+    
+
+Since Chrome has not yet shipped support for fallback adapters, `isFallbackAdapter` is at the moment always false on users' devices. We're investigating whether the GPUAdapter `isFallbackAdapter` attribute can be deprecated and removed. See [intent to ship](https://groups.google.com/a/chromium.org/g/blink-dev/c/VUkzIOWd2n0).
+
+
+## Shader compilation time improvements on D3D12
+
+The Chrome team keeps improving Tint, the WebGPU shader language compiler, by adding an intermediate representation (IR) for devices that support WebGPU with the D3D12 backend. This IR, positioned between Tint's abstract syntax tree (AST) and the HLSL backend writer, will make the compiler more efficient and maintainable, ultimately benefiting both developers and users. Initial tests show that the new version of Tint is up to 10 times faster when translating Unity's WGSL shaders to HLSL.
+
+![A flowchart shows the process of converting WGSL shader code into low-level GPU instructions.](/static/blog/new-in-webgpu-136/image/render-pipeline-creation-in-windows.jpg) Render pipeline creation in Windows.
+
+These improvements—already accessible on Android, ChromeOS, and macOS—are being progressively expanded to Windows devices that support WebGPU with the D3D12 backend. See [issue 42251045](https://issues.chromium.org/issues/42251045).
+
+
+## Save and copy canvas images
+
+Chrome users can now right-click on a WebGPU canvas and access context menu options **Save Image As…** or **Copy Image**. See [issue 40902474](https://issues.chromium.org/issues/40902474).
+
+![The ](/static/blog/new-in-webgpu-136/image/save-image-as.jpg) User selected "Save Image As…" context menu.
+
+
+## Lift compatibility mode restrictions
+
+The experimental `"core-features-and-limits"` feature when available on a GPUDevice, lifts all compatibility mode restrictions (features and limits) when the `chrome://flags/#enable-unsafe-webgpu` flag is enabled. See [issue 395855517](https://issues.chromium.org/issues/395855517).
+
+Requesting a GPUAdapter with the `featureLevel: "compatibility"` option hints the browser to select the experimental [WebGPU compatibility mode](https://github.com/gpuweb/gpuweb/blob/main/proposals/compatibility-mode.md). If successful, the resulting adapter is "compatibility-defaulting". Otherwise, it is "core-defaulting", which is the same as using the `featureLevel: "core"` option. Moreover, calling `requestDevice()` without `requiredFeatures` and `requiredLimits` request a GPUDevice with the GPUAdapter's default capabilities.
+
+Core-defaulting adapters always support the `"core-features-and-limits"` feature and it is automatically enabled on GPUDevices created from them. For compatibility-defaulting adapters, the `"core-features-and-limits"` feature may be supported and can be requested on GPUDevices created from them. Both types of adapters may also support features like `"float32-blendable"`, which is optional in both core and compatibility modes.
+
+The following example is for an application that requires `"float32-blendable"` and supports using core features if available, but uses only compatibility features if core features are not available.
+    
+    
+    const adapter = await navigator.gpu.requestAdapter({ featureLevel: "compatibility" });
+    
+    if (!adapter || !adapter.features.has("float32-blendable")) {
+      throw new Error("32-bit float textures blending support is not available");
+    }
+    
+    const requiredFeatures = [];
+    if (adapter.features.has("core-features-and-limits")) {
+      requiredFeatures.push("core-features-and-limits");
+    }
+    
+    const device = await adapter.requestDevice({ requiredFeatures });
+    
+    if (!device.features.has("core-features-and-limits")) {
+      // Compatibility mode restrictions validation rules will apply.
+    }
+    
+
+The experimental GPUAdapter `featureLevel`and `isCompatibilityMode` attributes have been removed in favor of the `"core-features-and-limits"` feature. See [issue 395855516](https://issues.chromium.org/issues/395855516).
+
+
+## Dawn updates
+
+The [callback status](https://webgpu-native.github.io/webgpu-headers/Asynchronous-Operations.html#CallbackStatuses) enum `InstanceDropped` has been renamed to `CallbackCancelled` to clarify that the callback was cancelled, but background processing associated with the event, such as pipeline compilation, might still be running. The new name is more generally-applicable, in case another cancellation mechanism is added later. See [issue 520](https://github.com/webgpu-native/webgpu-headers/issues/520).
+
+The `wgpu::PopErrorScopeStatus::EmptyStack` enum that indicates that the error scope stack couldn't be popped has been renamed to `wgpu::PopErrorScopeStatus::Error` (which is also more generally-applicable). The callback now also includes a corresponding error explanation message to help debugging. See [issue 369](https://github.com/webgpu-native/webgpu-headers/issues/369).
+
+This covers only some of the key highlights. Check out the exhaustive [list of commits](https://dawn.googlesource.com/dawn/+log/chromium/7049..chromium/7103?n=1000).
