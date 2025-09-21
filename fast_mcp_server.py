@@ -22,6 +22,7 @@ sys.path.append(str(Path(__file__).parent / "src"))
 # Import tool classes
 from mcp_tools.enhanced_webplatform_digest import EnhancedWebplatformDigestTool
 from mcp_tools.feature_splitter import FeatureSplitterTool
+from mcp_tools.github_pages_orchestrator import GithubPagesOrchestratorTool
 from mcp_tools.release_monitor import ReleaseMonitorTool
 # WebGPU tools removed - functionality integrated into main pipeline
 
@@ -50,6 +51,8 @@ def get_webplatform_prompt() -> str:
 # Initialize tool instances
 feature_splitter = FeatureSplitterTool(BASE_PATH)
 release_monitor_tool = ReleaseMonitorTool(BASE_PATH)
+# Navigation orchestrator ties digest generation, page refresh, and validation together
+github_pages_orchestrator = GithubPagesOrchestratorTool(BASE_PATH)
 # WebGPU tools initialization removed - use split_and_process_release_notes.py instead
 
 # Initialize resource handler
@@ -185,16 +188,47 @@ async def split_features_by_heading(content: str, target_heading_level: int = 3)
 @mcp.tool()
 async def check_latest_releases(ctx: Context, release_type: str = "webplatform", channel: str = "stable") -> str:
     """Check for latest available release versions and compare with local files
-    
+
     Args:
         release_type: Type of releases to check ("webplatform")
         channel: Release channel for webplatform ("stable", "beta", "dev", "canary")
-        
+
     Returns:
         JSON with latest versions and missing releases
     """
     return await release_monitor_tool.check_latest_releases(
         ctx, {"release_type": release_type, "channel": channel}
+    )
+
+
+@mcp.tool()
+async def generate_github_pages(
+    ctx: Context,
+    version: str,
+    channel: str = "stable",
+    focus_areas: Optional[str] = None,
+    language: str = "bilingual",
+    force_regenerate: bool = False,
+    skip_clean: bool = False,
+    skip_digest: bool = False,
+    skip_validation: bool = False,
+    target_area: Optional[str] = None,
+    debug: bool = False
+) -> str:
+    """Orchestrate digest generation, navigation refresh, and validation."""
+
+    return await github_pages_orchestrator.run(
+        ctx,
+        version=version,
+        channel=channel,
+        focus_areas=focus_areas,
+        language=language,
+        force_regenerate=force_regenerate,
+        skip_clean=skip_clean,
+        skip_digest=skip_digest,
+        skip_validation=skip_validation,
+        target_area=target_area,
+        debug=debug
     )
 
 

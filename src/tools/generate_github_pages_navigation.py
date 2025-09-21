@@ -8,9 +8,12 @@ import os
 import re
 import shutil
 from pathlib import Path
-from typing import Dict, List, Set, Tuple
+from typing import Dict, Iterable, List, Optional, Set, Tuple
 from collections import defaultdict
-import yaml
+try:
+    import yaml  # type: ignore
+except ImportError:  # pragma: no cover - optional dependency
+    yaml = None
 
 class GitHubPagesNavigationGenerator:
     def __init__(self, base_path: str = "."):
@@ -20,29 +23,118 @@ class GitHubPagesNavigationGenerator:
         self.versions_dir = self.digest_dir / "versions"
         self.areas_dir = self.digest_dir / "areas"
         
-        # Area display names mapping
-        self.area_display_names = {
-            'css': 'CSS',
-            'webapi': 'Web APIs',
-            'graphics-webgpu': 'Graphics & WebGPU',
-            'security-privacy': 'Security & Privacy',
-            'javascript': 'JavaScript',
-            'html-dom': 'HTML & DOM',
-            'navigation-loading': 'Navigation & Loading',
-            'network': 'Network',
-            'payment': 'Payment',
-            'pwa-service-worker': 'PWA & Service Worker',
-            'performance': 'Performance',
-            'multimedia': 'Multimedia',
-            'devices': 'Devices',
-            'identity': 'Identity',
-            'browser-changes': 'Browser Changes',
-            'deprecations': 'Deprecations',
-            'on-device-ai': 'On-Device AI',
-            'origin-trials': 'Origin Trials',
-            'webassembly': 'WebAssembly',
-            'webrtc': 'WebRTC'
+        # Area metadata sourced from config/focus_areas.yaml
+        self.area_metadata = self.load_focus_area_metadata()
+        self.area_order = list(self.area_metadata.keys())
+        
+        # Fallback names for areas not yet in the config
+        self.fallback_display_names = {
+            "webrtc": "WebRTC"
         }
+
+    def load_focus_area_metadata(self) -> Dict[str, Dict[str, str]]:
+        """Load area display metadata from the shared focus areas config."""
+        metadata: Dict[str, Dict[str, str]] = {}
+        config_path = self.base_path / "config" / "focus_areas.yaml"
+
+        if not config_path.exists():
+            return metadata
+
+        if yaml:
+            with open(config_path, "r", encoding="utf-8") as f:
+                config = yaml.safe_load(f) or {}
+
+            focus_areas = config.get("focus_areas", {})
+
+            for area_key, attrs in focus_areas.items():
+                display_name = attrs.get("name") or area_key.replace("-", " ").title()
+                description = attrs.get("description", "").strip()
+                metadata[area_key] = {
+                    "name": display_name,
+                    "description": description
+                }
+
+            return metadata
+
+        return self._parse_focus_area_metadata_without_yaml(config_path)
+
+    def _parse_focus_area_metadata_without_yaml(self, config_path: Path) -> Dict[str, Dict[str, str]]:
+        """Fallback parser when PyYAML is unavailable."""
+        metadata: Dict[str, Dict[str, str]] = {}
+        current_area: Optional[str] = None
+        in_focus_section = False
+
+        with open(config_path, "r", encoding="utf-8") as f:
+            for raw_line in f:
+                line = raw_line.rstrip("\n")
+                stripped = line.strip()
+
+                if not stripped or stripped.startswith("#"):
+                    continue
+
+                if not in_focus_section:
+                    if stripped in {"focus_areas:", "focus_areas"}:
+                        in_focus_section = True
+                    continue
+
+                indent = len(line) - len(line.lstrip(" "))
+
+                # Exit when we leave the focus_areas block
+                if indent == 0:
+                    break
+
+                if indent == 2 and stripped.endswith(":"):
+                    area_key = stripped[:-1]
+                    current_area = area_key
+                    metadata[current_area] = {
+                        "name": area_key.replace("-", " ").title(),
+                        "description": ""
+                    }
+                    continue
+
+                if indent == 4 and current_area:
+                    if stripped.startswith("name:"):
+                        value = stripped.split("name:", 1)[1].strip().strip('"')
+                        metadata[current_area]["name"] = value or metadata[current_area]["name"]
+                    elif stripped.startswith("description:"):
+                        value = stripped.split("description:", 1)[1].strip().strip('"')
+                        metadata[current_area]["description"] = value
+
+        return metadata
+
+    def get_area_display_name(self, area_key: str) -> str:
+        """Resolve the display name for an area."""
+        if area_key in self.area_metadata:
+            return self.area_metadata[area_key]["name"]
+        if area_key in self.fallback_display_names:
+            return self.fallback_display_names[area_key]
+        return area_key.replace("-", " ").title()
+
+    def get_area_description(self, area_key: str) -> str:
+        """Resolve the marketing description for an area if present."""
+        return self.area_metadata.get(area_key, {}).get("description", "")
+
+    @staticmethod
+    def pluralize(count: int, singular: str, plural: str = None) -> str:
+        """Return the proper singular/plural label for a count."""
+        if count == 1:
+            return singular
+        return plural if plural else f"{singular}s"
+
+    def order_areas(self, areas: Iterable[str]) -> List[str]:
+        """Order areas using the config ordering first, then alphabetically."""
+        ordered: List[str] = []
+        seen = set()
+
+        for area_key in self.area_order:
+            if area_key in areas:
+                ordered.append(area_key)
+                seen.add(area_key)
+
+        for area_key in sorted(set(areas) - seen):
+            ordered.append(area_key)
+
+        return ordered
         
     def scan_content(self) -> Tuple[Dict[str, Set[str]], Dict[str, Set[str]]]:
         """Scan source directory to find all versions and areas."""
@@ -128,7 +220,11 @@ Browse Chrome release notes organized by version number.
             is_latest = version == versions[0]
             latest_badge = " **(Latest Stable)**" if is_latest else ""
             areas_count = len(version_areas[version])
-            index_content += f"- [Chrome {version}{latest_badge}](./chrome-{version}/) - {areas_count} areas with updates\n"
+            area_label = self.pluralize(areas_count, "area")
+            index_content += (
+                f"- [Chrome {version}{latest_badge}](./chrome-{version}/) - "
+                f"{areas_count} {area_label} with updates\n"
+            )
             
         with open(self.versions_dir / "index.md", 'w', encoding='utf-8') as f:
             f.write(index_content)
@@ -153,9 +249,13 @@ title: Chrome {version} Release Notes
 
 """
             
-            for area in sorted(version_areas[version]):
-                display_name = self.area_display_names.get(area, area.replace('-', ' ').title())
-                overview_content += f"- [{display_name}](./{area}.html)\n"
+            areas_for_version = self.order_areas(version_areas[version])
+
+            for area in areas_for_version:
+                display_name = self.get_area_display_name(area)
+                description = self.get_area_description(area)
+                description_suffix = f" — {description}" if description else ""
+                overview_content += f"- [{display_name}](./{area}.html){description_suffix}\n"
                 
                 # Copy area content to version directory
                 source_file = self.source_dir / area / f"chrome-{version}-stable.md"
@@ -182,7 +282,7 @@ title: Chrome {version} Release Notes
                 
     def generate_area_pages(self, area_versions: Dict[str, Set[str]]):
         """Generate area-centric navigation pages."""
-        areas = sorted(area_versions.keys())
+        areas = self.order_areas(area_versions.keys())
         
         # Generate main areas index
         index_content = """---
@@ -199,9 +299,15 @@ Browse Chrome release notes organized by feature area to track evolution over ti
 """
         
         for area in areas:
-            display_name = self.area_display_names.get(area, area.replace('-', ' ').title())
+            display_name = self.get_area_display_name(area)
+            description = self.get_area_description(area)
             versions_count = len(area_versions[area])
-            index_content += f"- [{display_name}](./{area}/) - Updates in {versions_count} versions\n"
+            versions_label = self.pluralize(versions_count, "version")
+            description_suffix = f" — {description}" if description else ""
+            index_content += (
+                f"- [{display_name}](./{area}/) - Updates in {versions_count} "
+                f"{versions_label}{description_suffix}\n"
+            )
             
         with open(self.areas_dir / "index.md", 'w', encoding='utf-8') as f:
             f.write(index_content)
@@ -211,7 +317,8 @@ Browse Chrome release notes organized by feature area to track evolution over ti
             area_dir = self.areas_dir / area
             area_dir.mkdir(exist_ok=True)
             
-            display_name = self.area_display_names.get(area, area.replace('-', ' ').title())
+            display_name = self.get_area_display_name(area)
+            description = self.get_area_description(area)
             versions = sorted(area_versions[area], reverse=True)
             
             # Area hub page
@@ -227,6 +334,13 @@ title: {display_name} Updates
 ## Version History
 
 Track the evolution of {display_name} features across Chrome releases.
+
+"""
+            
+            if description:
+                hub_content += f"{description}\n\n"
+
+            hub_content += """
 
 ### Available Versions
 
@@ -253,7 +367,7 @@ Track the evolution of {display_name} features across Chrome releases.
     def update_main_index(self, version_areas: Dict[str, Set[str]], area_versions: Dict[str, Set[str]]):
         """Update the main index.md with dual navigation."""
         versions = sorted(version_areas.keys(), reverse=True)
-        areas = sorted(area_versions.keys())
+        areas = self.order_areas(area_versions.keys())
         
         # Get top areas by update frequency
         top_areas = sorted(areas, key=lambda a: len(area_versions[a]), reverse=True)[:5]
@@ -278,7 +392,11 @@ Explore what's new in each Chrome release:
             is_latest = version == versions[0]
             latest_badge = " **(Latest Stable)**" if is_latest else ""
             areas_count = len(version_areas[version])
-            index_content += f"- [Chrome {version}{latest_badge}](./versions/chrome-{version}/) - {areas_count} areas with updates\n"
+            area_label = self.pluralize(areas_count, "area")
+            index_content += (
+                f"- [Chrome {version}{latest_badge}](./versions/chrome-{version}/) - "
+                f"{areas_count} {area_label} with updates\n"
+            )
             
         index_content += f"- [View all {len(versions)} versions →](./versions/)\n"
         
@@ -292,19 +410,27 @@ Track the evolution of specific features across Chrome versions:
         
         # Show top 5 areas
         for area in top_areas:
-            display_name = self.area_display_names.get(area, area.replace('-', ' ').title())
+            display_name = self.get_area_display_name(area)
             versions_count = len(area_versions[area])
-            index_content += f"- [{display_name}](./areas/{area}/) - Updates in {versions_count} versions\n"
+            versions_label = self.pluralize(versions_count, "version")
+            index_content += (
+                f"- [{display_name}](./areas/{area}/) - Updates in {versions_count} "
+                f"{versions_label}\n"
+            )
             
         index_content += f"- [View all {len(areas)} feature areas →](./areas/)\n"
         
+        latest_version = versions[0]
+        top_area_names = [self.get_area_display_name(area) for area in top_areas[:3]]
+
         index_content += """
 
 ## Quick Links
 
-- **Latest Release**: [Chrome """ + versions[0] + """](./versions/chrome-""" + versions[0] + """/)
-- **Most Active Areas**: CSS, Web APIs, Graphics & WebGPU
-- **Version Comparison**: Compare changes between releases
+- **Latest Release**: [Chrome """ + latest_version + """](./versions/chrome-""" + latest_version + """/)
+- **Most Active Areas**: """ + ", ".join(top_area_names) + """
+- **All Versions**: [Browse every release](./versions/)
+- **All Areas**: [Explore feature areas](./areas/)
 - **Search**: Use browser search (Ctrl+F) on any page
 
 ## About
@@ -350,8 +476,26 @@ New Chrome stable releases are typically published every 4 weeks. This site is u
         }
         
         config_path = self.digest_dir / "_config.yml"
-        with open(config_path, 'w', encoding='utf-8') as f:
-            yaml.dump(config, f, default_flow_style=False)
+        if yaml:
+            with open(config_path, 'w', encoding='utf-8') as f:
+                yaml.dump(config, f, default_flow_style=False)
+        else:
+            content_lines = [
+                "title: Chrome Release Digests",
+                "description: Comprehensive Chrome web platform release notes with version selection",
+                "theme: minima",
+                "plugins:",
+                "  - jekyll-feed",
+                "  - jekyll-sitemap",
+                "defaults:",
+                "  - scope:",
+                "      path: ''",
+                "      type: pages",
+                "    values:",
+                "      layout: default",
+            ]
+            with open(config_path, 'w', encoding='utf-8') as f:
+                f.write("\n".join(content_lines) + "\n")
             
     def clean_old_structure(self):
         """Clean up old webplatform directory if it exists."""

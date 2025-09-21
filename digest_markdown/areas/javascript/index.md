@@ -11,6 +11,10 @@ title: JavaScript Updates
 
 Track the evolution of JavaScript features across Chrome releases.
 
+JavaScript language features and runtime updates
+
+
+
 ### Available Versions
 
 - [Chrome 138 **(Latest)**](./chrome-138.html)

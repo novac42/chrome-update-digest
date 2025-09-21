@@ -1,15 +1,19 @@
 ---
 layout: default
-title: Browser Changes Updates
+title: Browser changes Updates
 ---
 
-# Browser Changes Updates
+# Browser changes Updates
 
 [← Back to all areas](../)
 
 ## Version History
 
-Track the evolution of Browser Changes features across Chrome releases.
+Track the evolution of Browser changes features across Chrome releases.
+
+Platform-level browser behavior updates
+
+
 
 ### Available Versions
 
