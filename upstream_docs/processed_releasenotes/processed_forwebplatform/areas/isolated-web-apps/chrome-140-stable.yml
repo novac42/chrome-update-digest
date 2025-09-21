@@ -1,12 +1,13 @@
 version: '140'
 channel: stable
 area: isolated-web-apps
-extraction_timestamp: '2025-09-20T23:17:00.479270'
+extraction_timestamp: '2025-09-21T15:08:34.165119'
 extraction_method: deterministic
 statistics:
   total_features: 1
   total_links: 4
-  primary_tags: {}
+  primary_tags:
+    isolated-web-apps: 1
   cross_cutting:
     privacy: 1
 features:
@@ -36,6 +37,10 @@ features:
     link_type: spec
     title: Spec
   line_number: 3
-  primary_tags: []
+  primary_tags:
+  - name: isolated-web-apps
+    priority: primary
+    source: heading
+    confidence: 1.0
   cross_cutting_concerns:
   - privacy

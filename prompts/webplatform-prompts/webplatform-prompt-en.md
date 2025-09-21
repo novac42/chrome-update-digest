@@ -14,19 +14,33 @@ You will receive Chrome release notes data for the **[AREA]** area in YAML forma
 
 ## Output Structure
 
-### 1. Summary
+### 1. Area Summary
 
-A concise overview of the most significant changes in **[AREA]** for Chrome [version].
+Provide a high-level summary (3-5 sentences) that:
+- Identifies the main themes or trends in **[AREA]** for Chrome [version]
+- Highlights the most impactful changes for developers
+- Explains how these features advance the web platform
+- Sets context for why these updates matter
 
-### 2. Feature Details
+### 2. Detailed Updates
 
-For each feature in **[AREA]**:
+Introduce this section with a brief transition from the summary, then list each feature:
 
 ```markdown
-### [Feature Title]
+### Detailed Updates
 
-**What Changed**:
-[Detailed description of what this feature does and how it works]
+[Brief introduction connecting to the summary above]
+
+#### [Feature Title]
+
+**What's New**:
+[Concise description of what this feature enables]
+
+**Technical Details**:
+[How it works technically, key implementation notes]
+
+**Use Cases**:
+[Practical applications and developer benefits]
 
 **References**:
 [All provided links - keep as-is]
@@ -54,6 +68,9 @@ Based on **[AREA]**, demonstrate expertise in:
 2. **Language Consistency**: All content in English
 3. **Area Focus**: Keep all content relevant to **[AREA]**
 4. **Link Preservation**: Never modify provided URLs
+5. **Structure**: Always include both Area Summary and Detailed Updates sections
+6. **Coherence**: Ensure the Area Summary connects logically to Detailed Updates
+7. **Developer Focus**: Frame features in terms of practical developer value
 
 ## Output File Storage
 
