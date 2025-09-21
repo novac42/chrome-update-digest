@@ -24,6 +24,7 @@ focus_areas:
     heading_patterns:
       - "HTML"
       - "DOM"
+      - "HTML and DOM"
     
   graphics-webgpu:
     name: "Graphics and WebGPU"
@@ -77,6 +78,7 @@ focus_areas:
     heading_patterns:
       - "Security"
       - "Privacy"
+      - "Privacy and security"
     
   navigation-loading:
     name: "Navigation-Loading"
@@ -94,6 +96,8 @@ focus_areas:
       - "Multimedia"
       - "audio and video"
       - "video and audio"
+      - "Images and media"
+      - "WebRTC"
 
     
   performance:
@@ -131,12 +135,58 @@ focus_areas:
       - "IWAs"
       - "Isolated Web Apps (IWAs)"
     
+  javascript:
+    name: "JavaScript"
+    description: "JavaScript language features and runtime updates"
+    priority: 2
+    heading_patterns:
+      - "JavaScript"
+      - "JS"
+    
+  webassembly:
+    name: "WebAssembly"
+    description: "WebAssembly runtime and tooling updates"
+    priority: 2
+    heading_patterns:
+      - "WebAssembly"
+      - "Wasm"
+    
+  enterprise:
+    name: "Enterprise"
+    description: "Enterprise policies and admin features"
+    priority: 3
+    heading_patterns:
+      - "Enterprise"
+    
+  network:
+    name: "Network"
+    description: "Networking and connectivity features"
+    priority: 3
+    heading_patterns:
+      - "Network"
+    
+  identity:
+    name: "Identity"
+    description: "Identity, sign-in, and account features"
+    priority: 3
+    heading_patterns:
+      - "Identity"
+    
+  browser-changes:
+    name: "Browser changes"
+    description: "Platform-level browser behavior updates"
+    priority: 2
+    heading_patterns:
+      - "Browser changes"
+    
   payment:
     name: "Payment"
     description: "Payment and payment-related features"
     priority: 2
     heading_patterns:
       - "Payment"
+      - "Payments"
+      - "Secure Payment Confirmation"
     
   devtools:
     name: "DevTools"
