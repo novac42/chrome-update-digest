@@ -5,7 +5,7 @@ title: Security-Privacy Updates
 
 # Security-Privacy Updates
 
-[← Back to all areas](../)
+[← Back to all areas](../index.html)
 
 ## Version History
 
@@ -15,9 +15,9 @@ Security and privacy features
 
 ### Available Versions
 
-- [Chrome 136 **(Latest)**](./chrome-136.html)
+- [Chrome 136 **(Latest)**](./chrome-136-en.html)
 
 ## Navigation
 
-- [View all feature areas](../)
-- [Browse by Chrome version](../../versions/)
+- [View all feature areas](../index.html)
+- [Browse by Chrome version](../../versions/index.html)

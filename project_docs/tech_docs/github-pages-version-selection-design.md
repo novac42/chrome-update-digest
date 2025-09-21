@@ -127,7 +127,7 @@ Home > Areas > CSS > Chrome 139
   2. Calls `src/tools/generate_github_pages_navigation.py` with configurable `--clean` behaviour.
   3. Executes `src/tools/validate_github_pages.py` and returns errors/warnings in the MCP response.
 - **Navigation Metadata**: Display names and descriptions are sourced exclusively from `config/focus_areas.yaml`.
-- **Outputs**: `digest_markdown/index.md`, `/versions`, and `/areas` are refreshed and ready for GitHub Pages deployment; the legacy `webplatform/` tree is removed automatically.
+- **Outputs**: `digest_markdown/index.md`, `/versions`, and `/areas` are refreshed and ready for GitHub Pages deployment. The `webplatform/` staging tree remains in place as the source for the navigation generator.
 
 ## Technical Considerations
 
@@ -139,10 +139,14 @@ Home > Areas > CSS > Chrome 139
 ### 2. File Naming Convention
 ```
 # Version-based
-versions/chrome-{version}/{area}.md
+versions/chrome-{version}/{area}-{language}.md   # e.g., css-en.md
 
-# Area-based  
-areas/{area}/chrome-{version}.md
+# Area-based
+areas/{area}/chrome-{version}-{language}.md
+
+# Index pages (per directory)
+index.md       # English
+index-zh.md    # Chinese
 ```
 
 ### 3. Automated Generation

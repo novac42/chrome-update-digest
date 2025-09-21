@@ -11,26 +11,26 @@ Comprehensive release notes for Chrome web platform features, organized for easy
 
 Explore what's new in each Chrome release:
 
-- [Chrome 136 **(Latest Stable)**](./versions/chrome-136/) - 12 areas with updates
-- [View all 1 versions →](./versions/)
+- [Chrome 136 **(Latest Stable)**](./versions/chrome-136/index.html) - 12 areas with updates
+- [View all 1 versions →](./versions/index.html)
 
 ## Browse by Feature Area
 
 Track the evolution of specific features across Chrome versions:
 
-- [CSS](./areas/css/) - Updates in 1 version
-- [HTML-DOM](./areas/html-dom/) - Updates in 1 version
-- [Graphics and WebGPU](./areas/graphics-webgpu/) - Updates in 1 version
-- [Web API](./areas/webapi/) - Updates in 1 version
-- [Origin trials](./areas/origin-trials/) - Updates in 1 version
-- [View all 12 feature areas →](./areas/)
+- [CSS](./areas/css/index.html) - Updates in 1 version
+- [HTML-DOM](./areas/html-dom/index.html) - Updates in 1 version
+- [Graphics and WebGPU](./areas/graphics-webgpu/index.html) - Updates in 1 version
+- [Web API](./areas/webapi/index.html) - Updates in 1 version
+- [Origin trials](./areas/origin-trials/index.html) - Updates in 1 version
+- [View all 12 feature areas →](./areas/index.html)
 
 ## Quick Links
 
-- **Latest Release**: [Chrome 136](./versions/chrome-136/)
+- **Latest Release**: [Chrome 136](./versions/chrome-136/index.html)
 - **Most Active Areas**: CSS, HTML-DOM, Graphics and WebGPU
-- **All Versions**: [Browse every release](./versions/)
-- **All Areas**: [Explore feature areas](./areas/)
+- **All Versions**: [Browse every release](./versions/index.html)
+- **All Areas**: [Explore feature areas](./areas/index.html)
 - **Search**: Use browser search (Ctrl+F) on any page
 
 ## About
@@ -53,4 +53,4 @@ New Chrome stable releases are typically published every 4 weeks. This site is u
 
 ## Other Languages
 
-- [中文版](./index-zh.md)
+- [中文版](./index-zh.html)

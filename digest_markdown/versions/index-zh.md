@@ -9,4 +9,4 @@ title: Chrome 各版本
 
 ## 可用版本
 
-- [Chrome 136 **（最新稳定版）**](./chrome-136/) - 包含 12 个更新领域
+- [Chrome 136 **（最新稳定版）**](./chrome-136/index-zh.html) - 包含 12 个更新领域

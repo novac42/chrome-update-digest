@@ -6,7 +6,7 @@ The Chrome Release Digests site now features a dual navigation system that allow
 1. **By Version** - See all changes in a specific Chrome release
 2. **By Feature Area** - Track how a feature area evolves over time
 
-All navigation is emitted in both English and Chinese. Each language currently lives in its own top-level tree (for example, `versions/` vs `versions-zh/`) and stays fully in sync when the generator runs in bilingual mode.
+All navigation is emitted in both English and Chinese. Both languages now share the same directory tree; individual pages carry a `-en` or `-zh` suffix while index files stay language-specific (`index.md` vs `index-zh.md`).
 
 ## Directory Structure
 
@@ -17,24 +17,22 @@ digest_markdown/
 ├── assets/                      # Shared assets (CSS, JS, images)
 ├── index.md                     # English landing page
 ├── index-zh.md                  # Chinese landing page
-├── versions/                    # Version-centric navigation (English)
-│   ├── index.md                # Version selector
+├── versions/                    # Version-centric navigation
+│   ├── index.md                # Version selector (en)
+│   ├── index-zh.md             # Version selector (zh)
 │   └── chrome-136/
-│       ├── index.md            # Chrome 136 overview
-│       └── css.md              # Example area digest (linking to staging copy)
-├── versions-zh/                 # Version-centric navigation (Chinese)
-│   └── chrome-136/
-│       ├── index.md            # Chrome 136 overview (zh)
-│       └── css.md
-├── areas/                       # Area-centric navigation (English)
-│   ├── index.md
+│       ├── index.md            # Chrome 136 overview (en)
+│       ├── index-zh.md         # Chrome 136 overview (zh)
+│       ├── css-en.md           # CSS changes in Chrome 136 (en)
+│       └── css-zh.md           # CSS changes in Chrome 136 (zh)
+├── areas/                       # Area-centric navigation
+│   ├── index.md                # Feature-area hub (en)
+│   ├── index-zh.md             # Feature-area hub (zh)
 │   └── css/
-│       ├── index.md            # CSS hub with version list
-│       └── chrome-136.md       # CSS in Chrome 136 (en)
-├── areas-zh/                    # Area-centric navigation (Chinese)
-│   └── css/
-│       ├── index.md            # CSS hub (zh)
-│       └── chrome-136.md
+│       ├── index.md            # CSS hub (en)
+│       ├── index-zh.md         # CSS hub (zh)
+│       ├── chrome-136-en.md    # CSS in Chrome 136 (en)
+│       └── chrome-136-zh.md    # CSS in Chrome 136 (zh)
 └── webplatform/                 # Staging digests copied from the pipeline
     ├── css/
     │   ├── chrome-136-stable-en.md
@@ -55,7 +53,7 @@ source .venv/bin/activate
 # Generate navigation
 python3 src/tools/generate_github_pages_navigation.py
 
-# Bilingual run (produces /versions, /versions-zh, /areas, /areas-zh)
+# Bilingual run (emits -en/-zh leaf pages inside shared directories)
 python3 src/tools/generate_github_pages_navigation.py --language bilingual
 
 # Clean and regenerate (removes existing structure first)
@@ -140,7 +138,7 @@ That staging directory is produced by the clean data pipeline (see `src/chrome_u
 
 ## Language Structure
 
-Running the generator with `--language bilingual` creates parallel English and Chinese navigation trees at the top level (`versions/` + `versions-zh/`, `areas/` + `areas-zh/`). The long-term goal is to collapse that split so that language variants become leaf files (for example, `css-en.md` and `css-zh.md` inside the same directory). Until that refactor lands, tooling that consumes the generated site should expect the top-level language forks.
+Running the generator with `--language bilingual` now produces a single navigation tree. Version and area directories contain companion files such as `css-en.md` and `css-zh.md`, while overview pages live side-by-side as `index.md` and `index-zh.md`. Cross-navigation links respect those suffixes so English pages point to English counterparts and Chinese pages point to Chinese counterparts.
 
 ## Supported Versions
 
@@ -178,7 +176,6 @@ Planned improvements include:
 - Search functionality
 - Feature adoption timeline
 - Browser compatibility matrix
-- Collapse language forks so English/Chinese variants share directories (e.g., `css-en.md`, `css-zh.md`)
 
 ## Troubleshooting
 

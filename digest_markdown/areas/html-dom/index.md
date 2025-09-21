@@ -5,7 +5,7 @@ title: HTML-DOM Updates
 
 # HTML-DOM Updates
 
-[← Back to all areas](../)
+[← Back to all areas](../index.html)
 
 ## Version History
 
@@ -15,9 +15,9 @@ HTML elements and DOM manipulation
 
 ### Available Versions
 
-- [Chrome 136 **(Latest)**](./chrome-136.html)
+- [Chrome 136 **(Latest)**](./chrome-136-en.html)
 
 ## Navigation
 
-- [View all feature areas](../)
-- [Browse by Chrome version](../../versions/)
+- [View all feature areas](../index.html)
+- [Browse by Chrome version](../../versions/index.html)
