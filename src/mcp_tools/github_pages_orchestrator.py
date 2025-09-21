@@ -34,7 +34,7 @@ class GithubPagesOrchestratorTool:
         language: str = "bilingual",
         force_regenerate: bool = False,
         skip_clean: bool = False,
-        skip_digest: bool = False,
+        skip_digest: bool = True,
         skip_validation: bool = False,
         target_area: Optional[str] = None,
         debug: bool = False
