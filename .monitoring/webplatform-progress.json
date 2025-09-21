@@ -18,43 +18,50 @@
   "completed_areas": 7,
   "per_area": {
     "css": {
-      "en": "error",
-      "zh": "pending",
-      "error": "Sampling failed after 3 retries: Unknown error: Error: Unknown tokenizer: undefined\n    at m4.acquireTokenizer (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:609:26873)\n    at new xt (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5058)\n    at /Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5414\n    at t.invokeFunction (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:453:942)\n    at xt.create (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5377)\n    at TT._provideLanguageModelResponse (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:618:5850)"
+      "en": "done",
+      "zh": "done",
+      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/css/chrome-140-stable-en.md",
+      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/css/chrome-140-stable-zh.md"
     },
     "deprecation": {
-      "en": "error",
-      "zh": "pending",
-      "error": "Sampling failed after 3 retries: Unknown error: Error: Unknown tokenizer: undefined\n    at m4.acquireTokenizer (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:609:26873)\n    at new xt (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5058)\n    at /Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5414\n    at t.invokeFunction (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:453:942)\n    at xt.create (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5377)\n    at TT._provideLanguageModelResponse (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:618:5850)"
+      "en": "done",
+      "zh": "done",
+      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/deprecation/chrome-140-stable-en.md",
+      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/deprecation/chrome-140-stable-zh.md"
     },
     "devices": {
-      "en": "error",
-      "zh": "pending",
-      "error": "Sampling failed after 3 retries: Unknown error: Error: Unknown tokenizer: undefined\n    at m4.acquireTokenizer (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:609:26873)\n    at new xt (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5058)\n    at /Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5414\n    at t.invokeFunction (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:453:942)\n    at xt.create (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5377)\n    at TT._provideLanguageModelResponse (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:618:5850)"
+      "en": "done",
+      "zh": "done",
+      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/devices/chrome-140-stable-en.md",
+      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/devices/chrome-140-stable-zh.md"
     },
     "graphics-webgpu": {
-      "en": "error",
-      "zh": "pending",
-      "error": "Sampling failed after 3 retries: Unknown error: Error: Unknown tokenizer: undefined\n    at m4.acquireTokenizer (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:609:26873)\n    at new xt (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5058)\n    at /Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5414\n    at t.invokeFunction (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:453:942)\n    at xt.create (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5377)\n    at TT._provideLanguageModelResponse (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:618:5850)"
+      "en": "done",
+      "zh": "done",
+      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/graphics-webgpu/chrome-140-stable-en.md",
+      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/graphics-webgpu/chrome-140-stable-zh.md"
     },
     "pwa-service-worker": {
-      "en": "error",
-      "zh": "pending",
-      "error": "Sampling failed after 3 retries: Unknown error: Error: Unknown tokenizer: undefined\n    at m4.acquireTokenizer (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:609:26873)\n    at new xt (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5058)\n    at /Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5414\n    at t.invokeFunction (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:453:942)\n    at xt.create (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5377)\n    at TT._provideLanguageModelResponse (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:618:5850)"
+      "en": "done",
+      "zh": "done",
+      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/pwa-service-worker/chrome-140-stable-en.md",
+      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/pwa-service-worker/chrome-140-stable-zh.md"
     },
     "storage": {
-      "en": "error",
-      "zh": "pending",
-      "error": "Sampling failed after 3 retries: Unknown error: Error: Unknown tokenizer: undefined\n    at m4.acquireTokenizer (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:609:26873)\n    at new xt (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5058)\n    at /Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5414\n    at t.invokeFunction (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:453:942)\n    at xt.create (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5377)\n    at TT._provideLanguageModelResponse (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:618:5850)"
+      "en": "done",
+      "zh": "done",
+      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/storage/chrome-140-stable-en.md",
+      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/storage/chrome-140-stable-zh.md"
     },
     "webapi": {
-      "en": "error",
-      "zh": "pending",
-      "error": "Sampling failed after 3 retries: Unknown error: Error: Unknown tokenizer: undefined\n    at m4.acquireTokenizer (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:609:26873)\n    at new xt (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5058)\n    at /Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5414\n    at t.invokeFunction (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:453:942)\n    at xt.create (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:612:5377)\n    at TT._provideLanguageModelResponse (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.31.1/dist/extension.js:618:5850)"
+      "en": "done",
+      "zh": "done",
+      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/webapi/chrome-140-stable-en.md",
+      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/webapi/chrome-140-stable-zh.md"
     }
   },
-  "started_at": "2025-09-20T23:32:39.055097",
-  "updated_at": "2025-09-20T23:32:50.460972",
-  "completed_at": "2025-09-20T23:32:50.460921",
-  "total_time_seconds": 11.405472040176392
+  "started_at": "2025-09-21T11:29:28.540704",
+  "updated_at": "2025-09-21T11:31:10.023720",
+  "completed_at": "2025-09-21T11:31:10.023646",
+  "total_time_seconds": 101.48263692855835
 }
