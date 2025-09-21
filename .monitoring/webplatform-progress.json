@@ -1,5 +1,5 @@
 {
-  "version": "140",
+  "version": "138",
   "channel": "stable",
   "languages": [
     "en",
@@ -10,58 +10,75 @@
     "deprecation",
     "devices",
     "graphics-webgpu",
+    "html-dom",
+    "javascript",
+    "multimedia",
+    "performance",
     "pwa-service-worker",
-    "storage",
+    "security-privacy",
     "webapi"
   ],
-  "total_areas": 7,
-  "completed_areas": 7,
+  "total_areas": 11,
+  "completed_areas": 11,
   "per_area": {
     "css": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/css/chrome-140-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/css/chrome-140-stable-zh.md"
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: 'NoneType' object is not callable"
     },
     "deprecation": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/deprecation/chrome-140-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/deprecation/chrome-140-stable-zh.md"
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: 'NoneType' object is not callable"
     },
     "devices": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/devices/chrome-140-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/devices/chrome-140-stable-zh.md"
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: 'NoneType' object is not callable"
     },
     "graphics-webgpu": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/graphics-webgpu/chrome-140-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/graphics-webgpu/chrome-140-stable-zh.md"
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: 'NoneType' object is not callable"
+    },
+    "html-dom": {
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: 'NoneType' object is not callable"
+    },
+    "javascript": {
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: 'NoneType' object is not callable"
+    },
+    "multimedia": {
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: 'NoneType' object is not callable"
+    },
+    "performance": {
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: 'NoneType' object is not callable"
     },
     "pwa-service-worker": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/pwa-service-worker/chrome-140-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/pwa-service-worker/chrome-140-stable-zh.md"
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: 'NoneType' object is not callable"
     },
-    "storage": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/storage/chrome-140-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/storage/chrome-140-stable-zh.md"
+    "security-privacy": {
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: 'NoneType' object is not callable"
     },
     "webapi": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/webapi/chrome-140-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/webapi/chrome-140-stable-zh.md"
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: 'NoneType' object is not callable"
     }
   },
-  "started_at": "2025-09-21T11:29:28.540704",
-  "updated_at": "2025-09-21T11:31:10.023720",
-  "completed_at": "2025-09-21T11:31:10.023646",
-  "total_time_seconds": 101.48263692855835
+  "started_at": "2025-09-21T15:05:40.486141",
+  "updated_at": "2025-09-21T15:05:52.533436",
+  "completed_at": "2025-09-21T15:05:52.533402",
+  "total_time_seconds": 12.047037839889526
 }

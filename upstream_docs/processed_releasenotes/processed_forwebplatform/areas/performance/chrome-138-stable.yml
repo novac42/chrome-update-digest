@@ -1,0 +1,75 @@
+version: '138'
+channel: stable
+area: performance
+extraction_timestamp: '2025-09-21T15:05:40.473193'
+extraction_method: deterministic
+statistics:
+  total_features: 2
+  total_links: 6
+  primary_tags:
+    performance: 2
+  cross_cutting:
+    privacy: 2
+features:
+- title: Add prefetchCache and prerenderCache to Clear-Site-Data header
+  content: 'Two new values for the Clear-Site-Data header to help developers target clearing the prerender and prefetch cache:
+    "prefetchCache" and "prerenderCache".
+
+
+    **References:** [Tracking bug #398149359](https://bugs.chromium.org/p/chromium/issues/detail?id=398149359) | [ChromeStatus.com
+    entry](https://chromestatus.com/feature/5110263659667456) | [Spec](https://w3c.github.io/webappsec-clear-site-data/#grammardef-cache-directive)'
+  heading_path:
+  - Chrome 138 Release Notes
+  - Performance
+  - Add prefetchCache and prerenderCache to Clear-Site-Data header
+  links:
+  - url: https://bugs.chromium.org/p/chromium/issues/detail?id=398149359
+    link_type: tracking_bug
+    title: 'Tracking bug #398149359'
+  - url: https://chromestatus.com/feature/5110263659667456
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://w3c.github.io/webappsec-clear-site-data/#grammardef-cache-directive
+    link_type: spec
+    title: Spec
+  line_number: 109
+  primary_tags:
+  - name: performance
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: 'Speculation rules: target_hint field'
+  content: 'This extends speculation rules syntax to allow developers to specify the target_hint field. This field provides
+    a hint to indicate a target navigable where a prerendered page will eventually be activated. For example, when `_blank`
+    is specified as a hint, a prerendered page can be activated for a navigable opened by `window.open()`. The field has no
+    effect on prefetching. The specification allows this field to accept any strings that are valid as navigable target name
+    or keyword as the value, but this launch supports only one of "_self" or "_blank" strings. If the hint is not specified,
+    it''s treated like "_self" is specified.
+
+
+    **References:** [Tracking bug #40234240](https://bugs.chromium.org/p/chromium/issues/detail?id=40234240) | [ChromeStatus.com
+    entry](https://chromestatus.com/feature/5084493854924800) | [Spec](https://wicg.github.io/nav-speculation/speculation-rules.html#speculation-rule-target-hint)'
+  heading_path:
+  - Chrome 138 Release Notes
+  - Performance
+  - 'Speculation rules: target_hint field'
+  links:
+  - url: https://bugs.chromium.org/p/chromium/issues/detail?id=40234240
+    link_type: tracking_bug
+    title: 'Tracking bug #40234240'
+  - url: https://chromestatus.com/feature/5084493854924800
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/nav-speculation/speculation-rules.html#speculation-rule-target-hint
+    link_type: spec
+    title: Spec
+  line_number: 115
+  primary_tags:
+  - name: performance
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
