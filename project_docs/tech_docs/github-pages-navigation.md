@@ -6,7 +6,7 @@ The Chrome Release Digests site now features a dual navigation system that allow
 1. **By Version** - See all changes in a specific Chrome release
 2. **By Feature Area** - Track how a feature area evolves over time
 
-All navigation is emitted in both English and Chinese. Both languages now share the same directory tree; individual pages carry a `-en` or `-zh` suffix while index files stay language-specific (`index.md` vs `index-zh.md`).
+All navigation is emitted in both English and Chinese. Both languages now share the same directory tree; English pages own the index files (`index.md`), while bilingual runs add Chinese leaf companions with a `-zh` suffix alongside the English `-en` files.
 
 ## Directory Structure
 
@@ -16,23 +16,18 @@ digest_markdown/
 ├── _layouts/                    # Shared page layouts
 ├── assets/                      # Shared assets (CSS, JS, images)
 ├── index.md                     # English landing page
-├── index-zh.md                  # Chinese landing page
 ├── versions/                    # Version-centric navigation
 │   ├── index.md                # Version selector (en)
-│   ├── index-zh.md             # Version selector (zh)
 │   └── chrome-136/
 │       ├── index.md            # Chrome 136 overview (en)
-│       ├── index-zh.md         # Chrome 136 overview (zh)
 │       ├── css-en.md           # CSS changes in Chrome 136 (en)
-│       └── css-zh.md           # CSS changes in Chrome 136 (zh)
+│       └── css-zh.md           # CSS changes in Chrome 136 (zh leaf)
 ├── areas/                       # Area-centric navigation
 │   ├── index.md                # Feature-area hub (en)
-│   ├── index-zh.md             # Feature-area hub (zh)
 │   └── css/
 │       ├── index.md            # CSS hub (en)
-│       ├── index-zh.md         # CSS hub (zh)
 │       ├── chrome-136-en.md    # CSS in Chrome 136 (en)
-│       └── chrome-136-zh.md    # CSS in Chrome 136 (zh)
+│       └── chrome-136-zh.md    # CSS in Chrome 136 (zh leaf)
 └── webplatform/                 # Staging digests copied from the pipeline
     ├── css/
     │   ├── chrome-136-stable-en.md
@@ -138,7 +133,7 @@ That staging directory is produced by the clean data pipeline (see `src/chrome_u
 
 ## Language Structure
 
-Running the generator with `--language bilingual` now produces a single navigation tree. Version and area directories contain companion files such as `css-en.md` and `css-zh.md`, while overview pages live side-by-side as `index.md` and `index-zh.md`. Cross-navigation links respect those suffixes so English pages point to English counterparts and Chinese pages point to Chinese counterparts.
+Running the generator with `--language bilingual` now produces a single navigation tree. Version and area directories contain companion files such as `css-en.md` and `css-zh.md`, with English index pages (`index.md`) remaining the sole hubs. Chinese visitors land directly on the `*-zh.md` leaf pages, which sit alongside the English leaves inside every version and area folder.
 
 ## Supported Versions
 

@@ -67,6 +67,12 @@ class GitHubPagesNavigationGenerator:
         """Produce relative link to a language-specific index page."""
         return f"{relative_prefix}{self.build_index_filename(language, 'html')}"
 
+    def should_emit_hub_pages(self, language: str) -> bool:
+        """Determine whether to create index/overview pages for the language."""
+        if self.language_mode == "bilingual" and language != "en":
+            return False
+        return True
+
     @staticmethod
     def _trans(language: str, english: str, chinese: str) -> str:
         """Return content in the requested language."""
@@ -257,91 +263,94 @@ title: {title}
         versions_dir = config["versions_dir"]
         versions = sorted(version_areas.keys(), reverse=True)
 
-        title_value = self._trans(language, "Chrome Versions", "Chrome 各版本")
-        index_lines = [
-            "---",
-            "layout: default",
-            f"title: {title_value}",
-            "---",
-            "",
-            f"# {self._trans(language, 'Chrome Release Digests by Version', '按版本浏览 Chrome 发布摘要')}",
-            "",
-            self._trans(
-                language,
-                "Browse Chrome release notes organized by version number.",
-                "按版本号浏览整理后的 Chrome 发布说明。"
-            ),
-            "",
-            f"## {self._trans(language, 'Available Versions', '可用版本')}",
-            ""
-        ]
+        emit_hubs = self.should_emit_hub_pages(language)
+        if emit_hubs:
+            title_value = self._trans(language, "Chrome Versions", "Chrome 各版本")
+            index_lines = [
+                "---",
+                "layout: default",
+                f"title: {title_value}",
+                "---",
+                "",
+                f"# {self._trans(language, 'Chrome Release Digests by Version', '按版本浏览 Chrome 发布摘要')}",
+                "",
+                self._trans(
+                    language,
+                    "Browse Chrome release notes organized by version number.",
+                    "按版本号浏览整理后的 Chrome 发布说明。"
+                ),
+                "",
+                f"## {self._trans(language, 'Available Versions', '可用版本')}",
+                ""
+            ]
 
-        for version in versions:
-            is_latest = version == versions[0]
-            en_latest_badge = " **(Latest Stable)**" if is_latest else ""
-            zh_latest_badge = " **（最新稳定版）**" if is_latest else ""
-            areas_count = len(version_areas[version])
-            area_label = self.pluralize(areas_count, "area")
+            for version in versions:
+                is_latest = version == versions[0]
+                en_latest_badge = " **(Latest Stable)**" if is_latest else ""
+                zh_latest_badge = " **（最新稳定版）**" if is_latest else ""
+                areas_count = len(version_areas[version])
+                area_label = self.pluralize(areas_count, "area")
 
-            latest_index_link_en = f"./chrome-{version}/{self.build_index_filename('en', 'html')}"
-            latest_index_link_zh = f"./chrome-{version}/{self.build_index_filename('zh', 'html')}"
-            english_line = (
-                f"- [Chrome {version}{en_latest_badge}]({latest_index_link_en}) - "
-                f"{areas_count} {area_label} with updates"
-            )
-            chinese_line = (
-                f"- [Chrome {version}{zh_latest_badge}]({latest_index_link_zh}) - "
-                f"包含 {areas_count} 个更新领域"
-            )
-            index_lines.append(self._trans(language, english_line, chinese_line))
+                latest_index_link_en = f"./chrome-{version}/{self.build_index_filename('en', 'html')}"
+                latest_index_link_zh = f"./chrome-{version}/{self.build_index_filename('zh', 'html')}"
+                english_line = (
+                    f"- [Chrome {version}{en_latest_badge}]({latest_index_link_en}) - "
+                    f"{areas_count} {area_label} with updates"
+                )
+                chinese_line = (
+                    f"- [Chrome {version}{zh_latest_badge}]({latest_index_link_zh}) - "
+                    f"包含 {areas_count} 个更新领域"
+                )
+                index_lines.append(self._trans(language, english_line, chinese_line))
 
-        index_lines.append("")
-        with open(versions_dir / self.build_index_filename(language), 'w', encoding='utf-8') as f:
-            f.write("\n".join(index_lines).rstrip() + "\n")
+            index_lines.append("")
+            with open(versions_dir / self.build_index_filename(language), 'w', encoding='utf-8') as f:
+                f.write("\n".join(index_lines).rstrip() + "\n")
 
         for version in versions:
             version_dir = versions_dir / f"chrome-{version}"
             version_dir.mkdir(exist_ok=True)
 
-            overview_title = self._trans(
-                language,
-                f"Chrome {version} Release Notes",
-                f"Chrome {version} 发布说明"
-            )
-            back_to_versions_en = self.build_index_link('en', "../")
-            back_to_versions_zh = self.build_index_link('zh', "../")
-            overview_lines = [
-                "---",
-                "layout: default",
-                f"title: {overview_title}",
-                "---",
-                "",
-                f"# {self._trans(language, f'Chrome {version} Release Notes', f'Chrome {version} 发布说明')}",
-                "",
-                self._trans(
-                    language,
-                    f"[← Back to all versions]({back_to_versions_en})",
-                    f"[← 返回所有版本]({back_to_versions_zh})"
-                ),
-                "",
-                f"## {self._trans(language, 'Areas with Updates', '包含更新的领域')}",
-                ""
-            ]
-
             areas_for_version = self.order_areas(version_areas[version])
+            if emit_hubs:
+                overview_title = self._trans(
+                    language,
+                    f"Chrome {version} Release Notes",
+                    f"Chrome {version} 发布说明"
+                )
+                back_to_versions_en = self.build_index_link('en', "../")
+                back_to_versions_zh = self.build_index_link('zh', "../")
+                overview_lines = [
+                    "---",
+                    "layout: default",
+                    f"title: {overview_title}",
+                    "---",
+                    "",
+                    f"# {self._trans(language, f'Chrome {version} Release Notes', f'Chrome {version} 发布说明')}",
+                    "",
+                    self._trans(
+                        language,
+                        f"[← Back to all versions]({back_to_versions_en})",
+                        f"[← 返回所有版本]({back_to_versions_zh})"
+                    ),
+                    "",
+                    f"## {self._trans(language, 'Areas with Updates', '包含更新的领域')}",
+                    ""
+                ]
 
             for area in areas_for_version:
                 display_name = self.get_area_display_name(area)
                 description = self.get_area_description(area)
                 description_suffix = f" — {description}" if description else ""
 
-                english_bullet = (
-                    f"- [{display_name}](./{self.build_leaf_filename(area, 'en', 'html')}){description_suffix}"
-                )
-                chinese_bullet = (
-                    f"- [{display_name}](./{self.build_leaf_filename(area, 'zh', 'html')}){description_suffix}"
-                )
-                overview_lines.append(self._trans(language, english_bullet, chinese_bullet))
+                if emit_hubs:
+                    english_bullet = (
+                        f"- [{display_name}](./{self.build_leaf_filename(area, 'en', 'html')}){description_suffix}"
+                    )
+                    chinese_bullet = (
+                        f"- [{display_name}](./{self.build_leaf_filename(area, 'zh', 'html')}){description_suffix}"
+                    )
+                    overview_lines.append(self._trans(language, english_bullet, chinese_bullet))
 
                 source_file = self.source_dir / area / f"chrome-{version}-{self.channel}-{language}.md"
                 dest_file = version_dir / self.build_leaf_filename(area, language)
@@ -351,47 +360,48 @@ title: {title}
                         "navigation entry will reference existing summaries only."
                     )
 
-            overview_lines.append("")
-            overview_lines.append(f"## {self._trans(language, 'Navigation', '页面导航')}")
-            overview_lines.append("")
+            if emit_hubs:
+                overview_lines.append("")
+                overview_lines.append(f"## {self._trans(language, 'Navigation', '页面导航')}")
+                overview_lines.append("")
 
-            version_idx = versions.index(version)
-            if version_idx > 0:
-                newer_version = versions[version_idx - 1]
+                version_idx = versions.index(version)
+                if version_idx > 0:
+                    newer_version = versions[version_idx - 1]
+                    overview_lines.append(
+                        self._trans(
+                            language,
+                            f"- [← Chrome {newer_version} (Newer)]({self.build_index_link('en', f'../chrome-{newer_version}/')})",
+                            f"- [← Chrome {newer_version}（较新版本）]({self.build_index_link('zh', f'../chrome-{newer_version}/')})"
+                        )
+                    )
+                if version_idx < len(versions) - 1:
+                    older_version = versions[version_idx + 1]
+                    overview_lines.append(
+                        self._trans(
+                            language,
+                            f"- [Chrome {older_version} (Older) →]({self.build_index_link('en', f'../chrome-{older_version}/')})",
+                            f"- [Chrome {older_version}（较旧版本） →]({self.build_index_link('zh', f'../chrome-{older_version}/')})"
+                        )
+                    )
+
                 overview_lines.append(
                     self._trans(
                         language,
-                        f"- [← Chrome {newer_version} (Newer)]({self.build_index_link('en', f'../chrome-{newer_version}/')})",
-                        f"- [← Chrome {newer_version}（较新版本）]({self.build_index_link('zh', f'../chrome-{newer_version}/')})"
+                        f"- [View all versions]({self.build_index_link('en', '../')})",
+                        f"- [查看全部版本]({self.build_index_link('zh', '../')})"
                     )
                 )
-            if version_idx < len(versions) - 1:
-                older_version = versions[version_idx + 1]
                 overview_lines.append(
                     self._trans(
                         language,
-                        f"- [Chrome {older_version} (Older) →]({self.build_index_link('en', f'../chrome-{older_version}/')})",
-                        f"- [Chrome {older_version}（较旧版本） →]({self.build_index_link('zh', f'../chrome-{older_version}/')})"
+                        f"- [Browse by feature area]({self.build_index_link('en', '../../areas/')})",
+                        f"- [按功能领域浏览]({self.build_index_link('zh', '../../areas/')})"
                     )
                 )
 
-            overview_lines.append(
-                self._trans(
-                    language,
-                    f"- [View all versions]({self.build_index_link('en', '../')})",
-                    f"- [查看全部版本]({self.build_index_link('zh', '../')})"
-                )
-            )
-            overview_lines.append(
-                self._trans(
-                    language,
-                    f"- [Browse by feature area]({self.build_index_link('en', '../../areas/')})",
-                    f"- [按功能领域浏览]({self.build_index_link('zh', '../../areas/')})"
-                )
-            )
-
-            with open(version_dir / self.build_index_filename(language), 'w', encoding='utf-8') as f:
-                f.write("\n".join(overview_lines).rstrip() + "\n")
+                with open(version_dir / self.build_index_filename(language), 'w', encoding='utf-8') as f:
+                    f.write("\n".join(overview_lines).rstrip() + "\n")
 
 
     def generate_area_pages(
@@ -404,45 +414,47 @@ title: {title}
         areas_dir = config["areas_dir"]
         areas = self.order_areas(area_versions.keys())
 
-        title_value = self._trans(language, "Feature Areas", "功能领域")
-        index_lines = [
-            "---",
-            "layout: default",
-            f"title: {title_value}",
-            "---",
-            "",
-            f"# {self._trans(language, 'Chrome Release Digests by Feature Area', '按功能领域浏览 Chrome 发布摘要')}",
-            "",
-            self._trans(
-                language,
-                "Browse Chrome release notes organized by feature area to track evolution over time.",
-                "按功能领域查看 Chrome 更新，追踪功能演进。"
-            ),
-            "",
-            f"## {self._trans(language, 'Available Feature Areas', '可用功能领域')}",
-            ""
-        ]
+        emit_hubs = self.should_emit_hub_pages(language)
+        if emit_hubs:
+            title_value = self._trans(language, "Feature Areas", "功能领域")
+            index_lines = [
+                "---",
+                "layout: default",
+                f"title: {title_value}",
+                "---",
+                "",
+                f"# {self._trans(language, 'Chrome Release Digests by Feature Area', '按功能领域浏览 Chrome 发布摘要')}",
+                "",
+                self._trans(
+                    language,
+                    "Browse Chrome release notes organized by feature area to track evolution over time.",
+                    "按功能领域查看 Chrome 更新，追踪功能演进。"
+                ),
+                "",
+                f"## {self._trans(language, 'Available Feature Areas', '可用功能领域')}",
+                ""
+            ]
 
-        for area in areas:
-            display_name = self.get_area_display_name(area)
-            description = self.get_area_description(area)
-            versions_count = len(area_versions[area])
-            versions_label = self.pluralize(versions_count, "version")
-            description_suffix = f" — {description}" if description else ""
+            for area in areas:
+                display_name = self.get_area_display_name(area)
+                description = self.get_area_description(area)
+                versions_count = len(area_versions[area])
+                versions_label = self.pluralize(versions_count, "version")
+                description_suffix = f" — {description}" if description else ""
 
-            english_line = (
-                f"- [{display_name}](./{area}/{self.build_index_filename('en', 'html')}) - "
-                f"Updates in {versions_count} {versions_label}{description_suffix}"
-            )
-            chinese_line = (
-                f"- [{display_name}](./{area}/{self.build_index_filename('zh', 'html')}) - "
-                f"在 {versions_count} 个版本中有更新{description_suffix}"
-            )
-            index_lines.append(self._trans(language, english_line, chinese_line))
+                english_line = (
+                    f"- [{display_name}](./{area}/{self.build_index_filename('en', 'html')}) - "
+                    f"Updates in {versions_count} {versions_label}{description_suffix}"
+                )
+                chinese_line = (
+                    f"- [{display_name}](./{area}/{self.build_index_filename('zh', 'html')}) - "
+                    f"在 {versions_count} 个版本中有更新{description_suffix}"
+                )
+                index_lines.append(self._trans(language, english_line, chinese_line))
 
-        index_lines.append("")
-        with open(areas_dir / self.build_index_filename(language), 'w', encoding='utf-8') as f:
-            f.write("\n".join(index_lines).rstrip() + "\n")
+            index_lines.append("")
+            with open(areas_dir / self.build_index_filename(language), 'w', encoding='utf-8') as f:
+                f.write("\n".join(index_lines).rstrip() + "\n")
 
         for area in areas:
             area_dir = areas_dir / area
@@ -452,52 +464,54 @@ title: {title}
             description = self.get_area_description(area)
             versions = sorted(area_versions[area], reverse=True)
 
-            area_title = self._trans(language, f"{display_name} Updates", f"{display_name} 更新")
-            back_to_areas_en = self.build_index_link('en', "../")
-            back_to_areas_zh = self.build_index_link('zh', "../")
-            hub_lines = [
-                "---",
-                "layout: default",
-                f"title: {area_title}",
-                "---",
-                "",
-                f"# {self._trans(language, f'{display_name} Updates', f'{display_name} 更新')}",
-                "",
-                self._trans(
-                    language,
-                    f"[← Back to all areas]({back_to_areas_en})",
-                    f"[← 返回所有领域]({back_to_areas_zh})"
-                ),
-                "",
-                f"## {self._trans(language, 'Version History', '版本历史')}",
-                "",
-                self._trans(
-                    language,
-                    f"Track the evolution of {display_name} features across Chrome releases.",
-                    f"追踪 {display_name} 在各个 Chrome 版本中的功能演进。"
-                ),
-                ""
-            ]
+            if emit_hubs:
+                area_title = self._trans(language, f"{display_name} Updates", f"{display_name} 更新")
+                back_to_areas_en = self.build_index_link('en', "../")
+                back_to_areas_zh = self.build_index_link('zh', "../")
+                hub_lines = [
+                    "---",
+                    "layout: default",
+                    f"title: {area_title}",
+                    "---",
+                    "",
+                    f"# {self._trans(language, f'{display_name} Updates', f'{display_name} 更新')}",
+                    "",
+                    self._trans(
+                        language,
+                        f"[← Back to all areas]({back_to_areas_en})",
+                        f"[← 返回所有领域]({back_to_areas_zh})"
+                    ),
+                    "",
+                    f"## {self._trans(language, 'Version History', '版本历史')}",
+                    "",
+                    self._trans(
+                        language,
+                        f"Track the evolution of {display_name} features across Chrome releases.",
+                        f"追踪 {display_name} 在各个 Chrome 版本中的功能演进。"
+                    ),
+                    ""
+                ]
 
-            if description:
-                hub_lines.append(description)
+                if description:
+                    hub_lines.append(description)
+                    hub_lines.append("")
+
+                hub_lines.append(f"### {self._trans(language, 'Available Versions', '可用版本')}")
                 hub_lines.append("")
-
-            hub_lines.append(f"### {self._trans(language, 'Available Versions', '可用版本')}")
-            hub_lines.append("")
 
             for version in versions:
                 is_latest = version == versions[0]
                 en_badge = " **(Latest)**" if is_latest else ""
                 zh_badge = " **（最新）**" if is_latest else ""
 
-                english_line = (
-                    f"- [Chrome {version}{en_badge}](./{self.build_leaf_filename(f'chrome-{version}', 'en', 'html')})"
-                )
-                chinese_line = (
-                    f"- [Chrome {version}{zh_badge}](./{self.build_leaf_filename(f'chrome-{version}', 'zh', 'html')})"
-                )
-                hub_lines.append(self._trans(language, english_line, chinese_line))
+                if emit_hubs:
+                    english_line = (
+                        f"- [Chrome {version}{en_badge}](./{self.build_leaf_filename(f'chrome-{version}', 'en', 'html')})"
+                    )
+                    chinese_line = (
+                        f"- [Chrome {version}{zh_badge}](./{self.build_leaf_filename(f'chrome-{version}', 'zh', 'html')})"
+                    )
+                    hub_lines.append(self._trans(language, english_line, chinese_line))
 
                 source_file = self.source_dir / area / f"chrome-{version}-{self.channel}-{language}.md"
                 dest_file = area_dir / self.build_leaf_filename(f"chrome-{version}", language)
@@ -506,26 +520,27 @@ title: {title}
                         f"Warning: missing digests for area '{area}' in Chrome {version} ({language}); skipping area detail copy."
                     )
 
-            hub_lines.append("")
-            hub_lines.append(f"## {self._trans(language, 'Navigation', '页面导航')}")
-            hub_lines.append("")
-            hub_lines.append(
-                self._trans(
-                    language,
-                    f"- [View all feature areas]({self.build_index_link('en', '../')})",
-                    f"- [查看全部领域]({self.build_index_link('zh', '../')})"
+            if emit_hubs:
+                hub_lines.append("")
+                hub_lines.append(f"## {self._trans(language, 'Navigation', '页面导航')}")
+                hub_lines.append("")
+                hub_lines.append(
+                    self._trans(
+                        language,
+                        f"- [View all feature areas]({self.build_index_link('en', '../')})",
+                        f"- [查看全部领域]({self.build_index_link('zh', '../')})"
+                    )
                 )
-            )
-            hub_lines.append(
-                self._trans(
-                    language,
-                    f"- [Browse by Chrome version]({self.build_index_link('en', '../../versions/')})",
-                    f"- [按 Chrome 版本浏览]({self.build_index_link('zh', '../../versions/')})"
+                hub_lines.append(
+                    self._trans(
+                        language,
+                        f"- [Browse by Chrome version]({self.build_index_link('en', '../../versions/')})",
+                        f"- [按 Chrome 版本浏览]({self.build_index_link('zh', '../../versions/')})"
+                    )
                 )
-            )
 
-            with open(area_dir / self.build_index_filename(language), 'w', encoding='utf-8') as f:
-                f.write("\n".join(hub_lines).rstrip() + "\n")
+                with open(area_dir / self.build_index_filename(language), 'w', encoding='utf-8') as f:
+                    f.write("\n".join(hub_lines).rstrip() + "\n")
 
 
     def update_main_index(
@@ -536,6 +551,9 @@ title: {title}
         config: Dict[str, Path]
     ) -> None:
         """Update the language-specific main index."""
+        if not self.should_emit_hub_pages(language):
+            return
+
         versions = sorted(version_areas.keys(), reverse=True)
         areas = self.order_areas(area_versions.keys())
         top_areas = sorted(areas, key=lambda a: len(area_versions[a]), reverse=True)[:5]
@@ -720,17 +738,6 @@ title: {title}
                 "*内容来源：[Chrome 发布说明](https://developer.chrome.com/release-notes/)*"
             )
         )
-
-        if self.language_mode == 'bilingual' and language == 'en':
-            index_lines.append("")
-            index_lines.append("## Other Languages")
-            index_lines.append("")
-            index_lines.append("- [中文版](./index-zh.html)")
-        elif self.language_mode == 'bilingual' and language == 'zh':
-            index_lines.append("")
-            index_lines.append("## 其他语言")
-            index_lines.append("")
-            index_lines.append("- [English](./index.html)")
 
         with open(config["index_path"], 'w', encoding='utf-8') as f:
             f.write("\n".join(index_lines).rstrip() + "\n")

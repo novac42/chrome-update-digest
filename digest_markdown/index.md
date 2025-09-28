@@ -50,7 +50,3 @@ New Chrome stable releases are typically published every 4 weeks. This site is u
 ---
 
 *Generated from [Chrome Release Notes](https://developer.chrome.com/release-notes/)*
-
-## Other Languages
-
-- [中文版](./index-zh.html)
