@@ -3,9 +3,6 @@ layout: default
 title: Chrome 136 CSS Updates - Stable Release
 ---
 
-I'll analyze Chrome 136's CSS updates and create the digest markdown file.
-
-```markdown
 # Chrome 136 CSS Updates - Stable Release
 
 ## Area Summary

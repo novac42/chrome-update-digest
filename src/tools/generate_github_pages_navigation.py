@@ -232,7 +232,8 @@ class GitHubPagesNavigationGenerator:
         # Read original content
         with open(source_file, 'r', encoding='utf-8') as f:
             content = f.read()
-            
+        content = self._sanitize_digest_content(content)
+
         # Extract title from content
         title_match = re.search(r'^#\s+(.+)$', content, re.MULTILINE)
         title = title_match.group(1) if title_match else dest_file.stem
@@ -251,6 +252,26 @@ title: {title}
             f.write(front_matter + content)
             
         return True
+
+    def _sanitize_digest_content(self, content: str) -> str:
+        """Remove scaffold text and unwrap code fences around digests."""
+        normalized = content.replace('\r\n', '\n').lstrip()
+        lines = normalized.splitlines()
+
+        start_idx = 0
+        for idx, line in enumerate(lines):
+            if line.startswith('#'):
+                start_idx = idx
+                break
+        cleaned_lines = lines[start_idx:]
+
+        while cleaned_lines and cleaned_lines[0].startswith('```'):
+            cleaned_lines = cleaned_lines[1:]
+
+        while cleaned_lines and cleaned_lines[-1].strip() == '```':
+            cleaned_lines = cleaned_lines[:-1]
+
+        return ("\n".join(cleaned_lines)).strip() + "\n"
 
 
     def generate_version_pages(
