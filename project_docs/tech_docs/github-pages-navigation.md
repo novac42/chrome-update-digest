@@ -133,7 +133,7 @@ That staging directory is produced by the clean data pipeline (see `src/chrome_u
 
 ## Language Structure
 
-Running the generator with `--language bilingual` now produces a single navigation tree. Version and area directories contain companion files such as `css-en.md` and `css-zh.md`, with English index pages (`index.md`) remaining the sole hubs. Chinese visitors land directly on the `*-zh.md` leaf pages, which sit alongside the English leaves inside every version and area folder.
+Running the generator with `--language bilingual` now produces a single navigation tree. Version and area directories contain companion files such as `css-en.md` and `css-zh.md`, with English index pages (`index.md`) remaining the sole hubs. Those hubs surface language toggles (English / 中文) for every leaf so both translations stay discoverable even without separate Chinese index pages.
 
 ## Supported Versions
 

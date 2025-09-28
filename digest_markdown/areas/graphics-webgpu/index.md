@@ -15,7 +15,7 @@ Graphics rendering and WebGPU features
 
 ### Available Versions
 
-- [Chrome 136 **(Latest)**](./chrome-136-en.html)
+- Chrome 136 **(Latest)**: [English](./chrome-136-en.html) / [中文](./chrome-136-zh.html)
 
 ## Navigation
 

@@ -344,13 +344,22 @@ title: {title}
                 description_suffix = f" — {description}" if description else ""
 
                 if emit_hubs:
-                    english_bullet = (
-                        f"- [{display_name}](./{self.build_leaf_filename(area, 'en', 'html')}){description_suffix}"
-                    )
-                    chinese_bullet = (
-                        f"- [{display_name}](./{self.build_leaf_filename(area, 'zh', 'html')}){description_suffix}"
-                    )
-                    overview_lines.append(self._trans(language, english_bullet, chinese_bullet))
+                    if language == 'en':
+                        language_links = [
+                            f"[English](./{self.build_leaf_filename(area, 'en', 'html')})"
+                        ]
+                        if 'zh' in self.languages:
+                            language_links.append(
+                                f"[中文](./{self.build_leaf_filename(area, 'zh', 'html')})"
+                            )
+                        overview_lines.append(
+                            f"- {display_name}: {' / '.join(language_links)}{description_suffix}"
+                        )
+                    else:
+                        label = self._trans(language, 'English', '中文')
+                        overview_lines.append(
+                            f"- {display_name}: [{label}](./{self.build_leaf_filename(area, language, 'html')}){description_suffix}"
+                        )
 
                 source_file = self.source_dir / area / f"chrome-{version}-{self.channel}-{language}.md"
                 dest_file = version_dir / self.build_leaf_filename(area, language)
@@ -505,13 +514,22 @@ title: {title}
                 zh_badge = " **（最新）**" if is_latest else ""
 
                 if emit_hubs:
-                    english_line = (
-                        f"- [Chrome {version}{en_badge}](./{self.build_leaf_filename(f'chrome-{version}', 'en', 'html')})"
-                    )
-                    chinese_line = (
-                        f"- [Chrome {version}{zh_badge}](./{self.build_leaf_filename(f'chrome-{version}', 'zh', 'html')})"
-                    )
-                    hub_lines.append(self._trans(language, english_line, chinese_line))
+                    if language == 'en':
+                        language_links = [
+                            f"[English](./{self.build_leaf_filename(f'chrome-{version}', 'en', 'html')})"
+                        ]
+                        if 'zh' in self.languages:
+                            language_links.append(
+                                f"[中文](./{self.build_leaf_filename(f'chrome-{version}', 'zh', 'html')})"
+                            )
+                        hub_lines.append(
+                            f"- Chrome {version}{en_badge}: {' / '.join(language_links)}"
+                        )
+                    else:
+                        label = self._trans(language, 'English', '中文')
+                        hub_lines.append(
+                            f"- Chrome {version}{zh_badge}: [{label}](./{self.build_leaf_filename(f'chrome-{version}', language, 'html')})"
+                        )
 
                 source_file = self.source_dir / area / f"chrome-{version}-{self.channel}-{language}.md"
                 dest_file = area_dir / self.build_leaf_filename(f"chrome-{version}", language)
