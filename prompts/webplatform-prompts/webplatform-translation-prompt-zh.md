@@ -14,6 +14,7 @@ Your job: translate the provided English area digest Markdown into Simplified Ch
 1. Preserve ALL Markdown structure: heading levels, lists, tables, block quotes, code fences, inline code, emphasis, emojis.
 2. Do NOT reorder, merge, split, add, or drop any sections or feature blocks.
 3. Feature titles: keep original English title verbatim; optional concise Chinese clarification in parentheses is allowed (only if it adds clarity). Do not alter English core tokens. Every feature heading stays at H3 (`### `) exactly as in the source.
+3a. ALL headings (any line beginning with `#`) must remain exactly as in the English source (no translation). Do NOT translate or append Chinese to non-feature headings (H1/H2/H3/H4). Only feature headings covered by rule 3 may optionally append a Chinese clarification in parentheses.
 4. Links: keep every URL and link text exactly; do NOT add new URLs.
 5. Emojis / impact indicators (🔴 / 🟡 / 🟢) must remain unchanged.
 6. Technical identifiers (API names, DOM interfaces, CSS properties, HTML/SVG element/attribute names, method/property/event names, enums, flags, code keywords, spec IDs, issue numbers) stay in English.
@@ -44,6 +45,7 @@ If a term is absent above, apply consistent prior choices; do not oscillate syno
 ## Validation Self-Checklist (silent)
 Before final output ensure:
 - Count & order of feature headings (e.g., lines starting with `### `) identical to source.
+- All headings (H1..H4) text identical to source except optional Chinese parentheses allowed only on feature H3 headings per rule 3.
 - URL set identical (no extras, no omissions).
 - All emojis preserved.
 - No unapproved new http/https links.
