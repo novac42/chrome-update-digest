@@ -569,7 +569,7 @@ YAML Data:
                     "messages": messages,
                     "system_prompt": system_prompt,  # Pass as separate parameter
                     # Explicitly prefer gpt5-mini for sampling
-                    "model_preferences": {"model": "gpt5-mini"},
+                    "model_preferences": {"model": "gpt-5-mini"},
                     "temperature": 0.7,
                     "max_tokens": max_tokens,
                 }
