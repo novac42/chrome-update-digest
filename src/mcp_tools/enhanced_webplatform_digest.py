@@ -556,8 +556,8 @@ YAML Data:
         import asyncio
         import os
         
-        # Get max tokens from environment variable with reasonable default
-        max_tokens = int(os.getenv("WEBPLATFORM_MAX_TOKENS", "12000"))
+        # Get max tokens from environment variable with reasonable default (explicitly 20000 for gpt5-mini)
+        max_tokens = int(os.getenv("WEBPLATFORM_MAX_TOKENS", "20000"))
         
         for attempt in range(max_retries):
             try:
@@ -569,8 +569,10 @@ YAML Data:
                     ctx.sample(
                         messages=messages,
                         system_prompt=system_prompt,  # Pass as separate parameter
+                        # Explicitly prefer gpt5-mini for sampling
+                        model_preferences={"model": "gpt5-mini"},
                         temperature=0.7,
-                        max_tokens=max_tokens  # Now configurable via environment
+                        max_tokens=max_tokens  # Now configurable via environment (default 20000)
                     ),
                     timeout=timeout
                 )
