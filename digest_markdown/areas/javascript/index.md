@@ -16,6 +16,7 @@ JavaScript language features and runtime updates
 ### Available Versions
 
 - Chrome 140 **(Latest)**: [English](./chrome-140-en.html) / [中文](./chrome-140-zh.html)
+- Chrome 139: [English](./chrome-139-en.html) / [中文](./chrome-139-zh.html)
 
 ## Navigation
 

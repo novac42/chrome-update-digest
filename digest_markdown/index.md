@@ -12,19 +12,20 @@ Comprehensive release notes for Chrome web platform features, organized for easy
 Explore what's new in each Chrome release:
 
 - [Chrome 140 **(Latest Stable)**](./versions/chrome-140/index.html) - 11 areas with updates
+- [Chrome 139](./versions/chrome-139/index.html) - 13 areas with updates
 - [Chrome 136](./versions/chrome-136/index.html) - 12 areas with updates
-- [View all 2 versions →](./versions/index.html)
+- [View all 3 versions →](./versions/index.html)
 
 ## Browse by Feature Area
 
 Track the evolution of specific features across Chrome versions:
 
-- [CSS](./areas/css/index.html) - Updates in 2 versions
-- [HTML-DOM](./areas/html-dom/index.html) - Updates in 2 versions
-- [Graphics and WebGPU](./areas/graphics-webgpu/index.html) - Updates in 2 versions
-- [Web API](./areas/webapi/index.html) - Updates in 2 versions
-- [Origin trials](./areas/origin-trials/index.html) - Updates in 2 versions
-- [View all 17 feature areas →](./areas/index.html)
+- [CSS](./areas/css/index.html) - Updates in 3 versions
+- [HTML-DOM](./areas/html-dom/index.html) - Updates in 3 versions
+- [Graphics and WebGPU](./areas/graphics-webgpu/index.html) - Updates in 3 versions
+- [Web API](./areas/webapi/index.html) - Updates in 3 versions
+- [Origin trials](./areas/origin-trials/index.html) - Updates in 3 versions
+- [View all 18 feature areas →](./areas/index.html)
 
 ## Quick Links
 
