@@ -556,24 +556,26 @@ YAML Data:
         import asyncio
         import os
         
-        # Get max tokens from environment variable with reasonable default (explicitly 20000 for gpt5-mini)
-        max_tokens = int(os.getenv("WEBPLATFORM_MAX_TOKENS", "20000"))
-        
+        # Fixed max tokens for sampling per server configuration
+        max_tokens = 20000
+
         for attempt in range(max_retries):
             try:
                 if debug:
                     print(f"Sampling attempt {attempt + 1}/{max_retries}... (max_tokens={max_tokens})")
-                
+
                 # Use asyncio.wait_for for timeout control
+                sample_kwargs = {
+                    "messages": messages,
+                    "system_prompt": system_prompt,  # Pass as separate parameter
+                    # Explicitly prefer gpt5-mini for sampling
+                    "model_preferences": {"model": "gpt5-mini"},
+                    "temperature": 0.7,
+                    "max_tokens": max_tokens,
+                }
+
                 response = await asyncio.wait_for(
-                    ctx.sample(
-                        messages=messages,
-                        system_prompt=system_prompt,  # Pass as separate parameter
-                        # Explicitly prefer gpt5-mini for sampling
-                        model_preferences={"model": "gpt5-mini"},
-                        temperature=0.7,
-                        max_tokens=max_tokens  # Now configurable via environment (default 20000)
-                    ),
+                    ctx.sample(**sample_kwargs),
                     timeout=timeout
                 )
                 

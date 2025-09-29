@@ -1,102 +1,84 @@
 {
-  "version": "136",
+  "version": "140",
   "channel": "stable",
   "languages": [
     "en",
     "zh"
   ],
   "areas": [
-    "browser-changes",
     "css",
+    "deprecation",
     "devices",
     "graphics-webgpu",
     "html-dom",
-    "identity",
-    "multimedia",
-    "navigation-loading",
+    "isolated-web-apps",
+    "javascript",
     "origin-trials",
-    "performance",
-    "security-privacy",
+    "pwa-service-worker",
+    "storage",
     "webapi"
   ],
-  "total_areas": 12,
-  "completed_areas": 12,
+  "total_areas": 11,
+  "completed_areas": 11,
   "per_area": {
-    "browser-changes": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/browser-changes/chrome-136-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/browser-changes/chrome-136-stable-zh.md"
-    },
     "css": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/css/chrome-136-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/css/chrome-136-stable-zh.md"
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: model_preferences must be one of: ModelPreferences, str, list[str], or None."
+    },
+    "deprecation": {
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: model_preferences must be one of: ModelPreferences, str, list[str], or None."
     },
     "devices": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/devices/chrome-136-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/devices/chrome-136-stable-zh.md"
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: model_preferences must be one of: ModelPreferences, str, list[str], or None."
     },
     "graphics-webgpu": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/graphics-webgpu/chrome-136-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/graphics-webgpu/chrome-136-stable-zh.md"
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: model_preferences must be one of: ModelPreferences, str, list[str], or None."
     },
     "html-dom": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/html-dom/chrome-136-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/html-dom/chrome-136-stable-zh.md"
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: model_preferences must be one of: ModelPreferences, str, list[str], or None."
     },
-    "identity": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/identity/chrome-136-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/identity/chrome-136-stable-zh.md"
+    "isolated-web-apps": {
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: model_preferences must be one of: ModelPreferences, str, list[str], or None."
     },
-    "multimedia": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/multimedia/chrome-136-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/multimedia/chrome-136-stable-zh.md"
-    },
-    "navigation-loading": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/navigation-loading/chrome-136-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/navigation-loading/chrome-136-stable-zh.md"
+    "javascript": {
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: model_preferences must be one of: ModelPreferences, str, list[str], or None."
     },
     "origin-trials": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/origin-trials/chrome-136-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/origin-trials/chrome-136-stable-zh.md"
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: model_preferences must be one of: ModelPreferences, str, list[str], or None."
     },
-    "performance": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/performance/chrome-136-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/performance/chrome-136-stable-zh.md"
+    "pwa-service-worker": {
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: model_preferences must be one of: ModelPreferences, str, list[str], or None."
     },
-    "security-privacy": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/security-privacy/chrome-136-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/security-privacy/chrome-136-stable-zh.md"
+    "storage": {
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: model_preferences must be one of: ModelPreferences, str, list[str], or None."
     },
     "webapi": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/webapi/chrome-136-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/webapi/chrome-136-stable-zh.md"
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: model_preferences must be one of: ModelPreferences, str, list[str], or None."
     }
   },
-  "started_at": "2025-09-21T21:12:38.519430",
-  "updated_at": "2025-09-21T21:15:48.623437",
-  "completed_at": "2025-09-21T21:15:48.623380",
-  "total_time_seconds": 190.10362005233765
+  "started_at": "2025-09-29T17:49:19.228380",
+  "updated_at": "2025-09-29T17:49:31.445713",
+  "completed_at": "2025-09-29T17:49:31.445400",
+  "total_time_seconds": 12.21222472190857
 }
