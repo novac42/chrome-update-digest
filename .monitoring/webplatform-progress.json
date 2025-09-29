@@ -22,63 +22,74 @@
   "completed_areas": 11,
   "per_area": {
     "css": {
-      "en": "error",
-      "zh": "pending",
-      "error": "Sampling failed after 3 retries: model_preferences must be one of: ModelPreferences, str, list[str], or None."
+      "en": "done",
+      "zh": "done",
+      "en_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/css/chrome-140-stable-en.md",
+      "zh_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/css/chrome-140-stable-zh.md"
     },
     "deprecation": {
-      "en": "error",
-      "zh": "pending",
-      "error": "Sampling failed after 3 retries: model_preferences must be one of: ModelPreferences, str, list[str], or None."
+      "en": "done",
+      "zh": "done",
+      "en_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/deprecation/chrome-140-stable-en.md",
+      "zh_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/deprecation/chrome-140-stable-zh.md"
     },
     "devices": {
-      "en": "error",
-      "zh": "pending",
-      "error": "Sampling failed after 3 retries: model_preferences must be one of: ModelPreferences, str, list[str], or None."
+      "en": "done",
+      "zh": "done",
+      "en_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/devices/chrome-140-stable-en.md",
+      "zh_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/devices/chrome-140-stable-zh.md"
     },
     "graphics-webgpu": {
-      "en": "error",
-      "zh": "pending",
-      "error": "Sampling failed after 3 retries: model_preferences must be one of: ModelPreferences, str, list[str], or None."
+      "en": "done",
+      "zh": "done",
+      "en_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/graphics-webgpu/chrome-140-stable-en.md",
+      "zh_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/graphics-webgpu/chrome-140-stable-zh.md"
     },
     "html-dom": {
-      "en": "error",
-      "zh": "pending",
-      "error": "Sampling failed after 3 retries: model_preferences must be one of: ModelPreferences, str, list[str], or None."
+      "en": "done",
+      "zh": "done",
+      "en_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/html-dom/chrome-140-stable-en.md",
+      "zh_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/html-dom/chrome-140-stable-zh.md"
     },
     "isolated-web-apps": {
-      "en": "error",
-      "zh": "pending",
-      "error": "Sampling failed after 3 retries: model_preferences must be one of: ModelPreferences, str, list[str], or None."
+      "en": "done",
+      "zh": "done",
+      "en_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/isolated-web-apps/chrome-140-stable-en.md",
+      "zh_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/isolated-web-apps/chrome-140-stable-zh.md"
     },
     "javascript": {
-      "en": "error",
-      "zh": "pending",
-      "error": "Sampling failed after 3 retries: model_preferences must be one of: ModelPreferences, str, list[str], or None."
+      "en": "done",
+      "zh": "done",
+      "en_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/javascript/chrome-140-stable-en.md",
+      "zh_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/javascript/chrome-140-stable-zh.md"
     },
     "origin-trials": {
-      "en": "error",
-      "zh": "pending",
-      "error": "Sampling failed after 3 retries: model_preferences must be one of: ModelPreferences, str, list[str], or None."
+      "en": "done",
+      "zh": "done",
+      "en_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/origin-trials/chrome-140-stable-en.md",
+      "zh_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/origin-trials/chrome-140-stable-zh.md"
     },
     "pwa-service-worker": {
-      "en": "error",
-      "zh": "pending",
-      "error": "Sampling failed after 3 retries: model_preferences must be one of: ModelPreferences, str, list[str], or None."
+      "en": "done",
+      "zh": "done",
+      "en_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/pwa-service-worker/chrome-140-stable-en.md",
+      "zh_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/pwa-service-worker/chrome-140-stable-zh.md"
     },
     "storage": {
-      "en": "error",
-      "zh": "pending",
-      "error": "Sampling failed after 3 retries: model_preferences must be one of: ModelPreferences, str, list[str], or None."
+      "en": "done",
+      "zh": "done",
+      "en_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/storage/chrome-140-stable-en.md",
+      "zh_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/storage/chrome-140-stable-zh.md"
     },
     "webapi": {
-      "en": "error",
-      "zh": "pending",
-      "error": "Sampling failed after 3 retries: model_preferences must be one of: ModelPreferences, str, list[str], or None."
+      "en": "done",
+      "zh": "done",
+      "en_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/webapi/chrome-140-stable-en.md",
+      "zh_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/webapi/chrome-140-stable-zh.md"
     }
   },
-  "started_at": "2025-09-29T17:49:19.228380",
-  "updated_at": "2025-09-29T17:49:31.445713",
-  "completed_at": "2025-09-29T17:49:31.445400",
-  "total_time_seconds": 12.21222472190857
+  "started_at": "2025-09-29T18:26:28.497377",
+  "updated_at": "2025-09-29T18:29:00.666612",
+  "completed_at": "2025-09-29T18:29:00.666495",
+  "total_time_seconds": 152.12194895744324
 }

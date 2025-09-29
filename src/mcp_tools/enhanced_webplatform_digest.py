@@ -5,8 +5,9 @@ Uses script-based extraction for 100% link accuracy.
 
 import asyncio
 import json
+import os
 from pathlib import Path
-from typing import Optional, Dict, List, Any
+from typing import Optional, Dict, List, Any, Union
 from datetime import datetime
 
 from fastmcp import Context
@@ -40,6 +41,61 @@ class EnhancedWebplatformDigestTool:
         # Digest output directory
         self.digest_dir = self.base_path / 'digest_markdown' / 'webplatform'
         self.digest_dir.mkdir(parents=True, exist_ok=True)
+        # Optional model preference hints for downstream sampling calls
+        self._model_preferences: Optional[Union[Dict[str, Any], List[Any]]] = None
+
+    def _resolve_model_preferences(
+        self,
+        explicit_preferences: Optional[Union[Dict[str, Any], List[Any], str]],
+        explicit_model: Optional[str]
+    ) -> Optional[Union[Dict[str, Any], List[Any]]]:
+        """Determine the model preference payload for sampling requests."""
+        preference_source: Optional[Union[Dict[str, Any], List[Any], str]] = explicit_preferences
+
+        # Direct model override takes effect only when full preferences are not provided
+        if preference_source is None and explicit_model:
+            preference_source = {"model": explicit_model}
+
+        # Allow environment configuration in the absence of explicit hints
+        if preference_source is None:
+            env_payload = os.getenv("WEBPLATFORM_MODEL_PREFERENCES")
+            if env_payload:
+                preference_source = env_payload
+            else:
+                env_model = os.getenv("WEBPLATFORM_MODEL")
+                if env_model:
+                    preference_source = env_model
+
+        return self._normalize_model_preferences(preference_source)
+
+    def _normalize_model_preferences(
+        self,
+        value: Optional[Union[Dict[str, Any], List[Any], str]]
+    ) -> Optional[Union[Dict[str, Any], List[Any]]]:
+        """Normalize incoming model preference configuration into dict/list payloads."""
+        if value is None:
+            return None
+
+        if isinstance(value, str):
+            candidate = value.strip()
+            if not candidate:
+                return None
+            try:
+                parsed = json.loads(candidate)
+            except json.JSONDecodeError:
+                # Treat plain string as shorthand for {"model": "..."}
+                return {"model": candidate}
+            else:
+                return self._normalize_model_preferences(parsed)
+
+        if isinstance(value, dict):
+            return value if value else None
+
+        if isinstance(value, list):
+            return value if value else None
+
+        # Unsupported types are ignored silently to avoid breaking the run
+        return None
     
     async def run(
         self,
@@ -51,7 +107,9 @@ class EnhancedWebplatformDigestTool:
         language: Optional[str] = None,
         split_by_area: bool = True,
         target_area: Optional[str] = None,
-        debug: bool = False
+        debug: bool = False,
+        model: Optional[str] = None,
+        model_preferences: Optional[Union[Dict[str, Any], List[Any], str]] = None
     ) -> str:
         """
         Generate WebPlatform digest with enhanced extraction.
@@ -66,6 +124,8 @@ class EnhancedWebplatformDigestTool:
             split_by_area: Whether to generate separate digests for each area (default: True)
             target_area: Specific area to analyze (e.g., "css", "webapi", "security")
             debug: Enable debug output
+            model: Optional short-hand to set preferred model (overridden by model_preferences)
+            model_preferences: Optional structured model preferences payload passed to ctx.sample
             
         Returns:
             Generated digest in markdown format or JSON with per-area results
@@ -77,6 +137,17 @@ class EnhancedWebplatformDigestTool:
                 focus_area_list = [area.strip() for area in focus_areas.split(',')]
                 if debug:
                     print(f"Filtering by focus areas: {focus_area_list}")
+
+            # Resolve model preferences once per run so all sampling calls share the same hint
+            self._model_preferences = self._resolve_model_preferences(
+                explicit_preferences=model_preferences,
+                explicit_model=model
+            )
+            if debug:
+                if self._model_preferences:
+                    print(f"Using model preferences: {self._model_preferences}")
+                else:
+                    print("No explicit model preferences provided; deferring to client defaults")
             
             # Step 1: Get or generate YAML data
             yaml_data = await self._get_yaml_data(ctx, version, channel, use_cache, split_by_area, target_area, debug)
@@ -554,10 +625,9 @@ YAML Data:
             Generated digest content or raises exception
         """
         import asyncio
-        import os
-        
+
         # Fixed max tokens for sampling per server configuration
-        max_tokens = 20000
+        max_tokens = 60000
 
         for attempt in range(max_retries):
             try:
@@ -568,11 +638,12 @@ YAML Data:
                 sample_kwargs = {
                     "messages": messages,
                     "system_prompt": system_prompt,  # Pass as separate parameter
-                    # Explicitly prefer gpt5-mini for sampling
-                    "model_preferences": {"model": "gpt-5-mini"},
                     "temperature": 0.7,
                     "max_tokens": max_tokens,
                 }
+
+                if self._model_preferences:
+                    sample_kwargs["model_preferences"] = self._model_preferences
 
                 response = await asyncio.wait_for(
                     ctx.sample(**sample_kwargs),

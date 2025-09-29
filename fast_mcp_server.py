@@ -148,7 +148,9 @@ async def get_webplatform_progress() -> str:
 async def webplatform_digest(ctx: Context, version: str = "138", channel: str = "stable",
                                      focus_areas: Optional[str] = None, use_cache: bool = True,
                                      language: str = "bilingual", split_by_area: bool = True,
-                                     target_area: Optional[str] = None, debug: bool = False) -> str:
+                                     target_area: Optional[str] = None, debug: bool = False,
+                                     model: Optional[str] = None,
+                                     model_preferences: Optional[Any] = None) -> str:
     """Generate webplatform digest with deterministic link extraction
     
     This tool provides 100% link accuracy through script-based extraction and
@@ -171,8 +173,19 @@ async def webplatform_digest(ctx: Context, version: str = "138", channel: str = 
         Generated digest in markdown format with accurate links in specified language
     """
     enhanced_tool = EnhancedWebplatformDigestTool(BASE_PATH)
-    return await enhanced_tool.run(ctx, version, channel, focus_areas, use_cache, language, 
-                                  split_by_area, target_area, debug)
+    return await enhanced_tool.run(
+        ctx=ctx,
+        version=version,
+        channel=channel,
+        focus_areas=focus_areas,
+        use_cache=use_cache,
+        language=language,
+        split_by_area=split_by_area,
+        target_area=target_area,
+        debug=debug,
+        model=model,
+        model_preferences=model_preferences,
+    )
 
 
 
