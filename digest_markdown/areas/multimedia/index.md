@@ -16,6 +16,7 @@ Media, audio, and video features
 ### Available Versions
 
 - Chrome 139 **(Latest)**: [English](./chrome-139-en.html) / [中文](./chrome-139-zh.html)
+- Chrome 137: [English](./chrome-137-en.html) / [中文](./chrome-137-zh.html)
 - Chrome 136: [English](./chrome-136-en.html) / [中文](./chrome-136-zh.html)
 
 ## Navigation
