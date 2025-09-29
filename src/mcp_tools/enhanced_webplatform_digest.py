@@ -1591,14 +1591,29 @@ YAML Data:
             issues.append(f"Missing {len(missing_links)} links from English version")
         if extra_links:
             issues.append(f"Added {len(extra_links)} new links not in English version")
-        
+
+        # Guard against untranslated output by checking Chinese character coverage
+        chinese_char_pattern = re.compile('[\u3400-\u4dbf\u4e00-\u9fff\u3000-\u303f\uff00-\uffef]')
+        content_char_pattern = re.compile('[A-Za-z\u3400-\u4dbf\u4e00-\u9fff\u3000-\u303f\uff00-\uffef]')
+        chinese_char_count = len(chinese_char_pattern.findall(chinese_digest))
+        content_char_count = len(content_char_pattern.findall(chinese_digest))
+        chinese_ratio = (chinese_char_count / content_char_count) if content_char_count else 0.0
+        min_content_chars = 100
+        min_ratio_threshold = 0.3
+        if content_char_count >= min_content_chars and chinese_ratio < min_ratio_threshold:
+            issues.append(
+                f"Chinese character ratio too low ({chinese_ratio:.2f}, threshold {min_ratio_threshold})"
+            )
+
         valid = len(issues) == 0
-        
+
         return {
             'valid': valid,
             'issues': '; '.join(issues) if issues else None,
             'heading_match': len(en_headings) == len(zh_headings),
-            'link_match': en_link_urls == zh_link_urls
+            'link_match': en_link_urls == zh_link_urls,
+            'chinese_ratio': chinese_ratio,
+            'content_char_count': content_char_count
         }
     
     def _generate_area_fallback(self, area_yaml: Dict, language: str, area: str, reason: str) -> str:

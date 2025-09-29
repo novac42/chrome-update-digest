@@ -2,7 +2,6 @@
   "version": "137",
   "channel": "stable",
   "languages": [
-    "en",
     "zh"
   ],
   "areas": [
@@ -74,8 +73,8 @@
       "zh_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\webassembly\\chrome-137-stable-zh.md"
     }
   },
-  "started_at": "2025-09-29T21:11:48.661177",
-  "updated_at": "2025-09-29T21:15:17.038980",
-  "completed_at": "2025-09-29T21:15:17.038865",
-  "total_time_seconds": 208.37674832344055
+  "started_at": "2025-09-29T22:05:28.098059",
+  "updated_at": "2025-09-29T22:08:28.942766",
+  "completed_at": "2025-09-29T22:08:28.942670",
+  "total_time_seconds": 180.8439040184021
 }

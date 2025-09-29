@@ -1,39 +1,34 @@
----
-layout: default
-title: multimedia-zh
----
-
 ## Area Summary
 
-Chrome 137 (stable) 引入了一个针对性的多媒体控制：一个 origin-trial 的 permission policy，允许嵌入方暂停未渲染 iframe 中的媒体播放。主要目的是赋予嵌入站点对隐藏 iframe 内容播放的显式控制。此更改对嵌入第三方或跨源媒体且需要可预测播放行为的开发者影响最大。它通过将 permission-policy 控制扩展到多媒体播放场景，促进平台演进，帮助嵌入方管理用户体验和资源使用。
+Chrome 137 (stable) 引入了一项新的权限策略，使嵌入方能够对 iframe 媒体进行更细粒度的控制。本次 Multimedia 的主要主题是允许嵌入方暂停未渲染（例如 `display: none`）的 iframe 中的媒体，从而改善用户体验并降低资源使用。对开发者影响最大的是新的 media-playback-while-not-rendered 权限策略，该策略在 origin trial 期间公开。通过将媒体播放决策移向嵌入上下文，这些控制推动了 Web 平台的发展，使复杂页面具备更好的用户体验和潜在的性能提升。
 
 ## Detailed Updates
 
-Below are the Multimedia-area details for Chrome 137 (stable), focused on developer-facing behavior and integration points.
+Below are the Multimedia-specific changes that follow from the summary above.
 
-### Pause media playback on not-rendered iframes
+### Pause media playback on not-rendered iframes (暂停未渲染 iframe 中的媒体播放)
 
 #### What's New
-Adds a `media-playback-while-not-rendered` permission policy to allow embedder websites to pause media playback of embedded iframes which aren't rendered—that is, have their display property set to `none`.
+新增了 media-playback-while-not-rendered 权限策略，允许嵌入方网站暂停未渲染的嵌入 iframe 中的媒体播放——即其 display 属性被设置为 `none`。
 
 #### Technical Details
-- Exposed as a permission policy named `media-playback-while-not-rendered`.
-- Available as an Origin Trial for Chrome 137 (see references).
+该权限策略允许嵌入方选择在未渲染（`display: none`）的 iframe 内暂停媒体。该能力作为权限策略特性公开，并通过 origin trial 逐步推出。
 
 #### Use Cases
-- Enables embedder sites to prevent audio/video from playing inside iframes that are not visually rendered, improving control over embedded content.
-- Useful for embedding scenarios where hidden iframes should not consume audio output or playback resources.
+- 嵌入方可以暂停或防止隐藏 iframe 中的媒体使用资源，以提升感知的用户体验和页面响应性。
+- 嵌入第三方媒体的网站在 iframe 内容不可见时，可以减少后台 CPU/带宽 使用。
 
 #### References
-- Origin Trial: https://developer.chrome.com/origintrials/#/trials/active
-- Tracking bug #351354996: https://bugs.chromium.org/p/chromium/issues/detail?id=351354996
-- ChromeStatus.com entry: https://chromestatus.com/feature/5082854470868992
+- https://developer.chrome.com/origintrials/#/trials/active
+- https://bugs.chromium.org/p/chromium/issues/detail?id=351354996
+- https://chromestatus.com/feature/5082854470868992
 
-## Area-Specific Expertise Notes (Multimedia-focused)
+## Area-Specific Expertise (Multimedia-focused)
 
-- css: Uses the rendered state concept (e.g., display:none) to decide playback suppression.
-- webapi: Surface provided via a permission policy mechanism for embedders.
-- multimedia: Impacts when codecs and decoders may be kept active for hidden embeds.
-- performance: Gives embedders a lever to reduce wasted playback work for non-rendered iframes.
-- security-privacy: Permission policy model maintains embedder authority over iframe playback behavior.
-- javascript / pwa-service-worker / webassembly / devices / graphics-webgpu / deprecations: No new platform ABI or 弃用 indicated in the provided data.
+- css: 该功能针对通过 CSS 导致的未渲染状态（`display: none`）的 iframe，使媒体行为与布局可见性一致。
+- webapi: 通过权限策略（media-playback-while-not-rendered）向嵌入方暴露控制。
+- multimedia: 通过在未渲染时允许暂停，直接影响 iframe 内的媒体生命周期。
+- performance: 有助于降低不可见 iframe 内容的后台媒体开销（CPU、网络）。
+- security-privacy: 通过正式的权限策略和 origin trial 推出，将控制权移至嵌入源，同时尊重 iframe 边界。
+- javascript: 嵌入方可通过服务器端或属性配置切换该策略；iframe 内的脚本会感知已暂停的播放状态。
+- devices / graphics-webgpu / pwa-service-worker / webassembly / deprecations: 本次发布中该功能未引入额外项目。

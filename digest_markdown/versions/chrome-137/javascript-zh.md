@@ -1,38 +1,31 @@
----
-layout: default
-title: javascript-zh
----
+Area 概要
 
-## Area Summary
-
-Chrome 137 的 JavaScript 领域更新聚焦于 JavaScript Promise Integration (JSPI)，这是一个在 WebAssembly 与 JavaScript Promise 之间搭建桥梁的能力。最重要的更改允许 WebAssembly 模块既能生成 Promise，又能直接与带有 Promise 的 API 交互，从而简化异步互操作性。此举通过减少粘合代码并在 JS/WASM 边界处实现更清晰的异步模式，推动平台发展。对于构建性能敏感或计算密集型的 WebAssembly 模块并需要参与 JavaScript 异步生态的团队，这些更新具有重要意义。
+Chrome 137 引入了 JavaScript Promise Integration (JSPI)，使 WebAssembly 与 JavaScript Promises 之间的互操作性更紧密。最重要的变化是 WebAssembly 模块现在可以作为 Promise 的生成者，并直接与返回 Promise 的 API 交互。此项进展通过减少同步 WebAssembly 代码与 JavaScript 异步模式之间的阻抗，简化了将异步 API 集成到由 WASM 驱动的逻辑中，从而推进了 Web 平台。该更新的重要性在于它简化了异步工作流，并使 WebAssembly 在基于 JavaScript 的应用架构中成为更为一等的参与者。
 
 ## Detailed Updates
 
-Below are the JavaScript-area changes relevant to developers working with WebAssembly and async JavaScript.
+The single JavaScript-area feature in this release focuses on bridging WebAssembly and JavaScript Promises. Below is a concise, developer-focused breakdown.
 
 ### JavaScript promise integration (JavaScript Promise 集成)
 
 #### What's New
-JavaScript Promise Integration (JSPI) 是一组 API，允许 WebAssembly 应用与 JavaScript Promise 集成。它使 WebAssembly 程序可以作为 Promise 的生成者，并允许该程序与带有 Promise 的 API 交互。
+JavaScript Promise Integration (JSPI) is an API that allows WebAssembly applications to integrate with JavaScript Promises. It allows a WebAssembly program to act as the generator of a Promise, and it allows the WebAssembly program to interact with Promise-bearing APIs.
 
 #### Technical Details
-- Enables WebAssembly code to produce and consume JavaScript Promises, formalizing async interop across the WASM/JS boundary.
-- Primary tags associated with the feature: webassembly, javascript.
+- JSPI exposes an interface for WebAssembly modules to create and resolve/reject JavaScript Promises and to consume APIs that return Promises.
+- See the specification and ChromeStatus entry for the canonical technical references (links below).
 
 #### Use Cases
-- WebAssembly modules that need to expose async operations to JavaScript consumers as Promises.
-- WASM code that must call into JavaScript async APIs and handle Promise results without heavy JS wrapper layers.
-- Cleaner async control flow in mixed JS + WASM applications (e.g., compute tasks returning Promise-based results).
+- WebAssembly modules that need to drive asynchronous workflows (e.g., I/O, network requests, or async platform APIs) can now create and manage Promises natively.
+- Better interop when embedding WASM into JavaScript applications that rely on Promise-based patterns, simplifying glue code and callback bridging.
 
 #### References
-- https://chromestatus.com/feature/5059306691878912
-- https://github.com/WebAssembly/js-promise-integration
+- https://chromestatus.com/feature/5059306691878912 (ChromeStatus.com entry)  
+- https://github.com/WebAssembly/js-promise-integration (Spec)
 
-## Area-Specific Expertise (JavaScript-focused)
+Area-Specific Expertise (JavaScript-focused implications)
 
-- javascript / webassembly: 直接相关 — JSPI 针对 WASM↔JS 的异步互操作性。
-- webapi: 影响 WASM 如何与 promise-bearing 浏览器 API 交互。
-- performance: 减少 JS glue 并能改善计算密集型 WASM 模块的异步调用路径。
-- pwa-service-worker: 使 WASM 更直接参与基于 Promise 的 service-worker 流程（fetch、caching）。
-- 弃用: 本功能无相关项；关注点为增加性的互操作性。
+- webassembly: 直接使 WASM 模块能够通过生成和交互 Promise 来参与 JS 的异步控制流。
+- javascript: 需要 V8 和嵌入者对 JSPI 表面的支持，以在 WASM 执行与 JS Promise 语义之间建立映射。
+- performance: 可以减少 JS 与 WASM 之间异步桥接的开销和复杂度，改善开发者体验并可能提升运行时效率。
+- webapi, security-privacy, multimedia, graphics-webgpu, devices, pwa-service-worker, webassembly, deprecations: JSPI 的主要影响在于异步集成模式；有关集成和安全方面的考虑，请查阅上方的规范和 ChromeStatus 链接。

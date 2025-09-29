@@ -1,42 +1,41 @@
-File: digest_markdown/webplatform/WebAssembly/chrome-137-stable-en.md
+## 区域摘要
 
-## Area Summary
+Chrome 137 推进了 WebAssembly 的互操作性和运行时性能。本次发布增加了 JavaScript Promise Integration (JSPI)，允许 Wasm 模块直接生成和消费 JS Promises，并引入了 Branch Hints 来改进生成代码的布局和寄存器使用。两项功能共同减少了 Wasm 与现有异步 Web API 集成的摩擦，并促使执行热点使用更少的 CPU 资源并获得更好的指令缓存局部性。这些更新重要在于它们使 Wasm 成为现代 Web 应用架构中更自然的一部分，并为计算密集型工作负载带来可测量的性能提升。
 
-Chrome 137 稳定版引入了两项针对 WebAssembly 的更新：JavaScript Promise Integration (JSPI) 和 Branch Hints。JSPI 改进了 WebAssembly 模块与 JavaScript Promises 之间的互操作性，使 WASM 能够生成和消费基于 Promise 的结果，从而实现更清晰的异步模式。Branch Hints 通过告知引擎哪些分支路径更可能被采用，在底层提升性能，改善代码布局和寄存器分配。二者共同推进了 WASM 工作负载的异步性和运行时性能，使基于浏览器的本机代码模块更易于集成并在实践中更快。
+## 详细更新
 
-## Detailed Updates
+以下内容扩展了上文摘要，并描述了在 Chrome 137 中使用 WebAssembly 的开发者的实际影响。
 
-The items below expand on the summary above and list the changes that matter to developers building with WebAssembly.
+### JavaScript promise integration（JavaScript Promise 集成）
 
-### JavaScript promise integration
+#### 新增内容
+WebAssembly 现在可以与 JavaScript Promises 集成：Wasm 模块可以作为 Promise 生成者，并更直接地与返回 Promise 的 API 进行交互。
 
-#### What's New
-JavaScript Promise Integration (JSPI) 是一组 API，允许 WebAssembly 应用与 JavaScript Promises 集成。它使 WebAssembly 程序能够作为 Promise 的生成者，并与返回 Promise 的 API 交互。
+#### 技术细节
+JSPI 定义了一个 API 表面，将 Wasm 执行映射到 JS Promise 的生命周期操作，使 Wasm 能够在无需大量 JS 桥接的情况下 resolve、reject 和 await promises。该功能在下方链接的社区维护规范中有定义，并在 ChromeStatus 上跟踪。
 
-#### Technical Details
-该功能暴露了一个 API 表面，使 WASM 模块能够创建和管理 Promises，并与现有基于 Promise 的 JS API 互操作。See the spec and ChromeStatus entry for authoritative behavior and deployment status.
+#### 适用场景
+- 在 Wasm 模块中实现类似原生的异步流程，并可与 Fetch、IndexedDB 等基于 Promise 的 Web API 直接互操作。
+- 简化编译到 Wasm 的语言为异步代码生成的绑定（减少自定义运行时 shim）。
+- 通过 Promise 的 reject 语义在 Wasm 与 JS 之间实现更清晰的错误传播。
 
-#### Use Cases
-- 允许 WASM 模块以原生 JS Promises 的形式生成异步结果。
-- 简化 WASM 与返回 Promises 的 JS 库的集成。
-- 在结合 JS 与 WASM 逻辑时，使异步控制流更清晰。
+#### 参考资料
+- https://chromestatus.com/feature/5059306691878912
+- https://github.com/WebAssembly/js-promise-integration
 
-#### References
-- ChromeStatus.com entry: https://chromestatus.com/feature/5059306691878912
-- Spec: https://github.com/WebAssembly/js-promise-integration
+### Branch Hints（分支提示）
 
-### Branch Hints
+#### 新增内容
+Branch Hints 允许开发者（通过编译工具链）告知引擎哪些分支方向更可能，从而使运行时能够优化代码布局和寄存器分配。
 
-#### What's New
-Branch Hints 通过告知引擎某个分支指令很可能走特定路径，从而提高已编译 WebAssembly 代码的性能，进而实现更好的代码布局和寄存器分配。
+#### 技术细节
+这些提示引导代码布局决策以改善指令缓存局部性，并允许引擎对热点路径偏好寄存器分配。该机制在 branch-hinting 规范中定义，并在 ChromeStatus 上跟踪。
 
-#### Technical Details
-该提示机制向引擎提供有关分支可能性的元数据，使编译器在代码生成期间能够优化指令布局（改善指令缓存局部性）和寄存器分配决策。
+#### 适用场景
+- 针对性能敏感的 Wasm 代码（游戏引擎、物理、数值内核）可以标记热点分支以减少误预测和缓存未命中。
+- 以 Wasm 为目标的编译器可以输出 branch hints 以保留本地构建的运行时性能特性。
+- 减少部署后剖析以查找并手工优化热点路径布局的需要。
 
-#### Use Cases
-- 针对存在可预测分支的性能敏感 WASM 模块（热循环、状态机）。
-- 编译为 WASM 的本机代码工作负载，可从改善的指令缓存行为和降低寄存器压力中获益。
-
-#### References
-- ChromeStatus.com entry: https://chromestatus.com/feature/5089072889290752
-- Spec: https://github.com/WebAssembly/branch-hinting
+#### 参考资料
+- https://chromestatus.com/feature/5089072889290752
+- https://github.com/WebAssembly/branch-hinting
