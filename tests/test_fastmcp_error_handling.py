@@ -4,6 +4,8 @@ FastMCP 错误处理测试
 测试边界情况和错误处理能力
 """
 
+import pytest
+
 import sys
 import asyncio
 import json
@@ -24,6 +26,7 @@ from fast_mcp_server import (
 # 直接导入FastMCP工具函数的实际实现
 # 我们需要重新实现这些函数来进行测试，因为装饰器会改变函数签名
 
+@pytest.mark.asyncio
 async def test_webplatform_digest(version: int, channel: str = "stable", 
                            focus_areas: list = None, custom_instruction: str = "") -> str:
     """测试版本的webplatform_digest函数"""
@@ -76,6 +79,7 @@ Data loaded: {len(processed_data)} characters
         })
 
 
+@pytest.mark.asyncio
 async def test_invalid_parameters():
     """测试无效参数处理"""
     print("🧪 测试无效参数处理...")
@@ -112,6 +116,7 @@ async def test_invalid_parameters():
     print()
 
 
+@pytest.mark.asyncio
 async def test_missing_files():
     """测试缺失文件处理"""
     print("🧪 测试缺失文件处理...")
@@ -189,6 +194,7 @@ async def test_missing_files():
     print()
 
 
+@pytest.mark.asyncio
 async def test_html_generation_edge_cases():
     """测试HTML生成的边界情况"""
     print("🧪 测试HTML生成边界情况...")
@@ -230,6 +236,7 @@ async def test_html_generation_edge_cases():
     print()
 
 
+@pytest.mark.asyncio
 async def test_large_data_handling():
     """测试大数据处理"""
     print("🧪 测试大数据处理...")
@@ -277,6 +284,7 @@ async def test_large_data_handling():
     print()
 
 
+@pytest.mark.asyncio
 async def test_concurrent_operations():
     """测试并发操作"""
     print("🧪 测试并发操作...")
@@ -318,6 +326,7 @@ async def test_concurrent_operations():
     print()
 
 
+@pytest.mark.asyncio
 async def test_json_parsing():
     """测试JSON解析错误处理"""
     print("🧪 测试JSON解析...")

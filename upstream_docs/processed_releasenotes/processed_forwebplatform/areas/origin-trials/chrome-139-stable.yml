@@ -1,21 +1,20 @@
 version: '139'
 channel: stable
 area: origin-trials
-extraction_timestamp: '2025-09-21T15:28:14.173821'
+extraction_timestamp: '2025-09-30T16:25:47.935919'
 extraction_method: deterministic
 statistics:
-  total_features: 6
-  total_links: 20
+  total_features: 5
+  total_links: 16
   primary_tags:
-    origin-trials: 6
+    webgpu: 5
+    origin-trials: 5
     performance: 1
     multimedia: 1
-    webgpu: 1
   cross_cutting:
     ai: 1
-    privacy: 6
+    privacy: 5
     enterprise: 1
-    webgpu: 1
 features:
 - title: Prompt API
   content: 'An API designed for interacting with an AI language model using text, image, and audio inputs. It supports various
@@ -33,6 +32,7 @@ features:
     [Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/2533837740349325313) | [Origin trial blog post](/blog/prompt-multimodal-origin-trial)
     | [Tracking bug #417530643](https://issues.chromium.org/issues/417530643) | [ChromeStatus.com entry](https://chromestatus.com/feature/5134603979063296)'
   heading_path:
+  - What's New in WebGPU (Chrome 139)
   - Origin trials
   - Prompt API
   links:
@@ -45,8 +45,12 @@ features:
   - url: https://chromestatus.com/feature/5134603979063296
     link_type: chromestatus
     title: ChromeStatus.com entry
-  line_number: 3
+  line_number: 329
   primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
   - name: origin-trials
     priority: primary
     source: heading
@@ -64,6 +68,7 @@ features:
     [Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/3056255297124302849) | [Origin trial blog post](/blog/extended-lifetime-shared-workers-origin-trial)
     | [Tracking bug #400473072](https://issues.chromium.org/issues/400473072) | [ChromeStatus.com entry](https://chromestatus.com/feature/5138641357373440)'
   heading_path:
+  - What's New in WebGPU (Chrome 139)
   - Origin trials
   - Extended lifetime shared workers
   links:
@@ -76,8 +81,12 @@ features:
   - url: https://chromestatus.com/feature/5138641357373440
     link_type: chromestatus
     title: ChromeStatus.com entry
-  line_number: 11
+  line_number: 337
   primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
   - name: origin-trials
     priority: primary
     source: heading
@@ -93,6 +102,7 @@ features:
     \ | [Tracking bug #1338390](https://issues.chromium.org/issues/1338390) | [ChromeStatus.com entry](https://chromestatus.com/feature/5144837209194496)\
     \ | [Spec](https://wicg.github.io/soft-navigations)"
   heading_path:
+  - What's New in WebGPU (Chrome 139)
   - Origin trials
   - '`SoftNavigation` performance entry'
   links:
@@ -108,8 +118,12 @@ features:
   - url: https://wicg.github.io/soft-navigations
     link_type: spec
     title: Spec
-  line_number: 17
+  line_number: 343
   primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
   - name: origin-trials
     priority: primary
     source: heading
@@ -131,6 +145,7 @@ features:
     [Tracking bug #408002783](https://issues.chromium.org/issues/408002783) | [ChromeStatus.com entry](https://chromestatus.com/feature/5164322780872704)
     | [Spec](https://github.com/w3c/webauthn/pull/2291)'
   heading_path:
+  - What's New in WebGPU (Chrome 139)
   - Origin trials
   - Web Authentication immediate mediation
   links:
@@ -143,8 +158,12 @@ features:
   - url: https://github.com/w3c/webauthn/pull/2291
     link_type: github
     title: Spec
-  line_number: 28
+  line_number: 354
   primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
   - name: origin-trials
     priority: primary
     source: heading
@@ -163,6 +182,7 @@ features:
     [Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/3578672853899280385) | [Tracking bug #397832388](https://issues.chromium.org/issues/397832388)
     | [ChromeStatus.com entry](https://chromestatus.com/feature/5207202081800192)'
   heading_path:
+  - What's New in WebGPU (Chrome 139)
   - Origin trials
   - Full frame rate render blocking attribute
   links:
@@ -175,48 +195,15 @@ features:
   - url: https://chromestatus.com/feature/5207202081800192
     link_type: chromestatus
     title: ChromeStatus.com entry
-  line_number: 34
+  line_number: 360
   primary_tags:
-  - name: origin-trials
-    priority: primary
-    source: heading
-    confidence: 1.0
-  cross_cutting_concerns:
-  - privacy
-- title: WebGPU compatibility mode
-  content: 'Adds an opt-in, lightly restricted subset of the WebGPU API capable of running older graphics APIs such as OpenGL
-    and Direct3D11. By opting into this mode and obeying its constraints, developers can extend the reach of their WebGPU
-    applications to many older devices that don''t have the modern, explicit graphics APIs that core WebGPU requires.
-
-
-    [Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/1489002626799370241) | [Tracking bug #40266903](https://issues.chromium.org/issues/40266903)
-    | [ChromeStatus.com entry](https://chromestatus.com/feature/6436406437871616) | [Spec](https://github.com/gpuweb/gpuweb/blob/main/proposals/compatibility-mode.md)'
-  heading_path:
-  - Origin trials
-  - WebGPU compatibility mode
-  links:
-  - url: https://developer.chrome.com/origintrials/#/register_trial/1489002626799370241
-    link_type: other
-    title: Origin Trial
-  - url: https://issues.chromium.org/issues/40266903
-    link_type: other
-    title: 'Tracking bug #40266903'
-  - url: https://chromestatus.com/feature/6436406437871616
-    link_type: chromestatus
-    title: ChromeStatus.com entry
-  - url: https://github.com/gpuweb/gpuweb/blob/main/proposals/compatibility-mode.md
-    link_type: github
-    title: Spec
-  line_number: 40
-  primary_tags:
-  - name: origin-trials
-    priority: primary
-    source: heading
-    confidence: 1.0
   - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: origin-trials
     priority: primary
     source: heading
     confidence: 1.0
   cross_cutting_concerns:
-  - webgpu
   - privacy

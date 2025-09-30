@@ -3,6 +3,8 @@
 Test actual splitting (non-dry-run) for the feature splitter tool
 """
 
+import pytest
+
 import asyncio
 import json
 import os
@@ -17,6 +19,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from src.mcp_tools.feature_splitter import FeatureSplitterTool
 
 
+@pytest.mark.asyncio
 async def test_actual_split():
     """Test actual file splitting with a single file"""
     print("=== Testing Actual File Splitting ===\n")

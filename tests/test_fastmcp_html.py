@@ -3,6 +3,8 @@
 测试FastMCP服务器中的webplatform_digest_html工具
 """
 
+import pytest
+
 import asyncio
 import json
 from pathlib import Path
@@ -11,6 +13,7 @@ import sys
 # 添加当前目录到路径
 sys.path.append('.')
 
+@pytest.mark.asyncio
 async def test_merged_digest_html():
     """测试merged_digest_html工具（不依赖FastMCP，直接测试逻辑）"""
     

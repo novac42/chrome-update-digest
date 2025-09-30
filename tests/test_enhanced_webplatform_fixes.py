@@ -3,6 +3,8 @@
 Test the fixes for enhanced webplatform digest tool based on sampling integration plan.
 """
 
+import pytest
+
 import sys
 import asyncio
 from pathlib import Path
@@ -54,6 +56,7 @@ class MockContext:
             raise ValueError("No valid parameters provided")
 
 
+@pytest.mark.asyncio
 async def test_prompt_loading():
     """Test 1: Verify prompt loading uses separate EN/ZH files."""
     print("\n=== Test 1: Prompt Loading ===")
@@ -79,6 +82,7 @@ async def test_prompt_loading():
     return True
 
 
+@pytest.mark.asyncio
 async def test_sampling_parameters():
     """Test 2: Verify sampling uses correct FastMCP parameters."""
     print("\n=== Test 2: Sampling Parameters ===")
@@ -106,6 +110,7 @@ async def test_sampling_parameters():
     return True
 
 
+@pytest.mark.asyncio
 async def test_sampling_fallback():
     """Test 3: Verify error handling and fallback."""
     print("\n=== Test 3: Error Handling ===")
@@ -135,6 +140,7 @@ async def test_sampling_fallback():
     return True
 
 
+@pytest.mark.asyncio
 async def test_resource_loading():
     """Test 4: Verify resource loading doesn't raise NotImplementedError."""
     print("\n=== Test 4: Resource Loading ===")
@@ -157,6 +163,7 @@ async def test_resource_loading():
     return True
 
 
+@pytest.mark.asyncio
 async def test_bilingual_generation():
     """Test 5: Verify bilingual mode generates two separate files."""
     print("\n=== Test 5: Bilingual Mode ===")

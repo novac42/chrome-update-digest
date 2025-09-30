@@ -1,7 +1,7 @@
 version: '138'
 channel: stable
 area: pwa-service-worker
-extraction_timestamp: '2025-09-21T15:28:01.609852'
+extraction_timestamp: '2025-09-30T16:25:47.759297'
 extraction_method: deterministic
 statistics:
   total_features: 1
@@ -24,6 +24,7 @@ features:
     **References:** [Tracking bug #40947546](https://bugs.chromium.org/p/chromium/issues/detail?id=40947546) | [ChromeStatus.com
     entry](https://chromestatus.com/feature/5121066433150976) | [Spec](https://wicg.github.io/nav-speculation/speculation-rules.html#speculation-rule-sw-integration)'
   heading_path:
+  - Chrome 138 Release Notes
   - Service Worker
   - ServiceWorker support for Speculation Rules Prefetch
   links:
@@ -36,7 +37,7 @@ features:
   - url: https://wicg.github.io/nav-speculation/speculation-rules.html#speculation-rule-sw-integration
     link_type: spec
     title: Spec
-  line_number: 3
+  line_number: 131
   primary_tags:
   - name: serviceworker
     priority: primary

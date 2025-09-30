@@ -77,6 +77,46 @@ This project underwent multiple iterations and debugging cycles to solve a funda
 - **Link Integrity**: 100% link accuracy requirement drove YAML pipeline implementation
 - **Lesson**: Automated validation is essential for maintaining quality at scale
 
+### 13. GitHub Pages Navigation and Validation
+- **Dual Navigation Trees**: Generate both version-oriented and area-oriented trees from staged digests
+- **Bilingual Parity**: Enforce paired language files and validate breadcrumbs/links before publish
+- **Single Source of Truth**: Read display names/order from `config/focus_areas.yaml` to avoid drift
+- **Lesson**: Treat site generation as a first-class pipeline step with strict pre-publish validation
+
+### 14. FastMCP Resources and Remote Hosting
+- **Dynamic Resource Registration**: Expose processed markdown/YAML as FastMCP resources with accurate MIME types
+- **Rich Metadata**: Attach `_meta._fastmcp.tags` and file stats to improve discovery and filtering
+- **Hosting Modes**: Support `local | remote | hybrid` via env (`MCP_RESOURCE_MODE`, `MCP_CDN_BASE`) with graceful fallback
+- **Lesson**: Stable URIs and metadata-led discovery make downstream automation robust and decoupled from storage layout
+
+### 15. Deterministic Outputs and Idempotency
+- **Deterministic YAML**: Cache version/channel YAML and reuse for digest generation unless `force_regenerate`
+- **Atomic Writes**: Overwrite language-specific outputs in place so repeated runs are stable
+- **Targeted Refresh vs Clean**: Support `--clean` and incremental updates in the navigation generator
+- **Lesson**: Determinism enables reliable reruns, easier diffs, and safer automation
+
+### 16. Release Monitoring and Progress Reporting
+- **Scheduled Checks**: Use cron-based workflows to poll upstream and trigger pipelines when new versions land
+- **Multi-Channel Awareness**: Track stable/beta/dev/canary and report status
+- **Progress Files**: Persist run metadata to `.monitoring/` so clients can poll `get_webplatform_progress`
+- **Lesson**: Lightweight monitoring plus visible progress keeps long-running MCP tasks usable in clients
+
+### 17. Backward Compatibility in File Discovery
+- **Dual Naming**: Emit both channel-suffixed and legacy filenames for stable where needed
+- **Multi-Pattern Search**: Prefer modern patterns, fall back to legacy and fuzzy matches; channel fallback to stable
+- **Clear Diagnostics**: Surface available files and chosen fallbacks in errors/logs
+- **Lesson**: Non-breaking evolution requires layered discovery and compatibility copies during transitions
+
+### 18. Stable Project Paths
+- **Root-Relative Paths**: Centralize path resolution to avoid output drifting with CWD
+- **Configurable Bases**: Allow tests/CLI to override bases while defaulting to repository root
+- **Lesson**: A shared path helper prevents subtle environment-dependent bugs across scripts and tools
+
+### 19. Packaging and Import Hygiene
+- **Package Namespace**: Standardize imports under `chrome_update_digest.*` and drop `sys.path` shims
+- **Module Execution**: Prefer `python -m ...` and prepare for `uv` packaging with console entry points
+- **Lesson**: Clean import graphs and packaging-ready layout reduce friction for both CLI and MCP usage
+
 ## Technical Debt and Future Considerations
 
 ### Architecture Refactoring Needs

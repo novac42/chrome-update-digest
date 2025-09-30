@@ -14,6 +14,8 @@ import tempfile
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+CONFIG_PATH = Path(__file__).resolve().parent.parent / 'config' / 'focus_areas.yaml'
+
 from src.utils.focus_area_manager import FocusAreaManager
 from src.utils.yaml_pipeline import YAMLPipeline, PipelineStatistics
 from src.utils.link_extractor import LinkExtractor, ExtractedFeature, ExtractedLink
@@ -26,7 +28,7 @@ class TestFocusAreaManager:
     
     def test_init_with_default_config(self):
         """Test initialization with default configuration."""
-        manager = FocusAreaManager()
+        manager = FocusAreaManager(CONFIG_PATH)
         
         # Check default focus areas exist
         assert 'ai' in manager.focus_areas
@@ -41,7 +43,7 @@ class TestFocusAreaManager:
     
     def test_filter_features_by_ai(self):
         """Test filtering features by AI focus area."""
-        manager = FocusAreaManager()
+        manager = FocusAreaManager(CONFIG_PATH)
         
         features = [
             {
@@ -70,7 +72,7 @@ class TestFocusAreaManager:
     
     def test_filter_features_multiple_areas(self):
         """Test filtering with multiple focus areas."""
-        manager = FocusAreaManager()
+        manager = FocusAreaManager(CONFIG_PATH)
         
         features = [
             {
@@ -100,7 +102,7 @@ class TestFocusAreaManager:
     
     def test_keyword_matching_case_insensitive(self):
         """Test case-insensitive keyword matching."""
-        manager = FocusAreaManager()
+        manager = FocusAreaManager(CONFIG_PATH)
         
         features = [
             {
@@ -124,7 +126,7 @@ class TestFocusAreaManager:
     
     def test_scoring_weights(self):
         """Test that scoring weights work correctly."""
-        manager = FocusAreaManager()
+        manager = FocusAreaManager(CONFIG_PATH)
         
         features = [
             {

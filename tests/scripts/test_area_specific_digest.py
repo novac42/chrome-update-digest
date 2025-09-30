@@ -3,6 +3,8 @@
 Test script for area-specific digest generation.
 """
 
+import pytest
+
 import sys
 import asyncio
 from pathlib import Path
@@ -14,6 +16,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from src.mcp_tools.enhanced_webplatform_digest import EnhancedWebplatformDigestTool
 
 
+@pytest.mark.asyncio
 async def test_area_specific_digest():
     """Test generating digest for a specific area."""
     
@@ -106,6 +109,7 @@ async def test_area_specific_digest():
             print(f"  - {area_name}: {file.name} ({size:,} bytes)")
 
 
+@pytest.mark.asyncio
 async def test_prompt_replacement():
     """Test that [AREA] placeholder is correctly replaced in prompts."""
     

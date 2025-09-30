@@ -3,6 +3,8 @@
 Test individual FastMCP tools
 """
 
+import pytest
+
 import asyncio
 import json
 import sys
@@ -11,6 +13,7 @@ from pathlib import Path
 # Add the server directory to Python path
 sys.path.insert(0, str(Path(__file__).parent))
 
+@pytest.mark.asyncio
 async def test_single_tool():
     """Test a single tool call"""
     try:

@@ -42,6 +42,9 @@ Use these fixed translations (do not invent variants):
 - interoperability -> 互操作性
 - experimental (context: origin trial/flag) -> 实验性
 - rendering pipeline -> 渲染管线
+- Area Summary -> 领域摘要
+- Area Digest -> 领域摘要
+   (统一：原先出现的“区域摘要”一律改为“领域摘要”，不要再使用“区域摘要”。)
 
 If a term is absent above, apply consistent prior choices; do not oscillate synonyms.
 

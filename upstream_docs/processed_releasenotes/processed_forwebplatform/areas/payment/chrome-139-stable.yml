@@ -1,12 +1,14 @@
 version: '139'
 channel: stable
 area: payment
-extraction_timestamp: '2025-09-03T16:38:58.936960'
+extraction_timestamp: '2025-09-30T16:25:47.905984'
 extraction_method: deterministic
 statistics:
   total_features: 2
   total_links: 6
-  primary_tags: {}
+  primary_tags:
+    webgpu: 2
+    payment: 2
   cross_cutting:
     privacy: 2
 features:
@@ -20,7 +22,7 @@ features:
     [Tracking bug #40258712](https://issues.chromium.org/issues/40258712) | [ChromeStatus.com entry](https://chromestatus.com/feature/5165040614768640)
     | [Spec](https://github.com/w3c/secure-payment-confirmation/pull/285)'
   heading_path:
-  - Chrome 139
+  - What's New in WebGPU (Chrome 139)
   - Secure Payment Confirmation (SPC)
   - The `securePaymentConfirmationAvailability` API
   links:
@@ -33,8 +35,16 @@ features:
   - url: https://github.com/w3c/secure-payment-confirmation/pull/285
     link_type: github
     title: Spec
-  line_number: 114
-  primary_tags: []
+  line_number: 229
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: payment
+    priority: primary
+    source: heading
+    confidence: 1.0
   cross_cutting_concerns:
   - privacy
 - title: 'Secure Payment Confirmation: Browser Bound Keys'
@@ -46,7 +56,7 @@ features:
     [Tracking bug #377278827](https://issues.chromium.org/issues/377278827) | [ChromeStatus.com entry](https://chromestatus.com/feature/5106102997614592)
     | [Spec](https://w3c.github.io/secure-payment-confirmation/#sctn-browser-bound-key-store)'
   heading_path:
-  - Chrome 139
+  - What's New in WebGPU (Chrome 139)
   - Secure Payment Confirmation (SPC)
   - 'Secure Payment Confirmation: Browser Bound Keys'
   links:
@@ -59,7 +69,15 @@ features:
   - url: https://w3c.github.io/secure-payment-confirmation/#sctn-browser-bound-key-store
     link_type: spec
     title: Spec
-  line_number: 120
-  primary_tags: []
+  line_number: 235
+  primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
+  - name: payment
+    priority: primary
+    source: heading
+    confidence: 1.0
   cross_cutting_concerns:
   - privacy

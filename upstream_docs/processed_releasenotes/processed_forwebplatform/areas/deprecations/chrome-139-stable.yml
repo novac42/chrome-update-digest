@@ -1,12 +1,13 @@
 version: '139'
 channel: stable
 area: deprecations
-extraction_timestamp: '2025-09-03T16:38:58.983821'
+extraction_timestamp: '2025-09-30T16:25:47.947530'
 extraction_method: deterministic
 statistics:
   total_features: 3
   total_links: 10
   primary_tags:
+    webgpu: 3
     deprecation: 3
   cross_cutting:
     privacy: 2
@@ -25,7 +26,7 @@ features:
     [Tracking bug #420724819](https://issues.chromium.org/issues/420724819) | [ChromeStatus.com entry](https://chromestatus.com/feature/5088012836536320)
     | [Spec](https://wicg.github.io/nav-speculation/prerendering.html#interaction-with-fetch)'
   heading_path:
-  - Chrome 139
+  - What's New in WebGPU (Chrome 139)
   - Deprecations and removals
   - 'Stop sending Purpose: prefetch header from prefetches and prerenders'
   links:
@@ -38,8 +39,12 @@ features:
   - url: https://wicg.github.io/nav-speculation/prerendering.html#interaction-with-fetch
     link_type: spec
     title: Spec
-  line_number: 259
+  line_number: 374
   primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
   - name: deprecation
     priority: primary
     source: heading
@@ -59,15 +64,19 @@ features:
 
     [ChromeStatus.com entry](https://chromestatus.com/feature/4504090090143744)'
   heading_path:
-  - Chrome 139
+  - What's New in WebGPU (Chrome 139)
   - Deprecations and removals
   - Remove support for macOS 11
   links:
   - url: https://chromestatus.com/feature/4504090090143744
     link_type: chromestatus
     title: ChromeStatus.com entry
-  line_number: 267
+  line_number: 382
   primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
   - name: deprecation
     priority: primary
     source: heading
@@ -96,7 +105,7 @@ features:
     of date","outOfDate","thumb-down"],["Samples / code issue","samplesCodeIssue","thumb-down"],["Other","otherDown","thumb-down"]],["Last
     updated 2025-08-05 UTC."],[],[]]'
   heading_path:
-  - Chrome 139
+  - What's New in WebGPU (Chrome 139)
   - Deprecations and removals
   - Remove auto-detection of `ISO-2022-JP` charset in HTML
   links:
@@ -118,8 +127,12 @@ features:
   - url: https://developers.google.com/site-policies
     link_type: other
     title: Google Developers Site Policies
-  line_number: 277
+  line_number: 392
   primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
   - name: deprecation
     priority: primary
     source: heading

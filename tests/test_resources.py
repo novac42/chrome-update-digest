@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Test script for ProcessedReleaseNotesResource"""
+import pytest
 
 import asyncio
 import sys
@@ -11,6 +12,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from src.mcp_resources.processed_releasenotes import ProcessedReleaseNotesResource
 
 
+@pytest.mark.asyncio
 async def test_resources():
     """Test the ProcessedReleaseNotesResource functionality"""
     

@@ -1,7 +1,7 @@
 version: '138'
 channel: stable
 area: multimedia
-extraction_timestamp: '2025-09-21T15:28:01.598480'
+extraction_timestamp: '2025-09-30T16:25:47.747900'
 extraction_method: deterministic
 statistics:
   total_features: 1
@@ -24,6 +24,7 @@ features:
     **References:** [Tracking bug #40243431](https://bugs.chromium.org/p/chromium/issues/detail?id=40243431) | [ChromeStatus.com
     entry](https://chromestatus.com/feature/5098495055380480) | [Spec](https://w3c.github.io/webcodecs/#videoframe-interface)'
   heading_path:
+  - Chrome 138 Release Notes
   - Multimedia
   - Add support for video frame orientation metadata to WebCodecs
   links:
@@ -36,7 +37,7 @@ features:
   - url: https://w3c.github.io/webcodecs/#videoframe-interface
     link_type: spec
     title: Spec
-  line_number: 3
+  line_number: 101
   primary_tags:
   - name: multimedia
     priority: primary

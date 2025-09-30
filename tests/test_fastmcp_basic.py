@@ -4,6 +4,8 @@ FastMCP WebPlatform 基础功能测试
 测试FastMCP服务器启动、resource读取等核心功能
 """
 
+import pytest
+
 import sys
 import asyncio
 import json
@@ -19,6 +21,7 @@ from fast_mcp_server import (
 )
 
 
+@pytest.mark.asyncio
 async def test_load_prompt_resources():
     """测试从resource加载prompt内容"""
     print("🧪 测试Resource读取功能...")
@@ -54,6 +57,7 @@ async def test_load_prompt_resources():
     print()
 
 
+@pytest.mark.asyncio
 async def test_load_processed_data():
     """测试加载处理过的数据文件"""
     print("🧪 测试处理数据加载功能...")
@@ -125,6 +129,7 @@ def test_file_structure():
     print()
 
 
+@pytest.mark.asyncio
 async def test_import_dependencies():
     """测试必要模块的导入"""
     print("🧪 测试模块导入...")

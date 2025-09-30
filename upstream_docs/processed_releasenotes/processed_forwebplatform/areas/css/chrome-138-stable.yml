@@ -1,7 +1,7 @@
 version: '138'
 channel: stable
 area: css
-extraction_timestamp: '2025-09-21T15:28:01.578545'
+extraction_timestamp: '2025-09-30T16:25:47.706340'
 extraction_method: deterministic
 statistics:
   total_features: 5
@@ -22,6 +22,7 @@ features:
     **References:** [MDN Docs:abs()](https://developer.mozilla.org/docs/Web/CSS/abs) | [Tracking bug #40253181](https://bugs.chromium.org/p/chromium/issues/detail?id=40253181)
     | [ChromeStatus.com entry](https://chromestatus.com/feature/5196860094464000) | [Spec](https://www.w3.org/TR/css-values-4/#sign-funcs)'
   heading_path:
+  - Chrome 138 Release Notes
   - CSS and UI
   - 'CSS Sign-Related Functions: abs(), sign()'
   links:
@@ -37,7 +38,7 @@ features:
   - url: https://www.w3.org/TR/css-values-4/#sign-funcs
     link_type: spec
     title: Spec
-  line_number: 3
+  line_number: 9
   primary_tags:
   - name: css
     priority: primary
@@ -54,6 +55,7 @@ features:
     **References:** [Tracking bug #40944203](https://bugs.chromium.org/p/chromium/issues/detail?id=40944203) | [ChromeStatus.com
     entry](https://chromestatus.com/feature/5096136905244672) | [Spec](https://www.w3.org/TR/css-values-5/#progress-notation)'
   heading_path:
+  - Chrome 138 Release Notes
   - CSS and UI
   - 'Interpolation progress functional notation: CSS progress() function'
   links:
@@ -66,7 +68,7 @@ features:
   - url: https://www.w3.org/TR/css-values-5/#progress-notation
     link_type: spec
     title: Spec
-  line_number: 9
+  line_number: 15
   primary_tags:
   - name: css
     priority: primary
@@ -83,6 +85,7 @@ features:
     **References:** [Tracking bug #40282719](https://bugs.chromium.org/p/chromium/issues/detail?id=40282719) | [ChromeStatus.com
     entry](https://chromestatus.com/feature/5649901281918976) | [Spec](https://www.w3.org/TR/css-values-5/#sibling-functions)'
   heading_path:
+  - Chrome 138 Release Notes
   - CSS and UI
   - CSS sibling-index() and sibling-count()
   links:
@@ -95,7 +98,7 @@ features:
   - url: https://www.w3.org/TR/css-values-5/#sibling-functions
     link_type: spec
     title: Spec
-  line_number: 15
+  line_number: 21
   primary_tags:
   - name: css
     priority: primary
@@ -113,6 +116,7 @@ features:
     **References:** [Tracking bug #41253915](https://bugs.chromium.org/p/chromium/issues/detail?id=41253915) | [ChromeStatus.com
     entry](https://chromestatus.com/feature/5102457485459456) | [Spec](https://www.w3.org/TR/css-sizing-4/#valdef-width-stretch)'
   heading_path:
+  - Chrome 138 Release Notes
   - CSS and UI
   - CSS stretch sizing keyword
   links:
@@ -125,7 +129,7 @@ features:
   - url: https://www.w3.org/TR/css-sizing-4/#valdef-width-stretch
     link_type: spec
     title: Spec
-  line_number: 21
+  line_number: 27
   primary_tags:
   - name: css
     priority: primary
@@ -142,6 +146,7 @@ features:
     **References:** [Tracking bug #397737223](https://bugs.chromium.org/p/chromium/issues/detail?id=397737223) | [ChromeStatus.com
     entry](https://chromestatus.com/feature/5106542883938304) | [Spec](https://www.w3.org/TR/css-env-1/#os-font-scale)'
   heading_path:
+  - Chrome 138 Release Notes
   - CSS and UI
   - CSS env variable for OS-level font scale
   links:
@@ -154,7 +159,7 @@ features:
   - url: https://www.w3.org/TR/css-env-1/#os-font-scale
     link_type: spec
     title: Spec
-  line_number: 27
+  line_number: 33
   primary_tags:
   - name: css
     priority: primary
