@@ -27,6 +27,7 @@ from convert_md2html import ChromeDigestConverter
 # After
 from src.convert_md2html import ChromeDigestConverter
 ```
+**Status (2025-09-30)**: The `convert_md2html` module was removed during the Jekyll publishing migration; dependent tests were retired.
 
 ### 2. test_fastmcp_pipeline.py ✅
 **Issue**: `ImportError: cannot import name 'enterprise_digest' from 'fast_mcp_server'`

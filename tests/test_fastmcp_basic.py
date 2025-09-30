@@ -101,7 +101,6 @@ def test_file_structure():
         "upstream_docs/processed_releasenotes",
         "upstream_docs/processed_releasenotes/processed_forwebplatform",
         "src/mcp_tools",
-        "templates"
     ]
     
     for dir_name in required_dirs:
@@ -115,8 +114,6 @@ def test_file_structure():
     required_files = [
         "prompts/chrome-update-analyzer-prompt-webplatform.md", 
         "prompts/profile-keywords.txt",
-        "src/convert_md2html.py",
-        "templates/digest_webplatform.html"
     ]
     
     for file_name in required_files:
@@ -141,13 +138,6 @@ async def test_import_dependencies():
         print("   ✅ FastMCP 导入成功")
     except ImportError as e:
         print(f"   ❌ FastMCP 导入失败: {e}")
-    
-    try:
-        print("   📦 测试 convert_md2html 导入...")
-        from src.convert_md2html import ChromeDigestConverter
-        print("   ✅ ChromeDigestConverter 导入成功")
-    except ImportError as e:
-        print(f"   ❌ ChromeDigestConverter 导入失败: {e}")
     
     try:
         print("   📦 测试 feature_splitter 导入...")
@@ -182,3 +172,4 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+

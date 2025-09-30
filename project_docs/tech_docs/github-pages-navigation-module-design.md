@@ -59,8 +59,8 @@ python src/tools/generate_github_pages_navigation.py --language bilingual --clea
 # Validate the generated site
 python src/tools/validate_github_pages.py --strict
 
-# Optional HTML conversion for local preview
-python src/convert_md2html.py
+# Optional local HTML preview via Jekyll (requires Ruby)
+bundle exec jekyll serve --source digest_markdown --destination _site
 ```
 
 ## MCP Orchestration

@@ -183,8 +183,8 @@ python3 src/processors/split_and_process_release_notes.py --version 139
 # Monitor releases
 python src/processors/monitor_releases.py
 
-# Generate HTML from markdown
-python src/convert_md2html.py
+# Preview GitHub Pages output locally (requires Ruby/Jekyll)
+bundle exec jekyll serve --source digest_markdown --destination _site
 ```
 
 ## 📖 Documentation

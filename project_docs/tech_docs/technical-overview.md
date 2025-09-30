@@ -10,7 +10,7 @@ The Chrome WebPlatform Digest project ingests Chrome WebPlatform release notes, 
 2. **Structure & Clean Data** – `src/chrome_update_digest/processors/clean_data_pipeline.CleanDataPipeline` loads raw notes, applies focus-area rules from `config/focus_areas.yaml`, merges WebGPU updates, and writes area markdown plus structured YAML to `upstream_docs/processed_releasenotes/processed_forwebplatform/`.
 3. **Tag Features into YAML** – `src/utils/yaml_pipeline.YAMLPipeline` extracts links with `LinkExtractor`, tags headings with `HeadingBasedTagger`, and persists deterministic YAML payloads used by downstream sampling.
 4. **Generate Digests** – `src/mcp_tools/enhanced_webplatform_digest.EnhancedWebplatformDigestTool` consumes the YAML, optionally filters focus areas, calls FastMCP sampling for English/Chinese summaries, and stores results in `digest_markdown/webplatform/`.
-5. **Publish Navigation** – `src/tools/generate_github_pages_navigation.py` copies staged digests into the version/area navigation tree, while `src/tools/validate_github_pages.py` and `src/convert_md2html.py` provide validation and HTML output for the site.
+5. **Publish Navigation** – `src/tools/generate_github_pages_navigation.py` copies staged digests into the version/area navigation tree, while `src/tools/validate_github_pages.py` enforces structural rules and GitHub Pages (Jekyll) renders the staged markdown into HTML.
 
 ## Core Architecture
 
@@ -52,7 +52,7 @@ The Chrome WebPlatform Digest project ingests Chrome WebPlatform release notes, 
   - `python -m chrome_update_digest.processors.clean_data_pipeline --version 140 --channel stable --with-yaml`
   - `python -m mcp_tools.enhanced_webplatform_digest --version 140 --split-by-area`
   - `python src/tools/generate_github_pages_navigation.py --language bilingual --clean`
-  - `python src/convert_md2html.py` (HTML export for staging)
+  - `bundle exec jekyll serve --source digest_markdown --destination _site` (Local preview of the GitHub Pages site)
 - **FastMCP Tools**
   - `webplatform_digest` → `EnhancedWebplatformDigestTool.run`
   - `split_features_by_heading` → `FeatureSplitterTool` utilities
