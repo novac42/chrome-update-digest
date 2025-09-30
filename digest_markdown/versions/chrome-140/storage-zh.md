@@ -1,33 +1,29 @@
 ---
 layout: default
-title: Chrome 140 Storage Updates - Expert Analysis
+title: storage-zh
 ---
 
-# Chrome 140 Storage Updates - Expert Analysis
+## 区域摘要
 
-## Area Summary
+Chrome 140（稳定版）通过弃用在只读存储纹理中使用 "bgra8unorm" 来收紧 WebGPU 存储纹理的行为。对开发者影响最大的是，依赖该先前允许模式的现有代码需要为可移植性和规范合规性而更新。此举使 Chrome 与 WebGPU 规范保持一致，减少平台不一致性和意外行为。那些更新提高了跨平台图形的可靠性，并降低了 GPU 加速 Web 应用中出现微妙渲染或兼容性错误的风险。
 
-Chrome 140 带来了对 WebGPU 存储纹理处理的重要更正，专门解决了只读存储纹理的 `bgra8unorm` 格式弃用问题。此更改通过移除对之前版本中错误允许的格式的支持，使 Chrome 与 WebGPU 规范保持一致。此次更新体现了 Chrome 对图形 API 规范合规性和跨平台可移植性的承诺。虽然这是一个单一更改，但它代表了确保 WebGPU 应用程序在不同实现和硬件平台上表现一致的关键步骤。
+## 详细更新
 
-## Detailed Updates
+本节将摘要扩展为 Chrome 140 中的单个与存储相关的更改以及开发者应注意的事项。
 
-此版本专注于纠正 WebGPU 存储纹理使用中的长期规范偏差，使 Chrome 完全符合官方 WebGPU 标准。
+### Deprecate bgra8unorm read-only storage texture usage（弃用 bgra8unorm 的只读存储纹理用法）
 
-### Deprecate bgra8unorm read-only storage texture usage
+#### 新增内容
+在只读存储纹理中使用 "bgra8unorm" 格式在 Chrome 140 中现已被弃用。WebGPU 规范不允许这种用法；Chrome 先前的允许是一个错误。
 
-#### What's New
-Chrome 140 弃用了在 WebGPU 中对只读存储纹理使用 `"bgra8unorm"` 格式。此格式将不再支持只读存储纹理操作，修正了之前的实现错误。
+#### 技术细节
+该弃用反映了 "bgra8unorm" 旨在用于仅写访问，且在不同实现间不可移植。Chrome 的更改使其 WebGPU 行为与规范一致，以避免不可移植的使用模式。
 
-#### Technical Details
-尽管 WebGPU 规范明确禁止此用法，但在早期 Chrome 版本中错误地允许了 `bgra8unorm` 格式用于只读存储纹理。此格式专门设计用于只写访问模式，缺乏跨不同 GPU 架构进行读取操作所需的可移植性特征。此弃用确保 Chrome 的 WebGPU 实现严格遵守规范要求。
+#### 适用场景
+- 依赖在只读存储纹理中使用 "bgra8unorm" 的 WebGPU 应用和着色器必须更新，以避免依赖该模式。
+- 开发者应审计存储纹理的使用情况，并切换到符合规范的访问模式或显式支持读访问的替代格式，以确保在不同浏览器和 GPU 之间的可移植性。
 
-#### Use Cases
-使用 WebGPU 存储纹理的开发者应该从只读操作中迁移出 `bgra8unorm` 格式。此更改主要影响：
-- 从存储纹理读取的 GPU 计算着色器
-- 使用存储纹理进行数据采样的图形管线
-- 需要一致行为的跨平台 WebGPU 应用程序
+#### 参考资料
+- 问题 427681156: https://issues.chromium.org/issues/427681156
 
-此弃用为开发者提供了时间来更新代码，然后该功能将在未来版本中完全移除。
-
-#### References
-- [issue 427681156](https://issues.chromium.org/issues/427681156)
+输出文件：digest_markdown/webplatform/storage/chrome-140-stable-en.md

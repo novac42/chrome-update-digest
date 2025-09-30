@@ -1,31 +1,40 @@
 ---
 layout: default
-title: Chrome 140 Stable - Isolated Web Apps 更新
+title: chrome-140-zh
 ---
 
-# Chrome 140 Stable - Isolated Web Apps 更新
+## 区域摘要
 
-## Area Summary
+Chrome 140 Stable 引入了 Controlled Frame API，专门面向 Isolated Web Apps (IWAs)。主要趋势是通过允许嵌入标准 <iframe> 拒绝的内容来扩展 IWA 的安全嵌入能力，同时让宿主应用对该内容拥有控制权。对于需要在不牺牲隔离保证的情况下将第三方或遗留内容集成到 IWA 的开发者来说，此更改具有重要影响。它通过提供一个新的、IWA 范围的 Web API 来推进 Web 平台，在更丰富的集成与明确的应用级控制之间取得平衡。
 
-Chrome 140 通过新的 Controlled Frame API 为独立 Web 应用 (IWA) 带来重要进展，这代表了安全 Web 应用架构的重大步骤。此功能使 IWA 能够嵌入任何内容，包括传统 `<iframe>` 元素无法处理的第三方资源，同时保持严格的安全边界。Controlled Frame API 通过提供对嵌入内容的精细控制，为 Web 平台带来桌面级应用能力，类似于原生应用框架。此更新强化了 Chrome 通过 IWA 模型实现更强大和安全的 Web 应用的承诺，为开发者创建具有增强隔离和控制机制的复杂 Web 应用提供新的可能性。
+## 详细更新
 
-## Detailed Updates
+下面的单个功能直接源自摘要，并突出了对 IWA 开发者的实际影响。
 
-在独立 Web 应用基础上，Chrome 140 提供强大的新嵌入能力，扩展了在安全 IWA 环境中的可能性。
+### Controlled Frame API (available only to IWAs)（仅对 IWAs 可用）
 
-### Controlled Frame API (available only to IWAs)
+#### 新增内容
+Controlled Frame 是一个仅对 Isolated Web Apps 可用的新 API，能够嵌入所有内容——包括无法在标准 <iframe> 中嵌入的第三方内容——并对该嵌入内容提供编程控制。
 
-#### What's New
-Controlled Frame API 为独立 Web 应用引入了一种嵌入内容的新方式，超越了传统 `<iframe>` 元素的限制。此 API 允许 IWA 嵌入所有类型的内容，包括无法使用标准 Web 技术嵌入的第三方资源，同时提供对嵌入内容行为和交互的增强控制。
+#### 技术细节
+- 范围：API 面向仅限 IWAs（依据 IWA 模型）。
+- 目的：通过提供受控的嵌入原语绕过 iframe 嵌入限制；控制语义和安全模型由规范定义。
+- 关键参考和规范文本可在链接的说明文档与规范中查看，以了解实现和行为细节。
 
-#### Technical Details
-Controlled Frame API 专门在独立 Web 应用安全模型内运行，确保强大的嵌入能力仅适用于满足 IWA 严格隔离要求的应用。与标准 `<iframe>` 元素不同，后者受到各种安全限制和跨源策略约束，可能阻止某些第三方内容的嵌入，Controlled Frame 提供了更灵活的嵌入机制。该 API 允许开发者控制嵌入内容执行环境和行为的各个方面，为 IWA 提供类似于其他平台原生应用框架的能力。
+与平台领域的关联：
+- webapi / javascript: 引入一个新的 JS API，供 IWAs 实例化并控制嵌入的帧。
+- security-privacy：改变了 IWA 内的嵌入模型；预期为明确的 IWA 范围隔离语义，而不是广泛的跨源 iframe 行为。
+- performance / graphics-webgpu / css：嵌入任意内容可能影响布局和渲染管线；开发者应对渲染和绘制成本进行分析。
+- pwa-service-worker：使用 service workers 的 IWAs 可能需要考虑受控 frame 内容的资源路由和缓存。
+- 弃用：这并不移除 iframe，而是在 iframe 嵌入被阻止的情况下，提供一个仅限 IWA 的替代原语。
 
-#### Use Cases
-此功能使开发者能够创建更复杂的 Web 应用，可以集成多样的内容源而不受传统 Web 安全限制约束。潜在应用包括需要嵌入遗留系统的商业应用、集成多个第三方工具的教育平台，或需要各种 Web 服务无缝集成的企业软件。受控环境确保即使嵌入不受信任的第三方内容时，宿主 IWA 也能保持安全性和稳定性。
+#### 适用场景
+- 在传统 <iframe> 嵌入被阻止的情况下，在 IWA 内集成第三方小部件或遗留页面。
+- 在 IWA 内构建需要对嵌入式导航和 UI 进行细粒度控制的自助终端或受管内容查看器。
+- 使用明确的应用级控制钩子（例如导航、输入调解）创建对远程内容的安全沙箱托管。
 
-#### References
-- [Isolated Web Apps explainer](https://github.com/WICG/isolated-web-apps/blob/main/README.md)
-- [Tracking bug #40191772](https://issues.chromium.org/issues/40191772)
-- [ChromeStatus.com entry](https://chromestatus.com/feature/5199572022853632)
-- [Spec](https://wicg.github.io/controlled-frame)
+#### 参考资料
+- https://github.com/WICG/isolated-web-apps/blob/main/README.md — Isolated Web Apps 说明
+- https://issues.chromium.org/issues/40191772 — '跟踪缺陷 #40191772'
+- https://chromestatus.com/feature/5199572022853632 — ChromeStatus.com 条目
+- https://wicg.github.io/controlled-frame — 规范

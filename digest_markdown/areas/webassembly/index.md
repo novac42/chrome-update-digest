@@ -15,7 +15,7 @@ WebAssembly runtime and tooling updates
 
 ### Available Versions
 
-- Chrome 137 **(Latest)**: [English](./chrome-137-en.html) / [中文](./chrome-137-zh.html)
+- Chrome 137 **(Latest)**: [English](./chrome-137-en.html) / [Chinese](./chrome-137-zh.html)
 
 ## Navigation
 

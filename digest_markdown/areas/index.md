@@ -14,6 +14,7 @@ Browse Chrome release notes organized by feature area to track evolution over ti
 - [Graphics and WebGPU](./graphics-webgpu/index.html) - Updates in 5 versions — Graphics rendering and WebGPU features
 - [Web API](./webapi/index.html) - Updates in 5 versions — Web APIs and browser interfaces
 - [Origin trials](./origin-trials/index.html) - Updates in 4 versions — Experimental features in origin trials
+- [Deprecations](./deprecations/index.html) - Updates in 1 version — Deprecated and removed features
 - [Security-Privacy](./security-privacy/index.html) - Updates in 3 versions — Security and privacy features
 - [Navigation-Loading](./navigation-loading/index.html) - Updates in 3 versions — Navigation and resource loading features
 - [Multimedia](./multimedia/index.html) - Updates in 4 versions — Media, audio, and video features

@@ -15,7 +15,7 @@ Identity, sign-in, and account features
 
 ### Available Versions
 
-- Chrome 136 **(Latest)**: [English](./chrome-136-en.html) / [中文](./chrome-136-zh.html)
+- Chrome 136 **(Latest)**: [English](./chrome-136-en.html) / [Chinese](./chrome-136-zh.html)
 
 ## Navigation
 

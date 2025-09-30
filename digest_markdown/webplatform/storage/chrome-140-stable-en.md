@@ -1,28 +1,24 @@
-# Chrome 140 Storage Updates - Expert Analysis
-
 ## Area Summary
 
-Chrome 140 brings a focused but important correction to WebGPU storage texture handling, specifically addressing the deprecation of `bgra8unorm` format for read-only storage textures. This change aligns Chrome with the WebGPU specification by removing support for a format that was incorrectly allowed in previous versions. The update emphasizes Chrome's commitment to spec compliance and cross-platform portability in graphics APIs. While this is a single change, it represents a critical step toward ensuring WebGPU applications behave consistently across different implementations and hardware platforms.
+Chrome 140 (stable) tightens WebGPU storage texture behavior by deprecating the use of "bgra8unorm" with read-only storage textures. The most impactful change for developers is that existing code relying on this previously-allowed pattern will need to be updated for portability and spec compliance. This aligns Chrome with the WebGPU specification, reducing platform inconsistencies and surprising behavior. These updates improve cross-platform graphics reliability and reduce the risk of subtle rendering or compatibility bugs in GPU-accelerated web apps.
 
 ## Detailed Updates
 
-This release focuses on correcting a longstanding specification deviation in WebGPU storage texture usage, bringing Chrome into full compliance with the official WebGPU standard.
+This section expands the summary into the single storage-related change in Chrome 140 and what developers should track.
 
 ### Deprecate bgra8unorm read-only storage texture usage
 
 #### What's New
-Chrome 140 deprecates the use of `"bgra8unorm"` format with read-only storage textures in WebGPU. This format will no longer be supported for read-only storage texture operations, correcting a previous implementation bug.
+Using "bgra8unorm" format with read-only storage textures is now deprecated in Chrome 140. The WebGPU specification disallows this usage; Chrome's prior allowance was a bug.
 
 #### Technical Details
-The `bgra8unorm` format was incorrectly allowed for read-only storage textures in earlier Chrome versions, despite the WebGPU specification explicitly prohibiting this usage. This format is designed exclusively for write-only access patterns and lacks the portability characteristics required for read operations across different GPU architectures. The deprecation ensures that Chrome's WebGPU implementation strictly adheres to the specification requirements.
+The deprecation reflects that "bgra8unorm" is intended for write-only access and is not portable across implementations. Chrome's change brings its WebGPU behavior in line with the spec to avoid non-portable usage patterns.
 
 #### Use Cases
-Developers using WebGPU storage textures should migrate away from `bgra8unorm` format for read-only operations. This change primarily affects:
-- GPU compute shaders that read from storage textures
-- Graphics pipelines using storage textures for data sampling
-- Cross-platform WebGPU applications requiring consistent behavior
-
-The deprecation provides time for developers to update their code before the feature is fully removed in future releases.
+- WebGPU-based applications and shaders that relied on read-only storage textures with "bgra8unorm" must be updated to avoid relying on this pattern.
+- Developers should audit storage texture usages and switch to spec-compliant access patterns or alternative formats that are explicitly supported for read access to ensure portability across browsers and GPUs.
 
 #### References
-- [issue 427681156](https://issues.chromium.org/issues/427681156)
+- issue 427681156: https://issues.chromium.org/issues/427681156
+
+Output file: digest_markdown/webplatform/storage/chrome-140-stable-en.md

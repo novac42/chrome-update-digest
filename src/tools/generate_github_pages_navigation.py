@@ -371,7 +371,7 @@ title: {title}
                         ]
                         if 'zh' in self.languages:
                             language_links.append(
-                                f"[中文](./{self.build_leaf_filename(area, 'zh', 'html')})"
+                                f"[Chinese](./{self.build_leaf_filename(area, 'zh', 'html')})"
                             )
                         overview_lines.append(
                             f"- {display_name}: {' / '.join(language_links)}{description_suffix}"
@@ -541,7 +541,7 @@ title: {title}
                         ]
                         if 'zh' in self.languages:
                             language_links.append(
-                                f"[中文](./{self.build_leaf_filename(f'chrome-{version}', 'zh', 'html')})"
+                                f"[Chinese](./{self.build_leaf_filename(f'chrome-{version}', 'zh', 'html')})"
                             )
                         hub_lines.append(
                             f"- Chrome {version}{en_badge}: {' / '.join(language_links)}"

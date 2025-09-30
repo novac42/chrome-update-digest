@@ -1,454 +1,77 @@
 # Technical Overview - Chrome WebPlatform Digest
 
-**Last Updated**: 2025-08-31
-
-## Project Overview
-
-The Chrome WebPlatform Digest is a comprehensive system for processing, analyzing, and generating digests from Chrome WebPlatform release notes. It provides both direct Python script execution and MCP (Model Context Protocol) tool interfaces for accessing its capabilities. The system uses a **configuration-driven, area-splitting pipeline** for precise WebPlatform content processing and multi-language digest generation.
-
-## System Architecture
-
-### Core Components
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                   MCP Server Layer                       │
-│                  (fast_mcp_server.py)                    │
-│  ┌─────────────────────────────────────────────────┐    │
-│  │  MCP Tools         │  MCP Resources              │    │
-│  │  - enhanced_       │  - Processed Release Notes  │    │
-│  │    webplatform     │  - Prompts (EN/ZH)          │    │
-│  │  - feature_splitter│  - Focus Areas Config       │    │
-│  │  - merged_digest   │  - Area-specific YAMLs      │    │
-│  │  - release_monitor │  - WebGPU Integration       │    │
-│  └─────────────────────────────────────────────────┘    │
-└─────────────────────────────────────────────────────────┘
-                            │
-                            ▼
-┌─────────────────────────────────────────────────────────┐
-│            Streamlined Processing Architecture           │
-│  ┌─────────────────────────────────────────────────┐    │
-│  │  Primary Pipeline                               │    │
-│  │  - clean_data_pipeline.py                       │    │
-│  │  - config-driven via focus_areas.yaml           │    │
-│  │  - dual output: markdown + YAML                │    │
-│  │  - advanced WebGPU merging & deduplication     │    │
-│  │  - seamless MCP integration                    │    │
-│  └─────────────────────────────────────────────────┘    │
-└─────────────────────────────────────────────────────────┘
-                            │
-                            ▼
-┌─────────────────────────────────────────────────────────┐
-│                  Shared Utilities                        │
-│  ┌─────────────────────────────────────────────────┐    │
-│  │  Core Utils        │  Processing Components      │    │
-│  │  - YAML Pipeline   │  - Link Extractor           │    │
-│  │  - Focus Area Mgr  │  - Feature Tagging          │    │
-│  │  - Area Classifier │  - WebGPU Classifier        │    │
-│  │  - Config Manager  │  - Release Monitor          │    │
-│  └─────────────────────────────────────────────────┘    │
-└─────────────────────────────────────────────────────────┘
-                            │
-                            ▼
-┌─────────────────────────────────────────────────────────┐
-│                Structured Data Layer                     │
-│  ┌─────────────────────────────────────────────────┐    │
-│  │  Input Data        │  Processed Data             │    │
-│  │  - Release Notes   │  - Area-specific YAMLs      │    │
-│  │  - WebGPU Notes    │  - Tagged Features          │    │
-│  │  - Enterprise Docs │  - Bilingual Digests        │    │
-│  │                    │  - HTML Output              │    │
-│  └─────────────────────────────────────────────────┘    │
-└─────────────────────────────────────────────────────────┘
-```
-
-### Directory Structure
-
-```
-chrome-update-digest/
-├── src/
-│   ├── mcp_tools/           # MCP tool implementations
-│   │   ├── enhanced_webplatform_digest.py  # Main WebPlatform tool
-│   │   ├── release_monitor.py              # Release monitoring
-│   │   └── feature_splitter.py             # H3 splitting utility
-│   ├── processors/          # Processing scripts (STREAMLINED ARCHITECTURE)
-│   │   ├── clean_data_pipeline.py          # PRIMARY: Config-driven processor
-│   │   ├── split_and_process_release_notes.py  # LEGACY: Deprecated
-│   │   └── extract_profile_features.py     # Profile feature extraction
-│   ├── utils/              # Shared utilities
-│   │   ├── yaml_pipeline.py                # Core YAML processing
-│   │   ├── focus_area_manager.py           # Config management
-│   │   ├── area_classifier.py              # WebGPU classification
-│   │   └── link_extractor.py               # Link extraction
-│   └── models/             # Data models
-├── config/                 # Configuration files
-│   ├── focus_areas.yaml    # Area mapping configuration
-│   └── output_configuration.md
-├── upstream_docs/
-│   ├── release_notes/      # Raw input files
-│   │   └── WebPlatform/    # Chrome & WebGPU release notes
-│   └── processed_releasenotes/
-│       └── processed_forwebplatform/
-│           ├── {area}/     # Area-specific directories
-│           │   └── chrome-{version}-{channel}.yml
-│           └── split_by_heading/  # H2 section splits
-├── digest_markdown/        # Generated digests
-│   └── webplatform/
-│       └── {area}/         # Per-area digests
-│           ├── chrome-{version}-{channel}-en.md
-│           └── chrome-{version}-{channel}-zh.md
-├── prompts/               # AI prompts
-│   └── webplatform-prompts/
-│       ├── webplatform-prompt-en.md
-│       ├── webplatform-prompt-zh.md
-│       └── webplatform-translation-prompt-zh.md
-└── tests/                # Test suites
-```
-
-## New Processing Architecture
-
-### Overview
-
-The system now features **a streamlined processing approach**:
-
-1. **`clean_data_pipeline.py`** (PRIMARY): Configuration-driven, integrates with existing YAML pipeline
-
-### 1. Data Acquisition Pipeline
-
-```mermaid
-graph LR
-    A[Web Sources] --> B[Release Monitor]
-    B --> C[Crawl Script]
-    C --> D[Raw Release Notes]
-    D --> E[upstream_docs/release_notes/]
-```
-
-**Access Methods**:
-- **MCP Tool**: `check_latest_releases`, `crawl_missing_releases`
-- **Python Script**: `src/processors/monitor_releases.py`
-
-### 2. Primary WebPlatform Processing Pipeline (NEW)
-
-```mermaid
-graph TD
-    A[Chrome Release Notes] --> B[clean_data_pipeline.py]
-    A1[WebGPU Release Notes] --> B
-    B --> C[focus_areas.yaml Config]
-    C --> D[Structure Validation]
-    D --> E[H2 Section Parsing]
-    E --> F[Area Classification]
-    F --> G[WebGPU Merging & Deduplication]
-    G --> H[Markdown Output by Area]
-    H --> I{--with-yaml flag?}
-    I -->|Yes| J[YAML Pipeline Integration]
-    I -->|No| K[Markdown Only]
-    J --> L[Area-specific YAML Files]
-    L --> M[Enhanced WebPlatform Digest Tool]
-    M --> N[Per-area Bilingual Digests]
-```
-
-**Key Features**:
-- **Configuration-driven**: Uses `config/focus_areas.yaml` for area mapping
-- **Sophisticated WebGPU handling**: Three-source merging with deduplication
-- **YAML integration**: Works seamlessly with existing `utils/yaml_pipeline.py`
-- **Dual output**: Both markdown and YAML formats
-
-**Usage**:
-```bash
-# Recommended usage
-python3 src/processors/clean_data_pipeline.py --version 139 --with-yaml
-```
-
-
-### 3. Digest Generation Pipeline
-
-```mermaid
-graph TD
-    A[Area-specific YAML Files] --> B[Enhanced WebPlatform Digest Tool]
-    B --> C{Language Selection}
-    C -->|English| D[English Prompt Template]
-    C -->|Chinese| E[Chinese Prompt Template]
-    C -->|Bilingual| F[Both Templates]
-    D --> G[LLM Sampling via MCP]
-    E --> H[LLM Sampling via MCP]
-    F --> G
-    F --> H
-    G --> I[English Digest]
-    H --> J[Chinese Digest]
-    I --> K[Validation & Retry Logic]
-    J --> L[Translation Validation]
-    K --> M[Final Per-area Digests]
-    L --> M
-```
-
-**Key Features**:
-- **Per-area processing**: Each focus area gets its own digest
-- **Bilingual support**: English and Chinese output
-- **Validation & retry**: Quality assurance with fallback mechanisms
-- **Area-specific prompts**: Customized prompts for different technical areas
-
-### 4. Output Generation Pipeline
-
-```mermaid
-graph LR
-    A[Per-area WebPlatform Digests] --> B[Merged HTML]
-    B --> C[HTML Template]
-    C --> D[Final HTML Output]
-```
-
-**Access Methods**:
-- **MCP Tool**: `merged_digest_html`
-- **Python Script**: `src/convert_md2html.py`
-
-## Capability Access Matrix
-
-| Capability | MCP Tool | Python Script | CLI Command | Status |
-|------------|----------|---------------|-------------|--------|
-| **Data Acquisition** |
-| Check latest releases | ✅ `check_latest_releases` | ✅ `monitor_releases.py` | ✅ | Active |
-| Crawl missing releases | ✅ `crawl_missing_releases` | ✅ `monitor_releases.py` | ✅ | Active |
-| **WebPlatform Processing (PRIMARY)** |
-| Primary processing pipeline | ❌ | ✅ `clean_data_pipeline.py --with-yaml` | ✅ | **PRIMARY** |
-| Legacy processing pipeline | ❌ | ✅ `split_and_process_release_notes.py` | ✅ | **DEPRECATED** |
-| Generate per-area digests | ✅ `enhanced_webplatform_digest` | ✅ Via MCP | ❌ | **PRIMARY** |
-| Generate bilingual digests | ✅ `enhanced_webplatform_digest` | ✅ Via MCP | ❌ | **PRIMARY** |
-| **Configuration & Management** |
-| Focus areas configuration | ❌ | ✅ `config/focus_areas.yaml` | ❌ | **NEW** |
-| Area classification validation | ❌ | ✅ Built into pipelines | ✅ | **NEW** |
-| **Utilities** |
-| Split features by heading | ✅ `split_features_by_heading` | ✅ `feature_splitter.py` | ❌ | Active |
-| Convert MD to HTML | ❌ | ✅ `convert_md2html.py` | ✅ | Active |
-| **Output Generation** |
-| Generate merged HTML | ✅ `merged_digest_html` | ✅ Via MCP | ❌ | Active |
-| Validate extraction | ❌ | ✅ Built into pipelines | ✅ | **NEW** |
-
-### Pipeline Comparison
-
-| Feature | clean_data_pipeline.py | Legacy Pipeline |
-|---------|------------------------|-----------------| 
-| **Configuration** | ✅ `focus_areas.yaml` (centralized) | ❌ Mixed/scattered |
-| **YAML Output** | ✅ Full integration | ✅ Limited |
-| **WebGPU Handling** | ✅ Advanced deduplication | ✅ Basic merging |
-| **Structure Validation** | ✅ Built-in | ❌ None |
-| **MCP Integration** | ✅ Seamless | ✅ Legacy |
-| **Flexibility** | ✅ High (config-driven) | ❌ Low (hardcoded) |
-| **Maintenance** | ✅ Easy | ❌ Difficult |
-| **Recommended Use** | **Production** | **Deprecated** |
-
-## Key Technologies
-
-### Core Frameworks
-- **FastMCP 2.0**: MCP server implementation with sampling support
-- **YAML Pipeline**: Deterministic feature extraction with 100% link accuracy
-- **BeautifulSoup**: HTML parsing for web crawling
-- **html2text**: HTML to Markdown conversion
-
-### AI Integration
-- **Sampling API**: LLM-based digest generation via MCP sampling
-- **Prompt Engineering**: Bilingual (EN/ZH) prompt templates
-- **Focus Area Filtering**: Configuration-driven content filtering
-
-### Data Formats
-- **Input**: Markdown (release notes), HTML (web sources)
-- **Intermediate**: YAML (structured data), JSON (metadata)
-- **Output**: Markdown (digests), HTML (formatted output)
-
-## Processing Modes
-
-### 1. Complete Workflow (Recommended)
-
-**Step 1: Process release notes with primary pipeline**
-```bash
-# Generate both markdown and YAML output by area
-python3 src/processors/clean_data_pipeline.py --version 139 --with-yaml
-```
-
-**Step 2: Generate digests via MCP server**
-```bash
-# Start MCP server
-python fast_mcp_server.py
-
-# Use MCP client to generate per-area bilingual digests
-# The enhanced_webplatform_digest tool will:
-# - Load area-specific YAML files
-# - Generate English and Chinese digests for each area
-# - Apply validation and retry logic
-# - Save to digest_markdown/webplatform/{area}/
-```
-
-### 2. Standalone Script Mode
-Direct Python execution for specific tasks:
-```bash
-# Enterprise processing
-python src/process_enterprise_release_note.py
-
-# Legacy processing (deprecated)
-python src/processors/split_and_process_release_notes.py --version 139
-
-# Release monitoring
-python src/processors/monitor_releases.py
-
-```
-
-### 3. MCP Server Mode
-API-based access for integration with other systems:
-```bash
-python fast_mcp_server.py
-# Then use MCP client to call tools
-```
-
-### 4. Hybrid Mode
-Combining both approaches for maximum flexibility:
-- Use `clean_data_pipeline.py` for initial processing
-- Use MCP tools for digest generation
-- Share structured YAML data between modes
-
-## Recommended Workflow
-
-### For New Chrome Versions
-
-1. **Data Collection**:
-   ```bash
-   python src/processors/monitor_releases.py
-   ```
-
-2. **WebPlatform Processing** (PRIMARY):
-   ```bash
-   python3 src/processors/clean_data_pipeline.py --version 139 --with-yaml
-   ```
-   This generates:
-   - `upstream_docs/processed_releasenotes/processed_forwebplatform/{area}/chrome-139-stable.yml`
-   - `upstream_docs/processed_releasenotes/processed_forwebplatform/areas/{area}/chrome-139-stable.md`
-
-3. **Digest Generation** (via MCP):
-   ```bash
-   # Start MCP server
-   python fast_mcp_server.py
-   
-   # Generate per-area bilingual digests
-   # Output: digest_markdown/webplatform/{area}/chrome-139-stable-{en|zh}.md
-   ```
-
-4. **HTML Generation**:
-   ```bash
-   python src/convert_md2html.py  # Convert to HTML
-   ```
-
-### Key Differences from Legacy Approach
-
-| Aspect | Legacy Approach | WebPlatform Approach |
-|--------|----------------|---------------------|
-| **Processing** | Single monolithic script | Modular, config-driven WebPlatform pipeline |
-| **Output Structure** | Flat file structure | WebPlatform area-based directory hierarchy |
-| **Configuration** | Hardcoded in multiple places | Centralized in `focus_areas.yaml` |
-| **WebGPU Handling** | Basic merging | Advanced WebGPU deduplication logic |
-| **Language Support** | English only | Bilingual WebPlatform with translation validation |
-| **Validation** | Manual checking | Built-in WebPlatform validation and retry |
-| **Area Classification** | Fixed patterns | Configurable WebPlatform areas with smart fallbacks |
-
-## Configuration
-
-### Environment Variables
-```bash
-MCP_RESOURCE_MODE=local|remote|hybrid
-MCP_CDN_BASE=https://cdn.example.com
-SAMPLING_API_KEY=your-api-key
-```
-
-### Configuration Files
-- `prompts/`: AI prompt templates
-- `config/focus_areas.yaml`: Focus area definitions
-- `.monitoring/versions.json`: Version tracking
-
-## Performance Characteristics
-
-### Processing Speed
-- **Enterprise Processing**: ~2-3 seconds per version
-- **WebPlatform Processing**: ~5-10 seconds per version (with WebGPU merge)
-- **Digest Generation**: ~10-30 seconds (with AI sampling)
-
-### Resource Usage
-- **Memory**: Typical usage 200-500MB
-- **Disk**: ~100MB for processed data per Chrome version
-- **Network**: Variable based on crawling and AI sampling
-
-## Development Workflow
-
-### Adding New Capabilities
-
-1. **Create Processing Script**:
-   - Add to `src/processors/` for standalone scripts
-   - Implement core logic with clear interfaces
-
-2. **Create MCP Tool Wrapper**:
-   - Add to `src/mcp_tools/`
-   - Wrap script functionality for MCP access
-
-3. **Register in MCP Server**:
-   - Update `fast_mcp_server.py`
-   - Add tool registration and initialization
-
-4. **Add Tests**:
-   - Create tests in `tests/`
-   - Cover both script and MCP modes
-
-### Testing Strategy
-
-```bash
-# Unit tests
-pytest tests/test_*.py
-
-# Integration tests
-python tests/scripts/test_area_splitting.py
-
-# MCP server tests
-python fast_mcp_server.py --test
-```
-
-## Future Enhancements
-
-### Planned Features
-- [ ] YAML resources via MCP protocol
-- [ ] Remote resource hosting (CDN)
-- [ ] GraphQL API for resource queries
-- [ ] Real-time release monitoring
-- [ ] Webhook notifications
-- [ ] Multi-language digest generation
-
-### Architecture Evolution
-- Microservices architecture for scalability
-- Container deployment (Docker/K8s)
-- Event-driven processing with message queues
-- Distributed caching for performance
-
-## Maintenance
-
-### Regular Tasks
-1. **Weekly**: Check for new Chrome releases
-2. **Monthly**: Update prompts and keywords
-3. **Quarterly**: Review and optimize processing logic
-4. **Yearly**: Architecture review and refactoring
-
-### Monitoring
-- Processing success rates
-- AI sampling costs
-- Resource usage trends
-- Error rates and patterns
-
-## Support and Documentation
-
-### Documentation
-- `/docs/tech_docs/`: Technical documentation
-- `/docs/product_docs/`: Product documentation
-- `/CLAUDE.md`: Development guidelines
-- `/README.md`: Quick start guide
-
-### Debugging
-- Check logs in `.monitoring/logs/`
-- Validate YAML output in `processed_releasenotes/`
-- Test individual tools via MCP protocol
-- Run validation scripts in `tests/scripts/`
-
-## Conclusion
-
-The Upstream Digest Server provides a flexible, dual-mode architecture that supports both direct script execution and MCP-based API access. This design enables various use cases from batch processing to real-time digest generation, with a clear separation of concerns and extensible architecture for future enhancements.
+**Last Updated**: 2025-09-30
+
+## Project Summary
+The Chrome WebPlatform Digest project ingests Chrome WebPlatform release notes, normalises them into a structured YAML format, and produces bilingual area digests and site navigation for GitHub Pages. The codebase exposes the same pipeline by command-line scripts and by FastMCP tools so it can power automation as well as interactive workflows.
+
+## High-Level Data Flow
+1. **Monitor & Fetch Releases** – `src/mcp_tools/release_monitor.ReleaseMonitorTool` and `src/utils/release_monitor_core` detect new versions and download upstream markdown into `upstream_docs/release_notes/`.
+2. **Structure & Clean Data** – `src/chrome_update_digest/processors/clean_data_pipeline.CleanDataPipeline` loads raw notes, applies focus-area rules from `config/focus_areas.yaml`, merges WebGPU updates, and writes area markdown plus structured YAML to `upstream_docs/processed_releasenotes/processed_forwebplatform/`.
+3. **Tag Features into YAML** – `src/utils/yaml_pipeline.YAMLPipeline` extracts links with `LinkExtractor`, tags headings with `HeadingBasedTagger`, and persists deterministic YAML payloads used by downstream sampling.
+4. **Generate Digests** – `src/mcp_tools/enhanced_webplatform_digest.EnhancedWebplatformDigestTool` consumes the YAML, optionally filters focus areas, calls FastMCP sampling for English/Chinese summaries, and stores results in `digest_markdown/webplatform/`.
+5. **Publish Navigation** – `src/tools/generate_github_pages_navigation.py` copies staged digests into the version/area navigation tree, while `src/tools/validate_github_pages.py` and `src/convert_md2html.py` provide validation and HTML output for the site.
+
+## Core Architecture
+
+### Data Acquisition & Monitoring
+- `fast_mcp_server.py` registers `check_latest_releases` and `crawl_missing_releases` tools that delegate to `ReleaseMonitorTool` for version tracking, RSS parsing, and optional crawling.
+- `src/utils/release_note_locator` and `src/utils/chrome_version_detector` locate raw WebPlatform and WebGPU files and resolve channel-specific filenames.
+- Monitoring metadata (run history, progress) lives under `.monitoring/` so automated jobs can report status to clients.
+
+### Normalisation Pipeline
+- `CleanDataPipeline` orchestrates end-to-end processing: validating H2 structure, instantiating area-specific extractors from `AreaExtractorFactory`, merging dedicated WebGPU notes through `WebGPUAreaExtractor`, and emitting per-area markdown plus optional YAML.
+- `src/chrome_update_digest/processors/area_extractors` defines the `Section` dataclass and extractor implementations for headings, feature detection, and safe markdown trimming.
+- `src/utils/focus_area_manager` and `src/utils/area_classifier.WebGPUClassifier` supply configurable mappings and strict WebGPU classification rules. The configuration lives in `config/focus_areas.yaml` and can extend areas without code changes.
+
+### YAML & Feature Tagging Layer
+- `YAMLPipeline` produces deterministic feature documents with statistics, link inventories, and heading paths. It merges WebGPU updates ahead of extraction to keep the "graphics-webgpu" area authoritative.
+- Tagged data is cached per version/channel (`*-webplatform-with-webgpu.yml`) and optionally split per area for reuse by tooling.
+
+### Digest Generation & Publication
+- `EnhancedWebplatformDigestTool` exposes the primary MCP entry point (`webplatform_digest`). It resolves sampling preferences, reuses cached YAML when possible, generates per-area or single-area digests, and writes bilingual files to `digest_markdown/webplatform/{area}/chrome-{version}-{channel}-{lang}.md`.
+- `FeatureSplitterTool` provides finer-grained sampling utilities by splitting markdown along heading paths for client workflows that need per-feature prompts.
+- `GithubPagesOrchestratorTool` (invoked by the `generate_github_pages` MCP tool) ties together digest regeneration, navigation refresh, and validation into one command that can skip expensive steps when outputs already exist.
+- GitHub Pages helpers live under `src/tools/`: the navigation generator emits the final directory tree (`digest_markdown/versions/` and `digest_markdown/areas/`), while the validator scans for broken links, missing language pairs, or stale metadata.
+
+### Resource Exposure
+- `src/mcp_resources/processed_releasenotes.ProcessedReleaseNotesResource` turns markdown and YAML artefacts into FastMCP resources so clients can read them over the protocol. `fast_mcp_server.register_dynamic_resources()` registers every discovered file with accurate mime types and metadata.
+- Prompts and other static assets are exposed through `file://` resources, with canonical copies stored under `prompts/webplatform-prompts/`.
+
+## Directory Map
+- `src/chrome_update_digest/` – Canonical package for processors, tools, and shared utilities used by the pipeline.
+- `src/mcp_tools/` – FastMCP tool wrappers that adapt the package modules for interactive use.
+- `src/utils/` – Reusable helpers: link extraction, focus-area configuration, YAML pipeline, project path resolution, and release monitoring core logic.
+- `src/tools/` – CLI-centric scripts for GitHub Pages navigation and validation.
+- `digest_markdown/` – Staging output for digests (`webplatform/`) and the generated GitHub Pages site (`versions/`, `areas/`).
+- `upstream_docs/` – Source release notes (raw under `release_notes/` and processed under `processed_releasenotes/`).
+- `.monitoring/` – Run metadata captured during long-running tasks.
+
+## Execution Modes
+- **CLI**
+  - `python -m chrome_update_digest.processors.clean_data_pipeline --version 140 --channel stable --with-yaml`
+  - `python -m mcp_tools.enhanced_webplatform_digest --version 140 --split-by-area`
+  - `python src/tools/generate_github_pages_navigation.py --language bilingual --clean`
+  - `python src/convert_md2html.py` (HTML export for staging)
+- **FastMCP Tools**
+  - `webplatform_digest` → `EnhancedWebplatformDigestTool.run`
+  - `split_features_by_heading` → `FeatureSplitterTool` utilities
+  - `check_latest_releases` / `crawl_missing_releases` → `ReleaseMonitorTool`
+  - `generate_github_pages` → `GithubPagesOrchestratorTool`
+  - `get_webplatform_progress` → progress reader backed by `.monitoring/webplatform-progress.json`
+
+## Configuration & Environment
+- `config/focus_areas.yaml` defines area metadata, display names, heading patterns, and keywords that drive both extraction and site navigation.
+- Environment variables recognized by the pipeline include `WEBPLATFORM_MODEL`, `WEBPLATFORM_MODEL_PREFERENCES`, `WEBPLATFORM_MAX_CONCURRENCY`, `STRICT_WEBGPU_AREA`, and MCP resource hosting settings (`MCP_RESOURCE_MODE`, `MCP_CDN_BASE`).
+- Cached outputs are organised by version and channel so re-runs can skip redundant work while still allowing forced regeneration (`force_regenerate=True`).
+
+## Validation, Testing, and Monitoring
+- Structural checks run inside `CleanDataPipeline.validate_structure` before processing to catch missing focus areas.
+- `src/tools/validate_github_pages.py` enforces navigation invariants (paired languages, breadcrumb coverage, link integrity).
+- Tests under `tests/` focus on strict WebGPU classification, focus-area mapping, and utility behaviour; they rely on the package namespace rather than legacy import paths.
+- Progress JSON files under `.monitoring/` allow long-running MCP operations to surface status updates to clients.
+
+## Future Considerations
+- `todo-yaml-resources-and-remote-hosting-plan.md` tracks work to expose YAML via MCP resources and optional CDN hosting.
+- `future-uv-packaging-plan.md` documents the packaging path that will convert the project into a proper `uv` package with console entry points.
+- Additional FastMCP tools can reuse the existing YAML pipeline for analytics or diffing without reprocessing raw release notes.

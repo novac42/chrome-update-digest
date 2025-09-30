@@ -1,29 +1,40 @@
-# Chrome 140 Stable - HTML-DOM Updates
+## 区域摘要
 
-## Area Summary
+Chrome 140 引入了一个小而集中的 HTML‑DOM 增强：在 `ToggleEvent` 接口上新增了一个 `source` 属性。该属性在适用时揭示触发 `ToggleEvent` 的元素，为处理器提供更丰富的事件上下文。对于开发者而言，此更改使得识别发起元素（例如打开 popover 的按钮）更容易，而无需自定义 DOM 遍历或额外属性。通过让内置 DOM 事件更具信息性并减少交互组件的样板代码，这项改进推进了平台发展。
 
-Chrome 140 针对 HTML-DOM 领域引入了一项重点增强功能，新增了 `ToggleEvent` source 属性。此更新加强了交互元素与其触发事件之间的连接，为开发者提供了关于导致弹出层等可切换元素状态变化的用户交互的更好上下文。该功能体现了 Chrome 持续努力使 DOM 事件对构建交互式 Web 应用程序的开发者更加信息丰富和可操作。此增强功能对于多个元素可能触发同一可切换组件的复杂 UI 模式特别有价值。
+## 详细更新
 
-## Detailed Updates
+下面的单一更新直接支持上述摘要。
 
-基于 Chrome 致力于提供更丰富事件上下文的承诺，此版本提供了对 ToggleEvent 接口的针对性改进，增强了开发者对用户交互的理解。
+### `ToggleEvent` source attribute（source 属性）
 
-### `ToggleEvent` source attribute
+#### 新增内容
+`ToggleEvent` 的 `source` 属性包含触发该 `ToggleEvent` 被派发的元素（如适用）。
 
-#### What's New
-`ToggleEvent` 现在包含一个 `source` 属性，用于标识触发切换事件的元素。这提供了有关切换操作来源的关键上下文，在多个元素可以控制同一可切换组件时特别有用。
+#### 技术细节
+这为 `ToggleEvent` DOM 接口添加了一个可访问的属性，当存在触发元素时引用该元素。发布说明通过一个示例说明了该行为，该示例涉及通过诸如 `popovertarget` 或 `commandfor` 之类的属性由 `<button>` 元素打开弹出面板的情形。
 
-#### Technical Details
-`source` 属性包含对启动 `ToggleEvent` 的 DOM 元素的引用。例如，当用户点击设置了 `popovertarget` 或 `commandfor` 属性以打开弹出层的 `<button>` 元素时，在弹出层上触发的结果 `ToggleEvent` 将其 `source` 属性指向该按钮元素。这在触发器和目标之间创建了清晰的程序化链接。
+#### 适用场景
+- 弹出面板或可切换 UI 的事件处理器可以检查 `event.source` 以确定哪个控件发起了切换。
+- 简化需要区分用户触发的切换与编程触发切换的组件逻辑。
+- 减少对基于属性的关联或手动查找元素来定位发起元素的依赖。
 
-#### Use Cases
-此功能使开发者能够：
-- 通过了解哪个特定触发器导致了切换来构建更复杂的事件处理逻辑
-- 基于源元素实现不同的行为（例如，不同的动画或定位）
-- 通过维护焦点上下文创建更好的无障碍体验
-- 更有效地调试与切换相关的交互
-- 构建跟踪哪些 UI 元素在触发用户操作方面最有效的分析
+#### 参考资料
+- https://chromestatus.com/feature/5165304401100800
+- https://html.spec.whatwg.org/multipage/interaction.html#the-toggleevent-interface
 
-#### References
-- [ChromeStatus.com entry](https://chromestatus.com/feature/5165304401100800)
-- [Spec](https://html.spec.whatwg.org/multipage/interaction.html#the-toggleevent-interface)
+## 区域专门知识 (HTML-DOM)
+
+- css: 对布局的直接影响最小；在不增加额外 DOM 标记的情况下，便于在控件与被切换的 UI 之间建立更清晰的关联。
+- webapi: 通过在 `ToggleEvent` 上添加 `source` 属性扩展了 DOM 事件 API。
+- graphics-webgpu: 与 GPU 或 渲染管线 无直接关联。
+- javascript: V8 使用者可以在 `ToggleEvent` 处理器中读取 `event.source` 以简化控制流。
+- security-privacy: 在事件对象中暴露了元素引用；标准的 same-origin 和 DOM 访问规则继续适用。
+- performance: 开销低；在常见的切换处理路径中避免了额外的 DOM 查询。
+- multimedia: 与编解码器/流媒体无关。
+- devices: 无直接设备 API 影响。
+- pwa-service-worker: 对 service worker 行为无直接影响。
+- webassembly: 对 WASM 运行时无直接影响。
+- deprecations: 未报告任何弃用影响。 
+
+已保存到：digest_markdown/webplatform/HTML-DOM/chrome-140-stable-en.md

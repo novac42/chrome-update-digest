@@ -11,7 +11,7 @@ Comprehensive release notes for Chrome web platform features, organized for easy
 
 Explore what's new in each Chrome release:
 
-- [Chrome 140 **(Latest Stable)**](./versions/chrome-140/index.html) - 11 areas with updates
+- [Chrome 140 **(Latest Stable)**](./versions/chrome-140/index.html) - 12 areas with updates
 - [Chrome 139](./versions/chrome-139/index.html) - 13 areas with updates
 - [Chrome 138](./versions/chrome-138/index.html) - 11 areas with updates
 - [View all 5 versions →](./versions/index.html)
@@ -25,7 +25,7 @@ Track the evolution of specific features across Chrome versions:
 - [Web API](./areas/webapi/index.html) - Updates in 5 versions
 - [HTML-DOM](./areas/html-dom/index.html) - Updates in 4 versions
 - [Origin trials](./areas/origin-trials/index.html) - Updates in 4 versions
-- [View all 20 feature areas →](./areas/index.html)
+- [View all 21 feature areas →](./areas/index.html)
 
 ## Quick Links
 

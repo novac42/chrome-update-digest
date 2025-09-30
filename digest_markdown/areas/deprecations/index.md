@@ -1,22 +1,21 @@
 ---
 layout: default
-title: PWA and service worker Updates
+title: Deprecations Updates
 ---
 
-# PWA and service worker Updates
+# Deprecations Updates
 
 [← Back to all areas](../index.html)
 
 ## Version History
 
-Track the evolution of PWA and service worker features across Chrome releases.
+Track the evolution of Deprecations features across Chrome releases.
 
-Progressive Web Apps and service worker features
+Deprecated and removed features
 
 ### Available Versions
 
 - Chrome 140 **(Latest)**: [English](./chrome-140-en.html) / [Chinese](./chrome-140-zh.html)
-- Chrome 138: [English](./chrome-138-en.html) / [Chinese](./chrome-138-zh.html)
 
 ## Navigation
 

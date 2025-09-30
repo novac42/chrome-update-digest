@@ -1,5 +1,5 @@
 {
-  "version": "138",
+  "version": "140",
   "channel": "stable",
   "languages": [
     "en",
@@ -8,88 +8,95 @@
   "areas": [
     "css",
     "deprecation",
+    "deprecations",
     "devices",
     "graphics-webgpu",
     "html-dom",
+    "isolated-web-apps",
     "javascript",
-    "multimedia",
-    "performance",
+    "origin-trials",
     "pwa-service-worker",
-    "security-privacy",
+    "storage",
     "webapi"
   ],
-  "total_areas": 11,
-  "completed_areas": 11,
+  "total_areas": 12,
+  "completed_areas": 12,
   "per_area": {
     "css": {
       "en": "done",
       "zh": "done",
-      "en_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\css\\chrome-138-stable-en.md",
-      "zh_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\css\\chrome-138-stable-zh.md"
+      "en_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\css\\chrome-140-stable-en.md",
+      "zh_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\css\\chrome-140-stable-zh.md"
     },
     "deprecation": {
       "en": "done",
       "zh": "done",
-      "en_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\deprecation\\chrome-138-stable-en.md",
-      "zh_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\deprecation\\chrome-138-stable-zh.md"
+      "en_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\deprecation\\chrome-140-stable-en.md",
+      "zh_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\deprecation\\chrome-140-stable-zh.md"
+    },
+    "deprecations": {
+      "en": "done",
+      "zh": "done",
+      "en_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\deprecations\\chrome-140-stable-en.md",
+      "zh_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\deprecations\\chrome-140-stable-zh.md"
     },
     "devices": {
       "en": "done",
       "zh": "done",
-      "en_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\devices\\chrome-138-stable-en.md",
-      "zh_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\devices\\chrome-138-stable-zh.md"
+      "en_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\devices\\chrome-140-stable-en.md",
+      "zh_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\devices\\chrome-140-stable-zh.md"
     },
     "graphics-webgpu": {
       "en": "done",
       "zh": "done",
-      "en_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\graphics-webgpu\\chrome-138-stable-en.md",
-      "zh_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\graphics-webgpu\\chrome-138-stable-zh.md"
+      "en_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\graphics-webgpu\\chrome-140-stable-en.md",
+      "zh_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\graphics-webgpu\\chrome-140-stable-zh.md"
     },
     "html-dom": {
       "en": "done",
       "zh": "done",
-      "en_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\html-dom\\chrome-138-stable-en.md",
-      "zh_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\html-dom\\chrome-138-stable-zh.md"
+      "en_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\html-dom\\chrome-140-stable-en.md",
+      "zh_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\html-dom\\chrome-140-stable-zh.md"
+    },
+    "isolated-web-apps": {
+      "en": "done",
+      "zh": "done",
+      "en_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\isolated-web-apps\\chrome-140-stable-en.md",
+      "zh_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\isolated-web-apps\\chrome-140-stable-zh.md"
     },
     "javascript": {
       "en": "done",
       "zh": "done",
-      "en_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\javascript\\chrome-138-stable-en.md",
-      "zh_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\javascript\\chrome-138-stable-zh.md"
+      "en_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\javascript\\chrome-140-stable-en.md",
+      "zh_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\javascript\\chrome-140-stable-zh.md"
     },
-    "multimedia": {
+    "origin-trials": {
       "en": "done",
       "zh": "done",
-      "en_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\multimedia\\chrome-138-stable-en.md",
-      "zh_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\multimedia\\chrome-138-stable-zh.md"
-    },
-    "performance": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\performance\\chrome-138-stable-en.md",
-      "zh_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\performance\\chrome-138-stable-zh.md"
+      "en_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\origin-trials\\chrome-140-stable-en.md",
+      "zh_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\origin-trials\\chrome-140-stable-zh.md"
     },
     "pwa-service-worker": {
       "en": "done",
       "zh": "done",
-      "en_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\pwa-service-worker\\chrome-138-stable-en.md",
-      "zh_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\pwa-service-worker\\chrome-138-stable-zh.md"
+      "en_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\pwa-service-worker\\chrome-140-stable-en.md",
+      "zh_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\pwa-service-worker\\chrome-140-stable-zh.md"
     },
-    "security-privacy": {
+    "storage": {
       "en": "done",
       "zh": "done",
-      "en_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\security-privacy\\chrome-138-stable-en.md",
-      "zh_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\security-privacy\\chrome-138-stable-zh.md"
+      "en_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\storage\\chrome-140-stable-en.md",
+      "zh_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\storage\\chrome-140-stable-zh.md"
     },
     "webapi": {
       "en": "done",
       "zh": "done",
-      "en_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\webapi\\chrome-138-stable-en.md",
-      "zh_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\webapi\\chrome-138-stable-zh.md"
+      "en_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\webapi\\chrome-140-stable-en.md",
+      "zh_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\webapi\\chrome-140-stable-zh.md"
     }
   },
-  "started_at": "2025-09-30T12:43:30.436055",
-  "updated_at": "2025-09-30T12:46:27.581057",
-  "completed_at": "2025-09-30T12:46:27.580964",
-  "total_time_seconds": 177.14397811889648
+  "started_at": "2025-09-30T15:50:30.731950",
+  "updated_at": "2025-09-30T15:54:22.081744",
+  "completed_at": "2025-09-30T15:54:22.081640",
+  "total_time_seconds": 231.34881782531738
 }

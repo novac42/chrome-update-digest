@@ -1,39 +1,43 @@
-# Chrome Update Analyzer - JavaScript Domain Analysis
+## 区域摘要
 
-## Area Summary
+Chrome 140 stable 引入了两项针对 JavaScript 领域的重点更改：在 Uint8Array 与 base64/hex 表示之间的内建转换，以及对 view transition finished promise 定时的调整。Uint8Array 转换功能减少了对自定义二进制 ↔ 文本 编码工具的需求，改善了互操作性和开发者使用便捷性。view transition 定时更改针对由 promise 解析顺序引起的可见闪烁，从而提高了动画的健壮性和感知性能。这两项更新收紧了平台原语，使开发者可以减少对临时解决方法的依赖。
 
-Chrome 140 为 JavaScript 的数据处理能力和视觉过渡 API 带来了显著改进。最值得注意的新增功能是对 `Uint8Array` 与 base64 和十六进制格式相互转换的原生支持，这消除了在处理二进制数据编码时对外部库或复杂变通方法的需求。此外，视图过渡 API 接收了一个关键的时序修复，防止动画完成期间出现视觉闪烁。这些更新反映了 Chrome 对增强 JavaScript 内置能力的持续关注，同时改善了能够提供流畅用户体验的现代 Web API 的可靠性。
+## 详细更新
 
-## Detailed Updates
+下面是每项 JavaScript 领域更改的简明、面向开发者的分解说明及其重要性。
 
-基于这些核心改进，让我们详细检查每个功能，以了解它们的技术实现和对 JavaScript 开发者的实际应用。
+### `Uint8Array` to and from base64 and hex（Uint8Array 与 base64/hex 相互转换）
 
-### `Uint8Array` to and from base64 and hex
+#### 新增内容
+新增在 Uint8Array 二进制数据与 base64/hex 文本编码之间进行转换的能力与方法。
 
-#### What's New
-JavaScript 现在包含了用于将 `Uint8Array` 对象转换为 base64 和十六进制字符串表示形式以及反向转换的内置方法。这一原生功能消除了对外部库进行常见二进制数据编码操作的依赖。
+#### 技术细节
+此功能为二进制 <-> 文本 编码的转换标准化了 API；有关方法具体形状和语义，请参阅语言级规范。
 
-#### Technical Details
-该实现向 `Uint8Array` 原型添加了新方法，并提供用于从编码字符串创建数组的静态方法。这些方法直接在 V8 引擎中处理二进制数据与 ASCII 安全字符串格式之间的转换，相比基于 JavaScript 的实现提供了更好的性能。该功能遵循 TC39 规范，确保跨浏览器行为的一致性。
+#### 适用场景
+- 对二进制数据进行传输或存储编码（例如，嵌入图像、发送紧凑负载）。
+- 将 base64/hex 载荷解码为 typed arrays，以便通过 Web APIs（crypto、WebAssembly、fetch 响应处理）进行处理。
+- 减少对实用库和自定义编码/解码代码路径的依赖。
 
-#### Use Cases
-这一增强对于处理文件上传、加密操作或需要 base64 编码的 API 通信的 Web 应用程序特别有价值。从事图像数据、PDF 生成或二进制协议实现的开发者将受益于简化的工作流程，以及相比 polyfill 解决方案的改进性能。
+#### 参考资料
+- ChromeStatus.com 条目: https://chromestatus.com/feature/6281131254874112  
+- 规范: https://tc39.es/proposal-arraybuffer-base64/spec
 
-#### References
-- [ChromeStatus.com entry](https://chromestatus.com/feature/6281131254874112)
-- [Spec](https://tc39.es/proposal-arraybuffer-base64/spec)
+### View transition finished promise timing change（finished promise 定时调整以避免动画末端闪烁）
 
-### View transition finished promise timing change
+#### 新增内容
+已更改 view transition finished promise 的定时，以解决在渲染生命周期步骤内发生 promise 解析并在动画结束处导致可见闪烁的情况。
 
-#### What's New
-View Transitions API 的 finished promise 现在以改进的时序进行解析，以防止在动画完成后立即执行 JavaScript 代码时可能出现的视觉闪烁。
+#### 技术细节
+调整针对 finished promise 相对于渲染生命周期何时解析，以确保对完成作出反应的脚本不会在移除 view transition 的视觉帧之后运行，从而避免动画结束时的视觉瑕疵。
 
-#### Technical Details
-以前，finished promise 在渲染生命周期步骤内解析，导致后续的 JavaScript 执行在移除视图过渡的视觉帧已经生成后才发生。时序调整确保 promise 解析和任何后续脚本执行在渲染管线中的适当时刻发生，以维持视觉连续性。
+#### 适用场景
+- 在视图切换流程中获得更平滑的体验，当过渡结束后脚本需要操作 DOM 或样式时尤为重要。
+- 为在等待 finished promise 后执行最终布局或清理的框架和库提供可靠的动画终点。
+- 减少为避免闪烁而使用脆弱计时技巧或强制重排的需要。
 
-#### Use Cases
-此修复对于实现流畅页面过渡、单页应用导航或依赖 View Transitions API 的自定义动画序列的开发者至关重要。改进的时序防止了在导航或状态更改期间可能对用户体验产生负面影响的突兀视觉伪影。
+#### 参考资料
+- 跟踪 bug #430018991: https://issues.chromium.org/issues/430018991  
+- ChromeStatus.com 条目: https://chromestatus.com/feature/5143135809961984
 
-#### References
-- [Tracking bug #430018991](https://issues.chromium.org/issues/430018991)
-- [ChromeStatus.com entry](https://chromestatus.com/feature/5143135809961984)
+已保存文件路径：digest_markdown/webplatform/JavaScript/chrome-140-stable-en.md

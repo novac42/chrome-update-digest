@@ -1,81 +1,89 @@
 ---
 layout: default
-title: Chrome 140 - Origin Trials Analysis
+title: origin-trials-zh
 ---
 
-# Chrome 140 - Origin Trials Analysis
+## 详细更新
 
-## Area Summary
+下面是 Chrome 140 stable 中引入的每个 Origin Trial 的简明、面向开发者的分解，与上文摘要相对应。
 
-Chrome 140 带来了四项重要的原生试验，扩展了网络平台在通信、调试、剪贴板集成和多线程方面的能力。最具影响力的更改包括为 PWA 提供来电通知、崩溃报告诊断、实时剪贴板同步以及在 Android 上支持 SharedWorker。这些功能通过更好的 VoIP 集成、改进的调试工作流、无缝剪贴板操作以及跨移动平台标签页的资源高效后台处理，共同提升了用户体验。
+### Enable incoming call notifications（启用来电通知）
 
-## Detailed Updates
+#### 新增内容
+对 Notifications API 的扩展，允许已安装的 PWA 发送包含来电样式操作按钮和铃声的来电通知，以便更易识别和响应的 VoIP 通知。
 
-此版本专注于为开发者提供高级通信、诊断和系统集成 API，同时扩展跨设备平台的一致性。
+#### 技术细节
+- 通过为注册站点发放 Origin Trial token 的方式，将其作为 Notifications API 的扩展呈现。
+- 目标是让已安装的 PWA 展示更丰富的通知 UI 和声音反馈；集成依赖于平台通知通道。
+- 相关领域：webapi、multimedia、devices、pwa-service-worker、security-privacy（用户同意和通知权限）。
 
-### Enable incoming call notifications
+#### 适用场景
+- 提供类原生来电提示的 VoIP 和远程会议 Web 应用。
+- 通过展示铃声和专用操作按钮来提高用户参与度并减少漏接来电。
 
-#### What's New
-此功能扩展了 Notifications API，允许已安装的 PWA 发送带有通话样式按钮和铃声支持的来电通知，创造更具吸引力的 VoIP 体验。
+#### 参考资料
+- https://developer.chrome.com/origintrials/#/register_trial/2876111312029483009
+- https://issues.chromium.org/issues/detail?id=1383570
+- https://chromestatus.com/feature/5110990717321216
+- https://notifications.spec.whatwg.org
 
-#### Technical Details
-该增强功能基于现有的 Notifications API，通过添加包含原生通话界面元素和音频能力的专门通话通知类型。这允许 PWA 与操作系统的通话界面进行更深度的集成。
+### Crash Reporting key-value API（崩溃报告 键值 API）
 
-#### Use Cases
-VoIP 应用现在可以提供类似原生的通话体验，使用户更容易识别和响应来电。这对商务通信工具、视频会议平台以及具有语音通话功能的消息应用特别有价值。
+#### 新增内容
+一个试验性的 window.crashReport 键值 API，公开了一个每文档的映射，可用于在渲染器崩溃时将键/值数据附加到 CrashReportBody 中。
 
-#### References
-- [Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/2876111312029483009)
-- [Tracking bug #detail?id=1383570](https://issues.chromium.org/issues/detail?id=1383570)
-- [ChromeStatus.com entry](https://chromestatus.com/feature/5110990717321216)
-- [Spec](https://notifications.spec.whatwg.org)
+#### 技术细节
+- API 面向脚本的每文档映射；条目在渲染器崩溃时序列化到 CrashReportBody 中。
+- 旨在在无需服务器端插装的情况下协助崩溃后的诊断；必须评估隐私和数据泄露风险。
+- 相关领域：webapi、security-privacy、performance（调试影响）、弃用（从自定义日志模式的迁移）。
 
-### Crash Reporting key-value API
+#### 适用场景
+- 附加上下文调试元数据（状态标识、功能标志）以协助崩溃排查。
+- 提高复杂单页应用和 PWA 的崩溃分析准确性。
 
-#### What's New
-此功能引入了一个新的键值 API（暂定为 `window.crashReport`），允许开发者将自定义调试数据附加到崩溃报告中，以进行更好的错误分析。
+#### 参考资料
+- https://developer.chrome.com/origintrials/#/register_trial/1304355042077179905
+- https://issues.chromium.org/issues/400432195
+- https://chromestatus.com/feature/6228675846209536
+- https://github.com/WICG/crash-reporting/pull/37
 
-#### Technical Details
-该 API 维护一个按文档划分的映射，保存开发者定义的数据，当渲染器进程发生崩溃时，这些数据会自动包含在 `CrashReportBody` 中。这提供了有助于诊断导致崩溃的情况的上下文信息。
+### Add the `clipboardchange` event（添加 `clipboardchange` 事件）
 
-#### Use Cases
-开发者可以跟踪用户操作、应用状态、功能标志或自定义指标，这些为调试崩溃提供关键上下文。对于复杂的网络应用，理解用户在崩溃前的操作路径对根本原因分析至关重要。
+#### 新增内容
+一个在系统剪贴板更改时触发的 DOM 事件，使 Web 应用能够在不轮询的情况下同步其内部剪贴板状态。
 
-#### References
-- [Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/1304355042077179905)
-- [Tracking bug #400432195](https://issues.chromium.org/issues/400432195)
-- [ChromeStatus.com entry](https://chromestatus.com/feature/6228675846209536)
-- [Spec](https://github.com/WICG/crash-reporting/pull/37)
+#### 技术细节
+- 事件分发给通过 Origin Trial 选择加入的页面；它反映来自任意应用的系统级剪贴板更改。
+- 设计者必须考虑用户隐私和权限模型，因为剪贴板内容可能包含敏感数据。
+- 相关领域：webapi、security-privacy、performance、devices（输入）、multimedia（文本/媒体剪贴板）。
 
-### Add the `clipboardchange` event
+#### 适用场景
+- 远程桌面和协作应用高效地保持本地与远程剪贴板同步。
+- 消除昂贵的周期性剪贴板轮询，从而降低 CPU 和电池消耗。
 
-#### What's New
-`clipboardchange` 事件在系统剪贴板内容发生更改时触发，无论是来自当前网络应用还是任何其他系统应用，实现实时剪贴板同步。
+#### 参考资料
+- https://developer.chrome.com/origintrials/#/register_trial/137922738588221441
+- https://issues.chromium.org/issues/41442253
+- https://chromestatus.com/feature/5085102657503232
+- https://github.com/w3c/clipboard-apis/pull/239
 
-#### Technical Details
-此事件通过自动通知应用程序更改，提供了轮询剪贴板的高效替代方案。它在整个系统范围内工作，不仅限于浏览器上下文，允许进行全面的剪贴板监控。
+### Enable `SharedWorker` on Android（在 Android 上启用 `SharedWorker`）
 
-#### Use Cases
-远程桌面客户端可以在本地和远程系统之间保持同步的剪贴板。剪贴板管理器、生产力工具和协作应用可以在不同上下文和应用程序之间提供无缝的复制粘贴体验。
+#### 新增内容
+一个 Origin Trial，使 Android 上支持 SharedWorker，从而允许多个浏览上下文（选项卡）共享单个 worker 实例。
 
-#### References
-- [Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/137922738588221441)
-- [Tracking bug #41442253](https://issues.chromium.org/issues/41442253)
-- [ChromeStatus.com entry](https://chromestatus.com/feature/5085102657503232)
-- [Spec](https://github.com/w3c/clipboard-apis/pull/239)
+#### 技术细节
+- 在 Android 构建中通过 Origin Trial token 启用 SharedWorker API，以便站点测试跨选项卡共享脚本和连接。
+- 解决资源共享场景，例如共享 WebSocket 或 SSE 连接，以减少重复的网络和 CPU 工作。
+- 相关领域：webapi、performance、pwa-service-worker、devices、security-privacy（origin 隔离和生命周期）。
 
-### Enable `SharedWorker` on Android
+#### 适用场景
+- 在多个选项卡之间共享单个 WebSocket/SSE，以减少连接数和内存占用。
+- 在移动端实现选项卡之间的集中协调，用于缓存、状态同步和后台工作。
 
-#### What's New
-SharedWorker 支持现在通过原生试验在 Android 上可用，解决了开发者长期以来对移动平台上跨标签页资源共享和后台处理能力的需求。
+#### 参考资料
+- https://developer.chrome.com/origintrials/#/register_trial/4101090410674257921
+- https://chromestatus.com/feature/6265472244514816
+- https://html.spec.whatwg.org/multipage/workers.html#shared-workers-and-the-sharedworker-interface
 
-#### Technical Details
-SharedWorkers 使多个浏览器上下文（标签页、窗口）能够共享单个后台线程，允许在同一网络应用的多个实例之间进行高效的资源利用和状态管理。
-
-#### Use Cases
-开发者现在可以在 Android 上跨多个标签页共享 WebSocket 连接或 Server-Sent Events，节省带宽和电池寿命。这为聊天应用、实时协作工具以及任何受益于持久后台连接的网络应用提供了更好的资源管理。
-
-#### References
-- [Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/4101090410674257921)
-- [ChromeStatus.com entry](https://chromestatus.com/feature/6265472244514816)
-- [Spec](https://html.spec.whatwg.org/multipage/workers.html#shared-workers-and-the-sharedworker-interface)
+已保存文件路径：digest_markdown/webplatform/Origin trials/chrome-140-stable-en.md
