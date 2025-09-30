@@ -1,83 +1,70 @@
-## Area Summary
+## 领域摘要
 
-Chrome 139 的 Web API 更新侧重于提高网页应用的互操作性、平台正确性以及开发者对诊断的控制。主要更改包括跨来源的 web app scope 扩展、按 WHATWG mimesniff spec 更严格的 JSON MIME 类型检测、用于表明符合规范核心特性与限制的 WebGPU 支持标识，以及针对崩溃上报的专用 Crash Reporting API 端点选项。这些更新减少了多来源应用集成摩擦，使基于内容类型的 JS API 行为更可预测，澄清了 GPU 能力信号，并为开发者提供更精确的崩溃遥测路由 —— 全面提升了 Web 的可靠性和开发者使用体验。
+Chrome 139 的 Web API 更新侧重于标准化、跨源应用边界、可预测的功能检测和更清晰的遥测路由。主要更改允许 Web 应用跨来源扩展范围，使 JSON MIME 检测完全符合 WHATWG 规范，向 WebGPU 适配器/设备标注满足核心规范特性和限制，并允许将仅崩溃报告发送到专用端点。这些进展提升了互操作性、开发者可预测性以及平台集成功能的运营清晰度。开发者应根据这些更改评估清单、内容类型处理、GPU 能力假设和崩溃报告配置。
 
-## Detailed Updates
+## 详细更新
 
-The following summarizes each Web API feature in Chrome 139 and the practical implications for developers.
+以下条目扩展了上面的摘要，说明了发生了什么、如何工作、实际开发者使用场景，以及跟踪/规范资源链接。
 
-### Web app scope extensions (扩展 web 应用的 scope 到其他来源)
+### Web app scope extensions (Web 应用范围扩展)
 
-#### What's New
-Adds a `scope_extensions` web app manifest field that enables web apps to extend their scope to other origins, allowing sites that control multiple subdomains and top level domains to be presented as a single web app.
+#### 新增内容
+新增了一个 `scope_extensions` web app manifest 字段，允许 Web 应用将其范围扩展到其他来源，使控制多个子域和顶级域的网站可以作为单个 Web 应用呈现。列出的来源必须使用 `.well-known` 关联来确认与该 Web 应用的关联。
 
-#### Technical Details
-- Introduces a manifest field (`scope_extensions`) to list additional origins.
-- Listed origins must confirm association with the web app (see spec links for association requirements).
-- Relevant tags: webapi, service-worker/PWA integration and origin association semantics.
+#### 技术细节
+这是一个清单级别的扩展，要求通过所述的关联机制进行来源验证。实现和跟踪通过 Chromium 跟踪 bug 与规范 PR 协调。
 
-#### Use Cases
-- Consolidating multiple domains/subdomains into one installable web app.
-- Simplifying navigation, deep links, and back/forward behavior across related origins.
+#### 适用场景
+将多来源属性（子域、相关顶级域）统一为单一 PWA 安装/启动体验；简化相关来源间的导航、共享和 service worker 预期行为。
 
-#### References
-- https://issues.chromium.org/issues/detail?id=1250011
-- https://chromestatus.com/feature/5746537956114432
-- https://github.com/WICG/manifest-incubations/pull/113
+#### 参考资料
+- https://issues.chromium.org/issues/detail?id=1250011 (跟踪问题 #detail?id=1250011)  
+- https://chromestatus.com/feature/5746537956114432 (ChromeStatus.com 条目)  
+- https://github.com/WICG/manifest-incubations/pull/113 (规范)
 
-### Specification-compliant JSON MIME type detection (兼容规范的 JSON MIME 类型检测)
+### Specification-compliant JSON MIME type detection (符合规范的 JSON MIME 类型检测)
 
-#### What's New
-Chrome now recognizes all valid JSON MIME types as defined by the WHATWG mimesniff specification, including any MIME type whose subtype ends with `+json`, in addition to `application/json` and `text/json`.
+#### 新增内容
+Chrome 现在根据 WHATWG mimesniff 规范识别所有有效的 JSON MIME 类型，包括任何以 `+json` 结尾的子类型，除了 `application/json` 和 `text/json` 外。这使得 JSON 检测与规范一致。
 
-#### Technical Details
-- MIME sniffing behavior for JSON detection updated to match the WHATWG mimesniff rules.
-- Affects APIs and features that branch behavior based on JSON content-type detection (fetch, XHR, content sniffers).
+#### 技术细节
+MIME 类型识别逻辑已更新为遵循 WHATWG mimesniff 的 JSON 规则。这会影响任何基于检测到的 JSON 内容类型而分支行为的功能或 API 路径。
 
-#### Use Cases
-- Ensures consistent parsing/handling of vendor-specific JSON media types (e.g., `application/ld+json`, `application/vnd.example+json`).
-- Reduces accidental misclassification and parsing errors in client code that depends on content-type detection.
+#### 适用场景
+依赖 content-type 检查的 API 和客户端代码在服务器使用 `+json` 厂商或厂商树子类型时，将会看到更一致的 JSON 解析/处理；在与使用自定义 JSON 类 MIME 类型的 API 互操作时可减少意外情况。
 
-#### References
-- https://chromestatus.com/feature/5470594816278528
-- https://mimesniff.spec.whatwg.org/#json-mime-type
+#### 参考资料
+- https://chromestatus.com/feature/5470594816278528 (ChromeStatus.com 条目)  
+- https://mimesniff.spec.whatwg.org/#json-mime-type (规范)
 
-### WebGPU `core-features-and-limits` (指示符合规范的核心特性与限制)
+### WebGPU `core-features-and-limits` (WebGPU 核心特性与限制)
 
-#### What's New
-The `core-features-and-limits` feature flag indicates a WebGPU adapter and device support the core features and limits defined by the WebGPU spec.
+#### 新增内容
+引入了 `core-features-and-limits` 功能标志/状态，用以表示某个 WebGPU 适配器和设备支持 GPUWeb 规范定义的核心特性和限制。
 
-#### Technical Details
-- Signals adapter/device conformance to a baseline set of features and limits.
-- Helps feature detection and capability probing in graphics and compute pipelines.
-- Relevant tags: webapi, webgpu, graphics-webgpu, performance.
+#### 技术细节
+声明支持该功能的适配器/设备满足规范的基线特性和限制。跟踪和规范对齐记录在所引用的跟踪 bug 与规范部分中。
 
-#### Use Cases
-- Allowing applications to reliably detect a spec-compliant GPU environment before enabling advanced rendering paths.
-- Simplifying feature-gating logic in libraries that target WebGPU.
+#### 适用场景
+图形和计算应用可以查询并依赖已定义良好的 WebGPU 能力基线，从而在高性能渲染和 GPU 计算场景中简化能力协商和回退策略。
 
-#### References
-- https://issues.chromium.org/issues/418025721
-- https://chromestatus.com/feature/4744775089258496
-- https://gpuweb.github.io/gpuweb/#core-features-and-limits
+#### 参考资料
+- https://issues.chromium.org/issues/418025721 (跟踪问题 #418025721)  
+- https://chromestatus.com/feature/4744775089258496 (ChromeStatus.com 条目)  
+- https://gpuweb.github.io/gpuweb/#core-features-and-limits (规范)
 
-### Crash Reporting API: Specify `crash-reporting` to receive only crash reports (仅接收崩溃报告的端点配置)
+### Crash Reporting API: Specify `crash-reporting` to receive only crash reports (崩溃报告 API：指定 `crash-reporting` 以仅接收崩溃报告)
 
-#### What's New
-Developers can specify the endpoint named `crash-reporting` to receive only crash reports; by default, crash reports go to the `default` endpoint which also receives other report types.
+#### 新增内容
+开发者可以指定名为 `crash-reporting` 的端点，使得只有崩溃报告会被发送到该端点。默认情况下，`default` 端点会接收多种报告类型；此功能将崩溃投递与其他报告分离。
 
-#### Technical Details
-- Adds a way to register a separate URL for crash report delivery via the well-known endpoint configuration.
-- Enables separation of crash telemetry from other reporting categories for finer-grained handling and privacy controls.
-- Relevant tags: webapi, security-privacy (telemetry routing and endpoint separation).
+#### 技术细节
+crash-reporting 端点通过 Crash Reporting API 中的 well-known 端点名称进行配置。这允许使用不同的 URL 专门用于崩溃报告，区别于更广泛的报告投递端点。
 
-#### Use Cases
-- Routing crash reports to a dedicated telemetry endpoint for processing without mixing other report types.
-- Implementing stricter ingestion and storage policies for crash data.
+#### 适用场景
+希望将仅崩溃的遥测发送到专门摄取管道（用于存储、告警或隐私隔离）的团队可以配置 `crash-reporting` 端点，以避免其他报告类型的噪声并减少下游过滤工作量。
 
-#### References
-- https://issues.chromium.org/issues/414723480
-- https://chromestatus.com/feature/5129218731802624
-- https://wicg.github.io/crash-reporting/#crash-reports-delivery-priority
-
-已保存文件：digest_markdown/webplatform/Web API/chrome-139-stable-en.md
+#### 参考资料
+- https://issues.chromium.org/issues/414723480 (跟踪问题 #414723480)  
+- https://chromestatus.com/feature/5129218731802624 (ChromeStatus.com 条目)  
+- https://wicg.github.io/crash-reporting/#crash-reports-delivery-priority (规范)

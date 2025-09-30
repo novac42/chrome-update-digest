@@ -1,27 +1,26 @@
-## Area Summary
+文件路径：digest_markdown/webplatform/Navigation-Loading/chrome-139-stable-en.md
 
-Chrome 139 (stable) 引入了一项以隐私为重点的 Navigation-Loading 更改，当导航导致浏览上下文组切换时，会清除 `window.name` 的值。通过防止数据在不同浏览上下文组之间泄露，该更改减少了持久的跨导航跟踪向量。对开发者来说，最重要的影响是任何依赖 `window.name` 在跨站导航中持久化数据的做法将会失效；应使用 postMessage 或 origin-scoped storage 等替代方案。该更改使浏览器与 HTML 规范保持一致，增强了 Web 平台的隐私保障，同时对性能影响最小。
+## 领域摘要
 
-## Detailed Updates
+Chrome 139（stable）引入了一项以隐私为中心的 Navigation-Loading 更改：当导航导致浏览上下文组切换时，清除 `window.name`。此举主要缓解通过 `window.name` 导致的信息泄露，从而减少跨站点跟踪向量。对开发者而言，最重要的影响是：在可能跨越浏览上下文组的导航中，不能再依赖 `window.name` 来在导航间持久化数据。该更新加强了导航模型中的隐私保障，并使行为与 HTML 规范保持一致。
 
-下面是关于该 Navigation-Loading 更改的详细信息以及对开发者的实际影响。
+## 详细更新
 
-### Clear window name for cross-site navigations that switches browsing context group (在跨站导航导致浏览上下文组切换时清除 window.name)
+本次发布中的单一 Navigation-Loading 更改在跨站点导航期间加强了隐私保护。详情如下。
 
-#### What's New
-The browser now clears the `window.name` property when a navigation results in a browsing context group switch, preventing the value from surviving into the new group.
+### Clear window name for cross-site navigations that switches browsing context group（在跨站点且切换浏览上下文组的导航中清除 window.name）
 
-#### Technical Details
-Per the HTML specification's resetBCName step, user agents reset the browsing context name when a navigation crosses browsing-context-group boundaries. The implementation in Chrome follows this behavior, causing `window.name` to become an empty string at the navigation boundary rather than carry previous values into a different browsing-context group.
+#### 新增内容
+在导航导致浏览上下文组切换时，清除 `window.name` 属性的值，以避免通过该值泄露可用于跟踪的信息。
 
-#### Use Cases
-- 阻止将 `window.name` 用作跨站点存储/跟踪通道。
-- 使用 `window.name` 在顶级导航之间传递数据的开发者，在跨源情形应迁移到替代方案（postMessage、same-origin storage 或临时 URL/状态传递）。
-- 不会触发浏览上下文组切换的单源导航流程不受影响。
+#### 技术细节
+此行为在改变浏览上下文组的导航上强制重置 `window.name`，与 HTML 规范中的 resetBCName 步骤一致。此更改旨在防止跨站点携带 `window.name` 状态。
 
-#### References
-- Tracking bug #1090128: https://issues.chromium.org/issues/1090128
-- ChromeStatus.com entry: https://chromestatus.com/feature/5962406356320256
-- Spec: https://html.spec.whatwg.org/multipage/browsing-the-web.html#resetBCName
+#### 适用场景
+- 防止将 `window.name` 用作跨站点跟踪通道。
+- 开发者不应依赖 `window.name` 在可能切换浏览上下文组的导航间持久化数据；应改用显式存储或消息传递模式。
 
-File saved to: digest_markdown/webplatform/Navigation-Loading/chrome-139-stable-en.md
+#### 参考资料
+- https://issues.chromium.org/issues/1090128
+- https://chromestatus.com/feature/5962406356320256
+- https://html.spec.whatwg.org/multipage/browsing-the-web.html#resetBCName

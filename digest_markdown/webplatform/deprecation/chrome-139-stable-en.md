@@ -1,63 +1,63 @@
 ## Area Summary
 
-Chrome 139 deprecations focus on removing legacy behaviors and platform support that pose security, compatibility, or maintenance costs. Key themes are retiring legacy request headers (prefetch Purpose), ending support for older macOS (11), and removing risky charset auto-detection (ISO-2022-JP). The most impactful changes for developers are potential behavioral differences in speculative prefetches/prerenders, update limitations on older Macs, and stricter encoding handling that can surface mis-declared pages. These changes advance the web platform by reducing attack surface, simplifying implementation invariants, and encouraging explicit developer control over encoding and platform support.
+Chrome 139 focuses on removing legacy behaviors and attack surfaces: legacy request headers, old OS support, and risky charset auto-detection are being deprecated. The most impactful changes for developers are the removal of the legacy Purpose: prefetch header (servers must rely on Sec-Purpose), the end of updates on macOS 11, and the removal of ISO-2022-JP auto-detection due to security concerns. These deprecations simplify the platform, align behavior with modern specs, and reduce security and compatibility burdens. Teams should audit server-side header handling, update macOS test environments, and validate encoding handling for legacy content.
 
 ## Detailed Updates
 
-The following entries expand on the summary above and provide technical and practical guidance for development teams.
+Below are concise, developer-focused descriptions of each deprecation listed above and what teams should consider when preparing for Chrome 139.
 
 ### Stop sending Purpose: prefetch header from prefetches and prerenders
 
 #### What's New
-Chrome is removing the legacy Purpose: prefetch request header for prefetches and prerenders; these requests will use the Sec-Purpose header instead.
+Chrome will stop emitting the legacy `Purpose: prefetch` header for prefetches and prerenders; these requests now use the `Sec-Purpose` header. The removal will be gated behind a feature flag/kill switch to avoid broad compatibility breaks.
 
 #### Technical Details
-The legacy header removal will be controlled by a feature flag/kill switch to avoid compatibility issues. The change is scoped to speculative navigation features (prefetches and prerenders) per the nav-speculation interaction with fetch.
+The platform has moved to the `Sec-Purpose` header as the standardized signal for prefetch/prerender intent. Implementations that still parse `Purpose: prefetch` should migrate to recognize `Sec-Purpose`. The change is tracked and coordinated with the nav-speculation prerendering spec to ensure consistent behavior.
 
 #### Use Cases
-- Ensure server-side logic that depended on Purpose: prefetch instead reads Sec-Purpose.
-- Update analytics or access-control rules that inspect request headers for prefetch/prerender signals.
-- Use this change to simplify header handling by standardizing on Sec-Purpose.
+- Server-side request handlers, analytics, and caching layers should be updated to read `Sec-Purpose`.
+- Ad platforms or middleware that branch logic on `Purpose` should add support for `Sec-Purpose` before this header is removed behind the flag.
+- QA should validate speculative navigations and prefetching flows against the spec.
 
 #### References
-- [Tracking bug #420724819](https://issues.chromium.org/issues/420724819)
-- [ChromeStatus.com entry](https://chromestatus.com/feature/5088012836536320)
-- [Spec](https://wicg.github.io/nav-speculation/prerendering.html#interaction-with-fetch)
+- https://issues.chromium.org/issues/420724819
+- https://chromestatus.com/feature/5088012836536320
+- https://wicg.github.io/nav-speculation/prerendering.html#interaction-with-fetch
 
 ### Remove support for macOS 11
 
 #### What's New
-Chrome 139 drops support for macOS 11. Chrome 138 is the last release to support that OS.
+Chrome 138 is the final release supporting macOS 11; starting in Chrome 139, Chrome will no longer support macOS 11 for updates.
 
 #### Technical Details
-On macOS 11 devices, Chrome will continue to run but will show a warning infobar and will no longer receive updates. Users must upgrade their OS to receive new Chrome releases.
+On systems running macOS 11, Chrome will continue to run but will display a warning infobar and will not receive further updates. Users must upgrade macOS to a supported version to continue receiving Chrome updates.
 
 #### Use Cases
-- Plan testing and support baselines: CI and QA should move macOS test runners to supported macOS versions.
-- Communicate to users and operations teams about necessary OS upgrades to continue receiving Chrome updates.
-- Consider auto-update and enterprise management workflows that target supported macOS versions.
+- IT administrators must plan OS upgrades for managed fleets to continue receiving Chrome updates.
+- Developers and QA should stop relying on macOS 11 for ongoing browser testing; move test coverage to supported macOS versions.
 
 #### References
-- [ChromeStatus.com entry](https://chromestatus.com/feature/4504090090143744)
+- https://chromestatus.com/feature/4504090090143744
 
 ### Remove auto-detection of `ISO-2022-JP` charset in HTML
 
 #### What's New
-Chrome 139 removes auto-detection support for the ISO-2022-JP charset in HTML due to known security issues and very low usage.
+Chrome 139 removes automatic charset detection for `ISO-2022-JP` in HTML due to known security issues and low usage; Safari also does not support this auto-detection.
 
 #### Technical Details
-Auto-detection for ISO-2022-JP is removed; pages must explicitly declare their encoding. The decision aligns with other browsers (Safari does not support this auto-detection) and mitigates risks described in security analyses.
+Auto-detection for `ISO-2022-JP` is being dropped to mitigate encoding-differential security risks. Sites relying on implicit detection must explicitly declare their charset to ensure correct rendering. Tracking and coordination for this removal are documented in project issues and platform status entries.
 
 #### Use Cases
-- Audit pages that rely on charset auto-detection and ensure explicit charset declarations (Content-Type header or <meta charset>).
-- For legacy content in ISO-2022-JP, convert files to UTF-8 or serve an explicit charset header.
-- Update server- and build-pipelines to enforce correct charset metadata to avoid misinterpretation.
+- Web developers should ensure pages using `ISO-2022-JP` explicitly declare the charset (e.g., via <meta charset> or HTTP headers).
+- Security teams should note this reduces a vector for encoding-based attacks.
+- Compatibility testing should verify behavior for legacy Japanese-encoded content in the absence of auto-detection.
 
 #### References
-- [known security issues](https://www.sonarsource.com/blog/encoding-differentials-why-charset-matters/)
-- [Tracking bug #40089450](https://issues.chromium.org/issues/40089450)
-- [ChromeStatus.com entry](https://chromestatus.com/feature/6576566521561088)
-- [Creative Commons Attribution 4.0 License](https://creativecommons.org/licenses/by/4.0/)
-- [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0)
-- [Google Developers Site Policies](https://developers.google.com/site-policies)
+- https://www.sonarsource.com/blog/encoding-differentials-why-charset-matters/
+- https://issues.chromium.org/issues/40089450
+- https://chromestatus.com/feature/6576566521561088
+- https://creativecommons.org/licenses/by/4.0/
+- https://www.apache.org/licenses/LICENSE-2.0
+- https://developers.google.com/site-policies
 
+File saved to: digest_markdown/webplatform/deprecation/chrome-139-stable-en.md

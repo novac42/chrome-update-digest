@@ -1,155 +1,148 @@
-### 1. Area Summary
+## 领域摘要
 
-Chrome 139 的 CSS 领域更新侧重于更丰富的排版控制、更具表现力的角角形状、改进的动画与滚动稳定性，以及新的 CSS 级原语（自定义函数、短路语义）。对开发者影响最大的改动包括新的字体和角形特性、确定性的过渡行为以及对异步 SVG 脚本的支持——这些都减少了变通办法并提高了渲染保真度。综合来看，这些进展使 Chrome 更贴近现代 CSS 规范（Fonts、Borders、Transitions、Mixins），支持更可预测的动画、更精细的排版与 UI 设计，并为 SVG 驱动的体验带来更好性能。这些更新重要，因为它们减少了平台分裂，使作者无需 polyfills 或 hack 即可实现高级设计。
+Chrome 139 通过添加富表现力的形状控制、改进的字体处理和更健全的值求值语义来继续推进 CSS。面向开发者的关键更改包括 corner shaping (superellipse/squircle)、CSS custom functions，以及改进的字体描述符（`font-width` 和 `@font-face` 的 `font-feature-settings`）。这些更新使视觉设计和排版更可预测且更强大，而较小的修复（`var()`/`attr()` 短路、过渡延续、滚动锚定）则减少了边缘案例故障。总体而言，它们推动平台朝向更丰富、对动画友好且符合规范的样式原语发展。
 
-## Detailed Updates
+## 详细更新
 
-下面的列表在概要基础上展开，提供针对 Chrome 139 中每个 CSS 领域功能的精确、面向开发者的细节。
+下面的列表对上文摘要进行了扩展，提供每个 Chrome 139 中 CSS 领域功能的简明、面向开发者的说明。
 
 ### Short-circuiting `var()` and `attr()`
 
-#### What's New
-When a fallback value is not used, `var()` and `attr()` evaluate without searching for cycles in that fallback.
+#### 新增内容
+当未采用回退值时，`var()` 和 `attr()` 在评估该回退值时不会扫描循环。
 
-#### Technical Details
-Evaluation short-circuits: if the primary value is taken, cycle detection does not traverse into the fallback expression. This aligns evaluation cost and cycle-detection scope with practical usage patterns.
+#### 技术细节
+评估会更早短路，从而在直接使用回退值时避免不必要的循环检测。
 
-#### Use Cases
-Avoids false-positive cycle detection and reduces overhead when fallbacks are present but not taken; more predictable custom-property usage.
+#### 适用场景
+减少意外的循环错误并提高基于自定义属性和属性值的可靠性。
 
-#### References
-- https://chromestatus.com/feature/6212939656462336
+#### 参考资料
+- ChromeStatus.com 条目: https://chromestatus.com/feature/6212939656462336
 
 ### Support `font-feature-settings` descriptor in `@font-face` rule
 
-#### What's New
-Adds support for the string-based `font-feature-settings` descriptor inside `@font-face` as defined by CSS Fonts Level 4.
+#### 新增内容
+根据 CSS Fonts Level 4，在 `@font-face` 内添加了对基于字符串的 `font-feature-settings` 描述符的支持。
 
-#### Technical Details
-Chrome accepts string syntax, ignores invalid/unrecognized OpenType feature tags per spec, and does not implement binary/non-standard forms.
+#### 技术细节
+接受字符串语法；按规范，非法/未识别的 OpenType 特性标签将被忽略。不支持非标准或二进制形式。
 
-#### Use Cases
-Allows font authors and developers to declare OpenType feature settings at font-face load time for precise typographic control without relying on runtime CSS hacks.
+#### 适用场景
+允许字体作者和开发者在 `@font-face` 加载时声明 OpenType 特性偏好，改进排版控制。
 
-#### References
-- https://issues.chromium.org/issues/40398871
-- https://chromestatus.com/feature/5102801981800448
-- https://www.w3.org/TR/css-fonts-4/#font-rend-desc
+#### 参考资料
+- 跟踪 bug #40398871: https://issues.chromium.org/issues/40398871
+- ChromeStatus.com 条目: https://chromestatus.com/feature/5102801981800448
+- 规范: https://www.w3.org/TR/css-fonts-4/#font-rend-desc
 
 ### CSS custom functions
 
-#### What's New
-Introduces custom functions: parameterized, conditional value generators akin to custom properties but capable of returning computed values.
+#### 新增内容
+引入自定义函数，可从自定义属性、参数和条件计算值（类似 mixin 的行为）。
 
-#### Technical Details
-Custom functions can depend on custom properties, accept parameters, and include conditionals as specified by the CSS Mixins/custom-functions draft. Implementation follows the referenced tracking and spec work.
+#### 技术细节
+自定义函数遵循 CSS mixins/custom functions 草案，并在 Chromium 中跟踪。
 
-#### Use Cases
-Enables reusable, parameterized value composition for themes, design systems, and component libraries without JS-based value computation.
+#### 适用场景
+在无需 JS 的情况下，为复杂主题和组件库提供可复用、参数化的样式逻辑。
 
-#### References
-- https://issues.chromium.org/issues/325504770
-- https://chromestatus.com/feature/5179721933651968
-- https://drafts.csswg.org/css-mixins-1/#defining-custom-functions
+#### 参考资料
+- 跟踪 bug #325504770: https://issues.chromium.org/issues/325504770
+- ChromeStatus.com 条目: https://chromestatus.com/feature/5179721933651968
+- 规范草案: https://drafts.csswg.org/css-mixins-1/#defining-custom-functions
 
 ### Continue running transitions when switching to initial transition value
 
-#### What's New
-Active transitions continue running with their prior parameters when transition-* properties change; transition property changes only affect newly started transitions.
+#### 新增内容
+即使 `transition-*` 属性更改为初始值，活动过渡仍会继续先前的动画状态。
 
-#### Technical Details
-Behavior aligns with the transitions spec: updates to transition-related properties do not implicitly restart or cancel in-flight transitions; they apply to future transitions only.
+#### 技术细节
+过渡属性的更改仅影响新启动的过渡；根据规范，现有的活动过渡将保留其先前参数。
 
-#### Use Cases
-Produces stable, predictable animations when toggling transition declarations at runtime (reduces unintended restarts/jank).
+#### 适用场景
+避免在切换过渡定义时出现突兀的动画中断，改善动态样式更改期间的动画稳定性。
 
-#### References
-- https://chromestatus.com/feature/5194501932711936
-- https://www.w3.org/TR/css-transitions-1/#starting
+#### 参考资料
+- ChromeStatus.com 条目: https://chromestatus.com/feature/5194501932711936
+- 规范: https://www.w3.org/TR/css-transitions-1/#starting
 
-### Corner shaping (`corner-shape`, `superellipse`, `squircle`)
+### Corner shaping (`corner-shape`, `superellipse`, `squircle`)（角部成形）
 
-#### What's New
-Adds corner-shaping primitives (e.g., `corner-shape`, superellipse / squircle) to express corner curvature beyond `border-radius`.
+#### 新增内容
+添加了角部成形原语，可将角曲率表达为超椭圆，使得可以实现 squircle、凹口、挖槽以及角形的动画变形。
 
-#### Technical Details
-Corners can be expressed as superellipse-based shapes and animated between different corner-shape values as defined by the Borders Level 4 draft.
+#### 技术细节
+新属性接受形状描述（superellipse 参数）并与现有的边框/角模型集成，以渲染非圆形角。
 
-#### Use Cases
-Creates squircles, notches, scoops, and animatable corner geometry for modern UI design without SVG or layered masking hacks.
+#### 适用场景
+创建更平滑、由设计驱动的角部，并在无需复杂 SVG 或遮罩解决方案的情况下实现角形之间的动画过渡。
 
-#### References
-- https://issues.chromium.org/issues/393145930
-- https://chromestatus.com/feature/5357329815699456
-- https://drafts.csswg.org/css-borders-4/#corner-shaping
+#### 参考资料
+- 跟踪 bug #393145930: https://issues.chromium.org/issues/393145930
+- ChromeStatus.com 条目: https://chromestatus.com/feature/5357329815699456
+- 规范草案: https://drafts.csswg.org/css-borders-4/#corner-shaping
 
 ### Add `font-width` property and descriptor and make `font-stretch` a legacy alias
 
-#### What's New
-Chrome recognizes the `font-width` property and descriptor; `font-stretch` is treated as a legacy alias.
+#### 新增内容
+Chrome 识别 `font-width` 作为标准属性/描述符；`font-stretch` 现在是遗留别名。
 
-#### Technical Details
-Aligns Chrome with the CSS Fonts specification and other browsers by mapping the standardized `font-width` to font matching and @font-face descriptors while retaining backward compatibility via the legacy alias.
+#### 技术细节
+通过推广 `font-width` 用于宽度/condensed/expanded 字体轴，Chrome 与规范和其他浏览器保持一致。
 
-#### Use Cases
-Improves variable-font width selection and declarative width control in CSS, clarifying intent in font loading and matching.
+#### 适用场景
+在 CSS 和 `@font-face` 中使用 `font-width` 以针对可变字体的宽度轴，实现跨浏览器的排版一致性。
 
-#### References
-- https://issues.chromium.org/issues/356670472
-- https://chromestatus.com/feature/5190141555245056
+#### 参考资料
+- 跟踪 bug #356670472: https://issues.chromium.org/issues/356670472
+- ChromeStatus.com 条目: https://chromestatus.com/feature/5190141555245056
 
 ### Support async attribute for SVG `<script>` element
 
-#### What's New
-Adds support for the `async` attribute on SVG `<script>` via the SVGScriptElement interface per SVG 2.0.
+#### 新增内容
+在 SVG 脚本元素（SVGScriptElement）上实现了 `async` 属性，使其行为与 HTMLScriptElement 匹配。
 
-#### Technical Details
-SVG scripts with `async` behave similarly to HTMLScriptElement `async`, allowing script execution without blocking parser/rendering.
+#### 技术细节
+根据 SVG 2.0 接口定义，SVG 中的脚本可以异步执行。
 
-#### Use Cases
-Non-blocking SVG scripts for interactive graphics and icons embedded inline or via <object>/<embed>, improving load responsiveness.
+#### 适用场景
+允许包含外部或内联脚本的 SVG 进行异步执行，从而改善性能和响应性。
 
-#### References
-- https://issues.chromium.org/issues/40067618
-- https://chromestatus.com/feature/6114615389585408
-- https://svgwg.org/svg2-draft/interact.html#ScriptElement:~:text=%E2%80%98script%E2%80%99%20element-,SVG%202%20Requirement%3A,Consider%20allowing%20async/defer%20on%20%E2%80%98script%E2%80%99.,-Resolution%3A
+#### 参考资料
+- 跟踪 bug #40067618: https://issues.chromium.org/issues/40067618
+- ChromeStatus.com 条目: https://chromestatus.com/feature/6114615389585408
+- 规范: https://svgwg.org/svg2-draft/interact.html#ScriptElement:~:text=%E2%80%98script%E2%80%99%20element-,SVG%202%20Requirement%3A,Consider%20allowing%20async/defer%20on%20%E2%80%98script%E2%80%99.,-Resolution%3A
 
 ### The `request-close` invoker command
 
-#### What's New
-Introduces the `request-close` invoker semantics so programmatic close requests can be treated like user-initiated close requests that fire cancel events.
+#### 新增内容
+向对话框处理添加 `requestClose()` 调用器命令行为，以便可以一致地触发和拦截取消事件。
 
-#### Technical Details
-Programmatic invocations that request closure will dispatch the same cancel/close lifecycle events (so handlers can call preventDefault()), matching the form-elements spec behavior for request-close state.
+#### 技术细节
+对话框现在将编程关闭请求映射到与用户操作相同的取消/关闭请求路径，从而可以通过事件处理程序进行阻止。
 
-#### Use Cases
-Allows dialogs and custom UI to programmatically request closure while still giving pages the opportunity to intercept and prevent the close (confirmation flows, unsaved-work protection).
+#### 适用场景
+允许开发者在输入和编程场景中一致地拦截并阻止对话框关闭。
 
-#### References
-- https://issues.chromium.org/issues/400647849
-- https://chromestatus.com/feature/5592399713402880
-- https://html.spec.whatwg.org/multipage/form-elements.html#attr-button-command-request-close-state
+#### 参考资料
+- 跟踪 bug #400647849: https://issues.chromium.org/issues/400647849
+- ChromeStatus.com 条目: https://chromestatus.com/feature/5592399713402880
+- 规范: https://html.spec.whatwg.org/multipage/form-elements.html#attr-button-command-request-close-state
 
 ### Scroll anchoring priority candidate fix
 
-#### What's New
-Updates the scroll-anchoring algorithm: the priority candidate is now used as the scope/root for the standard anchor selection, rather than being directly selected as the anchor.
+#### 新增内容
+修改了滚动锚定：优先候选被用作常规锚点选择算法的作用域/根，而不是自动成为锚点。
 
-#### Technical Details
-Selecting the candidate as the search scope allows the regular algorithm to pick the deepest onscreen element as the actual anchor, improving selection correctness when layout changes occur.
+#### 技术细节
+算法现在在该作用域内选择最深的在屏元素作为锚点，改变了锚点选择行为。
 
-#### Use Cases
-Reduces unexpected viewport jumps during dynamic content changes, making scroll anchoring more robust for SPA and content-insertion scenarios.
+#### 适用场景
+在增量内容更改和图像加载期间减少错误跳动并提高布局稳定性。
 
-#### References
-- https://chromestatus.com/feature/5070370113323008
+#### 参考资料
+- ChromeStatus.com 条目: https://chromestatus.com/feature/5070370113323008
 
-Area-specific expertise mapping (developer impact)
-- css / layout engines: corner-shaping, font-width, font-feature-settings, and custom functions enable richer, spec-aligned layout and rendering primitives.
-- webapi / javascript: `request-close` and SVG `async` affect DOM scripting and lifecycle interactions.
-- performance: async SVG scripts and short-circuiting `var()`/`attr()` reduce render-blocking and evaluation cost.
-- security-privacy: `request-close` preserves cancel semantics so apps can enforce user-consent patterns; no new surface increases permissions.
-- performance / rendering: transition continuation and scroll anchoring fixes improve smoothness and visual stability.
-- deprecations: `font-stretch` treated as legacy alias; migrate to `font-width` per spec.
-
-Saved to: digest_markdown/webplatform/CSS/chrome-139-stable-en.md
+已保存文件路径:
+digest_markdown/webplatform/CSS/chrome-139-stable-en.md

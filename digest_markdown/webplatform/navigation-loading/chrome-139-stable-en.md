@@ -1,27 +1,26 @@
+File path: digest_markdown/webplatform/Navigation-Loading/chrome-139-stable-en.md
+
 ## Area Summary
 
-Chrome 139 (stable) introduces a privacy-focused Navigation-Loading change that clears the value of `window.name` when a navigation causes a browsing context group switch. This reduces a persistent cross-navigation tracking vector by preventing data leaking across distinct browsing-context groups. For developers, the most impactful change is that any reliance on `window.name` to persist data across cross-site navigations will break; alternatives like postMessage or origin-scoped storage should be used. The change aligns the browser with the HTML spec and strengthens web platform privacy guarantees while having minimal performance impact.
+Chrome 139 (stable) introduces a privacy-focused Navigation-Loading change that clears window.name when a navigation causes a browsing context group switch. This primarily mitigates a cross-site tracking vector by preventing information leakage through window.name. For developers, the most impactful change is that window.name can no longer be relied on to persist data across navigations that cross browsing context groups. The update tightens privacy guarantees in the navigation model and aligns behavior with the HTML spec.
 
 ## Detailed Updates
 
-Below are the details for the Navigation-Loading change and practical implications for developers.
+The single Navigation-Loading change in this release strengthens privacy during cross-site navigations. Details follow.
 
 ### Clear window name for cross-site navigations that switches browsing context group
 
 #### What's New
-The browser now clears the `window.name` property when a navigation results in a browsing context group switch, preventing the value from surviving into the new group.
+Clears the value of the `window.name` property when navigation switches browsing context groups, to avoid leaking information that could be used as a tracking vector.
 
 #### Technical Details
-Per the HTML specification's resetBCName step, user agents reset the browsing context name when a navigation crosses browsing-context-group boundaries. The implementation in Chrome follows this behavior, causing `window.name` to become an empty string at the navigation boundary rather than carry previous values into a different browsing-context group.
+This behavior enforces a reset of `window.name` on navigations that change the browsing context group, consistent with the HTML specification's resetBCName step. The change is implemented to prevent cross-site carryover of `window.name` state.
 
 #### Use Cases
-- Prevents using `window.name` as a cross-site storage/tracking channel.
-- Developers who used `window.name` to pass data across top-level navigations should migrate to alternatives (postMessage, same-origin storage, or ephemeral URL/state passing) for cross-origin scenarios.
-- Single-origin navigation flows that do not trigger a browsing-context-group switch remain unaffected.
+- Prevents using `window.name` as a cross-site tracking channel.
+- Developers should not rely on `window.name` to persist data across navigations that may switch browsing context groups; use explicit storage or messaging patterns instead.
 
 #### References
-- Tracking bug #1090128: https://issues.chromium.org/issues/1090128
-- ChromeStatus.com entry: https://chromestatus.com/feature/5962406356320256
-- Spec: https://html.spec.whatwg.org/multipage/browsing-the-web.html#resetBCName
-
-File saved to: digest_markdown/webplatform/Navigation-Loading/chrome-139-stable-en.md
+- https://issues.chromium.org/issues/1090128
+- https://chromestatus.com/feature/5962406356320256
+- https://html.spec.whatwg.org/multipage/browsing-the-web.html#resetBCName

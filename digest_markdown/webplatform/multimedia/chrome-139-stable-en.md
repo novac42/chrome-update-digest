@@ -1,46 +1,37 @@
 ## Area Summary
 
-Chrome 139 (stable) advances multimedia by exposing richer runtime metadata and improving credential mediation that affects media UX. The two standout changes are: a new audio-level exposure for encoded WebRTC frames, and an "immediate" mediation mode for navigator.credentials.get(). These updates help developers build more responsive real-time-audio features (metering, VAD, telemetry) and smoother authentication flows that can be important for media apps. Together they push the web platform toward lower-level media observability and faster credential-driven UX.
+Chrome 139 adds a metadata exposure for audio level on encoded WebRTC frames, enabling developers to read per-frame audio loudness from transmitted encoded audio. The change surfaces encoded-frame audio level via the WebRTC encoded transform pipeline and the RTCEncodedAudioFrameMetadata API, improving observability and enabling level-based features without decoding. This is impactful for real-time analytics, voice activity detection, and adaptive UX while keeping processing on the encoded path for performance. These updates advance the web platform by standardizing a low-cost metadata channel for audio telemetry in peer-to-peer streams.
 
 ## Detailed Updates
 
-Below are concise, developer-focused explanations of each Multimedia-area change and why they matter to real-time media applications and services.
+Below are the detailed changes that implement the summary above and their practical implications for multimedia engineers.
 
 ### Audio level for RTC encoded frames
 
 #### What's New
-This feature exposes the audio level of an encoded audio frame transmitted via RTCPeerConnection and surfaced to web code using WebRTC encoded transforms.
+Exposes an audio level value for an encoded audio frame transmitted over RTCPeerConnection and surfaced via the WebRTC encoded transform API, allowing developers to access per-frame loudness metadata.
 
 #### Technical Details
-The capability is defined in the encoded-transform WebRTC specification for RTCEncodedAudioFrame metadata (see spec link). It surfaces per-frame audio level information from encoded frames so web-level transforms and analytics can access energy/level metrics without decoding raw PCM.
+- The spec-defined metadata field is available on RTCEncodedAudioFrameMetadata as an audioLevel attribute (see spec link).
+- This operates on encoded frames within the encoded-transform pipeline, so inspection can occur without full decode, reducing CPU and latency compared to decoding for level analysis.
+- Implementation integration points: WebRTC encoded transform hooks and RTCPeerConnection encoded frame path; interacts with codec-encoded payloads and their associated metadata.
 
 #### Use Cases
-- Voice activity detection or mute detection implemented in an encoded-transform without full decode.
-- UI-level audio meters and per-participant level telemetry for diagnostics and analytics.
-- Adaptive bitrate or codec selection heuristics informed by per-frame energy measurements.
-- Content moderation and level-based recording triggers inside encoded transforms.
+- Real-time voice activity detection and presence indicators in conferencing UIs without additional decoding.
+- Lightweight metrics and analytics pipelines that aggregate audio level histograms or trigger events (e.g., mute suggestions, auto-gain) on the sender/transit side.
+- Adaptive UX or network strategies that use level metadata to prioritize active speakers or trigger bitrate/silence suppression policies.
+- Useful for low-overhead monitoring in large-scale deployments and for client-side visualizations of audio without adding decode cost.
+
+#### Security & Privacy Notes
+- Audio level is telemetry that may reveal speech activity patterns; treat as potentially sensitive and follow user consent policies and local privacy regulations.
+- Consider CSP/CORS and application-level handling when sending audio-level telemetry to remote servers; ensure appropriate user disclosure.
 
 #### References
 - https://issues.chromium.org/issues/418116079
 - https://chromestatus.com/feature/5206106602995712
 - https://w3c.github.io/webrtc-encoded-transform/#dom-rtcencodedaudioframemetadata-audiolevel
 
-### Web Authentication immediate mediation
-
-#### What's New
-Adds an "immediate" mediation mode for navigator.credentials.get() that prompts the browser sign-in UI only when a passkey or password for the site is immediately known to the browser; otherwise the call rejects with NotAllowedError.
-
-#### Technical Details
-This mediation mode is surfaced as an additional option to navigator.credentials.get() (origin-trial-tagged in this release). It changes the credential selection UX to be immediate-only, avoiding fallback prompts when no known credential exists. See the linked spec PR and tracking bug for implementation notes and origin-trial status.
-
-#### Use Cases
-- Fast sign-in paths for media services where reduced friction improves playback/auth flow.
-- Deterministic credential flow in embedded or automated media clients that need to know immediately whether a browser-held credential is available.
-- Passwordless/passkey-first UX in media-oriented web apps that must minimize interruption to playback or capture flows.
-
-#### References
-- https://issues.chromium.org/issues/408002783
-- https://chromestatus.com/feature/5164322780872704
-- https://github.com/w3c/webauthn/pull/2291
-
-File saved to: digest_markdown/webplatform/Multimedia/chrome-139-stable-en.md
+Save to:
+```text
+digest_markdown/webplatform/Multimedia/chrome-139-stable-en.md
+```

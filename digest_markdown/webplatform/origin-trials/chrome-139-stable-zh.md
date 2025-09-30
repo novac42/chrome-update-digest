@@ -1,119 +1,107 @@
-## Area Summary
+# 领域摘要
 
-Chrome 139 的 Origin trials 聚焦于扩展实验性平台能力，供开发者在标准化之前选择加入新的 API 和行为。主要主题包括多模态 AI 交互（Prompt API）、更长生命周期的后台 JavaScript（extended SharedWorker lifetime）、更细粒度的性能遥测（SoftNavigation）、简化的认证 UX（WebAuth immediate mediation）、渲染器资源控制（full-frame-rate render blocking）以及对 GPU 工作负载更广泛的设备支持（WebGPU compatibility mode）。这些试验允许团队在功能广泛发布前对集成模式、性能影响及安全/兼容性约束进行原型验证和评估，从而在尽量降低风险的同时影响 Web 平台的发展。
+Chrome 139 的 origin trials 侧重于扩展平台在 AI 交互、后台工作、性能可观测性、身份验证体验、渲染资源管理和更广泛的 WebGPU 覆盖方面的能力。对开发者影响最大的更改包括：用于 AI 输入的多模态 Prompt API、用于卸载后工作的延长生命周期 `SharedWorker`、用于丰富交互遥测的新软导航性能条目、WebAuth 流程的即时调解、影响渲染器行为的全帧率渲染阻塞令牌，以及用于扩大 WebGPU 设备支持的兼容模式。这些试验共同提供了可提升应用响应性、离线/后台工作流、性能测量和图形可移植性的新原语，同时也暴露了开发者必须管理的权衡。
 
-## Detailed Updates
+## 详细更新
 
-Below are the origin-trialized features in Chrome 139 that development teams can opt into to experiment and gather feedback.
+下面的条目围绕上述主题展开，提供简明的技术背景、实际适用场景，以及指向 origin trial 注册、跟踪 bug 和规范的链接。
 
-### Prompt API
+### Prompt API（提示 API）
 
-#### What's New
-一个用于使用文本、图像和音频输入与 AI 语言模型交互的 API。它支持生成图像标题、视觉搜索、音频转录、声音事件分类、引导式文本生成和抽取等用例。
+#### 新增内容
+一个使用文本、图像和音频输入与 AI 语言模型交互的 API，支持生成字幕、视觉搜索、转录、分类、遵循指令的文本生成和信息提取。
 
-#### Technical Details
-通过一个实验性接口向 Web 应用暴露多模态输入处理（text、image、audio），以便与模型交互。需要进行 origin trial 注册才能测试该能力。
+#### 技术细节
+公开了一个面向 Web 的输入/输出模型，接受多模态输入；作为一个由 origin trial 保护的 web API 集成到 Web 平台中。开发者应为客户端直接调用模式以及在模型或计费受限时的服务器辅助流程做好规划。
 
-#### Use Cases
-- 集成设备端或云端 AI 功能：图像字幕、视觉搜索、转录。
-- 原型化将音频、图像和文本输入结合的多模态用户界面。
-- 在公开发布前评估 AI 驱动功能的隐私、延迟和用户体验。
+#### 适用场景
+图像字幕、页面内视觉搜索、客户端音频转录、嵌入网页应用的多模态助手，以及接收用户提供的图像/音频的自动化工作流。
 
-#### References
-- Origin Trial — https://developer.chrome.com/origintrials/#/register_trial/2533837740349325313
-- Tracking bug #417530643 — https://issues.chromium.org/issues/417530643
-- ChromeStatus.com entry — https://chromestatus.com/feature/5134603979063296
+#### 参考资料
+- https://developer.chrome.com/origintrials/#/register_trial/2533837740349325313
+- https://issues.chromium.org/issues/417530643
+- https://chromestatus.com/feature/5134603979063296
 
-### Extended lifetime shared workers
+### Extended lifetime shared workers（延长生命周期的 shared workers）
 
-#### What's New
-Adds an `extendedLifetime: true` option to the `SharedWorker` constructor to request keeping a shared worker alive after all current clients unload.
+#### 新增内容
+在 `SharedWorker` 构造函数中新增 `extendedLifetime: true` 选项，用于请求在所有客户端卸载后继续保持 worker 存活，从而支持在页面卸载后继续运行的异步工作。
 
-#### Technical Details
-The new constructor option signals the browser to retain the shared worker for post-unload asynchronous work. Pages opting into this origin trial can exercise lifecycle behaviors that persist beyond the last connected client.
+#### 技术细节
+此 origin-trial 选项改变了 shared worker 的生命周期语义，允许在客户端卸载事件后继续执行后台 JS。开发者必须处理资源生命周期、持久化以及潜在的电量/性能影响；并考虑与 service worker 及页面卸载序列的集成。
 
-#### Use Cases
-- 在页面卸载后执行后台清理、遥测上报或最终化任务。
-- 支持多标签协同以及无法在卸载前完成的后到达异步工作。
-- 评估更长生命周期 worker 在内存和能耗方面的权衡。
+#### 适用场景
+在导航后进行的延迟上传或分析数据刷新，多页面之间的协调任务，以及避免在客户端卸载时立即终止的后台处理。
 
-#### References
-- Origin Trial — https://developer.chrome.com/origintrials/#/register_trial/3056255297124302849
-- Tracking bug #400473072 — https://issues.chromium.org/issues/400473072
-- ChromeStatus.com entry — https://chromestatus.com/feature/5138641357373440
+#### 参考资料
+- https://developer.chrome.com/origintrials/#/register_trial/3056255297124302849
+- https://issues.chromium.org/issues/400473072
+- https://chromestatus.com/feature/5138641357373440
 
-### `SoftNavigation` performance entry
+### `SoftNavigation` performance entry（SoftNavigation 性能条目）
 
-#### What's New
-Exposes experimental soft navigation heuristics via `PerformanceObserver` and the performance timeline, reporting a `soft-navigation` entry and related timing slicing.
+#### 新增内容
+通过 `PerformanceObserver` 和性能时间线公开实验性软导航启发式，报告 `soft-navigation` 条目和新的 `timeOrigin`，以帮助切分过渡测量。
 
-#### Technical Details
-Reports new performance entries (including `soft-navigation`) and defines a new `timeOrigin` to help slice time ranges for soft navigations. The feature is observable through standard performance APIs while under origin trial control.
+#### 技术细节
+为软导航（无完整导航的用户交互）添加了性能时间线条目类型。开发者可以通过标准的 PerformanceObserver API 观察这些条目，并将其与其他时间线事件关联，以获得准确的交互到渲染度量。
 
-#### Use Cases
-- 测量并优化重用页面上下文的用户发起导航（软导航）。
-- 将交互时序与渲染和网络活动关联，用于单页应用风格的过渡。
-- 增强性能分析和 RUM 工具，以考虑页面内导航语义。
+#### 适用场景
+测量和优化单页应用导航，量化路由过渡的交互延迟，以及通过识别代价高的软导航路径来改进 UX。
 
-#### References
-- Origin Trial — https://developer.chrome.com/origintrials#/view_trial/21392098230009857
-- Tracking bug #1338390 — https://issues.chromium.org/issues/1338390
-- ChromeStatus.com entry — https://chromestatus.com/feature/5144837209194496
-- Spec — https://wicg.github.io/soft-navigations
+#### 参考资料
+- https://developer.chrome.com/origintrials#/view_trial/21392098230009857
+- https://issues.chromium.org/issues/1338390
+- https://chromestatus.com/feature/5144837209194496
+- https://wicg.github.io/soft-navigations
 
-### Web Authentication immediate mediation
+### Web Authentication immediate mediation（Web Authentication 即时调解）
 
-#### What's New
-A mediation mode for `navigator.credentials.get()` that displays browser sign-in UI immediately if the browser knows a passkey or password for the site; otherwise it rejects with `NotAllowedError`.
+#### 新增内容
+为 `navigator.credentials.get()` 引入一种调解模式，当网站的通行密钥或密码已知时会触发浏览器的登录 UI；否则会以 `NotAllowedError` 拒绝。
 
-#### Technical Details
-Immediate mediation changes the get() mediation behavior to proactively surface sign-in UI only when a credential is immediately available to the browser; absence of a known credential leads to a deterministic rejection rather than fallthrough behavior.
+#### 技术细节
+新增了一种影响凭证调解行为的即时调解模式，改变了 WebAuthn 流程的运行时 UX 路径，并影响凭证发现与用户提示的触发方式。
 
-#### Use Cases
-- 简化浏览器能够立即提供已知凭证的登录流程。
-- 在不存在凭证时避免不必要的发现提示，从而改善用户体验和安全明确性。
-- 测试与基于 passkey 的认证流程的集成并衡量用户体验影响。
+#### 适用场景
+当凭证已存在时提供简化的登录体验、有条件的凭证提示流程，以及为希望在可用时提供即时低摩擦认证的网站改进新用户体验。
 
-#### References
-- Tracking bug #408002783 — https://issues.chromium.org/issues/408002783
-- ChromeStatus.com entry — https://chromestatus.com/feature/5164322780872704
-- Spec — https://github.com/w3c/webauthn/pull/2291
+#### 参考资料
+- https://issues.chromium.org/issues/408002783
+- https://chromestatus.com/feature/5164322780872704
+- https://github.com/w3c/webauthn/pull/2291
 
-### Full frame rate render blocking attribute
+### Full frame rate render blocking attribute（全帧率渲染阻塞属性）
 
-#### What's New
-Adds a new render-blocking token `full-frame-rate` to blocking attributes so the renderer can be blocked with that token and run at a lower frame rate to reserve resources for loading.
+#### 新增内容
+引入一个作为阻塞属性的渲染阻塞令牌（"full-frame-rate"）；当被持有时，渲染器会以较低的帧率运行以保留资源用于加载。
 
-#### Technical Details
-This attribute introduces a render-blocking token that signals the renderer should lower its frame rate while blocked, allowing more resources to be allocated to loading work. The capability is available via origin trial registration.
+#### 技术细节
+提供了一个影响帧率预算和调度的渲染器级令牌，以优先考虑加载工作。该功能受 origin-trial 限制；开发者需在感知到的 UI 平滑度与关键加载期间的资源可用性之间进行权衡。
 
-#### Use Cases
-- 在资源受限设备上，通过在关键加载期间减少合成器/渲染预算来改善加载性能。
-- 评估视觉流畅性与更快内容就绪之间的权衡。
-- 集成到自适应加载策略中，通过限制渲染以优先处理网络和解析工作。
+#### 适用场景
+在资源密集的页面上优化关键路径资源加载，降低高帧率渲染与加载同时发生时引起的卡顿，并在页面过渡期间调整渲染器行为。
 
-#### References
-- Origin Trial — https://developer.chrome.com/origintrials/#/register_trial/3578672853899280385
-- Tracking bug #397832388 — https://issues.chromium.org/issues/397832388
-- ChromeStatus.com entry — https://chromestatus.com/feature/5207202081800192
+#### 参考资料
+- https://developer.chrome.com/origintrials/#/register_trial/3578672853899280385
+- https://issues.chromium.org/issues/397832388
+- https://chromestatus.com/feature/5207202081800192
 
-### WebGPU compatibility mode
+### WebGPU compatibility mode（WebGPU 兼容模式）
 
-#### What's New
-An opt-in, lightly restricted subset of the WebGPU API that can run on older graphics backends (e.g., OpenGL, Direct3D11), enabling WebGPU apps to reach older devices.
+#### 新增内容
+一种可选的、受轻度限制的 WebGPU 子集，可在较旧的图形 API（例如 OpenGL、Direct3D11）上运行，从而将 WebGPU 应用的覆盖范围扩展到旧设备。
 
-#### Technical Details
-Compatibility mode provides a constrained WebGPU subset and requires developers to opt in and obey specific constraints. This allows implementations to map the mode to legacy graphics APIs while preserving a defined surface of WebGPU functionality.
+#### 技术细节
+兼容模式限制或改变某些 WebGPU 能力，使实现可以映射到传统图形后端。origin-trial 注册允许开发者检测并选择加入该模式，优雅降级或调整着色器/工作流。
 
-#### Use Cases
-- 提高 WebGPU 应用在没有现代图形驱动的设备上的覆盖范围。
-- 原型化回退策略并测量原生 WebGPU 与兼容模式实现之间的性能/功能差距。
-- 验证着色器/工作负载的可移植性及开发者工具，以支持更广泛的设备。
+#### 适用场景
+为 WebGPU 应用提供更广的设备支持、在高端特性为条件的渐进增强路径，以及简化将 WebGL/OpenGL 代码路径迁移到 WebGPU 的工作量。
 
-#### References
-- Origin Trial — https://developer.chrome.com/origintrials/#/register_trial/1489002626799370241
-- Tracking bug #40266903 — https://issues.chromium.org/issues/40266903
-- ChromeStatus.com entry — https://chromestatus.com/feature/6436406437871616
-- Spec — https://github.com/gpuweb/gpuweb/blob/main/proposals/compatibility-mode.md
+#### 参考资料
+- https://developer.chrome.com/origintrials/#/register_trial/1489002626799370241
+- https://issues.chromium.org/issues/40266903
+- https://chromestatus.com/feature/6436406437871616
+- https://github.com/gpuweb/gpuweb/blob/main/proposals/compatibility-mode.md
 
-已保存至: digest_markdown/webplatform/Origin trials/chrome-139-stable-en.md
+File: digest_markdown/webplatform/Origin trials/chrome-139-stable-en.md
