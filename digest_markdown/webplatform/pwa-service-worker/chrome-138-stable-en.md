@@ -1,30 +1,41 @@
-### 1. Area Summary
+Output file: digest_markdown/webplatform/PWA and service worker/chrome-138-stable-en.md
 
-Chrome 138 (stable) adds support for ServiceWorker-controlled prefetches driven by the Speculation Rules API. The most impactful change for developers is that speculation-rules prefetches can now be routed through a controlling Service Worker instead of being cancelled when a Service Worker is present. This aligns browser behavior with the nav-speculation integration spec and enables more consistent caching and offline handling for prefetched navigation targets. These updates matter because they reduce surprising differences between prefetch and normal navigation for PWAs and improve predictability of Service Worker control.
+# Area Summary
+
+Chrome 138 introduces ServiceWorker support for speculation-rules prefetch, allowing prefetches to targets that are controlled by a Service Worker. The most impactful change for developers is that prefetches are no longer cancelled when a controlling Service Worker is detected, improving cache priming and navigation responsiveness for SW-controlled sites. This change advances the web platform by aligning navigation speculation with ServiceWorker control, enabling more reliable offline-first and performance optimizations. These updates matter because they reduce wasted work and improve the effectiveness of prefetch strategies for PWAs.
 
 ## Detailed Updates
 
-Below are the details connecting the summary to the single listed change in this release.
+The brief summary above frames the single change in this release; details and developer implications follow.
 
 ### ServiceWorker support for Speculation Rules Prefetch
 
 #### What's New
-Enables ServiceWorker-controlled prefetches: speculation-rules prefetches to URLs that are controlled by a Service Worker are no longer cancelled upon detecting the controlling Service Worker.
+Enables speculation-rules prefetches to URLs that are controlled by a Service Worker instead of cancelling those prefetches when a controlling Service Worker is detected.
 
 #### Technical Details
-Per the linked specification, prefetches initiated via the Speculation Rules API can integrate with Service Worker control so that fetches follow the same Service Worker handling model as normal navigations. See the spec and tracking bug for implementation notes and status.
+ServiceWorker-controlled prefetches are now allowed by the integration between the Nav Speculation rules and ServiceWorker control. Previously, the browser cancelled a speculation prefetch if it detected a controlling ServiceWorker, preventing the prefetch from populating the ServiceWorker-controlled fetch path. With this change, the prefetch can proceed and be served/handled by the ServiceWorker as applicable.
 
 #### Use Cases
-- PWAs: Prefetched navigations can be served by a Service Worker, improving cache utilization and consistency between prefetch and subsequent navigation.
-- Offline-first flows: Prefetches can prime the Service Worker cache for future navigations.
-- Performance testing: Reduces variance between prefetched responses and responses served during normal navigation, simplifying performance tuning.
+- PWAs that use ServiceWorkers for offline caching can prime the SW cache via speculation rules before navigation, improving perceived load times.
+- Sites using navigation speculation to prefetch likely navigations will see reduced wasted work and better cache hit rates when ServiceWorkers are present.
+- Developers can rely on speculation-rules as part of an end-to-end performance strategy that includes SW routing and caching.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=40947546
-- https://chromestatus.com/feature/5121066433150976
-- https://wicg.github.io/nav-speculation/speculation-rules.html#speculation-rule-sw-integration
+- https://bugs.chromium.org/p/chromium/issues/detail?id=40947546 (Tracking bug #40947546)  
+- https://chromestatus.com/feature/5121066433150976 (ChromeStatus.com entry)  
+- https://wicg.github.io/nav-speculation/speculation-rules.html#speculation-rule-sw-integration (Spec)
 
-File saved to:
-```text
-digest_markdown/webplatform/PWA and service worker/chrome-138-stable-en.md
-```
+# Area-Specific Expertise (PWA and service worker focus)
+
+- css: Prefetch and SW interactions can improve initial render speed by ensuring critical CSS is served from SW cache.
+- webapi: This change affects fetch flows and the fetch event lifecycle when speculation prefetches target SW-controlled scopes.
+- graphics-webgpu: Reduced navigation latency can improve time-to-first-frame for GPU-heavy pages by earlier resource availability.
+- javascript: ServiceWorker script lifecycle and fetch handlers should account for prefetch-originated requests and idempotent handling.
+- security-privacy: Developers must ensure prefetch handling respects CORS, credentials, and privacy constraints consistent with SW fetch semantics.
+- performance: Enables more effective cache priming strategies, reducing navigation stall and improving perceived performance.
+- multimedia: Prefetching media assets via SW-controlled scopes can smooth playback startup for PWAs.
+- devices: Faster navigations aid device API initialization when PWAs prefetch resources needed for hardware access.
+- pwa-service-worker: Directly improves offline-first and background resource priming strategies by allowing SW to serve speculation prefetches.
+- webassembly: WASM modules can be prefetched into SW cache to accelerate startup for heavy compute pages.
+- deprecations: No deprecations in this change; evaluate existing prefetch strategies to leverage SW integration where applicable.

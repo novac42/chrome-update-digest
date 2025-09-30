@@ -3,44 +3,29 @@ layout: default
 title: chrome-138-en
 ---
 
-### 1. Area Summary
+## Area Summary
 
-Chrome 138 deprecations focus on streamlining the WebGPU API surface by removing a redundant attribute. The most impactful change is the deprecation of the GPUAdapter.isFallbackAdapter attribute in favor of GPUAdapterInfo.isFallbackAdapter (introduced in Chrome 136), a minor breaking change for WebGPU consumers. This reduces API duplication and clarifies where adapter metadata belongs, aiding portability and spec conformance. Developers using WebGPU should migrate checks to GPUAdapterInfo to avoid future breakage.
+Chrome 138 (stable) includes a focused deprecation in the WebGPU surface: the removal of the redundant `GPUAdapter.isFallbackAdapter` attribute in favor of the `GPUAdapterInfo.isFallbackAdapter` field. This change is a minor breaking change for code that reads the attribute directly from `GPUAdapter`; developers should migrate accesses to `GPUAdapterInfo`. Consolidating the API reduces duplication and clarifies the adapter information model, improving API consistency and long-term maintainability of WebGPU implementations. Teams relying on adapter feature detection should update code paths and tests to avoid runtime regressions.
 
 ## Detailed Updates
 
-Below are the deprecation items in Chrome 138 relevant to WebGPU and migration guidance.
+The single deprecation below follows from the summary above and explains the technical impact and migration guidance.
 
 ### WebGPU: Deprecate GPUAdapter isFallbackAdapter attribute
 
 #### What's New
-Deprecates the GPUAdapter `isFallbackAdapter` boolean attribute because it is redundant with `GPUAdapterInfo.isFallbackAdapter`.
+The boolean attribute `GPUAdapter.isFallbackAdapter` on `GPUAdapter` is deprecated and slated for removal because the same boolean is available on `GPUAdapterInfo` as `isFallbackAdapter`.
 
 #### Technical Details
-The attribute removal is an intentional API simplification: adapter fallback information is consolidated under `GPUAdapterInfo`. The change is a minor breaking change for code that reads `GPUAdapter.isFallbackAdapter`.
+- The attribute is redundant with `GPUAdapterInfo.isFallbackAdapter`.
+- Code that previously read `adapter.isFallbackAdapter` should instead obtain `adapter.adapterInfo` (or the equivalent API) and read `isFallbackAdapter` from the `GPUAdapterInfo` structure.
+- This is described as a minor breaking change; update points in initialization and capability-detection paths.
 
 #### Use Cases
-Update WebGPU code that inspects adapter fallback status to use `GPUAdapter.requestAdapter()` → examine `adapter.adapterInfo.isFallbackAdapter` (or the equivalent `GPUAdapterInfo` surface) to remain compatible.
+- Migration: Replace direct reads of `GPUAdapter.isFallbackAdapter` with reads from `GPUAdapterInfo.isFallbackAdapter`.
+- Tests & Feature Detection: Update unit and integration tests that assert adapter properties; ensure tools that serialize adapter info use the `GPUAdapterInfo` field.
 
 #### References
-https://bugs.chromium.org/p/chromium/issues/detail?id=409259074
-https://chromestatus.com/feature/5125671816847360
-https://gpuweb.github.io/gpuweb/#gpu-adapter
-
-### Deprecation of GPUAdapter isFallbackAdapter Attribute
-
-#### What's New
-The `isFallbackAdapter` attribute for `GPUAdapter` is deprecated and replaced by `GPUAdapterInfo.isFallbackAdapter`, introduced in Chrome 136.
-
-#### Technical Details
-The deprecation directs developers to the `GPUAdapterInfo` attribute as the canonical source of fallback metadata for adapters, consolidating adapter metadata.
-
-#### Use Cases
-Migrate any direct reads of `GPUAdapter.isFallbackAdapter` to the `GPUAdapterInfo.isFallbackAdapter` field to avoid future incompatibilities.
-
-#### References
-None provided.
-
-File to save:
-```text
-digest_markdown/webplatform/deprecation/chrome-138-stable-en.md
+- https://bugs.chromium.org/p/chromium/issues/detail?id=409259074
+- https://chromestatus.com/feature/5125671816847360
+- https://gpuweb.github.io/gpuweb/#gpu-adapter

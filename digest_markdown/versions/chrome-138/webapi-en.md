@@ -5,106 +5,104 @@ title: webapi-en
 
 ## Area Summary
 
-Chrome 138 (stable) advances the Web API surface by standardizing built-in language and AI-assisted text capabilities (Translator, Language Detector, Summarizer), while also tightening serialization security and improving runtime diagnostics and push subscription behavior. The most impactful changes for developers are native language processing APIs that reduce the need for site-side large models and improved platform-level safety and observability. These updates push more responsibility to the browser for common tasks (translation, detection, summarization, secure serialization, crash context, push resubscription), simplifying web app implementation and improving end-user privacy and reliability.
+Chrome 138 for the Web API area emphasizes built-in language and AI-assisted capabilities (Translator, Language Detector, Summarizer), plus platform hardening and lifecycle improvements for service workers and reporting. The most impactful changes let developers leverage browser-provided translation/detection/summarization models and avoid shipping large ML artifacts, while security and reliability improvements (attribute serialization escaping, richer crash reports, and push subscription lifecycle events) reduce attack surface and improve diagnostics. Collectively these updates advance the web platform by exposing native language-model services, tightening serialization behavior to mitigate mutation XSS, and making push and crash reporting semantics more actionable for developers. These updates matter because they improve developer ergonomics, user privacy/performance trade-offs, and overall platform resilience.
 
 ## Detailed Updates
 
-The items below expand on the summary above and outline developer-facing implications for each Web API feature in this release.
+The following items expand on the summary above with concise, developer-focused details.
 
 ### Translator API
 
 #### What's New
-A JavaScript API that exposes language translation capabilities to web pages, enabling pages to request translations from the browser-provided translation capability.
+A JavaScript API to provide language translation capabilities to web pages, exposing browser-level translation functionality to developers.
 
 #### Technical Details
-Browser-provided translation is exposed via a web API so developers can integrate translation flows without bundling models or relying solely on browser UI. (See spec and tracking links for implementation specifics.)
+Exposes translation functionality via a web API so pages can request translations without bundling models. Relevant to webapi and javascript domains; links point to MDN, a tracking bug, ChromeStatus, and the WICG spec.
 
 #### Use Cases
-On-page translation of user content, localized input handling, or augmenting UI when built-in browser translation cannot be used.
+On-demand translation of user-generated content or UI text when built-in browser translation is insufficient or when site-controlled translation workflows are needed.
 
 #### References
-- MDN Docs: https://developer.mozilla.org/docs/Web/API/Translator
-- 'Tracking bug #322229993': https://bugs.chromium.org/p/chromium/issues/detail?id=322229993
-- ChromeStatus.com entry: https://chromestatus.com/feature/5652970345332736
-- Spec: https://wicg.github.io/translation-api/
+- https://developer.mozilla.org/docs/Web/API/Translator
+- https://bugs.chromium.org/p/chromium/issues/detail?id=322229993
+- https://chromestatus.com/feature/5652970345332736
+- https://wicg.github.io/translation-api/
 
 ### Language Detector API
 
 #### What's New
-A JavaScript API that detects the language of input text and returns confidence levels, intended to complement translation workflows.
+A JavaScript API for detecting the language of text, returning confidence levels to assist downstream actions.
 
 #### Technical Details
-Language detection is exposed as a browser API so pages can programmatically determine input language and combine detection with translation or routing logic.
+Provides language-detection functionality separate from translation; intended to be combined with translation or other flows. Relevant to webapi and javascript integration points; spec and status links provided.
 
 #### Use Cases
-Auto-detecting user input language to select translation targets, analytics, or adaptive UI when language is unknown.
+Automatically determine input language for auto-translation, routing, or analytics; precondition step before calling Translator API.
 
 #### References
-- MDN Docs: https://developer.mozilla.org/docs/Web/API/LanguageDetector
-- ChromeStatus.com entry: https://chromestatus.com/feature/5134901000871936
-- Spec: https://wicg.github.io/language-detection-api/
+- https://developer.mozilla.org/docs/Web/API/LanguageDetector
+- https://chromestatus.com/feature/5134901000871936
+- https://wicg.github.io/language-detection-api/
 
 ### Summarizer API
 
 #### What's New
-A JavaScript API for producing summaries of input text backed by an in-browser or OS-provided language model, reducing the need for sites to ship large models.
+A JavaScript API that produces summaries of input text backed by a built-in AI language model exposed by the browser.
 
 #### Technical Details
-The API exposes summarization capabilities via the browser so sites can request concise summaries without embedding large model artifacts; see spec and tracking links for behavior and safety considerations.
+Browsers expose an on-device/OS-provided language model via a Summarizer API so sites can summarize content without each site downloading large models. See spec and tracking entries for design details.
 
 #### Use Cases
-Generating abstracts for long articles, previews for user-provided content, or server-side offloading of summarization to the client/browser.
+Client-side summarization of articles, messages, or user-generated content for previews, accessibility, or assistant-like features while reducing network/model-loading costs.
 
 #### References
-- MDN Docs: https://developer.mozilla.org/docs/Web/API/Summarizer
-- 'Tracking bug #351744634': https://bugs.chromium.org/p/chromium/issues/detail?id=351744634
-- ChromeStatus.com entry: https://chromestatus.com/feature/5134971702001664
-- Spec: https://wicg.github.io/summarization-api/
+- https://developer.mozilla.org/docs/Web/API/Summarizer
+- https://bugs.chromium.org/p/chromium/issues/detail?id=351744634
+- https://chromestatus.com/feature/5134971702001664
+- https://wicg.github.io/summarization-api/
 
 ### Escape < and > in attributes on serialization
 
 #### What's New
-Attribute values are serialized with `<` and `>` escaped to mitigate mutation XSS risks when serialized attributes might be re-parsed as start-tag tokens.
+Escape `<` and `>` in values of attributes during HTML serialization to mitigate mutation XSS risks.
 
 #### Technical Details
-The serialization algorithm now escapes `<` and `>` inside attribute values per the HTML parsing/serialization spec to reduce the risk of attribute-driven injection when content is re-serialized and re-parsed.
+Serialization now ensures `<` and `>` characters in attribute values are escaped so they cannot be misinterpreted as start-tag tokens after serializing and reparsing. This change aligns with the HTML spec on serializing fragments and is a security-hardening measure relevant to security-privacy and parsing behavior.
 
 #### Use Cases
-Improves safety of DOM serialization operations (e.g., innerHTML-like flows, HTML fragment generation) by preventing certain mutation XSS vectors.
+Reduces the class of mutation XSS issues when applications serialize DOM fragments or set attributes that may later be reparsed or injected.
 
 #### References
-- ChromeStatus.com entry: https://chromestatus.com/feature/5125509031477248
-- Spec: https://html.spec.whatwg.org/multipage/parsing.html#serializing-html-fragments
+- https://chromestatus.com/feature/5125509031477248
+- https://html.spec.whatwg.org/multipage/parsing.html#serializing-html-fragments
 
 ### Crash Reporting API: is_top_level and visibility_state
 
 #### What's New
-Adds string fields `is_top_level` and `visibility_state` to the crash reporting API body sent to the default crash reporting endpoint.
+Adds string fields `is_top_level` and `visibility_state` to the crash reporting API payload sent to the default reporting endpoint.
 
 #### Technical Details
-These fields provide additional runtime context about the page when a crash report is generated, following the reporting spec extensions for crash reports.
+Crash report bodies now include these additional context fields to improve understanding of crash circumstances. This change affects reporting semantics and backend diagnostics; see the reporting spec and ChromeStatus entry for the intended fields.
 
 #### Use Cases
-Provides richer crash context for diagnostics and triage (e.g., whether the crash occurred in a top-level page and the document visibility state), aiding reliability engineering and debugging.
+Improves server-side crash analytics and client-side triage by providing visibility context and top-level frame status, aiding debugging and prioritization.
 
 #### References
-- ChromeStatus.com entry: https://chromestatus.com/feature/5112885175918592
-- Spec: https://w3c.github.io/reporting/#crash-report
+- https://chromestatus.com/feature/5112885175918592
+- https://w3c.github.io/reporting/#crash-report
 
 ### Fire the pushsubscriptionchange event upon resubscription
 
 #### What's New
-When notification permission for an origin that previously had a push subscription is re-granted after being revoked, service workers will receive a `pushsubscriptionchange` event with an empty `oldSubscription` and the current subscription as `newSubscription`.
+Service workers will fire the `pushsubscriptionchange` event when notification permission for an origin that previously had a subscription is re-granted; the event is dispatched with an empty oldSubscription in such cases.
 
 #### Technical Details
-This behavior ensures service workers are notified of subscription lifecycle changes stemming from permission transitions, aligning with the Push API spec.
+This behavior change makes push subscription lifecycle more explicit when permission transitions (granted → denied/default → granted) occur. It follows the Push API spec semantics for the `pushsubscriptionchange` event and impacts pwa-service-worker and permission-handling flows.
 
 #### Use Cases
-Helps push-capable applications detect resubscription scenarios after permission changes and update server-side subscription records or re-register with push services.
+Allows service workers to re-subscribe or reconcile push state when permissions are re-granted, enabling reliable push delivery recovery and improved developer handling of permission churn.
 
 #### References
-- 'Tracking bug #407523313': https://bugs.chromium.org/p/chromium/issues/detail?id=407523313
-- ChromeStatus.com entry: https://chromestatus.com/feature/5115983529336832
-- Spec: https://w3c.github.io/push-api/#the-pushsubscriptionchange-event
-
-Saved to digest_markdown/webplatform/Web API/chrome-138-stable-en.md
+- https://bugs.chromium.org/p/chromium/issues/detail?id=407523313
+- https://chromestatus.com/feature/5115983529336832
+- https://w3c.github.io/push-api/#the-pushsubscriptionchange-event

@@ -3,37 +3,40 @@ layout: default
 title: chrome-138-zh
 ---
 
+## 领域摘要
+
+Chrome 138（stable）在 WebCodecs 中引入了对多媒体帧方向元数据的支持。此更改添加了显式的方向字段，使开发者能够检测并传递来自诸如 Android 相机等来源的旋转和翻转信息。它将帧方向处理在 WebCodecs 管线内标准化，使渲染、编码和处理更加可预测。对开发者而言，此更新减少了对临时变换的需求并简化了捕获设备与基于 Web 的媒体处理之间的互操作性。
+
 ## 详细更新
 
-此版本中的单个多媒体更新直接解决了视频帧方向如何由 Web 应用和低级媒体管线表示与消费的问题。
+下面的单项 multimedia 更新在 WebCodecs 中实现了方向元数据，并直接支持上述摘要。
 
 ### Add support for video frame orientation metadata to WebCodecs（为 WebCodecs 添加视频帧方向元数据支持）
 
 #### 新增内容
-引入了 `rotation: int` 和 `flip: bool` 值到 WebCodecs 的各类与视频相关的接口，以便开发者可以处理带有方向元数据的帧源。`VideoFrame` 接口已扩展，允许创建带有任意旋转和翻转元数据的 VideoFrame。
+向 WebCodecs 中的各类视频相关接口引入了 `rotation: int` 和 `flip: bool` 值，以便开发者能够处理具有方向信息的帧来源（例如 Android 相机、某些媒体）。`VideoFrame` 接口获得了创建带有方向元数据的 VideoFrame 的能力。
 
 #### 技术细节
-- 新的元数据字段：`rotation`（整数，度）和 `flip`（布尔）在 WebCodecs 视频接口和 VideoFrame 构造中暴露。
-- 这些字段使消费者了解预计的视觉方向，而不需要像素缓冲区本身事先被旋转。
-- 这是一个 WebCodecs 级别的更改（参见规范链接），并将与 GPU 上传和合成器路径交互；实现者可以使用该元数据选择面向方向的纹理上传或基于着色器的变换，而不是在 CPU 端重新格式化。
+- 在相关的 WebCodecs 接口中新增了方向元数据字段（`rotation`、`flip`），且 VideoFrame 构造 API 接受方向信息。
+- 这些元数据随帧在 WebCodecs 管线中传递，因此下游消费者（编码器、渲染器、处理器）可以应用或保留期望的方向。
+- 有关权威接口细节，请参阅 WebCodecs 规范，并参阅 ChromeStatus/跟踪 bug 了解部署状态。
 
 #### 适用场景
-- 移动相机应用和基于 Web 的捕获管线：正确解释来自 Android 等设备的 EXIF/相机方向信息。
-- 实时视频（会议、流媒体）：避免对每帧进行整帧的 CPU 变换，降低延迟和 CPU 使用。
-- 媒体处理管线（编码/解码）：在编码/解码周期中保留方向元数据，并仅在必要时应用变换（渲染 vs 存储）。
-
-#### 领域专家注释
-- webapi: WebCodecs API 扩展以包含方向元数据；开发者应检查 VideoFrame 的创建/消费点。
-- graphics-webgpu: 方向元数据使得更高效的 GPU 端处理成为可能（纹理坐标变换或着色器旋转），而非 CPU 端重绘。
-- javascript: WebCodecs 在 JS 中的集成将为 VideoFrame 暴露额外属性；更新应用逻辑以查询这些字段。
-- performance: 减少冗余像素操作，可降低实时应用的端到端延迟。
-- multimedia: 通过将像素数据与呈现方向分离，澄清了编码器和容器对方向的处理。
-- devices: 有助于规范设备相机在设备本机方向下呈现帧的行为。
+- 在硬件提供方向元数据的相机捕获中正确渲染，而无需额外的基于 CPU 的旋转。
+- 在基于 Web 的媒体工作流中，在编码/转码期间保留源方向。
+- 将带方向的帧输入到渲染管线（Canvas、WebGL/WebGPU）或带有显式方向语义的 WebRTC。
+- 通过避免手动元数据 hack 简化媒体编辑和播放器逻辑。
 
 #### 参考资料
 - https://bugs.chromium.org/p/chromium/issues/detail?id=40243431
 - https://chromestatus.com/feature/5098495055380480
 - https://w3c.github.io/webcodecs/#videoframe-interface
 
-此摘要的文件路径：
-digest_markdown/webplatform/Multimedia/chrome-138-stable-en.md
+Developer implications by domain (concise):
+- webapi: New WebCodecs fields expand the VideoFrame contract; update code that constructs/consumes VideoFrames.
+- graphics-webgpu: Texture uploads and shader transforms may use orientation metadata instead of pre-rotating pixels.
+- javascript: Surface-level API additions; no language-level changes.
+- multimedia: Clarifies codec/processing semantics when source hardware supplies orientation.
+- devices: Improves integration with camera hardware that reports frame orientation.
+- performance: Potentially reduces CPU work by avoiding software rotation; use metadata-aware pipelines.
+- security-privacy: No new permission surface is introduced by orientation metadata.

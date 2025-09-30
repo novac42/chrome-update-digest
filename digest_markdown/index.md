@@ -13,7 +13,7 @@ Explore what's new in each Chrome release:
 
 - [Chrome 140 **(Latest Stable)**](./versions/chrome-140/index.html) - 12 areas with updates
 - [Chrome 139](./versions/chrome-139/index.html) - 17 areas with updates
-- [Chrome 138](./versions/chrome-138/index.html) - 11 areas with updates
+- [Chrome 138](./versions/chrome-138/index.html) - 13 areas with updates
 - [View all 5 versions →](./versions/index.html)
 
 ## Browse by Feature Area

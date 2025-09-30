@@ -16,6 +16,7 @@ On-device AI and LLM features
 ### Available Versions
 
 - Chrome 139 **(Latest)**: [English](./chrome-139-en.html) / [Chinese](./chrome-139-zh.html)
+- Chrome 138: [English](./chrome-138-en.html) / [Chinese](./chrome-138-zh.html)
 
 ## Navigation
 

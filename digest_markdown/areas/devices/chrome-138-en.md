@@ -3,27 +3,21 @@ layout: default
 title: chrome-138-en
 ---
 
-## Area Summary
-
-Chrome 138 (stable) advances the Devices area in two complementary directions: expanded hardware connectivity and improved layout support for foldable hardware. The Web Serial API over Bluetooth RFCOMM on Android broadens serial device access patterns for web apps, while the Viewport Segments Enumeration API formalizes how pages detect and adapt to split viewports on foldables. These features move the platform toward richer device integrations and more predictable multi-segment layouts, enabling web apps that target IoT, device provisioning, and foldable UX. For developers, the changes mean new device pairing surfaces and clearer primitives for responsive layout on non‑rectangular viewports.
-
 ## Detailed Updates
 
-Below are the two Devices-area updates in this release and what they mean for implementation and product scenarios.
+Below are the Devices-area updates from the Chrome 138 stable release, with concise technical context and developer-focused use cases.
 
 ### Web serial over Bluetooth on Android
 
 #### What's New
-Chrome on Android supports the Web Serial API over Bluetooth RFCOMM, allowing web pages and web apps to connect to serial ports via Bluetooth on Android devices.
+Chrome on Android supports the Web Serial API over Bluetooth RFCOMM, letting web pages and web apps connect to serial ports exposed over Bluetooth on Android devices. Existing enterprise policies such as DefaultSerialGuardSetting, SerialAllowAllPortsForUrls, and SerialAllowUsbDevicesForUrls apply.
 
 #### Technical Details
-- Enables Web Serial API usage over Bluetooth RFCOMM transport on Android.
-- Existing enterprise policies are referenced in the change (e.g., `DefaultSerialGuardSetting`, `SerialAllowAllPortsForUrls`, `SerialAllowUsbDevicesForUrls`, `SerialAsk...`).
+Implementation enables Web Serial API transport over Bluetooth RFCOMM on Chromium for Android, following the Web Serial spec for enumerating and opening serial ports over this transport.
 
 #### Use Cases
-- Web-based device configuration and provisioning for Bluetooth-capable serial devices (IoT, embedded devices, test equipment).
-- In-browser debugging and maintenance tools that communicate with devices over Bluetooth serial links.
-- Enterprise-managed deployments that rely on existing serial-related policies for governance.
+- Web UIs that communicate with microcontrollers, sensors, or legacy serial peripherals via Bluetooth.
+- Enterprise and managed-device scenarios where policies govern serial-port access from web apps.
 
 #### References
 - https://bugs.chromium.org/p/chromium/issues/detail?id=375245353
@@ -33,20 +27,17 @@ Chrome on Android supports the Web Serial API over Bluetooth RFCOMM, allowing we
 ### Viewport Segments Enumeration API
 
 #### What's New
-The Viewport Segments API exposes the position and dimensions of logically separate regions (viewport segments) created when hardware features split the viewport, enabling better layout adaptation for foldable devices.
+The Viewport Segments API enables developers to adapt layouts for foldable and multi-segment displays by exposing the position and dimensions of logically separate viewport regions. Viewport segments are created when the viewport is split by one or more hardware features.
 
 #### Technical Details
-- Introduces enumeration of viewport segments that represent distinct regions when the viewport is split by one or more hardware features.
-- Provides programmatic access to segment geometry to drive layout and rendering decisions.
+The API provides enumeration of viewport segments produced by hardware-driven splits (hinges, folds, cutouts), allowing apps to query segment geometry and react to segmented viewports as defined by the Visual Viewport work.
 
 #### Use Cases
-- Responsive layouts that place content into segments (e.g., multi-panel UIs) and avoid hinge/crease areas.
-- Progressive enhancement for foldable and dual-screen devices where segment geometry determines content flow and navigation patterns.
-- CSS and rendering-engine integration points to improve multi-segment layout stability and performance.
+- Responsive two-pane or multi-pane layouts for foldable devices.
+- Dynamic placement of interactive UI across hinge/fold boundaries to avoid occlusion.
+- Improved media and content layout strategies on split viewports.
 
 #### References
 - https://bugs.chromium.org/p/chromium/issues/detail?id=1039050
 - https://chromestatus.com/feature/5131631321964544
 - https://wicg.github.io/visual-viewport/
-
-Saved file: digest_markdown/webplatform/Devices/chrome-138-stable-en.md

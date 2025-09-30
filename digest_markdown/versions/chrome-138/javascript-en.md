@@ -3,29 +3,27 @@ layout: default
 title: javascript-en
 ---
 
-### 1. Area Summary
+## Area Summary
 
-Chrome 138 introduces a change in how quota exceedance errors are represented: moving from a name-based DOMException entry to a DOMException-derived interface for QuotaExceededError. This enables carrying structured, additional information with quota errors, improving diagnosability and programmatic handling in JavaScript. The change advances the web platform by making exception objects more extensible and aligned with WebIDL-derived interfaces. Developers should plan for more robust error handling and prefer capability checks over brittle string comparisons.
+Chrome 138 introduces a change in how quota-exceeded errors are represented: moving from using a generic DOMException with a name of "QuotaExceededError" to a dedicated DOMException-derived interface. This allows quota errors to carry structured, additional information beyond the legacy name string. For developers, the most impactful result is improved programmatic error handling and richer diagnostics when storage or quota limits are hit. Overall, the update standardizes error semantics and enables more expressive platform APIs.
 
 ## Detailed Updates
 
-Below is the JavaScript-area update in Chrome 138 and its implications for developers.
+Below are the JavaScript-focused details that follow from the summary above.
 
 ### Update QuotaExceededError to a DOMException derived interface
 
 #### What's New
-A proposal to stop treating "QuotaExceededError" as only a DOMException name value and instead define it as a DOMException-derived interface that can carry additional information.
+Previously the platform signaled quota errors by throwing a DOMException whose name property was set to "QuotaExceededError". The change introduces a DOMException-derived interface specifically for quota-exceeded situations so the error can carry additional information.
 
 #### Technical Details
-The change removes "QuotaExceededError" from the list of built-in DOMException name strings and replaces it with a proper DOMException-derived interface. This allows the exception to expose additional properties beyond the legacy name property, enabling richer structured data to be attached to quota errors.
+The proposal replaces the ad-hoc use of DOMException with name="QuotaExceededError" by defining a distinct interface that extends DOMException. This lets implementations attach structured data (fields or properties) to the error object rather than relying only on the name string.
 
 #### Use Cases
-- Storage and quota-related APIs can return quota errors with contextual data for better diagnostics.
-- Client code can perform more precise programmatic handling of quota conditions (rather than relying solely on string matching).
-
-#### Developer Guidance
-Audit code that checks error.name === "QuotaExceededError" and prepare to adopt feature detection or instanceof-style checks once the interface lands. Favor handling richer exception properties where available.
+- More reliable programmatic detection of quota conditions in storage-related APIs.
+- Richer diagnostic data available on the thrown error to support better recovery or telemetry.
+- Cleaner, spec-driven error surface for web APIs that need to report quota problems.
 
 #### References
-- ChromeStatus.com entry: https://chromestatus.com/feature/5647993867927552
+- ChromeStatus.com entry: https://chromestatus.com/feature/5647993867927552  
 - Spec: https://whatpr.org/dom/1245.html
