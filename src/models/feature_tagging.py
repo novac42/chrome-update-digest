@@ -68,7 +68,7 @@ class HeadingBasedTagger:
             # Primary categories - compound patterns first
             "css and ui": "css",  # Handle "CSS and UI" as CSS only
             "html and dom": "html-dom",
-            "deprecations and removals": "deprecation",
+            "deprecations and removals": "deprecations",
             "progressive web app": "pwa",
             "service worker": "serviceworker",
             "web apis": "webapi",
@@ -84,16 +84,16 @@ class HeadingBasedTagger:
             "dom": "html-dom",
             "javascript": "javascript",
             "js": "javascript",
-            "devices": "devices",
-            "device": "devices",
+            # Devices: handled by exact-heading rule (see ordered patterns below)
             "multimedia": "multimedia",
             "media": "multimedia",
             "performance": "performance",
             "perf": "performance",
             "security": "security",
             "serviceworker": "serviceworker",
-            "deprecation": "deprecation",
-            "removal": "deprecation",
+            # Map singular forms to the unified plural area key
+            "deprecation": "deprecations",
+            "removal": "deprecations",
 
             # Additional categories
             "origin trials": "origin-trials",
@@ -125,7 +125,7 @@ class HeadingBasedTagger:
             # Compound patterns first (more specific)
             ("css and ui", "css"),
             ("html and dom", "html-dom"),
-            ("deprecations and removals", "deprecation"),
+            ("deprecations and removals", "deprecations"),
             ("progressive web app", "pwa"),
             ("service worker", "serviceworker"),
             ("web apis", "webapi"),
@@ -140,8 +140,12 @@ class HeadingBasedTagger:
             ("dom", "html-dom"),
             ("javascript", "javascript"),
             ("js", "javascript"),
-            ("devices", "devices"),
-            ("device", "devices"),
+            # IMPORTANT: Do not keyword-match for Devices. We require an exact
+            # heading equal to "Devices" to classify into this area. This is
+            # implemented by checking equality during matching rather than
+            # substring inclusion, so we intentionally omit generic patterns
+            # for "device"/"devices" here to avoid false positives (e.g.,
+            # WebGPU "Device" headings).
             ("multimedia", "multimedia"),
             ("media", "multimedia"),
             ("webrtc", "multimedia"),
@@ -149,8 +153,8 @@ class HeadingBasedTagger:
             ("perf", "performance"),
             ("security", "security"),
             ("serviceworker", "serviceworker"),
-            ("deprecation", "deprecation"),
-            ("removal", "deprecation"),
+            ("deprecation", "deprecations"),
+            ("removal", "deprecations"),
             ("origin trials", "origin-trials"),
             ("on-device ai", "on-device-ai"),
             ("webgpu", "webgpu"),
@@ -267,6 +271,23 @@ class HeadingBasedTagger:
             if re.match(r'^chrome \d+', heading_lower):
                 continue
             
+            # Exact-match rule: Devices area only when heading equals "Devices"
+            if heading_lower == "devices":
+                if i == len(heading_path) - 1:
+                    priority = TagPriority.PRIMARY
+                elif i == len(heading_path) - 2:
+                    priority = TagPriority.PRIMARY
+                else:
+                    priority = TagPriority.SECONDARY
+                devices_tag = FeatureTag(
+                    name="devices",
+                    priority=priority,
+                    source="heading",
+                    confidence=1.0,
+                )
+                if not any(t.name == "devices" for t in tags):
+                    tags.append(devices_tag)
+
             # Check against ordered heading patterns (more specific first)
             for pattern, tag_name in self.ordered_heading_patterns:
                 if pattern in heading_lower:

@@ -1,13 +1,12 @@
 version: '139'
 channel: stable
 area: devices
-extraction_timestamp: '2025-09-30T16:25:47.881496'
+extraction_timestamp: '2025-09-30T18:10:41.469801'
 extraction_method: deterministic
 statistics:
   total_features: 1
   total_links: 3
   primary_tags:
-    devices: 1
     performance: 1
   cross_cutting:
     privacy: 1
@@ -25,7 +24,6 @@ features:
     [Tracking bug #410607163](https://issues.chromium.org/issues/410607163) | [ChromeStatus.com entry](https://chromestatus.com/feature/5074096916004864)
     | [Spec](https://immersive-web.github.io/depth-sensing)'
   heading_path:
-  - Chrome 139
   - Device
   - WebXR depth sensing performance improvements
   links:
@@ -38,12 +36,8 @@ features:
   - url: https://immersive-web.github.io/depth-sensing
     link_type: github
     title: Spec
-  line_number: 86
+  line_number: 3
   primary_tags:
-  - name: devices
-    priority: primary
-    source: heading
-    confidence: 1.0
   - name: performance
     priority: primary
     source: heading

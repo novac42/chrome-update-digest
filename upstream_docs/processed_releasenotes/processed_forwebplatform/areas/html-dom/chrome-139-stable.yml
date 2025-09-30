@@ -1,7 +1,7 @@
 version: '139'
 channel: stable
 area: html-dom
-extraction_timestamp: '2025-09-30T16:25:47.884775'
+extraction_timestamp: '2025-09-30T18:10:41.421972'
 extraction_method: deterministic
 statistics:
   total_features: 1
@@ -23,7 +23,6 @@ features:
     [Tracking bug #40228234](https://issues.chromium.org/issues/40228234) | [ChromeStatus.com entry](https://chromestatus.com/feature/6278918763708416)
     | [Spec](https://dom.spec.whatwg.org/#namespaces)'
   heading_path:
-  - Chrome 139
   - DOM
   - Allow more characters in JavaScript DOM APIs
   links:
@@ -36,7 +35,7 @@ features:
   - url: https://dom.spec.whatwg.org/#namespaces
     link_type: spec
     title: Spec
-  line_number: 96
+  line_number: 3
   primary_tags:
   - name: html-dom
     priority: primary

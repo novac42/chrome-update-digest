@@ -1,13 +1,12 @@
 version: '139'
 channel: stable
 area: multimedia
-extraction_timestamp: '2025-09-30T16:25:47.924082'
+extraction_timestamp: '2025-09-30T18:10:41.463051'
 extraction_method: deterministic
 statistics:
   total_features: 1
   total_links: 3
   primary_tags:
-    webgpu: 1
     multimedia: 1
   cross_cutting:
     privacy: 1
@@ -20,7 +19,6 @@ features:
     [Tracking bug #418116079](https://issues.chromium.org/issues/418116079) | [ChromeStatus.com entry](https://chromestatus.com/feature/5206106602995712)
     | [Spec](https://w3c.github.io/webrtc-encoded-transform/#dom-rtcencodedaudioframemetadata-audiolevel)'
   heading_path:
-  - What's New in WebGPU (Chrome 139)
   - WebRTC
   - Audio level for RTC encoded frames
   links:
@@ -33,12 +31,8 @@ features:
   - url: https://w3c.github.io/webrtc-encoded-transform/#dom-rtcencodedaudioframemetadata-audiolevel
     link_type: spec
     title: Spec
-  line_number: 291
+  line_number: 3
   primary_tags:
-  - name: webgpu
-    priority: secondary
-    source: heading
-    confidence: 1.0
   - name: multimedia
     priority: primary
     source: heading

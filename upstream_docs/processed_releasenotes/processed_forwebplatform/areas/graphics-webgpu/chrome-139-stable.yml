@@ -1,33 +1,16 @@
 version: '139'
 channel: stable
 area: graphics-webgpu
-extraction_timestamp: '2025-09-30T16:25:47.887655'
+extraction_timestamp: '2025-09-30T18:10:41.492234'
 extraction_method: deterministic
 statistics:
-  total_features: 9
-  total_links: 19
+  total_features: 4
+  total_links: 10
   primary_tags:
-    webgpu: 9
-    devices: 1
-    origin-trials: 1
+    webgpu: 4
   cross_cutting:
-    webgpu: 8
-    privacy: 2
+    webgpu: 4
 features:
-- title: Graphics
-  content: '*This section includes both Chrome WebGPU highlights and detailed WebGPU release notes.*'
-  heading_path:
-  - Chrome 139
-  - Graphics
-  links: []
-  line_number: 104
-  primary_tags:
-  - name: webgpu
-    priority: primary
-    source: heading
-    confidence: 1.0
-  cross_cutting_concerns:
-  - webgpu
 - title: 3D texture support for BC and ASTC compressed formats
   content: "The `\"texture-compression-bc-sliced-3d\"` and `\"texture-compression-astc-sliced-3d\"` WebGPU features add support\
     \ for 3D textures using Block Compression (BC) and Adaptive Scalable Texture Compression (ASTC) formats. This lets you\
@@ -48,7 +31,7 @@ features:
     \ WebGPU.](/static/blog/new-in-webgpu-139/image/brain-scans.png) A brain scan image from a 3D texture with ASTC compressed\
     \ format."
   heading_path:
-  - What's New in WebGPU (Chrome 139)
+  - Graphics and WebGPU - Chrome 139
   - 3D texture support for BC and ASTC compressed formats
   links:
   - url: https://webgpu.github.io/webgpu-samples/?sample=volumeRenderingTexture3D
@@ -57,29 +40,7 @@ features:
   - url: https://chromestatus.com/feature/5080855386783744
     link_type: chromestatus
     title: chromestatus entry
-  line_number: 136
-  primary_tags:
-  - name: webgpu
-    priority: primary
-    source: heading
-    confidence: 1.0
-  cross_cutting_concerns:
-  - webgpu
-- title: Detailed WebGPU Updates
-  content: "Source: https://developer.chrome.com/blog/new-in-webgpu-139\n\n  * [ Chrome for Developers ](https://developer.chrome.com/)\n\
-    \  * [ Blog ](https://developer.chrome.com/blog)"
-  heading_path:
-  - Chrome 139
-  - Graphics
-  - Detailed WebGPU Updates
-  links:
-  - url: https://developer.chrome.com/
-    link_type: other
-    title: Chrome for Developers
-  - url: https://developer.chrome.com/blog
-    link_type: other
-    title: Blog
-  line_number: 116
+  line_number: 3
   primary_tags:
   - name: webgpu
     priority: primary
@@ -102,7 +63,7 @@ features:
     For a detailed explanation and usage in WebGPU compatibility mode, refer to the [explainer](https://gist.github.com/greggman/0dea9995e33393c546a4c2bd2a12e50e)
     and the following section. See [issue 418025721](https://issues.chromium.org/issues/418025721).'
   heading_path:
-  - What's New in WebGPU (Chrome 139)
+  - Graphics and WebGPU - Chrome 139
   - New "core-features-and-limits" feature
   links:
   - url: https://gist.github.com/greggman/0dea9995e33393c546a4c2bd2a12e50e
@@ -111,7 +72,7 @@ features:
   - url: https://issues.chromium.org/issues/418025721
     link_type: other
     title: issue 418025721
-  line_number: 174
+  line_number: 42
   primary_tags:
   - name: webgpu
     priority: primary
@@ -142,7 +103,7 @@ features:
     ] : []),\n    });\n    \n    if (device?.features.has(\"core-features-and-limits\")) {\n      // Compatibility mode restrictions\
     \ will apply\n    }"
   heading_path:
-  - What's New in WebGPU (Chrome 139)
+  - Graphics and WebGPU - Chrome 139
   - Origin trial for WebGPU compatibility mode
   links:
   - url: https://developer.mozilla.org/docs/Web/API/GPU/requestAdapter
@@ -154,35 +115,10 @@ features:
   - url: https://webgpu.github.io/webgpu-samples/?sample=generateMipmap
     link_type: github
     title: Generate Mipmap WebGPU sample
-  line_number: 182
+  line_number: 51
   primary_tags:
   - name: webgpu
     priority: primary
-    source: heading
-    confidence: 1.0
-  cross_cutting_concerns:
-  - webgpu
-- title: Enable the feature
-  content: 'By default, [WebGPU compatibility mode](https://chromestatus.com/feature/6436406437871616) is not enabled in Chrome,
-    but it can be experimented with in Chrome 139 by explicitly enabling the functionality. You can activate it locally by
-    enabling the "Experimental Web Platform Features" [flag](/docs/web-platform/chrome-flags#chromeflags) at `chrome://flags/#enable-experimental-web-platform-features`.
-
-
-    To enable it for all visitors to your app, an [origin trial](/origintrials#/view_trial/1489002626799370241) is underway
-    and set to end in Chrome 145 (Apr 21, 2026). To participate in the trial, refer to the [Get started with origin trials](/docs/web-platform/origin-trials#take_part_in_an_origin_trial)
-    post.'
-  heading_path:
-  - What's New in WebGPU (Chrome 139)
-  - Origin trial for WebGPU compatibility mode
-  - Enable the feature
-  links:
-  - url: https://chromestatus.com/feature/6436406437871616
-    link_type: chromestatus
-    title: WebGPU compatibility mode
-  line_number: 212
-  primary_tags:
-  - name: webgpu
-    priority: secondary
     source: heading
     confidence: 1.0
   cross_cutting_concerns:
@@ -198,7 +134,7 @@ features:
 
     This covers only some of the key highlights. Check out the exhaustive [list of commits](https://dawn.googlesource.com/dawn/+log/chromium/7204..chromium/7258?n=1000).'
   heading_path:
-  - What's New in WebGPU (Chrome 139)
+  - Graphics and WebGPU - Chrome 139
   - Dawn updates
   links:
   - url: https://github.com/webgpu-native/webgpu-headers/pull/528
@@ -210,7 +146,7 @@ features:
   - url: https://dawn.googlesource.com/dawn/+log/chromium/7204..chromium/7258?n=1000
     link_type: other
     title: list of commits
-  line_number: 218
+  line_number: 90
   primary_tags:
   - name: webgpu
     priority: primary
@@ -218,75 +154,3 @@ features:
     confidence: 1.0
   cross_cutting_concerns:
   - webgpu
-- title: On-device Web Speech API
-  content: 'This feature adds on-device speech recognition support to the Web Speech API, allowing websites to ensure that
-    neither audio nor transcribed speech are sent to a third-party service for processing.
-
-
-    Websites can query the availability of on-device speech recognition for specific languages, prompt users to install the
-    necessary resources for on-device speech recognition, and choose between on-device or cloud-based speech recognition as
-    needed.
-
-
-    [ChromeStatus.com entry](https://chromestatus.com/feature/6090916291674112) | [Spec](https://webaudio.github.io/web-speech-api)'
-  heading_path:
-  - What's New in WebGPU (Chrome 139)
-  - On-device AI
-  - On-device Web Speech API
-  links:
-  - url: https://chromestatus.com/feature/6090916291674112
-    link_type: chromestatus
-    title: ChromeStatus.com entry
-  - url: https://webaudio.github.io/web-speech-api
-    link_type: github
-    title: Spec
-  line_number: 243
-  primary_tags:
-  - name: webgpu
-    priority: secondary
-    source: heading
-    confidence: 1.0
-  - name: devices
-    priority: primary
-    source: heading
-    confidence: 1.0
-  cross_cutting_concerns:
-  - privacy
-- title: WebGPU compatibility mode
-  content: 'Adds an opt-in, lightly restricted subset of the WebGPU API capable of running older graphics APIs such as OpenGL
-    and Direct3D11. By opting into this mode and obeying its constraints, developers can extend the reach of their WebGPU
-    applications to many older devices that don''t have the modern, explicit graphics APIs that core WebGPU requires.
-
-
-    [Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/1489002626799370241) | [Tracking bug #40266903](https://issues.chromium.org/issues/40266903)
-    | [ChromeStatus.com entry](https://chromestatus.com/feature/6436406437871616) | [Spec](https://github.com/gpuweb/gpuweb/blob/main/proposals/compatibility-mode.md)'
-  heading_path:
-  - What's New in WebGPU (Chrome 139)
-  - Origin trials
-  - WebGPU compatibility mode
-  links:
-  - url: https://developer.chrome.com/origintrials/#/register_trial/1489002626799370241
-    link_type: other
-    title: Origin Trial
-  - url: https://issues.chromium.org/issues/40266903
-    link_type: other
-    title: 'Tracking bug #40266903'
-  - url: https://chromestatus.com/feature/6436406437871616
-    link_type: chromestatus
-    title: ChromeStatus.com entry
-  - url: https://github.com/gpuweb/gpuweb/blob/main/proposals/compatibility-mode.md
-    link_type: github
-    title: Spec
-  line_number: 366
-  primary_tags:
-  - name: webgpu
-    priority: secondary
-    source: heading
-    confidence: 1.0
-  - name: origin-trials
-    priority: primary
-    source: heading
-    confidence: 1.0
-  cross_cutting_concerns:
-  - webgpu
-  - privacy
