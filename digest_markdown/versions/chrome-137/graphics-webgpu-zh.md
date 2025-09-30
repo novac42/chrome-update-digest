@@ -1,100 +1,123 @@
 ---
 layout: default
-title: graphics-webgpu-zh
+title: 领域摘要
 ---
+
+# 领域摘要
+
+Chrome 137（stable）为 WebGPU 及相关图形基元提供了针对性的增量改进，简化了常见的开发者工作流。主要主题包括 API 易用性（更简单的缓冲区复制、可绑定的纹理视图）、WGSL 中更安全的并发原语，以及通过适配器功耗提示实现更清晰的设备检测。这些更改减少了着色器/运行时样板代码，使视频和计算代码路径更易于编写和优化。对于开发者来说，更新在处理外部视频纹理、整个缓冲区操作和工作组范围的原子加载时降低了摩擦。
 
 ## 详细更新
 
-下面的条目扩展了上述摘要，说明了更改内容、工作方式以及适用场景。
+以下条目对上文摘要进行了扩展，提供开发者可采取行动的简明说明。
 
-### 1. Texture View for External Texture Binding (允许用纹理视图绑定外部纹理)
+### 1. Texture View for External Texture Binding（外部纹理绑定的纹理视图）
 
 #### 新增内容
-现在允许使用兼容的 `GPUTextureView` 替代 `GPUExternalTexture` 绑定。
+- 现在允许使用兼容的 `GPUTextureView` 来替代 `GPUExternalTexture` 绑定。
+- 简化了视频效果管线中的着色器逻辑。
+- 减少了动态编译着色器的需要。
 
 #### 技术细节
-符合外部纹理约定的 `GPUTextureView` 可以在此前要求 `GPUExternalTexture` 的位置进行绑定，减少了对特殊绑定和着色器排列组合的需求。
+- 以前需要 `GPUExternalTexture` 的绑定现在可以接受兼容的 `GPUTextureView`，从而允许在外部内容管线中重用现有的纹理视图对象。
 
 #### 适用场景
-简化了视频效果管线中的着色器逻辑，减少了仅为处理外部纹理绑定而动态编译或切换着色器的需要。
+- 视频效果着色器可以直接从 `GPUTextureView` 采样，减少运行时着色器变体和动态编译。
+- 在外部帧与常规纹理之间切换的管线可以共享 bind group 布局。
 
 #### 参考资料
-未提供。
+- 无提供链接。
 
-### 2. Buffer Copy Simplification (缓冲区复制简化)
+#### 示例
+```javascript
+const bindGroup = myDevice.createBindGroup({
+  layout: pipeline.getBindGroupLayout(0),...
+```
+
+### 2. Buffer Copy Simplification（缓冲区复制简化）
 
 #### 新增内容
-为 `copyBufferToBuffer()` 提供了新的方法重载，允许省略偏移和大小参数。
+- 新的方法重载允许在 `copyBufferToBuffer()` 中省略偏移量和大小参数。
+- 简化了整个缓冲区的复制操作。
 
 #### 技术细节
-`copyBufferToBuffer()` 的一个重载仅接受源和目标缓冲区以复制全部内容，从而移除了为整缓冲区复制重复传入零偏移和显式大小的模式。
+- 提供了更简短的重载 `copyBufferToBuffer(srcBuffer, dstBuffer)`，用于表达整缓冲区复制意图，而无需显式的偏移/大小。
 
+#### 适用场景
+- 简化需要复制或移动整个缓冲区的命令编码器代码，无需计算缓冲区长度或零偏移。
+- 减少实用工具和测试代码中的样板代码。
+
+#### 参考资料
+- 无提供链接。
+
+#### 示例
 ```javascript
 // Copy entire buffer without specifying offsets
 myCommandEncoder.copyBufferToBuffer(srcBuffer, dstBuffer);
 ```
 
-#### 适用场景
-简化了资源上传、暂存缓冲区使用和读回流程中的常见整缓冲区复制操作；减少了 API 面并降低了越界或大小出错的风险。
-
-#### 参考资料
-未提供。
-
-### 3. WGSL Workgroup Uniform Load (WGSL 工作组统一加载)
+### 3. WGSL Workgroup Uniform Load（WGSL 工作组统一加载）
 
 #### 新增内容
-新增 `workgroupUniformLoad(ptr)` 重载，用于原子加载，能以原子方式为所有工作组调用加载一个值。
+- 新的 `workgroupUniformLoad(ptr)` 重载用于原子加载。
+- 为所有工作组调用原子地加载值。
 
 #### 技术细节
-`workgroupUniformLoad(&wgvar)` 提供类似原子读取的重载，使得由某个调用（例如工作组 leader）初始化的值在整个工作组内一致可见，而无需手动同步模式。
+- WGSL 重载提供一种来自工作组存储的原子风格统一加载，以便所有调用获得由单个调用可原子写入的一致值。
 
+#### 适用场景
+- 一次调用存储哨兵或配置值而所有其它调用需要可靠读取且无竞争的场景。
+- 简化依赖于工作组共享状态的计算着色器中的同步逻辑。
+
+#### 参考资料
+- 无提供链接。
+
+#### 示例
 ```wgsl
 @compute @workgroup_size(1, 1)
 fn main(@builtin(local_invocation_index) lid: u32) {
   if (lid == 0) {
     atomicStore(&(wgvar), 42u);
   }
-  buffer[lid] = workgroupUniformLoad(&wgvar);
-}
+  buffer[lid] = workgroupUniformLoad(&...
 ```
 
-#### 适用场景
-使常见的工作组广播模式更安全、更简单——对在整个工作组中使用单个调用计算出的参数（例如调度元数据、共享常量）的计算着色器特别有用。
-
-#### 参考资料
-未提供。
-
-### 4. GPUAdapterInfo Power Preference (GPUAdapterInfo 电源偏好)
+### 4. GPUAdapterInfo Power Preference（GPUAdapterInfo 能耗偏好）
 
 #### 新增内容
-非标准的 `powerPreference` 属性可在 “WebGPU Developer Features” 标志下使用，并返回 `"low-power"` 或 `"high-performance"`。
+- 非标准的 `powerPreference` 属性在启用 “WebGPU Developer Features” 标志时可用。
+- 返回值为 `"low-power"` 或 `"high-performance"`。
 
 #### 技术细节
-`device.adapterInfo.powerPreference` 暴露了适配器的电源提示；这是非标准的并且受开发者功能标志控制，旨在用于实验性的设备感知调优。
+- 适配器/设备检测包含一个 `powerPreference` 字段（在开发者功能之后面），指示适配器的偏好类别。
 
+#### 适用场景
+- 用于基于适配器能耗类别选择质量/功能等级、节流工作负载或调整渲染选项的启发式方法。
+- 当启用功能标志时，对诊断和仅开发者调优非常有用。
+
+#### 参考资料
+- 无提供链接。
+
+#### 示例
 ```javascript
 function checkPowerPreferenceForGpuDevice(device) {
   const powerPreference = device.adapterInfo.powerPreference;
-  // Adjust settings based on GPU power preference
-}
+  // Adjust settings based on GP...
 ```
 
-#### 适用场景
-允许开发者根据适配器的功耗配置调整工作负载决策（质量与性能之间的取舍）——对移动设备与独立 GPU 的启发式判断，以及在适配期间的分析/遥测很有用。
-
-#### 参考资料
-未提供。
-
-### 5. Removed Compatibility Mode Attribute (移除兼容模式属性)
+### 5. Removed Compatibility Mode Attribute（移除兼容性模式属性）
 
 #### 新增内容
-实验性的 `compatibilityMode` 属性已被移除，并由一种标准化的兼容性方法替代。
+- 实验性的 `compatibilityMode` 属性已移除。
+- 被标准化的兼容性方法取代。
 
 #### 技术细节
-该属性的移除表明正在向标准的、非实验性的兼容机制整合；依赖该实验属性的代码必须迁移到标准化路径（在可用时）。
+- 该实验性属性已不再存在；开发者应使用替代该属性的标准化兼容性机制。
 
 #### 适用场景
-开发者应移除对该实验性属性的使用，并遵循标准化的兼容方法以实现前向兼容并降低维护成本。
+- 清理实验性表面减少了 API 面并引导开发者使用标准化的兼容路径。
 
 #### 参考资料
-未提供。
+- 无提供链接。
+
+文件已保存到: digest_markdown/webplatform/Graphics and WebGPU/chrome-137-stable-en.md

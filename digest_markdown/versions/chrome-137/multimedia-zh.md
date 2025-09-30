@@ -1,35 +1,39 @@
 ---
 layout: default
-title: multimedia-zh
+title: 领域摘要
 ---
 
-## 区域摘要
+# 领域摘要
 
-Chrome 137 引入了一个 origin-trial 权限策略，针对未渲染 iframe 的嵌入媒体播放控制。核心更改允许嵌入者暂停其 display 为 `none` 的 iframe 中的媒体，从而对嵌入内容进行更有意图的控制。对于需要优化用户体验并管理隐藏框架资源使用的开发者而言，这一改变很重要。该更新通过在跨框架边界的媒体行为中暴露一个由嵌入者控制的钩子，推动了 Web 平台的发展。
+Chrome 137 引入了一项以多媒体为中心的权限策略，该策略让嵌入方能够对未渲染 iframe 中的媒体播放进行显式控制。该变更以 Origin Trial 形式公开，面向需要在其 CSS display 属性被设置为 `none` 的嵌入上下文中暂停媒体的嵌入网站。此更新对嵌入第三方媒体的开发者很重要，因为它将非渲染 iframe 的播放行为形式化为一个控制点，并通过 Origin Trial 和 Chromium issue 进行跟踪。
 
 ## 详细更新
 
-以下为与上述摘要相关的多媒体领域更改。
+以下是 Chrome 137 中多媒体更改的详细信息及其对开发者的实际影响。
 
-### Pause media playback on not-rendered iframes (在未渲染的 iframe 上暂停媒体播放)
+### Pause media playback on not-rendered iframes（在未渲染 iframe 上暂停媒体播放）
 
 #### 新增内容
-- 新增了 `media-playback-while-not-rendered` 权限策略，允许嵌入站点暂停未渲染（即其 display 属性设置为 `none`）的嵌入 iframe 的媒体播放。该能力以 origin trial 形式提供。
+新增 `media-playback-while-not-rendered` 权限策略，允许嵌入站点暂停未渲染的嵌入 iframe 的媒体播放——即其 CSS `display` 属性被设置为 `none`。源文中的发布说明在 "improve the p..." 之后被截断。
 
 #### 技术细节
-- 引入权限策略令牌 `media-playback-while-not-rendered`。
-- 允许嵌入者控制当 iframe 未渲染（display: none）时其内部媒体是否继续播放。
-- 通过 Chrome 的 origin trial 机制交付（有关注册和详细信息，请参阅 Origin Trial 链接）。
+- 引入名为 `media-playback-while-not-rendered` 的权限策略。
+- 适用于其 CSS `display` 为 `none` 的嵌入 iframe（注释中“未渲染”的定义）。
+- 在提供的元数据中被标记为 Origin Trial。
 
 #### 适用场景
-- 防止隐藏的 iframe 中的媒体继续播放，提升用户对音视频行为的可预测性。
-- 通过在未渲染的框架中停止播放，减少无谓的 CPU/网络 资源消耗及潜在电池影响。
-- 为嵌入站点提供更细粒度的跨框架多媒体行为控制，以优化用户体验和资源管理。
+- 嵌入方可以选择在未渲染的 iframe 中暂停媒体，以更好地控制用户体验（如所述）。
+- 源文中有进一步解释性文本被截断；有关实现和推出的详细信息，请参阅下方的 Origin Trial 和跟踪链接。
+
+#### 领域特定影响
+- css: 依赖 `display: none` 状态作为触发“未渲染”行为的条件。
+- webapi: 为嵌入页面公开了一个权限策略控制面，以管理 iframe 的播放。
+- performance: 通过允许暂停未渲染 iframe 中的媒体，嵌入方可能减少不必要的后台活动。
+- multimedia: 直接影响嵌入媒体的播放行为和嵌入方驱动的播放策略。
+- security-privacy: 权限策略是一种面向 Web 的控制，影响跨源嵌入行为。
+- javascript, graphics-webgpu, devices, pwa-service-worker, webassembly, deprecations: 源文未提供其他详情；如需相关 API 交互或迁移指南，请参阅 Origin Trial 和跟踪 bug。
 
 #### 参考资料
-- https://developer.chrome.com/origintrials/#/trials/active
-- https://bugs.chromium.org/p/chromium/issues/detail?id=351354996
-- https://chromestatus.com/feature/5082854470868992
-
-此摘要的文件路径：
-digest_markdown/webplatform/Multimedia/chrome-137-stable-en.md
+- [Origin Trial](https://developer.chrome.com/origintrials/#/trials/active)
+- [跟踪 bug #351354996](https://bugs.chromium.org/p/chromium/issues/detail?id=351354996)
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/5082854470868992)

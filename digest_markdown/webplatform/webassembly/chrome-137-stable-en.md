@@ -1,41 +1,39 @@
 ## Area Summary
 
-Chrome 137 advances WebAssembly interoperability and runtime performance. The release adds JavaScript Promise Integration (JSPI) to let Wasm modules produce and consume JS Promises directly, and introduces Branch Hints to improve generated code layout and register use. Together these features reduce friction integrating Wasm with existing async web APIs and push execution hotspots to use fewer CPU resources and better instruction-cache locality. These updates matter because they make Wasm a more natural part of modern web application architectures and enable measurable performance wins for compute-heavy workloads.
+Chrome 137 advances WebAssembly with two targeted updates: JavaScript Promise Integration and Branch Hints. JavaScript Promise Integration (JSPI) lets WebAssembly code play the role of Promise generators and interoperate with Promise-bearing JavaScript APIs, improving async interop patterns. Branch Hints provide runtime hints to the engine to optimize code layout and register allocation, boosting instruction-cache efficiency for compiled WASM code. Together these changes improve both developer ergonomics for async workflows and low-level performance of WebAssembly modules on the web platform.
 
 ## Detailed Updates
 
-The following details expand on the summary above and describe practical impact for developers working with WebAssembly in Chrome 137.
+The items below expand on the summary and highlight developer-facing implications.
 
 ### JavaScript promise integration
 
 #### What's New
-WebAssembly can now integrate with JavaScript Promises: Wasm modules can act as Promise generators and interact with Promise-bearing APIs more directly.
+JavaScript Promise Integration (JSPI) is an API that allows WebAssembly applications to integrate with JavaScript Promises. It allows a WebAssembly program to act as the generator of a Promise, and it allows the WebAssembly program to interact with Promise-bearing APIs. In particular, when an applic...
 
 #### Technical Details
-JSPI defines an API surface that maps Wasm execution to JS Promise lifecycle operations, enabling Wasm to resolve, reject, and await promises without heavy JS glue. The feature is specified in a community-maintained spec linked below and tracked in ChromeStatus.
+JSPI exposes an integration surface so that WebAssembly code can create and drive Promises and consume Promise-based JavaScript APIs, enabling tighter async interoperability between WASM and JS runtimes.
 
 #### Use Cases
-- Native-like async flows in Wasm modules that directly interoperate with Fetch, IndexedDB, and other promise-based web APIs.
-- Simpler bindings for languages compiling to Wasm that emit async code (reduces custom runtime shims).
-- Cleaner error propagation between Wasm and JS via Promise rejection semantics.
+Enables WebAssembly modules to participate directly in JavaScript async flows (e.g., returning Promises, awaiting JS Promise APIs) which simplifies bridging between native-style WASM code and JS-driven async logic.
 
 #### References
-- https://chromestatus.com/feature/5059306691878912
-- https://github.com/WebAssembly/js-promise-integration
+- ChromeStatus.com entry: https://chromestatus.com/feature/5059306691878912
+- Spec: https://github.com/WebAssembly/js-promise-integration
 
 ### Branch Hints
 
 #### What's New
-Branch Hints let developers (via compilation toolchains) inform the engine which branch directions are very likely, enabling the runtime to optimize code layout and register allocation.
+Improves the performance of compiled WebAssembly code by informing the engine that a particular branch instruction is very likely to take a specific path. This allows the engine to make better decisions for code layout (improving instruction cache hits) and register allocation.
 
 #### Technical Details
-Hints guide code layout decisions to improve instruction-cache locality and allow the engine to favor register allocations for hot paths. The mechanism is defined in the branch-hinting spec and tracked by ChromeStatus.
+Branch hints convey likely-branch direction to the engine so the compiler and code layout stages can favor the hot path, impacting instruction cache locality and register assignment in generated machine code.
 
 #### Use Cases
-- Performance-sensitive Wasm code (game engines, physics, numerical kernels) can mark hot branches to reduce misprediction and cache misses.
-- Compilers targeting Wasm can emit branch hints to preserve runtime performance characteristics of native builds.
-- Reduces need for post-deployment profiling to find and hand-optimize hot-path layout.
+Useful for performance-sensitive WebAssembly modules where branch prediction and code layout influence hot-path execution, yielding measurable improvements in instruction-cache utilization and execution throughput.
 
 #### References
-- https://chromestatus.com/feature/5089072889290752
-- https://github.com/WebAssembly/branch-hinting
+- ChromeStatus.com entry: https://chromestatus.com/feature/5089072889290752
+- Spec: https://github.com/WebAssembly/branch-hinting
+
+Save to: digest_markdown/webplatform/WebAssembly/chrome-137-stable-en.md

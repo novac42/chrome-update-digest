@@ -11,6 +11,7 @@ title: Chrome 137 Release Notes
 
 - CSS: [English](./css-en.html) / [Chinese](./css-zh.html) — CSS styling, layout, and UI features
 - Graphics and WebGPU: [English](./graphics-webgpu-en.html) / [Chinese](./graphics-webgpu-zh.html) — Graphics rendering and WebGPU features
+- On-device AI: [English](./on-device-ai-en.html) / [Chinese](./on-device-ai-zh.html) — On-device AI and LLM features
 - Web API: [English](./webapi-en.html) / [Chinese](./webapi-zh.html) — Web APIs and browser interfaces
 - Origin trials: [English](./origin-trials-en.html) / [Chinese](./origin-trials-zh.html) — Experimental features in origin trials
 - Navigation-Loading: [English](./navigation-loading-en.html) / [Chinese](./navigation-loading-zh.html) — Navigation and resource loading features

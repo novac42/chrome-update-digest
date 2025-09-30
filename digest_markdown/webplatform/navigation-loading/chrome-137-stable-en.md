@@ -1,45 +1,41 @@
-Save-to path:
-```text
-digest_markdown/webplatform/Navigation-Loading/chrome-137-stable-en.md
-```
+### 1. Area Summary
 
-## Area Summary
-
-Chrome 137 continues the Storage Partitioning work by applying Storage Key partitioning to Blob URL access in the Navigation-Loading domain. The primary change partitions Blob URL access by Storage Key (top-level site, frame origin, and has-cross-site-ancestor), with an explicit exception that top-level navigations remain partitioned only by frame origin. This update most impacts cross-site embedding and navigation flows that rely on Blob URLs, tightening privacy boundaries while minimizing top-level navigation breakage. Developers should evaluate Blob URL usage in cross-origin frames and update tests to reflect new access semantics.
+Chrome 137 continues the Storage Partitioning work by partitioning Blob URL access according to Storage Key (top-level site, frame origin, and the has-cross-site-ancestor boolean), with the exception that top-level navigations remain partitioned only by frame origin. The most impactful change for developers is that Blob URLs are now scoped more strictly to storage keys, which changes access boundaries for blobs used during fetches and navigations. This advances the web platform by tightening storage and resource isolation across frames and sites, reducing cross-site leakage risk. Teams should review any workflows that rely on shared Blob URL access across origins or frames to ensure compatibility.
 
 ## Detailed Updates
 
-This section lists the Navigation-Loading change in Chrome 137 and its developer implications.
+Below are the Navigation-Loading changes relevant to developers working on navigation, fetch, and storage isolation.
 
 ### Blob URL Partitioning: Fetching/Navigation
 
 #### What's New
-Chrome partitions Blob URL access by Storage Key (top-level site, frame origin, and the has-cross-site-ancestor boolean), except that top-level navigations remain partitioned only by frame origin.
+Partitioning of Blob URL access is implemented by Storage Key (top-level site, frame origin, and has-cross-site-ancestor boolean); top-level navigations remain partitioned only by frame origin.
 
 #### Technical Details
-- Blob URL access is scoped to a Storage Key composed of the top-level site, the frame origin, and whether the frame has a cross-site ancestor.
-- An exception exists: top-level navigations are still partitioned only by the frame origin (not the full Storage Key).
-- This aligns Blob URL access control with the broader Storage Partitioning model to reduce cross-site data exposure.
+Blob URL access checks now consider the Storage Key triple (top-level site, frame origin, has-cross-site-ancestor) when deciding whether a blob is accessible from a given context. Top-level navigations are treated as an exception and continue to be partitioned solely by frame origin.
 
 #### Use Cases
-- Prevents Blob URLs created in one Storage Key (e.g., an embedded cross-site frame) from being used in a different Storage Key, improving privacy boundaries.
-- Minimizes regressions for top-level navigations by keeping them partitioned by frame origin only.
-- Requires developers to audit Blob URL sharing patterns across frames and update navigation/test flows that assume global Blob URL accessibility.
+- Audit and update codepaths that generate Blob URLs and share them across frames or origins.
+- Validate service-worker or fetch flows that expect cross-frame Blob accessibility.
+- Test navigations that rely on Blob URLs to ensure they still resolve under the more granular Storage Key partitioning.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=40057646
-- https://chromestatus.com/feature/5037311976488960
+- https://bugs.chromium.org/p/chromium/issues/detail?id=40057646 (Tracking bug #40057646)
+- https://chromestatus.com/feature/5037311976488960 (ChromeStatus.com entry)
 
-## Area-Specific Expertise (Navigation-Loading implications)
+## Area-Specific Expertise
 
-- css: No direct CSS changes, but cross-origin iframe behaviors that affect scrolling/layout during navigations may need revalidation when Blob URL access changes.
-- webapi: Blob URL fetch/navigation semantics are now Storage Key–scoped; APIs that create or resolve Blob URLs must consider storage partition boundaries.
-- graphics-webgpu: Blob-sourced assets used for textures or shaders in cross-site frames may become inaccessible across Storage Keys; validate resource loading in GPU pipelines.
-- javascript: JS that generates or consumes Blob URLs across frames must handle storage-partitioned access and fallbacks.
-- security-privacy: Strengthens privacy by limiting cross-site Blob reuse; reduces risk of cross-site data exfiltration via Blob URLs.
-- performance: Partitioning can affect caching/memoization of Blob-backed resources across contexts; review performance assumptions for navigations.
-- multimedia: Media elements using Blob URLs in cross-origin frames may experience access restrictions; ensure media provisioning accounts for Storage Key scope.
-- devices: Blob-based device data (e.g., camera captures) stored as Blob URLs should respect Storage Key boundaries when used across frames or navigations.
-- pwa-service-worker: Service worker fetches and navigation flows that rely on Blob URLs should be tested under Storage Key partitioning.
-- webassembly: WASM modules loaded from Blob URLs need to be validated for accessibility across Storage Keys in multi-origin scenarios.
-- deprecations: Treat this as a behavioral change rather than a deprecation; provide migration tests and explicit handling for cross-context Blob sharing.
+- css: Layout and rendering are unaffected directly, but Blob-based resources used for images or media may be inaccessible across frames if previously shared.
+- webapi: Blob URL resolution now consults Storage Key; APIs that pass Blob URLs between contexts should be reviewed.
+- graphics-webgpu: No direct change, but GPU resources referencing blob-backed assets should be validated for cross-context access.
+- javascript: Blob URL creation and transfer semantics in scripts must account for Storage Key scoping.
+- security-privacy: Strengthens isolation by reducing cross-site blob exposure, lowering the surface for cross-origin data leaks.
+- performance: Minor regressions possible if developers need to re-fetch blobs across partitions; consider caching strategies per Storage Key.
+- multimedia: Media elements sourcing blob: URLs should be tested across frames and navigations for access failures.
+- devices: Blob delivery for device-captured data (e.g., camera) may be partitioned by Storage Key; check sharing workflows.
+- pwa-service-worker: Service workers interacting with blobs should ensure blobs are available in the service worker’s storage key context.
+- webassembly: WASM modules using blob-sourced binaries should validate module fetch paths under the new partitioning.
+- deprecations: No explicit deprecations in this change; treat it as a behavioral partitioning update that may require migration of cross-origin blob-sharing patterns.
+
+File path for the generated digest:
+digest_markdown/webplatform/Navigation-Loading/chrome-137-stable-en.md

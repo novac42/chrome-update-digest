@@ -3,27 +3,29 @@ layout: default
 title: javascript-zh
 ---
 
-## 区域摘要
+### 1. 领域摘要
 
-Chrome 137 稳定版引入了 JavaScript Promise Integration (JSPI)，重点在于加强 WebAssembly 与 JavaScript Promises 之间的互操作性。主要目标是使 WebAssembly 模块能直接参与 JavaScript 的异步模型，作为 Promise 的生成者并与返回 Promise 的 API 交互。此变更对混合使用 Wasm 和 JS 的开发者影响显著，简化了集成模式并澄清了跨语言的异步流程。它通过在 ECMAScript Promises 与 WebAssembly 执行上下文之间形式化一座桥梁，推动了 Web 平台的发展。
+Chrome 137 在 JavaScript 领域的更改集中在 WebAssembly 与 JavaScript Promises 之间的更紧密集成。单一且高影响力的特性 (JavaScript Promise Integration) 使 WebAssembly 模块能够生成并与基于 Promise 的 API 交互，从而降低 WASM 与异步 JavaScript 之间的阻抗。这推动了平台发展，使异步互操作性更明确且更易实现，改善了混合 WASM/JS 应用的开发人员使用体验。这些更新的重要性在于它们简化了常见的异步模式并扩大了面向高性能 Web 应用的可能架构。
 
 ## 详细更新
 
-下面列出实现上述摘要的具体更新。
+以下是上文所述 JavaScript 领域更改的详细说明；这些内容扩展了摘要并展示了对开发者的实际影响。
 
 ### JavaScript promise integration（JavaScript Promise 集成）
 
 #### 新增内容
-JavaScript Promise Integration (JSPI) 是一组 API，允许 WebAssembly 应用与 JavaScript Promises 集成。它使得 WebAssembly 程序可以作为 Promise 的生成者，并与返回 Promise 的 API 交互。
+JavaScript Promise Integration (JSPI) 是一个 API，允许 WebAssembly 应用与 JavaScript Promises 集成。它允许 WebAssembly 程序作为 Promise 的生成者，并且允许该程序与返回 Promise 的 API 交互。
 
 #### 技术细节
-该功能以 API 规范的形式定义，桥接 WebAssembly 与 JavaScript Promise 的语义。它规定了 Wasm 程序如何创建/驱动 Promises 并与现有返回 Promise 的 JavaScript API 互操作。（详见链接的规范以获取权威细节。）
+- JSPI 暴露了一组 API，使 WebAssembly 模块可以创建并 resolve/reject Promise，并消费返回 Promise 的 JavaScript API。
+- 此特性的主要标签为 webassembly 和 javascript，表明在 WASM–JS 边界存在跨切改变。
+- 在链接的规范和 ChromeStatus 条目中可以查看进一步的技术规范和跟踪信息。
 
 #### 适用场景
-- 需要发起或返回 JavaScript Promises 的 WebAssembly 模块。  
-- 基于 Wasm 的代码在不使用复杂粘合代码的情况下调用现有的异步 JavaScript API。  
-- 在混合使用 Wasm 与 JS 组件的应用中实现更清晰的异步控制流。  
+- 需要启动异步工作流（例如 I/O、网络）的 WebAssembly 模块可以直接创建 Promise，并与 JS 代码自然互操作。
+- 把在 WASM 中的重计算与浏览器的异步 API（fetch、streams、自定义异步 API）桥接的库，可以简化粘合代码并避免临时的回调模式。
+- 使 WASM 与 JS 层之间的异步控制流和错误传播更清晰。
 
 #### 参考资料
-- ChromeStatus.com 条目: https://chromestatus.com/feature/5059306691878912  
+- ChromeStatus.com 条目: https://chromestatus.com/feature/5059306691878912
 - 规范: https://github.com/WebAssembly/js-promise-integration

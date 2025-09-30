@@ -12,7 +12,7 @@ Browse Chrome release notes organized by feature area to track evolution over ti
 - [CSS](./css/index.html) - Updates in 5 versions — CSS styling, layout, and UI features
 - [HTML-DOM](./html-dom/index.html) - Updates in 4 versions — HTML elements and DOM manipulation
 - [Graphics and WebGPU](./graphics-webgpu/index.html) - Updates in 5 versions — Graphics rendering and WebGPU features
-- [On-device AI](./on-device-ai/index.html) - Updates in 2 versions — On-device AI and LLM features
+- [On-device AI](./on-device-ai/index.html) - Updates in 3 versions — On-device AI and LLM features
 - [Web API](./webapi/index.html) - Updates in 5 versions — Web APIs and browser interfaces
 - [Origin trials](./origin-trials/index.html) - Updates in 4 versions — Experimental features in origin trials
 - [Deprecations](./deprecations/index.html) - Updates in 3 versions — Deprecated and removed features
