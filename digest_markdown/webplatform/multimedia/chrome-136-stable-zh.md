@@ -1,111 +1,116 @@
-# Chrome 136 多媒体更新 - 开发者分析
+# 领域摘要
 
-## 领域总结
-
-Chrome 136 在多媒体能力方面带来了重大进展，专注于增强音频管理、屏幕捕获控制和编解码器支持扩展。最具影响力的变化包括新的 AudioContext 中断状态以实现更好的音频会话处理、用于屏幕共享应用的全面捕获表面控制 API，以及通过在 WebRTC 和 MediaRecorder 中集成 H265/HEVC 来扩展编解码器支持。这些更新共同强化了 Chrome 作为高质量多媒体应用平台的地位，为开发者提供了对音频上下文的更精细控制、高级屏幕共享能力，以及对现代视频流和录制工作流程的更广泛编解码器兼容性。
+Chrome 136 引入了多媒体功能，重点在于提升编码器平台一致性、对被捕获表面的更细粒度控制，以及改进音频和 SVG 命中测试语义。最具影响力的更改包括在 WebRTC 和 MediaRecorder 中对 HEVC (H.265) 的支持，以及新的屏幕捕获控制（捕获表面控制和分辨率），这些功能支持更高质量的会议、录制和自适应流媒体工作流。AudioContext 增加了一个 "interrupted" 状态以反映独占音频使用场景，改善 VoIP 和合上笔记本盖子情形下的用户体验和资源处理。这些更新通过向 Web 应用公开设备和编码器能力、使实现与规范保持一致并实现更高效的媒体处理，推动了 Web 平台的发展。
 
 ## 详细更新
 
-基于 Chrome 的多媒体基础，此版本引入了多个面向开发者的增强功能，扩展了音频、视频和屏幕捕获领域的控制和兼容性。
+下面的条目将上述摘要与实际实现和开发者注意事项联系起来。
 
-### AudioContext Interrupted State
+### AudioContext Interrupted State（中断状态）
 
-#### 新功能
-向 AudioContextState 枚举引入新的"interrupted"状态，允许用户代理在独占音频访问场景或硬件事件（如笔记本电脑合盖）期间暂停音频播放。
-
-#### 技术细节
-中断状态扩展了现有的 AudioContext 状态机，为浏览器处理音频中断提供了标准化方式，而无需终止整个音频上下文。此状态在临时暂停播放的同时保留音频图，在中断结束时能够无缝恢复。
-
-#### 用例
-- VoIP 应用可以优雅地处理独占音频访问要求
-- 媒体播放器可以恰当地响应合盖等硬件事件
-- 音频应用获得与系统级音频管理的更好集成
-- 开发者可以实现更健壮的音频会话处理
-
-#### 参考资料
-[跟踪 bug #374805121](https://bugs.chromium.org/p/chromium/issues/detail?id=374805121) | [ChromeStatus.com 条目](https://chromestatus.com/feature/5087843301908480) | [规范](https://webaudio.github.io/web-audio-api/#AudioContextState)
-
-### Captured Surface Control
-
-#### 新功能
-一个全面的 Web API，使 Web 应用能够通过转发滚轮事件和管理屏幕共享会话期间捕获标签页的缩放级别来与捕获表面交互。
+#### 新增内容
+向 AudioContextState 枚举添加了一个 "interrupted" 值，以表示来自独占音频访问（例如 VoIP）或系统操作（如合上笔记本盖子）的临时暂停。
 
 #### 技术细节
-该 API 为捕获表面提供直接控制机制，允许应用将滚轮滚动等用户交互转发到捕获内容，并以编程方式调整缩放级别。这通过连接捕获和被捕获上下文之间的差距，创造了更具交互性的屏幕共享体验。
+- 根据 WebAudio 规范扩展了 Web Audio API 的 AudioContextState。
+- 允许用户代理发出与 "suspended" 或 "closed" 不同的非终止性暂停信号。
 
-#### 用例
-- 屏幕共享应用可以启用交互式远程桌面体验
-- 协作工具可以允许参与者直接导航共享内容
-- 远程支持应用获得增强的控制能力
-- 视频会议平台可以提供更具吸引力的屏幕共享功能
+#### 适用场景
+- 会议应用可以检测到中断与正常挂起的区别并调整 UI/行为。
+- 媒体播放器可以保留播放状态，并在独占音频结束后恢复。
 
 #### 参考资料
-[跟踪 bug #1466247](https://bugs.chromium.org/p/chromium/issues/detail?id=1466247) | [ChromeStatus.com 条目](https://chromestatus.com/feature/5064816815276032) | [规范](https://wicg.github.io/captured-surface-control/)
+- https://bugs.chromium.org/p/chromium/issues/detail?id=374805121
+- https://chromestatus.com/feature/5087843301908480
+- https://webaudio.github.io/web-audio-api/#AudioContextState
 
-### CapturedSurfaceResolution
+### Captured surface control（捕获表面控制）
 
-#### 新功能
-在屏幕共享期间公开捕获表面的像素比率，为应用提供关于共享内容的物理和逻辑分辨率的详细信息。
+#### 新增内容
+引入了一个 Web API，允许将滚轮事件转发到被捕获的标签页，并读取/更改被捕获标签页的缩放级别。
 
 #### 技术细节
-此功能揭示了捕获表面上物理像素与逻辑单位之间的关系，使应用能够基于捕获内容的实际分辨率特性做出明智的资源分配和质量优化决策。应用现在可以根据捕获内容的实际分辨率特性调整其处理管线。
+- 该 API 面向捕获上下文需要对用户交互和远端/被捕获表面的视觉缩放进行细粒度控制的场景。
+- 遵循 WICG 关于 captured surface control 的提案。
 
-#### 用例
-- 视频会议应用可以基于实际像素密度优化带宽使用
-- 屏幕录制工具可以调整质量设置以匹配源分辨率
-- 远程桌面应用可以实现智能缩放算法
-- 流媒体平台可以调整压缩参数以获得最佳视觉质量
+#### 适用场景
+- 希望将滚动手势转发到被捕获内容的屏幕共享 UI。
+- 需要调整缩放以提高可读性或减少带宽使用的远程控制流程。
 
 #### 参考资料
-[跟踪 bug #383946052](https://bugs.chromium.org/p/chromium/issues/detail?id=383946052) | [ChromeStatus.com 条目](https://chromestatus.com/feature/5100866324422656) | [规范](https://w3c.github.io/mediacapture-screen-share-extensions/#capturedsurfaceresolution)
+- https://bugs.chromium.org/p/chromium/issues/detail?id=1466247
+- https://chromestatus.com/feature/5064816815276032
+- https://wicg.github.io/captured-surface-control/
 
-### H265 (HEVC) codec support in WebRTC
+### CapturedSurfaceResolution（捕获表面分辨率）
 
-#### 新功能
-向 WebRTC 添加 H265/HEVC 编解码器支持，在 VP8、H.264、VP9 和 AV1 基础上扩展了可用的编解码器选项。支持通过 MediaCapabilities API 发现运行时编解码器可用性。
+#### 新增内容
+在屏幕共享期间公开被捕获表面的像素比，便于应用区分物理和逻辑分辨率。
 
 #### 技术细节
-WebRTC 中的 HEVC 集成提供了相比旧编解码器更优的压缩效率，在保持视频质量的同时可能减少带宽需求。该实现遵循 WebRTC 编解码器能力标准，并与现有编解码器协商机制集成。
+- 表面像素比信息允许调用者了解被捕获源的 devicePixelRatio 或等效值。
+- 规范与 mediacapture-screen-share-extensions 的扩展点保持一致。
 
-#### 用例
-- 视频会议应用可以在带宽受限场景中利用更优的压缩
-- 直播平台获得更高效的编码选项
-- 移动应用可以在保持视频质量的同时减少数据使用
-- 企业视频解决方案可以优化网络利用率
+#### 适用场景
+- 自适应编码器可根据源像素密度选择分辨率/比特率权衡。
+- 录制和流媒体应用可以避免不必要的上/下采样，从而节省 CPU/GPU 资源。
 
 #### 参考资料
-[跟踪 bug #391903235](https://bugs.chromium.org/p/chromium/issues/detail?id=391903235) | [ChromeStatus.com 条目](https://chromestatus.com/feature/5104835309936640) | [规范](https://www.w3.org/TR/webrtc/#dom-rtcrtpcodeccapability)
+- https://bugs.chromium.org/p/chromium/issues/detail?id=383946052
+- https://chromestatus.com/feature/5100866324422656
+- https://w3c.github.io/mediacapture-screen-share-extensions/#capturedsurfaceresolution
 
-### H26x Codec support updates for MediaRecorder
+### H265 (HEVC) codec support in WebRTC（在 WebRTC 中支持 HEVC）
 
-#### 新功能
-MediaRecorder API 现在支持使用 `hvc1.*` 编解码器字符串的 HEVC 编码，并引入新的编解码器变体（`hev1.*` 和 `avc3.*`），支持 MP4 容器中的可变分辨率视频。
+#### 新增内容
+HEVC (H.265) 被加入到可用于 WebRTC 的编码器集合中；支持可通过 MediaCapabilities API 查询。
 
 #### 技术细节
-此更新基于 Chrome 130 中添加到 WebCodecs 的 HEVC 平台编码支持，将编解码器支持扩展到 MediaRecorder 以实现一致的视频录制能力。新的编解码器字符串提供对编码参数和容器兼容性的更精细控制。
+- HEVC 成为可查询的编码器能力，与 VP8/VP9/H.264/AV1 并列。
+- 集成遵循 WebRTC 规范中的 RTCRtpCodecCapability 语义。
 
-#### 用例
-- 屏幕录制应用可以利用 HEVC 的压缩效率
-- 视频编辑工具获得现代编解码器变体的访问
-- 内容创作平台可以提供改进的录制质量
-- 移动应用可以在保持质量的同时创建更小的视频文件
+#### 适用场景
+- 在支持硬件的情况下，企业和工作流偏好使用 HEVC 以提高效率，可在点对点连接中协商使用。
+- 通过 MediaCapabilities 查询实现自适应 UX：根据硬件/软件可用性选择编码器。
 
 #### 参考资料
-[ChromeStatus.com 条目](https://chromestatus.com/feature/5103892473503744)
+- https://bugs.chromium.org/p/chromium/issues/detail?id=391903235
+- https://chromestatus.com/feature/5104835309936640
+- https://www.w3.org/TR/webrtc/#dom-rtcrtpcodeccapability
 
-### Use DOMPointInit for getCharNumAtPosition, isPointInFill, isPointInStroke
+### H26x Codec support updates for MediaRecorder（MediaRecorder 的 H26x 编解码器支持更新）
 
-#### 新功能
-更新 SVGGeometryElement 和 SVGPathElement 方法，对 `getCharNumAtPosition`、`isPointInFill` 和 `isPointInStroke` 方法使用 DOMPointInit 而不是 SVGPoint，与最新的 W3C 规范保持一致。
+#### 新增内容
+MediaRecorder 现在支持使用 `hvc1.*` 编解码器字符串进行 HEVC 编码，并添加了 `hev1.*` 和 `avc3.*` 编解码器字符串以支持可变分辨率 MP4。这与早期版本中添加到 WebCodecs 的平台编码支持保持一致。
 
 #### 技术细节
-此更改通过采用更灵活的 DOMPointInit 接口现代化了 SVG API 表面，该接口提供与现代 Web 平台 API 的更好集成以及在 SVG 上下文中基于点操作的改进开发者体验。
+- 扩展了 MediaRecorder 的输出编解码器标识，以反映现代容器和编解码器信号。
+- 使在可用时依赖平台 HEVC 编码器的录制工作流可行。
 
-#### 用例
-- SVG 操作库受益于现代化的 API 接口
-- 图形应用在 Web API 中获得更一致的点处理
-- 开发者工具可以提供更好的 SVG 交互能力
-- 动画框架可以利用改进的 SVG 几何方法
+#### 适用场景
+- 使用 HEVC 进行高效本地录制以降低存储或带宽需求。
+- 录制可变分辨率的 MP4 输出，以便与下游工具（期望 `avc3`/`hev1`/`hvc1` 标签）互操作。
 
 #### 参考资料
-[跟踪 bug #40572887](https://bugs.chromium.org/p/chromium/issues/detail?id=40572887) | [ChromeStatus.com 条目](https://chromestatus.com/feature/5084627093929984) | [规范](https://www.w3.org/TR/SVG2/types.html#InterfaceDOMPointInit)
+- https://chromestatus.com/feature/5103892473503744
+
+### Use DOMPointInit for getCharNumAtPosition, isPointInFill, isPointInStroke（在 getCharNumAtPosition、isPointInFill、isPointInStroke 中使用 DOMPointInit）
+
+#### 新增内容
+Chromium 更新了 SVGGeometryElement 和 SVGPathElement API，使 getCharNumAtPosition、isPointInFill 和 isPointInStroke 使用 DOMPointInit 而不是 SVGPoint，以与最新的 W3C 规范保持一致。
+
+#### 技术细节
+- API 表面改为接受 DOMPointInit（普通对象），而非 SVGPoint 实例。
+- 提高了与现代 DOM 点处理的一致性，并减少对遗留 API 的依赖。
+
+#### 适用场景
+- SVG 命中测试和文本布局代码可以传递简单的 JS 对象来表示点坐标。
+- 更容易与其他 DOM API 互操作，减少对创建遗留 SVG 对象的依赖。
+
+#### 参考资料
+- https://bugs.chromium.org/p/chromium/issues/detail?id=40572887
+- https://chromestatus.com/feature/5084627093929984
+- https://www.w3.org/TR/SVG2/types.html#InterfaceDOMPointInit
+
+Saved file:
+digest_markdown/webplatform/Multimedia/chrome-136-stable-en.md

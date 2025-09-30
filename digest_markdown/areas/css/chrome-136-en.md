@@ -1,91 +1,94 @@
 ---
 layout: default
-title: Chrome 136 CSS Updates - Stable Release
+title: chrome-136-en
 ---
-
-# Chrome 136 CSS Updates - Stable Release
 
 ## Area Summary
 
-Chrome 136 brings significant CSS improvements focused on print styling, HDR content management, and enhanced security for visited link styling. The most impactful changes include the standardization of `print-color-adjust` (removing the webkit prefix), a new `dynamic-range-limit` property for HDR displays, and improved privacy through partitioned `:visited` link history. These updates strengthen CSS's capabilities for both print media and modern display technologies while maintaining backward compatibility. The release also includes refinements to CSS custom properties and attribute functions, demonstrating continued evolution of CSS's foundational features.
+Chrome 136 advances CSS around color management, privacy, and modernized syntax handling. Key changes include HDR brightness control (dynamic-range-limit), standardized print color control (unprefixed print-color-adjust), stricter :visited styling partitioning to prevent history leaks, a rename for `attr()` string types to `raw-string`, and more forgiving `var()` fallbacks. These updates improve developer control over rendering, align with evolving specs, and reduce privacy and interoperability pitfalls. For teams this means small code updates for spec alignment and clearer options for printing, HDR, and custom property fallbacks.
 
 ## Detailed Updates
 
-These CSS updates in Chrome 136 span from new HDR display capabilities to important security improvements and standardization efforts.
+Below are the CSS-area changes in Chrome 136 with concise technical context and developer-focused use cases.
 
 ### The dynamic-range-limit property
 
 #### What's New
-Introduces a new CSS property that allows web pages to limit the maximum brightness of HDR (High Dynamic Range) content, providing better control over content display on HDR-capable devices.
+Enables a page to limit the maximum brightness of HDR content.
 
 #### Technical Details
-This property works with the CSS Color HDR specification to manage brightness levels dynamically. It enables developers to set constraints on how bright HDR content can appear, ensuring consistent viewing experiences across different display capabilities.
+Provides a CSS property to constrain HDR brightness exposure on a per-page basis (see spec link).
 
 #### Use Cases
-Particularly useful for media-rich applications, gaming websites, and content platforms where controlling HDR brightness is crucial for user experience. Helps prevent overly bright content that might be uncomfortable or problematic on certain displays.
+Control perceived brightness for HDR images/videos to match site design or accessibility needs.
 
 #### References
-[Tracking bug #1470298](https://bugs.chromium.org/p/chromium/issues/detail?id=1470298) | [ChromeStatus.com entry](https://chromestatus.com/feature/5023877486493696) | [Spec](https://www.w3.org/TR/css-color-hdr/#dynamic-range-limit)
+https://bugs.chromium.org/p/chromium/issues/detail?id=1470298  
+https://chromestatus.com/feature/5023877486493696  
+https://www.w3.org/TR/css-color-hdr/#dynamic-range-limit
 
 ### Partition :visited links history
 
 #### What's New
-Implements a significant security improvement that partitions the `:visited` pseudo-class behavior to prevent browsing history leaks across different sites and origins.
+To eliminate user browsing history leaks, anchor elements are styled as `:visited` only if they have been clicked from this top-level site and frame origin before. There is an exception for "self-links", where links to a site's own pages can be styled as `:visited` even if they have not been clicked...
 
 #### Technical Details
-Anchor elements now only receive `:visited` styling if they have been clicked from the same top-level site and frame origin. The system includes an exception for "self-links" where sites can style links to their own pages as `:visited` even without prior clicks from that specific context.
+The behavioral change partitions `:visited` styling by top-level site and frame origin to reduce cross-origin history inference.
 
 #### Use Cases
-This change is primarily a security enhancement that protects user privacy by preventing malicious sites from detecting which external sites a user has visited. Web developers should test their styling to ensure visited link appearance works as expected within the new partitioned model.
+Prevents sites from inferring cross-site link visit state; developers should not rely on `:visited` for cross-origin UX differences.
 
 #### References
-[Tracking bug #1448609](https://bugs.chromium.org/p/chromium/issues/detail?id=1448609) | [ChromeStatus.com entry](https://chromestatus.com/feature/5029851625472000) | [Spec](https://www.w3.org/TR/css-pseudo-4/#visited-pseudo)
+https://bugs.chromium.org/p/chromium/issues/detail?id=1448609  
+https://chromestatus.com/feature/5029851625472000  
+https://www.w3.org/TR/css-pseudo-4/#visited-pseudo
 
 ### Unprefixed print-color-adjust
 
 #### What's New
-The `print-color-adjust` property is now available without the `-webkit-` prefix, representing a move toward standardized CSS for print styling control.
+The `print-color-adjust` property lets you adjust colors in printed web pages. This is the same as Chrome's already-supported `-webkit-print-color-adjust`, but with a standardized name. The `-webkit-` prefixed version is not removed.
 
 #### Technical Details
-This property controls color adjustments in printed web pages, functioning identically to the existing `-webkit-print-color-adjust` property. The webkit-prefixed version remains supported for backward compatibility, allowing for a smooth transition period.
+Adds the unprefixed standard name alongside the existing `-webkit-` prefixed implementation to match the spec.
 
 #### Use Cases
-Essential for websites that need to control how colors appear in print media, such as documents, reports, or any content designed for printing. Developers can now use the standard property name while maintaining compatibility with older implementations.
+Use the standardized `print-color-adjust` for printing color fidelity; maintain `-webkit-print-color-adjust` for compatibility as needed.
 
 #### References
-[MDN Docs](https://developer.mozilla.org/docs/Web/CSS/print-color-adjust) | [Tracking bug #376381169](https://bugs.chromium.org/p/chromium/issues/detail?id=376381169) | [ChromeStatus.com entry](https://chromestatus.com/feature/5090690412953600) | [Spec](https://www.w3.org/TR/css-color-adjust-1/#print-color-adjust)
+https://developer.mozilla.org/docs/Web/CSS/print-color-adjust  
+https://bugs.chromium.org/p/chromium/issues/detail?id=376381169  
+https://chromestatus.com/feature/5090690412953600  
+https://www.w3.org/TR/css-color-adjust-1/#print-color-adjust
 
 ### Rename string attr() type to raw-string
 
 #### What's New
-Updates the CSS `attr()` function syntax to use `raw-string` instead of `string` as the type parameter, following CSS Working Group resolution.
+The CSS Working Group has resolved to replace `string` `attr()` type with `raw-string`. Therefore from Chrome 136 `attr(data-foo string)` becomes `attr(data-foo raw-string)`.
 
 #### Technical Details
-The change updates the syntax from `attr(data-foo string)` to `attr(data-foo raw-string)`. This modification aligns with the latest CSS specifications and provides more precise terminology for the attribute value type handling.
+Syntax-level rename in `attr()` type annotations to follow the updated spec naming.
 
 #### Use Cases
-Affects any CSS that uses the `attr()` function with string type specification. Developers using this feature should update their CSS to use the new `raw-string` syntax, though the functionality remains the same.
+Update existing `attr(... string)` usages to `attr(... raw-string)` to conform with the spec and ensure forward compatibility.
 
 #### References
-[Tracking bug #400981738](https://bugs.chromium.org/p/chromium/issues/detail?id=400981738) | [ChromeStatus.com entry](https://chromestatus.com/feature/5110654344216576) | [Spec](https://www.w3.org/TR/css-values-5/#attr-notation)
+https://bugs.chromium.org/p/chromium/issues/detail?id=400981738  
+https://chromestatus.com/feature/5110654344216576  
+https://www.w3.org/TR/css-values-5/#attr-notation
 
 ### Type-agnostic var() fallback
 
 #### What's New
-Modifies the `var()` function behavior so that fallback values are no longer validated against the type of the custom property being referenced.
+The fallback part of a `var()` function does not validate against the type of the custom property being referenced.
 
 #### Technical Details
-This change makes the fallback mechanism more flexible by removing type checking between the custom property and its fallback value. The fallback can now be of any valid CSS type regardless of what the custom property was originally defined to accept.
+`var(--prop, fallback)` no longer enforces type matching between `--prop` and the fallback expression, per the spec decision.
 
 #### Use Cases
-Provides more flexibility when working with CSS custom properties, allowing for more robust fallback strategies. Particularly useful in component systems where fallback values might need to be of different types than the primary custom property values.
+Allows more flexible fallbacks for custom properties without requiring exact type matches; simplifies resilient theming and progressive enhancement.
 
 #### References
-[Tracking bug #372475301](https://bugs.chromium.org/p/chromium/issues/detail?id=372475301) | [ChromeStatus.com entry](https://chromestatus.com/feature/5049845796618240)
-```
+https://bugs.chromium.org/p/chromium/issues/detail?id=372475301  
+https://chromestatus.com/feature/5049845796618240
 
-I'll save this content to the appropriate location:
-
-**File saved to:** `digest_markdown/webplatform/css/chrome-136-stable-en.md`
-
-The analysis covers all 5 CSS features from Chrome 136, highlighting the security improvements with visited link partitioning, the standardization of print-color-adjust, new HDR capabilities, and refinements to CSS functions. Each feature is presented with practical context for developers working with CSS.
+Saved to: digest_markdown/webplatform/CSS/chrome-136-stable-en.md

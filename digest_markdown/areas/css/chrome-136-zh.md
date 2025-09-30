@@ -1,84 +1,94 @@
 ---
 layout: default
-title: Chrome 136 CSS 更新 - 稳定版
+title: chrome-136-zh
 ---
 
-# Chrome 136 CSS 更新 - 稳定版
+## 领域摘要
 
-## 区域概览
-
-Chrome 136 带来了重要的 CSS 改进，重点关注打印样式、HDR 内容管理和访问链接样式的增强安全性。最具影响力的更改包括 `print-color-adjust` 的标准化（移除 webkit 前缀）、用于 HDR 显示器的新 `dynamic-range-limit` 属性，以及通过分区 `:visited` 链接历史记录改进隐私保护。这些更新在保持向后兼容性的同时，增强了 CSS 在打印媒体和现代显示技术方面的能力。该版本还包括对 CSS 自定义属性和属性函数的改进，展现了 CSS 基础功能的持续演进。
+Chrome 136 在颜色管理、隐私和现代语法处理方面推进了 CSS。主要更改包括 HDR 亮度控制（`dynamic-range-limit`）、标准化的打印颜色控制（未加前缀的 `print-color-adjust`）、更严格的 `:visited` 样式隔离以防止历史泄露、将 `attr()` 的 string 类型重命名为 `raw-string`，以及对 `var()` 回退值更宽松的类型处理。这些更新增强了开发者对渲染的控制、与演进中的规范对齐，并减少了隐私和互操作性问题。对团队而言，这意味着为符合规范进行少量代码更新，并为打印、HDR 和自定义属性回退提供更清晰的选项。
 
 ## 详细更新
 
-Chrome 136 中的这些 CSS 更新涵盖了从新的 HDR 显示能力到重要的安全改进和标准化工作。
+下面是 Chrome 136 中 CSS 领域的更改，附带简明的技术背景和以开发者为中心的适用场景。
 
-### The dynamic-range-limit property
+### The dynamic-range-limit property (动态范围亮度限制)
 
-#### 新功能
-引入了一个新的 CSS 属性，允许网页限制 HDR（高动态范围）内容的最大亮度，为 HDR 兼容设备上的内容显示提供更好的控制。
-
-#### 技术细节
-该属性与 CSS Color HDR 规范配合使用，动态管理亮度级别。它使开发者能够设置 HDR 内容显示亮度的约束，确保在不同显示能力的设备上提供一致的观看体验。
-
-#### 用例
-特别适用于媒体丰富的应用程序、游戏网站和内容平台，其中控制 HDR 亮度对用户体验至关重要。有助于防止过亮的内容在某些显示器上造成不适或问题。
-
-#### 参考资料
-[跟踪 bug #1470298](https://bugs.chromium.org/p/chromium/issues/detail?id=1470298) | [ChromeStatus.com 条目](https://chromestatus.com/feature/5023877486493696) | [规范](https://www.w3.org/TR/css-color-hdr/#dynamic-range-limit)
-
-### Partition :visited links history
-
-#### 新功能
-实现了一项重要的安全改进，对 `:visited` 伪类行为进行分区，以防止跨不同站点和源的浏览历史记录泄露。
+#### 新增内容
+允许页面限制 HDR 内容的最大亮度。
 
 #### 技术细节
-锚元素现在只有在从相同的顶级站点和框架源点击过的情况下才会接收 `:visited` 样式。系统为"自链接"提供了例外，允许站点将指向自己页面的链接样式设置为 `:visited`，即使在该特定上下文中没有先前的点击。
+提供一个 CSS 属性以在每页范围内约束 HDR 亮度暴露（参见规范链接）。
 
-#### 用例
-此更改主要是安全增强，通过防止恶意站点检测用户访问过哪些外部站点来保护用户隐私。Web 开发者应测试其样式，确保访问链接外观在新的分区模型下按预期工作。
+#### 适用场景
+对 HDR 图片/视频的感知亮度进行控制，以匹配站点设计或无障碍需求。
 
 #### 参考资料
-[跟踪 bug #1448609](https://bugs.chromium.org/p/chromium/issues/detail?id=1448609) | [ChromeStatus.com 条目](https://chromestatus.com/feature/5029851625472000) | [规范](https://www.w3.org/TR/css-pseudo-4/#visited-pseudo)
+https://bugs.chromium.org/p/chromium/issues/detail?id=1470298  
+https://chromestatus.com/feature/5023877486493696  
+https://www.w3.org/TR/css-color-hdr/#dynamic-range-limit
 
-### Unprefixed print-color-adjust
+### Partition :visited links history (分割 :visited 链接历史)
 
-#### 新功能
-`print-color-adjust` 属性现在可以不使用 `-webkit-` 前缀，这标志着向标准化 CSS 打印样式控制的迈进。
+#### 新增内容
+为消除用户浏览历史泄露，只有当锚点元素此前由此顶级站点和框架源点击过时，才会以 `:visited` 进行样式化。对于“self-links”有例外：指向站点自身页面的链接，即便未被点击，也可以被样式化为 `:visited`…
 
 #### 技术细节
-该属性控制打印网页中的颜色调整，功能与现有的 `-webkit-print-color-adjust` 属性完全相同。webkit 前缀版本仍然支持向后兼容性，允许平滑的过渡期。
+该行为更改通过按顶级站点和框架源对 `:visited` 样式进行分区，以减少跨源的历史推断。
 
-#### 用例
-对于需要控制颜色在打印媒体中显示方式的网站至关重要，例如文档、报告或任何为打印设计的内容。开发者现在可以使用标准属性名称，同时保持与旧实现的兼容性。
+#### 适用场景
+防止站点推断跨站点链接的访问状态；开发者不应依赖 `:visited` 来实现跨源的用户体验差异。
 
 #### 参考资料
-[MDN 文档](https://developer.mozilla.org/docs/Web/CSS/print-color-adjust) | [跟踪 bug #376381169](https://bugs.chromium.org/p/chromium/issues/detail?id=376381169) | [ChromeStatus.com 条目](https://chromestatus.com/feature/5090690412953600) | [规范](https://www.w3.org/TR/css-color-adjust-1/#print-color-adjust)
+https://bugs.chromium.org/p/chromium/issues/detail?id=1448609  
+https://chromestatus.com/feature/5029851625472000  
+https://www.w3.org/TR/css-pseudo-4/#visited-pseudo
 
-### Rename string attr() type to raw-string
+### Unprefixed print-color-adjust (未加前缀的 print-color-adjust)
 
-#### 新功能
-更新 CSS `attr()` 函数语法，使用 `raw-string` 代替 `string` 作为类型参数，遵循 CSS 工作组决议。
+#### 新增内容
+`print-color-adjust` 属性允许你调整打印网页中的颜色。这与 Chrome 已支持的 `-webkit-print-color-adjust` 相同，但采用了标准化名称。带 `-webkit-` 前缀的版本不会被移除。
 
 #### 技术细节
-该更改将语法从 `attr(data-foo string)` 更新为 `attr(data-foo raw-string)`。此修改与最新的 CSS 规范保持一致，为属性值类型处理提供更精确的术语。
+在现有带 `-webkit-` 前缀的实现旁添加未加前缀的标准名称以符合规范。
 
-#### 用例
-影响任何使用带有字符串类型规范的 `attr()` 函数的 CSS。使用此功能的开发者应更新其 CSS 以使用新的 `raw-string` 语法，尽管功能保持不变。
+#### 适用场景
+在需要打印颜色保真时使用标准化的 `print-color-adjust`；在需要兼容性时保留 `-webkit-print-color-adjust`。
 
 #### 参考资料
-[跟踪 bug #400981738](https://bugs.chromium.org/p/chromium/issues/detail?id=400981738) | [ChromeStatus.com 条目](https://chromestatus.com/feature/5110654344216576) | [规范](https://www.w3.org/TR/css-values-5/#attr-notation)
+https://developer.mozilla.org/docs/Web/CSS/print-color-adjust  
+https://bugs.chromium.org/p/chromium/issues/detail?id=376381169  
+https://chromestatus.com/feature/5090690412953600  
+https://www.w3.org/TR/css-color-adjust-1/#print-color-adjust
 
-### Type-agnostic var() fallback
+### Rename string attr() type to raw-string (将 string attr() 类型重命名为 raw-string)
 
-#### 新功能
-修改 `var()` 函数行为，使回退值不再根据所引用自定义属性的类型进行验证。
+#### 新增内容
+CSS 工作组已决定将 `string` `attr()` 类型替换为 `raw-string`。因此从 Chrome 136 起，`attr(data-foo string)` 变为 `attr(data-foo raw-string)`。
 
 #### 技术细节
-此更改通过移除自定义属性及其回退值之间的类型检查，使回退机制更加灵活。回退值现在可以是任何有效的 CSS 类型，无论自定义属性最初定义为接受什么类型。
+在 `attr()` 类型注释中进行语法级别的重命名以遵循更新后的规范命名。
 
-#### 用例
-在使用 CSS 自定义属性时提供更多灵活性，允许更强大的回退策略。在组件系统中特别有用，其中回退值可能需要与主要自定义属性值不同的类型。
+#### 适用场景
+将现有的 `attr(... string)` 用法更新为 `attr(... raw-string)`，以符合规范并确保向前兼容。
 
 #### 参考资料
-[跟踪 bug #372475301](https://bugs.chromium.org/p/chromium/issues/detail?id=372475301) | [ChromeStatus.com 条目](https://chromestatus.com/feature/5049845796618240)
+https://bugs.chromium.org/p/chromium/issues/detail?id=400981738  
+https://chromestatus.com/feature/5110654344216576  
+https://www.w3.org/TR/css-values-5/#attr-notation
+
+### Type-agnostic var() fallback (与类型无关的 var() 回退)
+
+#### 新增内容
+`var()` 函数的回退部分不再针对所引用的自定义属性的类型进行校验。
+
+#### 技术细节
+根据规范决定，`var(--prop, fallback)` 不再强制 `--prop` 与回退表达式之间的类型匹配。
+
+#### 适用场景
+允许为自定义属性提供更灵活的回退，而无需精确匹配类型；简化更具弹性的主题系统和渐进增强策略。
+
+#### 参考资料
+https://bugs.chromium.org/p/chromium/issues/detail?id=372475301  
+https://chromestatus.com/feature/5049845796618240
+
+已保存到：digest_markdown/webplatform/CSS/chrome-136-stable-en.md

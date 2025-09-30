@@ -1,46 +1,47 @@
 ---
 layout: default
-title: Chrome 136 身份标识更新 - 中文
+title: chrome-136-zh
 ---
 
-# Chrome 136 身份标识更新 - 中文
+## 领域摘要
 
-## 领域概述
-
-Chrome 136 为 Web 身份标识管理引入了重大增强，专注于改善用户体验和简化身份验证流程。此版本通过多提供商支持推进联合凭证管理 (FedCM)，允许网站在统一界面中展示多个身份标识提供商。此外，WebAuthn 条件创建功能支持从现有密码凭证无缝升级到通行密钥。这些更新通过减少身份验证过程中的摩擦并促进现代安全实践，共同强化了 Web 平台的身份标识生态系统。
+Chrome 136 通过改进联邦登录 UI 和启用将密码迁移到 passkeys 的 WebAuthn 流程来推进 Identity 领域。FedCM 的更改允许在一次 `get()` 调用中在同一对话框中展示多个身份提供者，并在被动模式中移除 “add another account” 流程。WebAuthn 条件性创建（passkey 升级）允许网站将现有的密码凭据升级为 passkeys，从而简化迁移。这些更新减少了认证摩擦，帮助开发者将用户转向更强、更抗钓鱼的凭证。
 
 ## 详细更新
 
-基于上述以身份标识为重点的改进，Chrome 136 提供了两个关键功能，既增强了开发者能力，也改善了用户身份验证体验。
+下面的条目扩展了摘要内容，并解释了对开发者的实际影响与技术细节。
 
-### FedCM 更新
+### FedCM updates（FedCM 更新）
 
-#### 新增功能
-FedCM 现在支持在单个对话框界面中显示多个身份标识提供商，为拥有不同提供商账户的用户简化身份验证过程。此更新还移除了对 FedCM 被动模式中"添加其他账户"功能的支持。
+#### 新增内容
+FedCM 可以在同一对话框中展示多个身份提供者，当所有提供者在单个 `get()` 调用中返回时。Chrome 136 还在 FedCM 被动模式中移除了对 “add another account” 的支持。
 
-#### 技术详情
-开发者现在可以在同一个 `get()` 调用中包含多个身份标识提供商，这些提供商将在统一界面中呈现给用户。这消除了为每个提供商单独进行身份验证流程的需要，并降低了实现多提供商身份验证场景的复杂性。
+#### 技术细节
+- 单个 FedCM `get()` 调用可以包含多个提供者，因此浏览器 UI 可以将它们一起显示。
+- 通过移除 “add another account” 流程，收紧了被动模式的行为（详细信息和理由见关联的跟踪 bug）。
 
-#### 使用场景
-此功能对于支持通过多个身份标识提供商（如 Google、Facebook、Apple 等）进行身份验证的网站特别有价值，允许用户一次性查看所有可用选项。它通过将提供商选择整合到单个步骤中来简化用户体验，减少认知负担并提高身份验证流程的转化率。
-
-#### 参考资料
-- [跟踪 bug #1348262](https://bugs.chromium.org/p/chromium/issues/detail?id=1348262)
-- [ChromeStatus.com 条目](https://chromestatus.com/feature/5049732142194688)
-- [规范](https://fedidcg.github.io/FedCM/)
-
-### Web authentication 条件创建（通行密钥升级）
-
-#### 新增功能
-WebAuthn 条件创建请求使网站能够将现有基于密码的凭证升级为通行密钥，提供从传统身份验证到现代无密码解决方案的平滑过渡路径。
-
-#### 技术详情
-此功能允许网站有条件地触发通行密钥创建，通常在用户使用密码登录时进行。条件创建机制尊重用户偏好和系统能力，仅在满足适当条件时才提示创建通行密钥。
-
-#### 使用场景
-适用于希望逐步将用户从基于密码的身份验证迁移到通行密钥而不干扰现有工作流程的网站。此功能通过允许用户在方便的时刻（如常规登录过程中）升级其凭证，而不是要求专门的设置流程，实现了安全性的渐进式增强。
+#### 适用场景
+- 支持多个联邦 IdP 的网站可以呈现统一的选择 UI，而无需多次往返。
+- 简化实现多提供者的注册/登录流程，减少用户体验碎片化。
 
 #### 参考资料
-- [跟踪 bug #377758786](https://bugs.chromium.org/p/chromium/issues/detail?id=377758786)
-- [ChromeStatus.com 条目](https://chromestatus.com/feature/5097871013068800)
-- [规范](https://w3c.github.io/webauthn/#enum-credentialmediationrequirement)
+- 跟踪 bug #1348262: https://bugs.chromium.org/p/chromium/issues/detail?id=1348262
+- ChromeStatus.com 条目: https://chromestatus.com/feature/5049732142194688
+- 规范: https://fedidcg.github.io/FedCM/
+
+### Web authentication conditional create (passkey upgrades)（条件性创建：passkey 升级）
+
+#### 新增内容
+WebAuthn 条件性创建请求使网站能够将现有的密码凭据升级为 passkeys。
+
+#### 技术细节
+- 条件性创建是一种 WebAuthn mediation 模式，允许用户代理在上下文中提供验证器创建，从而启用从密码到 passkeys 的凭据升级流程（参见跟踪 bug 和规范链接）。
+
+#### 适用场景
+- 以较低的用户摩擦逐步将用户账户从基于密码的认证迁移到 passkeys。
+- 在账户设置或登录流程中实现，当检测到密码凭据时提示用户创建 passkey。
+
+#### 参考资料
+- 跟踪 bug #377758786: https://bugs.chromium.org/p/chromium/issues/detail?id=377758786
+- ChromeStatus.com 条目: https://chromestatus.com/feature/5097871013068800
+- 规范: https://w3c.github.io/webauthn/#enum-credentialmediationrequirement

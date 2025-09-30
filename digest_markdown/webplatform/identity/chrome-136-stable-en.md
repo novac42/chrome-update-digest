@@ -1,41 +1,42 @@
-# Chrome 136 Identity Updates - English
-
 ## Area Summary
 
-Chrome 136 introduces significant enhancements to web identity management, focusing on improved user experience and streamlined authentication flows. The release advances Federated Credential Management (FedCM) with multi-provider support, allowing websites to present multiple identity providers in a unified interface. Additionally, WebAuthn conditional create functionality enables seamless passkey upgrades from existing password credentials. These updates collectively strengthen the web platform's identity ecosystem by reducing friction in authentication processes and promoting modern security practices.
+Chrome 136 advances Identity by improving federated sign-in UI and by enabling WebAuthn flows that migrate passwords to passkeys. The FedCM change lets a single get() call surface multiple identity providers in one dialog and removes "add another account" in passive mode. WebAuthn conditional create (passkey upgrades) lets sites upgrade existing password credentials to passkeys, simplifying migration. These updates reduce authentication friction and help developers move users toward stronger, phishing-resistant credentials.
 
 ## Detailed Updates
 
-Building on the identity-focused improvements outlined above, Chrome 136 delivers two key features that enhance both developer capabilities and user authentication experiences.
+The items below expand on the summary and explain practical developer impact and technical notes.
 
 ### FedCM updates
 
 #### What's New
-FedCM now supports displaying multiple identity providers within a single dialog interface, streamlining the authentication process for users who have accounts with different providers. This update also removes support for "add another account" functionality in FedCM passive mode.
+FedCM can present multiple identity providers in the same dialog when all providers are returned in a single get() call. Chrome 136 also removes support for "add another account" in FedCM passive mode.
 
 #### Technical Details
-Developers can now include multiple identity providers in the same `get()` call, which will be presented to users in a unified interface. This eliminates the need for separate authentication flows for each provider and reduces the complexity of implementing multi-provider authentication scenarios.
+- A single FedCM get() call can include multiple providers so the browser UI can show them together.
+- Passive-mode behavior was tightened by removing the "add another account" flow (details and rationale in linked tracking bug).
 
 #### Use Cases
-This feature is particularly valuable for websites that support authentication through multiple identity providers (such as Google, Facebook, Apple, etc.), allowing users to see all available options at once. It simplifies the user experience by consolidating provider selection into a single step, reducing cognitive load and improving conversion rates for authentication flows.
+- Sites that support multiple federated IdPs can present a unified selection UI without multiple round trips.
+- Simplifies implementing multi-provider sign-up/sign-in flows and reduces UX fragmentation.
 
 #### References
-- [Tracking bug #1348262](https://bugs.chromium.org/p/chromium/issues/detail?id=1348262)
-- [ChromeStatus.com entry](https://chromestatus.com/feature/5049732142194688)
-- [Spec](https://fedidcg.github.io/FedCM/)
+- Tracking bug #1348262: https://bugs.chromium.org/p/chromium/issues/detail?id=1348262
+- ChromeStatus.com entry: https://chromestatus.com/feature/5049732142194688
+- Spec: https://fedidcg.github.io/FedCM/
 
 ### Web authentication conditional create (passkey upgrades)
 
 #### What's New
-WebAuthn conditional create requests enable websites to upgrade existing password-based credentials to passkeys, providing a smooth transition path from traditional authentication to modern passwordless solutions.
+WebAuthn conditional create requests enable websites to upgrade existing password credentials to passkeys.
 
 #### Technical Details
-This functionality allows websites to trigger passkey creation conditionally, typically when a user is signing in with a password. The conditional create mechanism respects user preferences and system capabilities, only prompting for passkey creation when appropriate conditions are met.
+- Conditional create is a WebAuthn mediation mode that lets the user agent offer authenticator creation in context, enabling credential upgrade flows from passwords to passkeys (see tracking bug and spec links).
 
 #### Use Cases
-Ideal for websites looking to gradually migrate users from password-based authentication to passkeys without disrupting existing workflows. This feature enables progressive enhancement of security by allowing users to upgrade their credentials at convenient moments, such as during regular sign-in processes, rather than requiring dedicated setup flows.
+- Gradual migration of user accounts from password-based authentication to passkeys with lower user friction.
+- Implement in account settings or sign-in flows to prompt users to create a passkey when a password credential is detected.
 
 #### References
-- [Tracking bug #377758786](https://bugs.chromium.org/p/chromium/issues/detail?id=377758786)
-- [ChromeStatus.com entry](https://chromestatus.com/feature/5097871013068800)
-- [Spec](https://w3c.github.io/webauthn/#enum-credentialmediationrequirement)
+- Tracking bug #377758786: https://bugs.chromium.org/p/chromium/issues/detail?id=377758786
+- ChromeStatus.com entry: https://chromestatus.com/feature/5097871013068800
+- Spec: https://w3c.github.io/webauthn/#enum-credentialmediationrequirement

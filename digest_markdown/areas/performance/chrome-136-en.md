@@ -1,35 +1,34 @@
 ---
 layout: default
-title: Performance Digest - Chrome 136 Stable
+title: chrome-136-en
 ---
 
-# Performance Digest - Chrome 136 Stable
+### 1. Area Summary
 
-## Area Summary
-
-Chrome 136 introduces a significant advancement in performance measurement capabilities for web applications through bimodal performance timing understanding. This update addresses a critical gap in performance monitoring by helping developers identify and analyze performance variations that occur due to external factors beyond their application's control. The feature enables more accurate performance assessment by distinguishing between different operational states, such as cold start scenarios versus warm application states. This enhancement represents an important step forward in providing developers with more nuanced performance insights, allowing for better optimization strategies and more realistic performance expectations.
+Chrome 136 (stable) introduces an origin-trial-driven capability that helps web applications detect and reason about bimodal page-load performance distributions (e.g., cold vs warm starts). The most impactful change for developers is the ability to segment telemetry and metrics by whether expensive, platform-level startup effects influenced a navigation. This enables more accurate percentile reporting, better performance regressions detection, and targeted optimizations (defer/heftier work scheduling) without changing end-user behavior. These updates advance the web platform by exposing signals that reduce noise in real-world performance measurement and allow teams to prioritize engineering effort more effectively.
 
 ## Detailed Updates
 
-Building on the core theme of enhanced performance visibility, this release focuses on giving developers better tools to understand the complexities of real-world performance patterns.
+Below are the relevant details and developer implications connected to the summary above.
 
 ### Enable web applications to understand bimodal performance timings
 
 #### What's New
-Web applications can now better understand and analyze bimodal distribution patterns in page load performance through enhanced timing APIs. This feature helps identify performance variations caused by external factors beyond the application's direct control.
+An origin trial in Chrome 136 provides a way for web applications to detect when page-load timings are affected by bimodal factors (such as a browser cold start) so developers can separate those cases from normal navigations in telemetry and analysis.
 
 #### Technical Details
-The implementation leverages the Navigation Timing specification to provide more granular performance data that can distinguish between different system states. When a user agent performs a "cold start," expensive initialization tasks compete for system resources, creating measurably different performance characteristics compared to warm starts. The feature exposes these timing differences through enhanced APIs that can detect and report on these bimodal patterns.
+This capability is exposed via an origin trial (see Origin Trial link). Conceptually it lets pages distinguish navigations impacted by system-level initialization or other out-of-app factors from typical navigations—reducing skew in aggregated timing distributions. Integrations will sit alongside existing timing interfaces (e.g., Navigation Timing) so instrumentation and analytics pipelines can filter or label affected events. Use this to avoid misattributing platform-level jitter to application regressions.
 
 #### Use Cases
-Developers can use this capability to:
-- Build more accurate performance monitoring dashboards that account for system state variations
-- Implement adaptive loading strategies based on detected performance conditions
-- Create more realistic performance budgets that consider cold start scenarios
-- Improve user experience by adjusting application behavior based on detected performance patterns
+- Segment performance telemetry to exclude cold-start outliers when computing p50/p90/p99.
+- Make A/B test cohorts more reliable by filtering navigations affected by platform initialization.
+- Defer noncritical JS/CSS/worker initialization on warm paths while ensuring cold-start resilience.
+- Improve CI/perf dashboards by separating platform-induced variance from application regressions.
 
 #### References
-- [Origin Trial](https://developer.chrome.com/origintrials/#/trials/active)
-- [Tracking bug #1413848](https://bugs.chromium.org/p/chromium/issues/detail?id=1413848)
-- [ChromeStatus.com entry](https://chromestatus.com/feature/5037395062800384)
-- [Spec](https://w3c.github.io/navigation-timing/)
+- https://developer.chrome.com/origintrials/#/trials/active
+- https://bugs.chromium.org/p/chromium/issues/detail?id=1413848
+- https://chromestatus.com/feature/5037395062800384
+- https://w3c.github.io/navigation-timing/
+
+Output file: digest_markdown/webplatform/Performance/chrome-136-stable-en.md

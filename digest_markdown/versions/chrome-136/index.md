@@ -21,6 +21,7 @@ title: Chrome 136 Release Notes
 - Devices: [English](./devices-en.html) / [Chinese](./devices-zh.html) — Device APIs and sensor features
 - Identity: [English](./identity-en.html) / [Chinese](./identity-zh.html) — Identity, sign-in, and account features
 - Browser changes: [English](./browser-changes-en.html) / [Chinese](./browser-changes-zh.html) — Platform-level browser behavior updates
+- Other: [English](./other-en.html) / [Chinese](./other-zh.html)
 
 ## Navigation
 

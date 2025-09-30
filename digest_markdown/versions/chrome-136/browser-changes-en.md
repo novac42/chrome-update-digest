@@ -1,31 +1,33 @@
 ---
 layout: default
-title: Chrome 136 Stable - Browser Changes Update
+title: browser-changes-en
 ---
-
-# Chrome 136 Stable - Browser Changes Update
 
 ## Area Summary
 
-Chrome 136 introduces modernized scrollbar design as part of a visual refresh initiative. The standout update is the adoption of Fluent scrollbars that align with Windows 11's design language, extending beyond Windows to Linux platforms as well. This cross-platform visual consistency represents Chromium's commitment to modern UI standards while maintaining familiar functionality. The update affects both overlay and non-overlay scrollbar implementations, ensuring a cohesive user experience across different operating systems and user preferences.
+Chrome 136 introduces a visual refresh for Chromium scrollbars to match the Windows 11 Fluent design language, affecting both overlay and non-overlay scrollbars on Windows and Linux. The most impactful developer-visible change is that non-overlay Fluent scrollbars are enabled by default on those platforms, which can alter how pages look and how custom scrollbar styles interact with system-provided chrome. This update advances the web platform by unifying scrollbar visuals across platforms and reducing friction between native UI expectations and web content. Teams should plan for potential layout and styling differences, and validate accessibility and visual regressions.
 
 ## Detailed Updates
 
-This release focuses on visual modernization with a single but impactful browser interface enhancement that affects the fundamental scrolling experience across platforms.
+Below are the specific Browser changes that follow from the summary above.
 
-### Fluent Scrollbars
+### Fluent scrollbars
 
 #### What's New
-Chrome 136 introduces modernized scrollbars that follow Windows 11's Fluent design language across both Windows and Linux platforms. Both overlay and non-overlay scrollbar variants receive the visual update, creating a more contemporary and consistent browsing experience.
+Chromium scrollbars (both overlay and non-overlay) have been modernized on Windows and Linux to fit the Windows 11 Fluent design language. Non-overlay Fluent scrollbars will be enabled by default in Linux and Windows. (Source content truncated in input.)
 
 #### Technical Details
-The implementation updates Chromium's scrollbar rendering system to incorporate Fluent design principles. Non-overlay Fluent scrollbars are enabled by default on both Linux and Windows, ensuring cross-platform consistency. The design changes apply to all scrollbar interactions while maintaining existing functionality and accessibility features.
+- Applies to both overlay and non-overlay scrollbar modes on Windows and Linux.
+- Non-overlay Fluent scrollbars are enabled by default on those platforms per the release notes.
+- Implementation details beyond the provided summary were not included in the source data.
 
 #### Use Cases
-- **Cross-platform consistency**: Users experience uniform scrollbar design whether using Chrome on Windows or Linux
-- **Modern UI alignment**: Web applications and browser interfaces now align with contemporary operating system design languages
-- **Enhanced visual experience**: The updated scrollbars provide a more polished and modern browsing experience without changing functional behavior
+- UI consistency: Web apps and sites will render scrollbars that match the updated Fluent look on Windows and Linux, reducing visual mismatch with native controls.
+- Developer styling: Teams that use custom scrollbar CSS (e.g., ::-webkit-scrollbar) should test for visual regressions and ensure custom styles remain legible against the new defaults.
+- Testing & accessibility: Validate keyboard and assistive technology interactions and visual contrast after the refresh; also re-run visual regression tests where scrollbar visuals affect snapshots.
 
 #### References
-- [Tracking bug #1292117](https://bugs.chromium.org/p/chromium/issues/detail?id=1292117)
-- [ChromeStatus.com entry](https://chromestatus.com/feature/5023688844812288)
+- https://bugs.chromium.org/p/chromium/issues/detail?id=1292117 (Tracking bug #1292117)  
+- https://chromestatus.com/feature/5023688844812288 (ChromeStatus.com entry)
+
+Saved to: digest_markdown/webplatform/Browser changes/chrome-136-stable-en.md

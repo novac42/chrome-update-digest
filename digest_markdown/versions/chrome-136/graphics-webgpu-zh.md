@@ -1,90 +1,82 @@
 ---
 layout: default
-title: Chrome 136 图形和 WebGPU 更新
+title: 领域摘要
 ---
 
-# Chrome 136 图形和 WebGPU 更新
+# 领域摘要
 
-## 区域摘要
-
-Chrome 136 为 WebGPU 带来了重大增强，专注于开发者体验、性能优化和用户可访问性。最具影响力的更改包括引入 `isFallbackAdapter` 属性以更好地检测 GPU 适配器，通过 Tint 的新中间表示在 Windows 上大幅改善着色器编译，以及用户能够通过上下文菜单直接保存 WebGPU 画布内容。这些更新共同推进了 Web 平台的发展，使 WebGPU 对库开发者更加可预测，对 Windows 用户更加快速，对内容创作工作流程更加用户友好。
+Chrome 136（stable）通过围绕设备自省、编译器性能、兼容性控制和原生 Dawn API 清晰度的定向更改，继续完善 WebGPU 堆栈。对开发者影响最大的项包括新的 `GPUAdapterInfo.isFallbackAdapter` 标志用于识别受限适配器、通过 Tint IR 在 D3D12 上加速着色器编译、一个可解除兼容模式限制的实验性 `"core-features-and-limits"` 选项，以及 Dawn 中用于减少关于已取消回调歧义的 API 重命名。这些更新共同提升了运行时可预测性、编译吞吐量和 GPU 驱动的 Web 应用的开发体验。
 
 ## 详细更新
 
-基于之前 WebGPU 版本的基础，Chrome 136 提供了面向开发者的 API 改进和幕后性能增强，巩固了 WebGPU 作为 Web 顶级图形 API 的地位。
+下面是对 Chrome 136 中 Graphics and WebGPU 各项更改的简洁、面向开发者的说明，以及这些更改对实现、调试和性能调优的意义。
 
-### GPUAdapterInfo isFallbackAdapter 属性
+### GPUAdapterInfo isFallbackAdapter attribute（用于标识回退适配器）
 
-#### 新增功能
-`GPUAdapterInfo` 接口现在包含一个布尔型 `isFallbackAdapter` 属性，用于指示 GPU 适配器是否为了更广泛的兼容性、更可预测的行为或改善的隐私性而在性能上有显著限制。
-
-#### 技术细节
-该属性帮助开发者和库识别何时使用的是可能无法提供最佳性能的回退适配器。此添加解决了接受用户提供的 `GPUDevice` 对象的库的关键需求，这些库需要对功能使用和性能预期做出明智决策。
-
-#### 使用场景
-WebGPU 库现在可以程序性地检测回退适配器并相应调整其行为，可能选择不同的渲染路径或警告用户性能影响。这对需要平衡兼容性与性能的图形密集型应用程序特别有价值。
-
-#### 参考资料
-- [issue 403172841](https://issues.chromium.org/issues/403172841)
-- [intent to ship](https://groups.google.com/a/chromium.org/g/blink-dev/c/VUkzIOWd2n0)
-
-### D3D12 上的着色器编译时间改进
-
-#### 新增功能
-Chrome 的 WebGPU 实现现在通过增强 Tint 着色器编译器，在使用 D3D12 后端的 Windows 系统上具有显著的着色器编译性能改进。
+#### 新增内容
+在 `GPUAdapterInfo` 上新增了布尔属性 `isFallbackAdapter`，用于指示适配器是否为具有明显性能限制但兼容性或隐私更好的回退适配器。
 
 #### 技术细节
-改进来自于为 Tint 添加中间表示（IR），位于抽象语法树（AST）和 HLSL 后端写入器之间。这个新的 IR 层使编译器架构更加高效，并为未来版本中的额外优化开辟了机会。
+该属性将适配器级别的元数据提供给 WebGPU 使用者，使应用在不通过运行时探测行为的情况下区分全性能 GPU 与回退或受限适配器。
 
-#### 使用场景
-在 Windows 上构建 WebGPU 应用程序的开发者将体验到更快的着色器编译时间，从而减少加载时间并提供更流畅的开发工作流程。这对具有复杂着色器程序或在运行时编译着色器的应用程序特别有益。
+#### 适用场景
+- 为回退适配器选择不同的资源预算、着色器路径或功能开关。
+- 通过警告用户或自动降低画质改善用户体验。
+- 用于遥测和调试，将性能问题与适配器类型相关联。
 
 #### 参考资料
-- [issue 42251045](https://issues.chromium.org/issues/42251045)
+- https://issues.chromium.org/issues/403172841
+- https://groups.google.com/a/chromium.org/g/blink-dev/c/VUkzIOWd2n0
 
-### 解除兼容模式限制
+### Shader compilation time improvements on D3D12（在 D3D12 上的着色器编译时间改进）
 
-#### 新增功能
-实验性的 `"core-features-and-limits"` 功能允许开发者在启用不安全 WebGPU 标志时解除所有 WebGPU 兼容模式限制，提供对完整 WebGPU 功能和限制范围的访问。
+#### 新增内容
+Tint 为使用 D3D12 后端的设备新增了一个中间表示（IR），以加速着色器编译。
 
 #### 技术细节
-当启用 `chrome://flags/#enable-unsafe-webgpu` 标志且实验性功能在 `GPUDevice` 上可用时，开发者可以绕过兼容模式通常施加的限制。此实验性功能专为需要最大 WebGPU 能力的测试和开发场景而设计。
+该新 IR 位于 Tint 的 AST 与 HLSL 后端写入器之间，支持针对 D3D12/HLSL 代码生成的更高效转换，减少在管线创建期间的编译器工作量。
 
-#### 使用场景
-此功能主要面向高级开发者和研究人员，他们需要访问前沿的 WebGPU 功能进行测试、原型设计或推动基于 Web 的图形可能性边界。对于想要利用最新 GPU 能力而无需等待完整规范稳定化的应用程序特别有用。
+#### 适用场景
+- 在 Windows/D3D12 上更快的管线创建与较少的卡顿。
+- 动态着色器负载和迭代式开发工作流下更好的响应性。
+- 在 D3D12 设备上为 WebGPU 密集型应用降低延迟。
 
 #### 参考资料
-- [issue 395855517](https://issues.chromium.org/issues/395855517)
-- [WebGPU compatibility mode](https://github.com/gpuweb/gpuweb/blob/main/proposals/compatibility-mode.md)
-- [issue 395855516](https://issues.chromium.org/issues/395855516)
+- https://issues.chromium.org/issues/42251045
 
-### Dawn 更新
+### Lift compatibility mode restrictions（解除兼容模式限制）
 
-#### 新增功能
-Dawn WebGPU 实现接收回调状态处理的更新，`InstanceDropped` 枚举值被重命名为 `CallbackCancelled` 以提高清晰度。
+#### 新增内容
+一个实验性的 `"core-features-and-limits"` 功能，当其在 `GPUDevice` 上存在并与 chrome://flags/#enable-unsafe-webgpu 标志组合使用时，可解除兼容模式下对功能和限制的约束。
 
 #### 技术细节
-回调状态枚举更改阐明了当回调被取消时，与事件相关的任何后台处理（如管线编译）可能仍会继续。此命名更改更好地反映了实际行为，并帮助开发者理解回调取消的影响。
+此切换提供了一个设备级别的覆盖，用于绕过兼容模式的功能/限制约束，由不安全的 WebGPU 标志控制，并通过引用的 Chromium 问题和 GPUWeb 的兼容模式提案进行跟踪。
 
-#### 使用场景
-使用异步 WebGPU 操作的开发者将从更清晰的文档和处理回调取消时更可预测的行为中受益。这对管理复杂异步工作流程或需要优雅处理清理场景的应用程序特别重要。
+#### 适用场景
+- 在受控环境中对完整功能集进行测试和基准测量（这些功能在兼容模式下不可用）。
+- 调试功能门控行为并在受控环境中验证实现是否符合完整的 WebGPU 规范。
 
 #### 参考资料
-- [callback status](https://webgpu-native.github.io/webgpu-headers/Asynchronous-Operations.html#CallbackStatuses)
-- [issue 520](https://github.com/webgpu-native/webgpu-headers/issues/520)
-- [issue 369](https://github.com/webgpu-native/webgpu-headers/issues/369)
-- [list of commits](https://dawn.googlesource.com/dawn/+log/chromium/7049..chromium/7103?n=1000)
+- https://issues.chromium.org/issues/395855517
+- https://github.com/gpuweb/gpuweb/blob/main/proposals/compatibility-mode.md
+- https://issues.chromium.org/issues/395855516
 
-### 保存和复制画布图像
+### Dawn updates（Dawn 更新）
 
-#### 新增功能
-Chrome 用户现在可以右键点击 WebGPU 画布元素来访问标准上下文菜单选项，包括"图片另存为..."和"复制图片"，使 WebGPU 画布与传统 Web 内容保持一致。
+#### 新增内容
+回调状态枚举值 `InstanceDropped` 已重命名为 `CallbackCancelled`，以澄清即使后台处理（例如管线编译）可能继续，回调仍被取消的含义。
 
 #### 技术细节
-此功能将标准浏览器上下文菜单功能扩展到 WebGPU 画布元素，允许用户使用熟悉的浏览器模式与 GPU 渲染的内容交互。该实现确保复杂的 GPU 渲染场景可以像任何其他 Web 图像一样被捕获和保存。
+这是 Dawn/webgpu-native 回调状态枚举的命名澄清，旨在减少关于异步操作生命周期和取消语义的歧义。
 
-#### 使用场景
-此增强显著改善了 WebGPU 应用程序的用户体验，特别是那些专注于内容创作、数据可视化或艺术表达的应用程序。用户现在可以轻松保存 3D 场景截图、分享可视化内容或收集参考图像，而无需专门的应用程序功能。
+#### 适用场景
+- 在原生集成和绑定中更安全地处理异步回调。
+- 当调试或为编译任务进行埋点时，更清晰地将 JavaScript/WebGPU 错误与原生状态映射起来。
 
 #### 参考资料
-- [issue 40902474](https://issues.chromium.org/issues/40902474)
+- https://webgpu-native.github.io/webgpu-headers/Asynchronous-Operations.html#CallbackStatuses
+- https://github.com/webgpu-native/webgpu-headers/issues/520
+- https://github.com/webgpu-native/webgpu-headers/issues/369
+- https://dawn.googlesource.com/dawn/+log/chromium/7049..chromium/7103?n=1000
+
+文件已保存到：digest_markdown/Graphics and WebGPU/chrome-136-stable-en.md

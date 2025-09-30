@@ -1,35 +1,34 @@
 ---
 layout: default
-title: 性能摘要 - Chrome 136 稳定版
+title: performance-zh
 ---
 
-# 性能摘要 - Chrome 136 稳定版
+### 1. 领域摘要
 
-## 领域总结
-
-Chrome 136 通过双模性能时序理解引入了 Web 应用性能测量能力的重大进展。此更新解决了性能监控中的关键缺口，帮助开发者识别和分析由应用程序控制范围之外的外部因素导致的性能变化。该功能通过区分不同的操作状态（如冷启动场景与热应用状态）实现更准确的性能评估。此增强功能在为开发者提供更细致的性能洞察方面代表了重要进步，允许更好的优化策略和更现实的性能预期。
+Chrome 136（stable）引入了一项由 origin trial 驱动的能力，帮助 Web 应用检测并理解双峰页面加载性能分布（例如冷启动与热启动）。对开发者影响最大的是能够按是否受昂贵的、平台级启动影响对遥测和指标进行分段。这样可以更准确地报告百分位、改进性能回退的检测，并进行有针对性的优化（在温路径上延后/安排更重的工作），且不改变最终用户行为。这些更新通过暴露可减少真实世界性能测量噪声的信号推进了 Web 平台，并使团队能够更有效地优先分配工程资源。
 
 ## 详细更新
 
-基于增强性能可见性的核心主题，此版本专注于为开发者提供更好的工具来理解真实世界性能模式的复杂性。
+Below are the relevant details and developer implications connected to the summary above.
 
-### Enable web applications to understand bimodal performance timings
+### Enable web applications to understand bimodal performance timings（识别双峰性能时序）
 
-#### 新功能
-Web 应用现在可以通过增强的时序 API 更好地理解和分析页面加载性能中的双模分布模式。此功能有助于识别由应用程序直接控制范围之外的外部因素导致的性能变化。
+#### 新增内容
+Chrome 136 的一个 origin trial 提供了一种方法，允许 Web 应用检测页面加载时序何时受双峰因素（例如浏览器冷启动）影响，从而使开发者能够在遥测和分析中将这些情况与正常导航分离。
 
 #### 技术细节
-该实现利用 Navigation Timing 规范提供更精细的性能数据，可以区分不同的系统状态。当用户代理执行"冷启动"时，昂贵的初始化任务会竞争系统资源，与热启动相比创建可测量的不同性能特征。该功能通过可以检测和报告这些双模模式的增强 API 暴露这些时序差异。
+该能力通过 origin trial 暴露（参见 Origin Trial 链接）。概念上，它让页面能够区分受系统级初始化或其他应用外因素影响的导航与典型导航——从而减少聚合时序分布的偏斜。集成将与现有的 timing 接口并存（例如 Navigation Timing），以便检测和分析管道可以筛选或标记受影响的事件。将其用于避免将平台级抖动误归因于应用回归。
 
-#### 用例
-开发者可以使用此功能来：
-- 构建更准确的性能监控仪表板，考虑系统状态变化
-- 基于检测到的性能条件实现自适应加载策略
-- 创建考虑冷启动场景的更现实的性能预算
-- 通过根据检测到的性能模式调整应用程序行为来改善用户体验
+#### 适用场景
+- 在计算 p50/p90/p99 时对性能遥测进行分段，排除冷启动异常值。
+- 通过过滤受平台初始化影响的导航，使 A/B 测试组更可靠。
+- 在热路径上延后非关键的 JS/CSS/worker 初始化，同时确保对冷启动具有弹性。
+- 通过将平台引起的方差与应用回归分离来改进 CI/性能仪表板。
 
 #### 参考资料
-- [Origin Trial](https://developer.chrome.com/origintrials/#/trials/active)
-- [Tracking bug #1413848](https://bugs.chromium.org/p/chromium/issues/detail?id=1413848)
-- [ChromeStatus.com entry](https://chromestatus.com/feature/5037395062800384)
-- [Spec](https://w3c.github.io/navigation-timing/)
+- https://developer.chrome.com/origintrials/#/trials/active
+- https://bugs.chromium.org/p/chromium/issues/detail?id=1413848
+- https://chromestatus.com/feature/5037395062800384
+- https://w3c.github.io/navigation-timing/
+
+Output file: digest_markdown/webplatform/Performance/chrome-136-stable-en.md

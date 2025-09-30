@@ -31,5 +31,5 @@ Browse Chrome release notes organized by feature area to track evolution over ti
 - [Browser changes](./browser-changes/index.html) - Updates in 1 version — Platform-level browser behavior updates
 - [Payment](./payment/index.html) - Updates in 1 version — Payment and payment-related features
 - [Deprecation](./deprecation/index.html) - Updates in 3 versions
-- [Other](./other/index.html) - Updates in 1 version
+- [Other](./other/index.html) - Updates in 2 versions
 - [Storage](./storage/index.html) - Updates in 1 version
