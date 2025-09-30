@@ -58,7 +58,8 @@ class WebGPUClassifier:
     WEBGPU_SECTIONS = {
         'detailed webgpu updates',
         'webgpu features',
-        'what\'s new in webgpu'
+        'what\'s new in webgpu',
+        'graphics and webgpu'
     }
     
     def __init__(self, strict_mode: bool = True):

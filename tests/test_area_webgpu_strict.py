@@ -27,8 +27,21 @@ class TestWebGPUClassifier:
         result = self.classifier.is_strong_webgpu(feature)
         assert result.is_webgpu is True
         assert result.score >= 3
-        # Should identify WebGPU-related keywords  
+        # Should identify WebGPU-related keywords
         assert any(kw in ' '.join(result.reasons).lower() for kw in ['texture', '3d', 'webgpu', 'graphics'])
+
+    def test_graphics_and_webgpu_parent_heading(self):
+        """Test that Graphics and WebGPU parent sections count toward WebGPU."""
+        feature = {
+            'title': 'Save and copy canvas images',
+            'content': 'Chrome users can now right-click on a WebGPU canvas to save or copy the image.',
+            'heading_path': ['Graphics and WebGPU - Chrome 136', 'Save and copy canvas images']
+        }
+
+        result = self.classifier.is_strong_webgpu(feature)
+        assert result.is_webgpu is True
+        assert result.score >= 3
+        assert any('graphics and webgpu' in reason.lower() or 'webgpu' in reason.lower() for reason in result.reasons)
     
     def test_genuine_webgpu_dawn_updates(self):
         """Test that Dawn updates are correctly classified as WebGPU."""
