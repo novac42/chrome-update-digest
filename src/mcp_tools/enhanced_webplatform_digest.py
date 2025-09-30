@@ -1276,7 +1276,9 @@ Language: """ + language
     
     def _get_areas_from_yaml(self, yaml_data: Dict) -> List[str]:
         """Extract all areas from YAML data and normalize them."""
-        areas = set()
+        # Start with any explicit area list provided by aggregation
+        areas = set(yaml_data.get('areas', []))
+        # Also infer areas from feature tags to be robust
         for feature in yaml_data.get('features', []):
             tags = feature.get('primary_tags', [])
             for tag in tags:
@@ -1306,7 +1308,8 @@ Language: """ + language
     ) -> Optional[Dict]:
         """Load or extract area-specific YAML data."""
         # Check for cached area YAML
-        area_yaml_path = self.cache_dir / area / f"chrome-{version}-{channel}.yml"
+        # Area YAMLs are stored under processed_forwebplatform/areas/{area}/
+        area_yaml_path = self.cache_dir / 'areas' / area / f"chrome-{version}-{channel}.yml"
         if area_yaml_path.exists():
             if debug:
                 print(f"Loading cached area YAML: {area_yaml_path}")
