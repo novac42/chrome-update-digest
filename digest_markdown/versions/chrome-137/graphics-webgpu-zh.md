@@ -1,68 +1,52 @@
-digest_markdown/webplatform/Graphics and WebGPU/chrome-137-stable-en.md
+---
+layout: default
+title: graphics-webgpu-zh
+---
 
-# Area Summary
+## 详细更新
 
-Chrome 137 在 Graphics 和 WebGPU 的更新侧重于 API 简化、着色器/工作组原语以及设备信息检查，同时清理了实验性属性。最重要的更改包括允许开发者在外部视频绑定处重用 texture view、简化全缓冲区复制，以及在 WGSL 中引入原子工作组 uniform 加载，从而减少动态着色器编译和同步复杂性。提供一个非标准的 adapter `powerPreference` 字段，有助于在低功耗与高性能 GPU 之间进行调优；而移除实验性的 `compatibilityMode` 属性则推动采用标准化方案。这些变更减少样板代码，提高异构设备上的性能可预测性，并降低高级 GPU 驱动 Web 应用的开发摩擦。
+下面的条目扩展了上述摘要，说明了更改内容、工作方式以及适用场景。
 
-## Detailed Updates
+### 1. Texture View for External Texture Binding (允许用纹理视图绑定外部纹理)
 
-Below are focused descriptions of each Graphics and WebGPU change in Chrome 137, with practical notes for developers.
+#### 新增内容
+现在允许使用兼容的 `GPUTextureView` 替代 `GPUExternalTexture` 绑定。
 
-### 1. Texture View for External Texture Binding
+#### 技术细节
+符合外部纹理约定的 `GPUTextureView` 可以在此前要求 `GPUExternalTexture` 的位置进行绑定，减少了对特殊绑定和着色器排列组合的需求。
 
-#### What's New
-Now allows a compatible `GPUTextureView` to be used in place of a `GPUExternalTexture` binding, simplifying video effect pipelines.
+#### 适用场景
+简化了视频效果管线中的着色器逻辑，减少了仅为处理外部纹理绑定而动态编译或切换着色器的需要。
 
-#### Technical Details
-A bind group may accept a `GPUTextureView` where previously a `GPUExternalTexture` was required, enabling reuse of standard texture views with existing shader bindings. This reduces the need to create or manage separate external-texture objects and can eliminate runtime shader specialization tied to external texture semantics.
+#### 参考资料
+未提供。
 
-#### Use Cases
-- Video post-processing effects that previously required separate external texture bindings can now use existing texture views, simplifying resource management.
-- Reduces dynamic shader compilation paths for pipelines that must handle both regular and external textures.
+### 2. Buffer Copy Simplification (缓冲区复制简化)
 
-#### References
-No links provided.
+#### 新增内容
+为 `copyBufferToBuffer()` 提供了新的方法重载，允许省略偏移和大小参数。
 
-```javascript
-const bindGroup = myDevice.createBindGroup({
-  layout: pipeline.getBindGroupLayout(0),...
-```
-
-### 2. Buffer Copy Simplification
-
-#### What's New
-New overload for `copyBufferToBuffer()` that omits offsets and size parameters to copy entire buffers.
-
-#### Technical Details
-A more ergonomic API variant lets developers call `myCommandEncoder.copyBufferToBuffer(srcBuffer, dstBuffer);` to copy whole buffer contents without specifying explicit offsets and size. This reduces API surface friction for common full-buffer operations and avoids manual bookkeeping of buffer sizes.
-
-#### Use Cases
-- Quick full-buffer duplication during staging or resource uploads.
-- Test and tooling code that frequently copies entire buffers without needing offset precision.
-- Simplifies common patterns in GPU compute and resource preparation, improving developer productivity.
-
-#### References
-No links provided.
+#### 技术细节
+`copyBufferToBuffer()` 的一个重载仅接受源和目标缓冲区以复制全部内容，从而移除了为整缓冲区复制重复传入零偏移和显式大小的模式。
 
 ```javascript
 // Copy entire buffer without specifying offsets
 myCommandEncoder.copyBufferToBuffer(srcBuffer, dstBuffer);
 ```
 
-### 3. WGSL Workgroup Uniform Load
+#### 适用场景
+简化了资源上传、暂存缓冲区使用和读回流程中的常见整缓冲区复制操作；减少了 API 面并降低了越界或大小出错的风险。
 
-#### What's New
-Introduces `workgroupUniformLoad(ptr)` overload for atomic loads, enabling atomic retrieval of a value across workgroup invocations.
+#### 参考资料
+未提供。
 
-#### Technical Details
-The `workgroupUniformLoad` call provides an atomic load semantic for workgroup-shared values so all invocations observe a consistent value after atomicStore by one invocation. This aids synchronization patterns inside WGSL compute shaders and reduces the need for complex manual barriers or extra signaling.
+### 3. WGSL Workgroup Uniform Load (WGSL 工作组统一加载)
 
-#### Use Cases
-- Compute shaders needing a single writer to publish a configuration or sentinel value to all workgroup threads.
-- Simplifies atomic-based coordination inside workgroups for tasks such as work dispatching, shared state updates, and deterministic initialization.
+#### 新增内容
+新增 `workgroupUniformLoad(ptr)` 重载，用于原子加载，能以原子方式为所有工作组调用加载一个值。
 
-#### References
-No links provided.
+#### 技术细节
+`workgroupUniformLoad(&wgvar)` 提供类似原子读取的重载，使得由某个调用（例如工作组 leader）初始化的值在整个工作组内一致可见，而无需手动同步模式。
 
 ```wgsl
 @compute @workgroup_size(1, 1)
@@ -70,41 +54,47 @@ fn main(@builtin(local_invocation_index) lid: u32) {
   if (lid == 0) {
     atomicStore(&(wgvar), 42u);
   }
-  buffer[lid] = workgroupUniformLoad(&...
+  buffer[lid] = workgroupUniformLoad(&wgvar);
+}
 ```
 
-### 4. GPUAdapterInfo Power Preference
+#### 适用场景
+使常见的工作组广播模式更安全、更简单——对在整个工作组中使用单个调用计算出的参数（例如调度元数据、共享常量）的计算着色器特别有用。
 
-#### What's New
-A non-standard `powerPreference` attribute is available (behind "WebGPU Developer Features" flag) on adapterInfo, returning `"low-power"` or `"high-performance"`.
+#### 参考资料
+未提供。
 
-#### Technical Details
-The adapterInfo exposes a `powerPreference` string indicating the adapter's power class, useful for runtime heuristics. This is non-standard and gated behind a developer feature flag, intended for diagnostic and tuning scenarios rather than as a stable API.
+### 4. GPUAdapterInfo Power Preference (GPUAdapterInfo 电源偏好)
 
-#### Use Cases
-- Adjusting rendering or compute quality based on whether the device is low-power (e.g., integrated GPU) or high-performance (discrete GPU).
-- Profiling and telemetry in development environments to validate power-targeted optimizations.
+#### 新增内容
+非标准的 `powerPreference` 属性可在 “WebGPU Developer Features” 标志下使用，并返回 `"low-power"` 或 `"high-performance"`。
 
-#### References
-No links provided.
+#### 技术细节
+`device.adapterInfo.powerPreference` 暴露了适配器的电源提示；这是非标准的并且受开发者功能标志控制，旨在用于实验性的设备感知调优。
 
 ```javascript
 function checkPowerPreferenceForGpuDevice(device) {
   const powerPreference = device.adapterInfo.powerPreference;
-  // Adjust settings based on GP...
+  // Adjust settings based on GPU power preference
+}
 ```
 
-### 5. Removed Compatibility Mode Attribute
+#### 适用场景
+允许开发者根据适配器的功耗配置调整工作负载决策（质量与性能之间的取舍）——对移动设备与独立 GPU 的启发式判断，以及在适配期间的分析/遥测很有用。
 
-#### What's New
-The experimental `compatibilityMode` attribute has been removed and replaced by standardized compatibility approaches.
+#### 参考资料
+未提供。
 
-#### Technical Details
-Removal of the experimental flag indicates consolidation toward standardized compatibility mechanisms; developers should migrate away from relying on `compatibilityMode` and adopt public, standardized compatibility strategies exposed by the platform.
+### 5. Removed Compatibility Mode Attribute (移除兼容模式属性)
 
-#### Use Cases
-- Audit code that depended on experimental compatibilityMode and refactor to supported, standardized APIs or feature-detection patterns.
-- Reduce reliance on browser-specific experimental flags for production workloads.
+#### 新增内容
+实验性的 `compatibilityMode` 属性已被移除，并由一种标准化的兼容性方法替代。
 
-#### References
-No links provided.
+#### 技术细节
+该属性的移除表明正在向标准的、非实验性的兼容机制整合；依赖该实验属性的代码必须迁移到标准化路径（在可用时）。
+
+#### 适用场景
+开发者应移除对该实验性属性的使用，并遵循标准化的兼容方法以实现前向兼容并降低维护成本。
+
+#### 参考资料
+未提供。

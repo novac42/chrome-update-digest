@@ -3,104 +3,95 @@ layout: default
 title: chrome-137-zh
 ---
 
-## Area Summary
+## 区域摘要
 
-Chrome 137 的 Web API 更新集中在隔离、隐私与开发者诊断：针对 Blob URL 的存储分区、文档级隔离、针对基于 HSTS 的跟踪的保护、扩展的 Web Crypto 支持，以及改进的无响应页面崩溃报告。对开发者影响最大的更改是按存储键对 Blob URL 进行分区以及 Document-Isolation-Policy 的文档级隔离，这些更改会影响资源访问语义和进程隔离的假设。配合 HSTS 跟踪防护和 WebCrypto 中的 Ed25519，这些更新通过收紧安全/隐私保证并扩展密码学能力，同时改善难以调试的挂起问题的可观察性，推动平台前进。这些更改重要的原因在于它们可能需要在代码和部署层面做出调整（存储/URL 处理、隔离预期、密码学使用），并提升 Web 应用的健壮性与隐私属性。
+Chrome 137 (stable) 专注于加强平台隔离、隐私和密码学，同时改进开发者诊断。关键主题包括更细粒度的存储和资源分区（Blob URL partitioning、HSTS tracking prevention、Document-Isolation-Policy）、更强的加密原语（Web Crypto 中的 Ed25519）以及改进的调试数据（针对无响应页面的调用栈）。这些更新提升了安全和隐私保障，使跨源资源处理更明确，并为开发者提供更清晰的信号以修复性能和正确性问题。对于 Web API 团队来说，这些更改将集成和迁移的考虑转向每文档隔离和扩展的加密能力。
 
-## Detailed Updates
+## 详细更新
 
-Below are the Web API area changes in Chrome 137 with concise technical context and practical implications for developers.
+以下条目扩展了上述高层主题并总结了开发者需要了解的要点。
 
-### Blob URL Partitioning: Fetching/Navigation (Blob URL 存储分区：获取/导航)
+### Blob URL Partitioning: Fetching/Navigation（Blob URL 访问分区）
 
-#### What's New
-Chrome partitions Blob URL access by Storage Key (top-level site, frame origin, and the has-cross-site-ancestor boolean). Top-level navigations remain partitioned only by frame origin.
+#### 新增内容
+Chrome 将 Blob URL 访问按 Storage Key（top-level site、frame origin 和 has-cross-site-ancestor 布尔值）进行分区，但顶层导航仍仅按 frame origin 分区。
 
-#### Technical Details
-Partitioning uses Storage Key semantics to separate Blob URL access scopes; top-level navigation behavior is an exception and stays partitioned by frame origin.
+#### 技术细节
+分区将 Blob URL 的访问检查与 Storage Key 绑定，减少通过 blob URLs 的跨站泄露。顶层导航行为是一个例外，仍然按 frame origin 分区。
 
-#### Use Cases
-Affects apps that generate or consume blob: URLs across frames/sites — developers should verify Blob URL visibility and sharing across origins/frames under storage partitioning.
+#### 适用场景
+- 防止具有不同 Storage Key 的框架之间通过 blob: URLs 进行跨站跟踪或数据泄露。
+- 适用于在不同源或框架之间生成并共享 blob URLs 的应用。
 
-#### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=40057646 (Tracking bug #40057646)  
-- https://chromestatus.com/feature/5037311976488960 (ChromeStatus.com entry)
+#### 参考资料
+- https://bugs.chromium.org/p/chromium/issues/detail?id=40057646 — 跟踪 bug #40057646
+- https://chromestatus.com/feature/5037311976488960 — ChromeStatus.com 条目
 
-### Call stacks in crash reports from unresponsive web pages (无响应页面崩溃报告中的调用栈)
+### Call stacks in crash reports from unresponsive web pages（无响应网页崩溃报告中的调用栈）
 
-#### What's New
-When a page becomes unresponsive due to long-running JavaScript (e.g., infinite loops), Chrome captures the JavaScript call stack and includes it in reports to help identify causes.
+#### 新增内容
+当页面因长时间运行的 JavaScript（例如无限循环）而变得无响应时，Chrome 会捕获 JavaScript 调用栈并将其包含在崩溃/报告数据中，以帮助开发者确定原因。
 
-#### Technical Details
-The runtime captures the JS stack at hang detection and attaches it to the crash/unresponsiveness report for diagnostics.
+#### 技术细节
+该功能在检测到无响应时捕获 JS 调用栈，并将其附加到用于诊断和开发者反馈的报告/崩溃数据中。
 
-#### Use Cases
-Improves debugging for pages that freeze due to heavy JS; developers can use captured stacks to pinpoint and fix long-running computations or infinite loops.
+#### 适用场景
+- 帮助开发者定位并修复导致 UI 卡顿的热点循环或长时间的同步计算。
+- 通过更丰富的诊断负载改进无响应页面崩溃的分类处理。
 
-#### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=1445539 (Tracking bug #1445539)  
-- https://chromestatus.com/feature/5045134925406208 (ChromeStatus.com entry)  
-- https://w3c.github.io/reporting/#crash-report (Spec)
+#### 参考资料
+- https://bugs.chromium.org/p/chromium/issues/detail?id=1445539 — 跟踪 bug #1445539
+- https://chromestatus.com/feature/5045134925406208 — ChromeStatus.com 条目
+- https://w3c.github.io/reporting/#crash-report — 规范
 
-### Document-Isolation-Policy (文档隔离策略)
+### Document-Isolation-Policy（文档隔离策略）
 
-#### What's New
-Document-Isolation-Policy lets a document enable crossOriginIsolation for itself without deploying COOP/COEP and independent of the page’s crossOriginIsolation status. The policy is backed by process isolation.
+#### 新增内容
+Document-Isolation-Policy 允许文档为自身启用 crossOriginIsolation，而无需部署 COOP/COEP，并且独立于页面的 crossOriginIsolation 状态；该策略由进程隔离提供支持。
 
-#### Technical Details
-Documents can opt into isolation at the document level; process isolation underpins the policy. The content notes that non-CORS cross-origin subresources will either... (see tracking links for full spec/behavior).
+#### 技术细节
+该策略启用每文档的 cross-origin isolation，并使用进程隔离来强制实施。YAML 摘要指出对非 CORS 的跨源子资源还有额外影响。
 
-#### Use Cases
-Useful for pages or embedded documents that require isolated execution contexts (e.g., to access powerful APIs) without site-wide COOP/COEP deployment; developers embedding cross-origin content should review subresource behavior.
+#### 适用场景
+- 需要 cross-origin-isolated 特性的站点或嵌入文档（例如某些性能 API 或 SharedArrayBuffer）可以对单个文档进行选择。
+- 对于需要更强隔离但不希望修改页面级别 COOP/COEP 的 iframes 或嵌入小部件很有用。
 
-#### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=333029146 (Tracking bug #333029146)  
-- https://chromestatus.com/feature/5048940296830976 (ChromeStatus.com entry)  
-- https://wicg.github.io/document-isolation-policy/ (Spec)
+#### 参考资料
+- https://bugs.chromium.org/p/chromium/issues/detail?id=333029146 — 跟踪 bug #333029146
+- https://chromestatus.com/feature/5048940296830976 — ChromeStatus.com 条目
+- https://wicg.github.io/document-isolation-policy/ — 规范
 
-### Ed25519 in web cryptography (WebCrypto 中的 Ed25519)
+### Ed25519 in web cryptography（Web 密码学中的 Ed25519）
 
-#### What's New
-Adds support for Curve25519 algorithms in the Web Cryptography API, specifically the Ed25519 signature algorithm.
+#### 新增内容
+在 Web Cryptography API 中添加对 Curve25519 算法的支持，特别是 Ed25519 签名算法。
 
-#### Technical Details
-WebCrypto now exposes Ed25519-related primitives per the referenced tracking bug and standards (RFC 8032).
+#### 技术细节
+Ed25519 支持将基于 Curve25519 的签名操作集成到 Web Crypto API 接口中，使得在本地生成、签名和验证这一现代签名方案成为可能。
 
-#### Use Cases
-Enables web apps to generate and verify Ed25519 signatures natively via WebCrypto, benefiting modern cryptographic workflows and interoperability with systems using Ed25519.
+#### 适用场景
+- 需要现代、高性能签名算法用于认证、加密消息或密码学协议的网络应用。
+- 简化在 Web 环境中使用 Ed25519，而无需依赖外部库或 WASM 绑定。
 
-#### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=1370697 (Tracking bug #1370697)  
-- https://chromestatus.com/feature/5056122982457344 (ChromeStatus.com entry)  
-- https://www.rfc-editor.org/rfc/rfc8032.html (Spec)
+#### 参考资料
+- https://bugs.chromium.org/p/chromium/issues/detail?id=1370697 — 跟踪 bug #1370697
+- https://chromestatus.com/feature/5056122982457344 — ChromeStatus.com 条目
+- https://www.rfc-editor.org/rfc/rfc8032.html — 规范
 
-### HSTS tracking prevention (基于 HSTS 的跟踪防护)
+### HSTS tracking prevention（HSTS 跟踪防护）
 
-#### What's New
-Mitigates cross-site tracking via the HSTS cache by allowing HSTS upgrades only for top-level navigations and blocking HSTS upgrades for sub-resource requests.
+#### 新增内容
+通过允许仅对顶层导航进行 HSTS 升级并阻止子资源请求的 HSTS 升级，减轻 HSTS 缓存被用于第三方跟踪的问题。
 
-#### Technical Details
-Restricts HSTS-induced protocol upgrades in subresource contexts, preventing third parties from leveraging HSTS state to fingerprint or track users.
+#### 技术细节
+该功能在子资源上下文中限制基于 HSTS 的升级，使第三方无法利用 HSTS 缓存创建跨站标识符。
 
-#### Use Cases
-Third-party resources can no longer rely on HSTS cache behavior for tracking; developers of privacy-sensitive third-party services should audit any HSTS-based assumptions.
+#### 适用场景
+- 防止第三方域使用的基于 HSTS 的跨站跟踪向量。
+- 会影响依赖子资源 HSTS 升级的集成；开发者应确保资源在 HTTPS 上可访问或处理降级行为。
 
-#### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=40725781 (Tracking bug #40725781)  
-- https://chromestatus.com/feature/5065878464307200 (ChromeStatus.com entry)
-
-## Area-Specific Expertise Notes
-
-- css: Blob URL partitioning and document isolation can influence cross-origin resource loading and layout embedding scenarios; review resource fetch semantics when styling/embedding cross-origin content.
-- webapi: These updates change resource access and isolation APIs and add cryptographic primitives (Ed25519) accessible through WebCrypto.
-- graphics-webgpu: Document-level isolation affects capability exposure for powerful APIs; check isolation requirements for GPU or compute-based APIs.
-- javascript: Call-stack capture for unresponsive pages improves debugging of long-running JS; developers should leverage this for optimizing event loops and worker use.
-- security-privacy: HSTS tracking prevention and Document-Isolation-Policy tighten privacy and process isolation boundaries; update threat models and deployment strategies.
-- performance: Blob partitioning and isolation changes can affect cross-origin resource retrieval paths and caching; measure impacts on load performance.
-- multimedia: Blob URL visibility changes may affect media blobs shared between frames or origins.
-- devices: Document isolation may be a path to enable sensitive device APIs per-document without site-wide headers.
-- pwa-service-worker: Storage partitioning semantics can influence service worker-controlled fetches and resource caching strategies.
-- webassembly: Isolation and improved cryptography affect secure WASM usage and signing/verification flows.
-- 弃用: Review code that assumes global Blob URL reachability or HSTS behaviors; plan migration or testing for partitioned environments.
+#### 参考资料
+- https://bugs.chromium.org/p/chromium/issues/detail?id=40725781 — 跟踪 bug #40725781
+- https://chromestatus.com/feature/5065878464307200 — ChromeStatus.com 条目
 
 已保存文件：digest_markdown/webplatform/Web API/chrome-137-stable-en.md

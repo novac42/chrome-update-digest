@@ -5,171 +5,169 @@ title: css-en
 
 ## Area Summary
 
-Chrome 137 advances CSS expressivity, accessibility, SVG integration, and rendering precision. Key themes include conditional value support (if()), improved reading-flow and focus order controls, richer animation paths and view transitions, and higher-fidelity rendering via floating point canvas colors. These changes give developers clearer control over layout semantics, animations, and graphics fidelity while improving accessibility and OS integration (accent-color). Together they expand what can be expressed declaratively in CSS and reduce the need for JavaScript workarounds.
+Chrome 137 introduces a set of CSS-focused improvements that emphasize conditional styling, accessibility-aware layout ordering, richer SVG/CSS integration, and animation/transition ergonomics. Standout changes for developers include the CSS if() function for inline conditional values, reading-flow/reading-order for logical focus and assistive-order control, and view-transition-name: match-element for SPA animation continuity. These features advance the platform by enabling more expressive, accessible, and animation-friendly CSS primitives without heavy JS workarounds. The updates reduce implementation friction for common UI patterns (accessibility, responsive animation paths, system theming) and improve interoperability with web platform specs.
 
 ## Detailed Updates
 
-The items below expand on the summary above, focusing on what shipped, how it works at a high level, and practical developer uses.
+The following items expand on the summary above and provide practical and technical context for each CSS-area feature shipped in Chrome 137.
 
 ### CSS if() function
 
 #### What's New
-The CSS `if()` function provides a concise way to express conditional values. It accepts a series of condition-value pairs and returns the value associated with the first true condition.
+The CSS `if()` function provides a concise way to express conditional values using a series of condition-value pairs separated by semicolons. It evaluates conditions sequentially and returns the value associated with the first true condition.
 
 #### Technical Details
-The function evaluates condition-value pairs sequentially; if none evaluate true the behavior follows the specification. See the spec for formal syntax and evaluation rules.
+Implements the spec-defined `if()` from the CSS Values Level 5 draft, handling condition/value pairs in CSS expressions.
 
 #### Use Cases
-Replace verbose calc- or custom-property-based conditionals and simplify responsive, state-dependent property values directly in CSS.
+Inline conditional styling without needing CSS custom properties + JS workarounds; useful for fallback styles, responsive variations, and simplifying complex calc/chaining scenarios.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=346977961 (Tracking bug #346977961)  
-- https://chromestatus.com/feature/5084924504915968 (ChromeStatus.com entry)  
-- https://www.w3.org/TR/css-values-5/#if-function (Spec)
+- [Tracking bug #346977961](https://bugs.chromium.org/p/chromium/issues/detail?id=346977961)  
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5084924504915968)  
+- [Spec](https://www.w3.org/TR/css-values-5/#if-function)
 
 ### CSS reading-flow, reading-order properties
 
 #### What's New
-`reading-flow` controls the order elements are exposed to accessibility tools and tab navigation; `reading-order` allows manual overrides within a reading flow container.
+Adds `reading-flow` to control the order elements are exposed to accessibility tools and tab focus, and `reading-order` to let authors override order inside a reading flow container.
 
 #### Technical Details
-These properties affect the logical sequential exposure of elements for focus and assistive technologies in flex, grid, or block layouts per the drafts.
+Implements the reading-flow model from Display Level 4 drafts to influence logical sequence used by accessibility APIs and sequential focus navigation.
 
 #### Use Cases
-Improve keyboard navigation, accessibility semantics, and control over sequential focus in complex layouts without DOM reordering.
+Control keyboard/tab order and assistive technology reading order for complex layouts (flex, grid, block) without rearranging DOM; improves accessibility for rotated, multi-column, or visual-only ordering.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=40932006 (Tracking bug #40932006)  
-- https://chromestatus.com/feature/5061928169472000 (ChromeStatus.com entry)  
-- https://drafts.csswg.org/css-display-4/#reading-flow (Spec)  
-- https://developer.chrome.com/blog/reading-flow (Use CSS reading-flow for logical sequential focus navigation)
+- [Tracking bug #40932006](https://bugs.chromium.org/p/chromium/issues/detail?id=40932006)  
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5061928169472000)  
+- [Spec](https://drafts.csswg.org/css-display-4/#reading-flow)  
+- [Use CSS reading-flow for logical sequential focus navigation](https://developer.chrome.com/blog/reading-flow)
 
 ### Ignore letter spacing in cursive scripts
 
 #### What's New
-Letter-spacing can be ignored for cursive scripts to avoid disrupting word structure, aligning behavior with the specification and improving readability for cursive-script users.
+Adds behavior to ignore `letter-spacing` for cursive scripts when specified by the developer, aligning with the CSS Text spec to avoid disrupting word shape and readability.
 
 #### Technical Details
-The implementation conditionally disregards the `letter-spacing` setting for cursive scripts as specified in the CSS Text spec.
+Implements the text module guidance to selectively ignore letter-spacing for cursive/script fonts where spacing would harm script integrity.
 
 #### Use Cases
-Typography-sensitive interfaces and internationalized text rendering where letter-spacing should not break cursive script legibility.
+Improves typography for cursive and script languages by preventing developer-applied letter-spacing from breaking glyph joining and word recognition; important for localization-sensitive UI.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=40618336 (Tracking bug #40618336)  
-- https://chromestatus.com/feature/5088256061988864 (ChromeStatus.com entry)  
-- https://www.w3.org/TR/css-text-3/#letter-spacing-property (Spec)
+- [Tracking bug #40618336](https://bugs.chromium.org/p/chromium/issues/detail?id=40618336)  
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5088256061988864)  
+- [Spec](https://www.w3.org/TR/css-text-3/#letter-spacing-property)
 
 ### Selection API getComposedRanges and direction
 
 #### What's New
-Adds `Selection.direction` (returns `none`, `forward`, or `backward`) and `Selection.getComposedRanges()` (returns 0 or 1 composed StaticRange).
+Ships two Selection API additions: `Selection.direction` (returns `none`, `forward`, or `backward`) and `Selection.getComposedRanges()` (returns 0 or 1 composed StaticRange, which may cross shadow boundaries).
 
 #### Technical Details
-`getComposedRanges()` yields a composed StaticRange that may cross shadow DOM or other boundaries as permitted by the Selection spec; `direction` exposes selection traversal direction.
+Aligns Selection behavior with the Selection API draft to expose selection gravity and a composed range abstraction useful in shadow/slot contexts.
 
 #### Use Cases
-Improved programmatic selection handling for editors, rich text controls, and complex DOM (including shadow DOM) scenarios where selection direction and composed ranges matter.
+Improved programmatic handling of user text selection in rich components and shadow DOM, enabling accurate caret/selection logic for editors and accessibility tools.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=40286116 (Tracking bug #40286116)  
-- https://chromestatus.com/feature/5069063455711232 (ChromeStatus.com entry)  
-- https://w3c.github.io/selection-api/#dom-selection-getcomposedranges (Spec)
+- [Tracking bug #40286116](https://bugs.chromium.org/p/chromium/issues/detail?id=40286116)  
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5069063455711232)  
+- [Spec](https://w3c.github.io/selection-api/#dom-selection-getcomposedranges)
 
 ### Support offset-path: shape()
 
 #### What's New
-Support for `offset-path: shape()` enables using responsive shapes to define animation motion paths.
+Supports `offset-path: shape()` to allow animation motion paths driven by responsive shapes.
 
 #### Technical Details
-`shape()` allows specifying a CSS shape as an offset path so animated elements can follow declarative, responsive geometry.
+Implements the `shape()` function for `offset-path` as defined in CSS Motion Path / Shapes Level specs, enabling paths that adapt to layout.
 
 #### Use Cases
-Declarative motion along complex, responsive paths for UI animations, without relying on JavaScript-generated keyframes.
+Create motion-path animations that follow layout-aware shapes (e.g., bounding boxes or responsive shapes) without manual path recalculation.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=389713717 (Tracking bug #389713717)  
-- https://chromestatus.com/feature/5062848242884608 (ChromeStatus.com entry)  
-- https://www.w3.org/TR/css-shapes-2/#shape-function (Spec)
+- [Tracking bug #389713717](https://bugs.chromium.org/p/chromium/issues/detail?id=389713717)  
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5062848242884608)  
+- [Spec](https://www.w3.org/TR/css-shapes-2/#shape-function)
 
 ### Support the transform attribute on SVGSVGElement
 
 #### What's New
-Enables applying transformation properties (scale, rotate, translate, skew) directly to the `<svg>` root element via its `transform` attribute.
+Enables the use of the `transform` attribute on the `<svg>` root element to apply transforms (scale, rotate, translate, skew) to the entire SVG coordinate system or its contents.
 
 #### Technical Details
-Applying `transform` to the SVG root affects the entire SVG coordinate system or its contents, aligning SVG root transformability with the SVG2 spec.
+Implements SVG2 transformability for the root `<svg>` element, aligning behavior with the InterfaceSVGTransformable spec.
 
 #### Use Cases
-Global transformations of SVG documents without wrapping content, simplifying animations and coordinate-space adjustments.
+Simplifies global SVG transformations without extra wrapper elements; useful for scaling/rotating entire SVGs from CSS or attributes.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=40313130 (Tracking bug #40313130)  
-- https://chromestatus.com/feature/5070863647424512 (ChromeStatus.com entry)  
-- https://www.w3.org/TR/SVG2/types.html#InterfaceSVGTransformable (Spec)
+- [Tracking bug #40313130](https://bugs.chromium.org/p/chromium/issues/detail?id=40313130)  
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5070863647424512)  
+- [Spec](https://www.w3.org/TR/SVG2/types.html#InterfaceSVGTransformable)
 
 ### System accent color for accent-color property
 
 #### What's New
-`accent-color` can use the operating system's accent color so form elements adopt the user's OS-defined accent automatically.
+`accent-color` can now use the operating system's accent color so form controls (checkboxes, radios, progress bars) automatically adopt the user’s OS accent.
 
 #### Technical Details
-Form controls such as checkboxes, radios, and progress bars will reflect the system accent color when `accent-color` is set to use it, per the CSS UI spec.
+Brings `accent-color` behavior in line with CSS UI Level 4, mapping system accent tokens to form element rendering.
 
 #### Use Cases
-Native-integrated theming of form controls to match user preferences and OS-level theming, improving visual consistency.
+Ensure native-consistent theming for built-in controls, improving visual integration with platform UI and reducing custom styling needs.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=40764875 (Tracking bug #40764875)  
-- https://chromestatus.com/feature/5088516877221888 (ChromeStatus.com entry)  
-- https://www.w3.org/TR/css-ui-4/#accent-color (Spec)
+- [Tracking bug #40764875](https://bugs.chromium.org/p/chromium/issues/detail?id=40764875)  
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5088516877221888)  
+- [Spec](https://www.w3.org/TR/css-ui-4/#accent-color)
 
 ### Allow <use> to reference an external document's root element by omitting the fragment
 
 #### What's New
-Loosens `<use>` referencing so omitting a fragment can reference an external document's root element, simplifying external SVG reuse.
+Loosens `<use>` referencing requirements so that omitting a fragment when referencing an external SVG document resolves to that document's root element.
 
 #### Technical Details
-Previously a fragment ID was required; this change allows `<use>` to resolve to the external document root when no fragment is provided, per the SVG struct spec.
+Adjusts `<use>` resolution logic for cross-document references to accept external document root targets when no fragment is provided, per SVG2 struct rules.
 
 #### Use Cases
-Easier inclusion and reuse of external SVG documents’ root content via `<use>` without needing fragment identifiers.
+Simplifies reuse of entire external SVG documents via `<use>` without requiring internal fragment IDs; improves SVG composition workflows.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=40362369 (Tracking bug #40362369)  
-- https://chromestatus.com/feature/5078775255900160 (ChromeStatus.com entry)  
-- https://www.w3.org/TR/SVG2/struct.html#UseElement (Spec)
+- [Tracking bug #40362369](https://bugs.chromium.org/p/chromium/issues/detail?id=40362369)  
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5078775255900160)  
+- [Spec](https://www.w3.org/TR/SVG2/struct.html#UseElement)
 
 ### Canvas floating point color types
 
 #### What's New
-Introduces floating point pixel formats for `CanvasRenderingContext2D`, `OffscreenCanvasRenderingContext2D`, and `ImageData` to enable higher precision and HDR workflows.
+Adds support for floating point pixel formats (instead of 8-bit) with Canvas 2D contexts and ImageData, enabling higher precision color representations.
 
 #### Technical Details
-Allows float-based pixel formats instead of 8-bit fixed point, supporting high dynamic range and high-precision rendering scenarios as described in the canvas spec.
+Extends CanvasRenderingContext2D, OffscreenCanvasRenderingContext2D, and ImageData to support floating point color types per HTML Canvas spec extensions.
 
 #### Use Cases
-Medical visualization, HDR imaging, scientific visualizations, and any application requiring greater color precision than 8-bit.
+Necessary for high-dynamic-range or high-precision rendering scenarios (medical visualization, scientific imaging, HDR workflows) where 8-bit color quantization is insufficient.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=40245602 (Tracking bug #40245602)  
-- https://chromestatus.com/feature/5053734768197632 (ChromeStatus.com entry)  
-- https://html.spec.whatwg.org/multipage/canvas.html#the-2d-rendering-context (Spec)
+- [Tracking bug #40245602](https://bugs.chromium.org/p/chromium/issues/detail?id=40245602)  
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5053734768197632)  
+- [Spec](https://html.spec.whatwg.org/multipage/canvas.html#the-2d-rendering-context)
 
 ### view-transition-name: match-element
 
 #### What's New
-The `match-element` value generates a unique ID based on an element's identity and renames it for use in view transitions, aiding animations when elements move in single-page apps.
+The `match-element` value for `view-transition-name` generates a unique ID based on an element’s identity, enabling consistent naming during view transitions for moved elements in SPAs.
 
 #### Technical Details
-`match-element` produces a consistent identifier for an element so it can be matched across view transitions even as the element moves within the app, following the view transitions draft.
+Implements the view transitions naming mechanism from the View Transitions Level 2 draft to match elements that move in the DOM without requiring manual IDs.
 
 #### Use Cases
-Smooth element-preserving animations in SPAs where DOM reparenting or reordering occurs, enabling coherent view transitions without manual ID management.
+Simplifies creating seamless transitions for elements that are moved or reparented during client-side navigation (common in SPA routing), improving animation continuity without DOM ID management.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=365997248 (Tracking bug #365997248)  
-- https://chromestatus.com/feature/5092488609931264 (ChromeStatus.com entry)  
-- https://drafts.csswg.org/css-view-transitions-2/#view-transition-name-prop (Spec)
-
-Saved to: digest_markdown/webplatform/CSS/chrome-137-stable-en.md
+- [Tracking bug #365997248](https://bugs.chromium.org/p/chromium/issues/detail?id=365997248)  
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5092488609931264)  
+- [Spec](https://drafts.csswg.org/css-view-transitions-2/#view-transition-name-prop)

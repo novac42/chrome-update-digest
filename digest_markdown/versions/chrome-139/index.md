@@ -26,6 +26,6 @@ title: Chrome 139 Release Notes
 ## Navigation
 
 - [← Chrome 140 (Newer)](../chrome-140/index.html)
-- [Chrome 137 (Older) →](../chrome-137/index.html)
+- [Chrome 138 (Older) →](../chrome-138/index.html)
 - [View all versions](../index.html)
 - [Browse by feature area](../../areas/index.html)

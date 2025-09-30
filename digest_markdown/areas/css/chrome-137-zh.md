@@ -3,173 +3,171 @@ layout: default
 title: chrome-137-zh
 ---
 
-## Area Summary
+## 区域摘要
 
-Chrome 137 提升了 CSS 的表达能力、可访问性、SVG 集成与渲染精度。主要主题包括条件值支持 (if())、改进的 reading-flow 与焦点顺序控制、更丰富的动画路径与视图过渡，以及通过浮点画布色彩实现的更高保真渲染。这些改动让开发者对布局语义、动画和图形保真度有更清晰的控制，同时改进可访问性与与操作系统集成 (accent-color)。总体上，它们扩展了可以在 CSS 中声明式表达的范围，并减少对 JavaScript 权宜之计的需求。
+Chrome 137 引入了一系列以 CSS 为中心的改进，强调条件样式、可访问性感知的布局顺序、更丰富的 SVG/CSS 集成，以及动画/过渡的人机工程学。对开发者来说，显著变化包括用于行内条件值的 CSS `if()` 函数、用于逻辑焦点与辅助顺序控制的 `reading-flow`/`reading-order`，以及用于 SPA 动画连续性的 `view-transition-name: match-element`。这些功能通过提供更具表达力、可访问且对动画友好的 CSS 原语，减少对大量 JS 权宜之计的需求，从而推动平台进步。更新降低了实现常见 UI 模式（可访问性、响应式动画路径、系统主题化）的难度，并改善了与 Web 平台规范的互操作性。
 
-## Detailed Updates
+## 详细更新
 
-下面的条目在上述摘要基础上展开说明，侧重已发布内容、工作原理的高层描述以及面向开发者的实际用例。
+以下条目扩展了上文摘要，并为 Chrome 137 中交付的每个 CSS 领域功能提供实用和技术上下文。
 
 ### CSS if() function
 
-#### What's New
-The CSS `if()` function provides a concise way to express conditional values. It accepts a series of condition-value pairs and returns the value associated with the first true condition.
+#### 新增内容
+CSS `if()` 函数提供了一种简洁方式，使用以分号分隔的一系列条件-值对来表达条件值。它按顺序评估条件并返回与第一个为真的条件关联的值。
 
-#### Technical Details
-The function evaluates condition-value pairs sequentially; if none evaluate true the behavior follows the specification. See the spec for formal syntax and evaluation rules.
+#### 技术细节
+实现了来自 CSS Values Level 5 draft 的规范定义的 `if()`，在 CSS 表达式中处理条件/值对。
 
-#### Use Cases
-Replace verbose calc- or custom-property-based conditionals and simplify responsive, state-dependent property values directly in CSS.
+#### 适用场景
+在无需 CSS 自定义属性和 JS 权宜之计的情况下实现行内条件样式；适用于回退样式、响应式变体以及简化复杂的 calc/链式场景。
 
-#### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=346977961 (跟踪 bug #346977961)  
-- https://chromestatus.com/feature/5084924504915968 (ChromeStatus.com 条目)  
-- https://www.w3.org/TR/css-values-5/#if-function (规范)
+#### 参考资料
+- [跟踪问题 #346977961](https://bugs.chromium.org/p/chromium/issues/detail?id=346977961)  
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/5084924504915968)  
+- [规范](https://www.w3.org/TR/css-values-5/#if-function)
 
 ### CSS reading-flow, reading-order properties
 
-#### What's New
-`reading-flow` controls the order elements are exposed to accessibility tools and tab navigation; `reading-order` allows manual overrides within a reading flow container.
+#### 新增内容
+添加了 `reading-flow` 来控制元素向可访问性工具和制表焦点暴露的顺序，添加了 `reading-order` 以允许作者在阅读流容器内覆盖顺序。
 
-#### Technical Details
-These properties affect the logical sequential exposure of elements for focus and assistive technologies in flex, grid, or block layouts per the drafts.
+#### 技术细节
+实现了来自 Display Level 4 drafts 的 reading-flow 模型，以影响可访问性 API 和顺序焦点导航使用的逻辑序列。
 
-#### Use Cases
-Improve keyboard navigation, accessibility semantics, and control over sequential focus in complex layouts without DOM reordering.
+#### 适用场景
+在无需重排 DOM 的情况下控制键盘/制表顺序和辅助技术的阅读顺序，适用于复杂布局（flex、grid、block）；改善了旋转、多栏或仅视觉排序场景下的可访问性。
 
-#### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=40932006 (跟踪 bug #40932006)  
-- https://chromestatus.com/feature/5061928169472000 (ChromeStatus.com 条目)  
-- https://drafts.csswg.org/css-display-4/#reading-flow (规范)  
-- https://developer.chrome.com/blog/reading-flow (使用 CSS reading-flow 进行逻辑顺序焦点导航)
+#### 参考资料
+- [跟踪问题 #40932006](https://bugs.chromium.org/p/chromium/issues/detail?id=40932006)  
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/5061928169472000)  
+- [规范](https://drafts.csswg.org/css-display-4/#reading-flow)  
+- [使用 CSS reading-flow 实现逻辑顺序的焦点导航](https://developer.chrome.com/blog/reading-flow)
 
 ### Ignore letter spacing in cursive scripts
 
-#### What's New
-Letter-spacing can be ignored for cursive scripts to avoid disrupting word structure, aligning behavior with the specification and improving readability for cursive-script users.
+#### 新增内容
+添加了在手动指定 `letter-spacing` 时对草书/连笔文字忽略间距的行为，符合 CSS Text 规范，以避免破坏单词形状和可读性。
 
-#### Technical Details
-The implementation conditionally disregards the `letter-spacing` setting for cursive scripts as specified in the CSS Text spec.
+#### 技术细节
+实现了文本模块的指导，选择性地在会损害字形连结完整性的草书/手写字体上忽略 `letter-spacing`。
 
-#### Use Cases
-Typography-sensitive interfaces and internationalized text rendering where letter-spacing should not break cursive script legibility.
+#### 适用场景
+通过防止开发者设置的字间距破坏字形连结和单词识别，改进草书和手写语言的排版；对本地化敏感的 UI 至关重要。
 
-#### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=40618336 (跟踪 bug #40618336)  
-- https://chromestatus.com/feature/5088256061988864 (ChromeStatus.com 条目)  
-- https://www.w3.org/TR/css-text-3/#letter-spacing-property (规范)
+#### 参考资料
+- [跟踪问题 #40618336](https://bugs.chromium.org/p/chromium/issues/detail?id=40618336)  
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/5088256061988864)  
+- [规范](https://www.w3.org/TR/css-text-3/#letter-spacing-property)
 
 ### Selection API getComposedRanges and direction
 
-#### What's New
-Adds `Selection.direction` (returns `none`, `forward`, or `backward`) and `Selection.getComposedRanges()` (returns 0 or 1 composed StaticRange).
+#### 新增内容
+交付了两个 Selection API 补充：`Selection.direction`（返回 `none`、`forward` 或 `backward`）和 `Selection.getComposedRanges()`（返回 0 或 1 个 composed StaticRange，可能跨越 shadow 边界）。
 
-#### Technical Details
-`getComposedRanges()` yields a composed StaticRange that may cross shadow DOM or other boundaries as permitted by the Selection spec; `direction` exposes selection traversal direction.
+#### 技术细节
+使 Selection 行为与 Selection API 草案对齐，以公开选择的重力和对在 shadow/slot 上下文中有用的组合范围抽象。
 
-#### Use Cases
-Improved programmatic selection handling for editors, rich text controls, and complex DOM (including shadow DOM) scenarios where selection direction and composed ranges matter.
+#### 适用场景
+改进富组件和 shadow DOM 中对用户文本选择的编程处理，使编辑器和可访问性工具能够实现准确的插入点/选择逻辑。
 
-#### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=40286116 (跟踪 bug #40286116)  
-- https://chromestatus.com/feature/5069063455711232 (ChromeStatus.com 条目)  
-- https://w3c.github.io/selection-api/#dom-selection-getcomposedranges (规范)
+#### 参考资料
+- [跟踪问题 #40286116](https://bugs.chromium.org/p/chromium/issues/detail?id=40286116)  
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/5069063455711232)  
+- [规范](https://w3c.github.io/selection-api/#dom-selection-getcomposedranges)
 
 ### Support offset-path: shape()
 
-#### What's New
-Support for `offset-path: shape()` enables using responsive shapes to define animation motion paths.
+#### 新增内容
+支持 `offset-path: shape()`，允许使用响应式形状驱动动画运动路径。
 
-#### Technical Details
-`shape()` allows specifying a CSS shape as an offset path so animated elements can follow declarative, responsive geometry.
+#### 技术细节
+实现了 CSS Motion Path / Shapes Level 规范中为 `offset-path` 定义的 `shape()` 函数，使路径能够适应布局。
 
-#### Use Cases
-Declarative motion along complex, responsive paths for UI animations, without relying on JavaScript-generated keyframes.
+#### 适用场景
+创建遵循布局感知形状（例如边界框或响应式形状）的运动路径动画，而无需手动重新计算路径。
 
-#### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=389713717 (跟踪 bug #389713717)  
-- https://chromestatus.com/feature/5062848242884608 (ChromeStatus.com 条目)  
-- https://www.w3.org/TR/css-shapes-2/#shape-function (规范)
+#### 参考资料
+- [跟踪问题 #389713717](https://bugs.chromium.org/p/chromium/issues/detail?id=389713717)  
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/5062848242884608)  
+- [规范](https://www.w3.org/TR/css-shapes-2/#shape-function)
 
 ### Support the transform attribute on SVGSVGElement
 
-#### What's New
-Enables applying transformation properties (scale, rotate, translate, skew) directly to the `<svg>` root element via its `transform` attribute.
+#### 新增内容
+允许在 `<svg>` 根元素上使用 `transform` 属性，以对整个 SVG 坐标系或其内容应用缩放、旋转、平移、倾斜等变换。
 
-#### Technical Details
-Applying `transform` to the SVG root affects the entire SVG coordinate system or its contents, aligning SVG root transformability with the SVG2 spec.
+#### 技术细节
+实现了 SVG2 中对根 `<svg>` 元素的可变换性，使行为与 InterfaceSVGTransformable 规范一致。
 
-#### Use Cases
-Global transformations of SVG documents without wrapping content, simplifying animations and coordinate-space adjustments.
+#### 适用场景
+无需额外包装元素即可简化全局 SVG 变换；便于通过 CSS 或属性缩放/旋转整个 SVG。
 
-#### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=40313130 (跟踪 bug #40313130)  
-- https://chromestatus.com/feature/5070863647424512 (ChromeStatus.com 条目)  
-- https://www.w3.org/TR/SVG2/types.html#InterfaceSVGTransformable (规范)
+#### 参考资料
+- [跟踪问题 #40313130](https://bugs.chromium.org/p/chromium/issues/detail?id=40313130)  
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/5070863647424512)  
+- [规范](https://www.w3.org/TR/SVG2/types.html#InterfaceSVGTransformable)
 
 ### System accent color for accent-color property
 
-#### What's New
-`accent-color` can use the operating system's accent color so form elements adopt the user's OS-defined accent automatically.
+#### 新增内容
+`accent-color` 现在可以使用操作系统的强调色，使表单控件（复选框、单选按钮、进度条）自动采用用户的操作系统强调色。
 
-#### Technical Details
-Form controls such as checkboxes, radios, and progress bars will reflect the system accent color when `accent-color` is set to use it, per the CSS UI spec.
+#### 技术细节
+使 `accent-color` 的行为与 CSS UI Level 4 对齐，将系统强调色令牌映射到表单元素的渲染。
 
-#### Use Cases
-Native-integrated theming of form controls to match user preferences and OS-level theming, improving visual consistency.
+#### 适用场景
+确保内置控件的原生一致主题，改善与平台 UI 的视觉融合，并减少自定义样式需求。
 
-#### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=40764875 (跟踪 bug #40764875)  
-- https://chromestatus.com/feature/5088516877221888 (ChromeStatus.com 条目)  
-- https://www.w3.org/TR/css-ui-4/#accent-color (规范)
+#### 参考资料
+- [跟踪问题 #40764875](https://bugs.chromium.org/p/chromium/issues/detail?id=40764875)  
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/5088516877221888)  
+- [规范](https://www.w3.org/TR/css-ui-4/#accent-color)
 
 ### Allow <use> to reference an external document's root element by omitting the fragment
 
-#### What's New
-Loosens `<use>` referencing so omitting a fragment can reference an external document's root element, simplifying external SVG reuse.
+#### 新增内容
+放宽了 `<use>` 的引用要求，当引用外部 SVG 文档且省略片段时，解析为该文档的根元素。
 
-#### Technical Details
-Previously a fragment ID was required; this change allows `<use>` to resolve to the external document root when no fragment is provided, per the SVG struct spec.
+#### 技术细节
+调整了跨文档引用的 `<use>` 解析逻辑，以在未提供片段时接受外部文档根目标，符合 SVG2 结构规则。
 
-#### Use Cases
-Easier inclusion and reuse of external SVG documents’ root content via `<use>` without needing fragment identifiers.
+#### 适用场景
+简化通过 `<use>` 重用整个外部 SVG 文档的流程，无需内部片段 ID；改善 SVG 组合工作流。
 
-#### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=40362369 (跟踪 bug #40362369)  
-- https://chromestatus.com/feature/5078775255900160 (ChromeStatus.com 条目)  
-- https://www.w3.org/TR/SVG2/struct.html#UseElement (规范)
+#### 参考资料
+- [跟踪问题 #40362369](https://bugs.chromium.org/p/chromium/issues/detail?id=40362369)  
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/5078775255900160)  
+- [规范](https://www.w3.org/TR/SVG2/struct.html#UseElement)
 
 ### Canvas floating point color types
 
-#### What's New
-Introduces floating point pixel formats for `CanvasRenderingContext2D`, `OffscreenCanvasRenderingContext2D`, and `ImageData` to enable higher precision and HDR workflows.
+#### 新增内容
+在 Canvas 2D 上下文和 ImageData 中添加对浮点像素格式（而非 8 位）的支持，以实现更高精度的颜色表示。
 
-#### Technical Details
-Allows float-based pixel formats instead of 8-bit fixed point, supporting high dynamic range and high-precision rendering scenarios as described in the canvas spec.
+#### 技术细节
+扩展了 CanvasRenderingContext2D、OffscreenCanvasRenderingContext2D 和 ImageData，以按照 HTML Canvas 规范扩展支持浮点颜色类型。
 
-#### Use Cases
-Medical visualization, HDR imaging, scientific visualizations, and any application requiring greater color precision than 8-bit.
+#### 适用场景
+对于需要高动态范围或高精度渲染的场景（医学可视化、科学成像、HDR 工作流），8 位颜色量化不足时这是必要的。
 
-#### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=40245602 (跟踪 bug #40245602)  
-- https://chromestatus.com/feature/5053734768197632 (ChromeStatus.com 条目)  
-- https://html.spec.whatwg.org/multipage/canvas.html#the-2d-rendering-context (规范)
+#### 参考资料
+- [跟踪问题 #40245602](https://bugs.chromium.org/p/chromium/issues/detail?id=40245602)  
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/5053734768197632)  
+- [规范](https://html.spec.whatwg.org/multipage/canvas.html#the-2d-rendering-context)
 
 ### view-transition-name: match-element
 
-#### What's New
-The `match-element` value generates a unique ID based on an element's identity and renames it for use in view transitions, aiding animations when elements move in single-page apps.
+#### 新增内容
+`view-transition-name` 的 `match-element` 值基于元素的身份生成唯一 ID，从而在视图过渡中为在 SPA 中移动的元素提供一致的命名。
 
-#### Technical Details
-`match-element` produces a consistent identifier for an element so it can be matched across view transitions even as the element moves within the app, following the view transitions draft.
+#### 技术细节
+实现了 View Transitions Level 2 draft 中的视图过渡命名机制，以匹配在 DOM 中移动的元素，而无需手动 ID。
 
-#### Use Cases
-Smooth element-preserving animations in SPAs where DOM reparenting or reordering occurs, enabling coherent view transitions without manual ID management.
+#### 适用场景
+简化为在客户端导航期间移动或更改父级的元素（SPA 路由中常见）创建无缝过渡，提升动画连续性而无需管理 DOM ID。
 
-#### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=365997248 (跟踪 bug #365997248)  
-- https://chromestatus.com/feature/5092488609931264 (ChromeStatus.com 条目)  
-- https://drafts.csswg.org/css-view-transitions-2/#view-transition-name-prop (规范)
-
-Saved to: digest_markdown/webplatform/CSS/chrome-137-stable-en.md
+#### 参考资料
+- [跟踪问题 #365997248](https://bugs.chromium.org/p/chromium/issues/detail?id=365997248)  
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/5092488609931264)  
+- [规范](https://drafts.csswg.org/css-view-transitions-2/#view-transition-name-prop)

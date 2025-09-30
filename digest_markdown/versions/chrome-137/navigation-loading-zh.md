@@ -1,38 +1,45 @@
-## Area Summary
+---
+layout: default
+title: navigation-loading-zh
+---
 
-Chrome 137 继续通过 Storage Partitioning 的工作，根据 Storage Key（top-level site、frame origin 和 has-cross-site-ancestor 标志）对 Blob URL 访问进行分区，但有意保留一个例外：顶级导航仍仅按 frame origin 分区。对开发者影响最大的变化是跨存储分区对 Blob URL 的隐式共享减少，这会影响跨框架和源如何获取或导航到 blobs。此举通过收紧数据隔离并使 blob 处理与 site-isolation 和隐私目标一致，推进了 Web 平台。生成或在框架、service workers 或导航之间传递 Blob URL 的团队应审查共享模式并测试跨源场景。
+## 区域摘要
 
-## Detailed Updates
+Chrome 137 继续推进 Storage Partitioning 工作，将 Storage Key 分区应用于 Navigation-Loading 领域的 Blob URL 访问。主要更改是按 Storage Key（top-level site、frame origin 和 has-cross-site-ancestor）对 Blob URL 访问进行分区，但明确例外是顶层导航仍仅按 frame origin 分区。此更新主要影响依赖 Blob URL 的跨站嵌入和导航流，收紧隐私边界，同时将顶层导航的破坏降到最低。开发者应评估跨源框架中 Blob URL 的使用，并更新测试以反映新的访问语义。
 
-Below are the Navigation-Loading–specific changes in Chrome 137 derived from the release data.
+## 详细更新
 
-### Blob URL Partitioning: Fetching/Navigation (Blob URL 访问分区：获取/导航)
+This section lists the Navigation-Loading change in Chrome 137 and its developer implications.
 
-#### What's New
-Partitioning of Blob URL access by Storage Key (top-level site, frame origin, and the has-cross-site-ancestor boolean) has been implemented as part of Storage Partitioning. Top-level navigations are an exception and remain partitioned only by frame origin.
+### Blob URL Partitioning: Fetching/Navigation（Blob URL 分区：获取/导航）
 
-#### Technical Details
-This feature continues Storage Partitioning work; Blob URL access is scoped to Storage Key components listed above. The described exception (top-level navigations partitioned only by frame origin) is preserved per the release notes.
+#### 新增内容
+Chrome 按 Storage Key（top-level site、frame origin 和 has-cross-site-ancestor 布尔值）对 Blob URL 访问进行分区，但顶层导航仍然仅按 frame origin 分区。
 
-#### Use Cases
-- Prevent accidental cross-site access to blobs created in a different storage partition.
-- Require explicit sharing strategies if blobs must be consumed across different top-level sites or cross-site frames.
-- Review PWA, service-worker, and navigation flows that rely on blob: URLs to ensure expected availability after partitioning.
+#### 技术细节
+- Blob URL 访问被限定到由 top-level site、frame origin 及该帧是否具有跨站祖先（has-cross-site-ancestor）组成的 Storage Key。
+- 存在例外：顶层导航仍仅按 frame origin 分区（而不是完整的 Storage Key）。
+- 这使得 Blob URL 的访问控制与更广泛的 Storage Partitioning 模型保持一致，以减少跨站数据暴露。
 
-#### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=40057646 (Tracking bug #40057646)  
-- https://chromestatus.com/feature/5037311976488960 (ChromeStatus.com entry)
+#### 适用场景
+- 防止在一个 Storage Key（例如嵌入的跨站框架）中创建的 Blob URLs 在不同的 Storage Key 中被使用，从而改善隐私边界。
+- 通过使顶层导航仅按 frame origin 分区，尽量减少对顶层导航的回归影响。
+- 要求开发者审查跨框架的 Blob URL 共享模式并更新依赖全局 Blob URL 可访问性的导航/测试流程。
 
-## Area-Specific Expertise (Navigation-Loading implications)
+#### 参考资料
+- https://bugs.chromium.org/p/chromium/issues/detail?id=40057646
+- https://chromestatus.com/feature/5037311976488960
 
-- css: 验证在 CSS 中使用的基于 Blob 的任何资源（例如通过 blobs 生成并用于 `url()` 引用的数据）是否在相同的 storage partition 中提供，或已针对分区进行调整。
-- webapi: Blob URL 创建和 fetch/navigation 语义现在以分区为范围；将 `blob:` URLs 在帧之间传递的 APIs 可能需要进行协调。
-- graphics-webgpu: 如果 Blob URL 提供跨帧加载的 shader 或二进制资产，请确保分区对齐以避免资源丢失。
-- javascript: 在 window/frames 之间发布 Blob URL 的代码可能会因 Storage Key 而表现出不同的可用性；请在跨源测试用例中验证。
-- security-privacy: 更强的隔离减少了与 Blob URL 相关的跨站数据泄露向量。
-- 性能: 当在不同分区中重新请求 blobs 时，分区可能影响缓存命中或资源重用。
-- multimedia: 基于 Blob 的媒体源（例如用于媒体的 object URLs）应在导航和框架间验证其可用性。
-- devices: 来自生成 blobs 的设备 API 的文件/Blob 访问模式必须考虑分区边界。
-- pwa-service-worker: 涉及 Blob URL 的 service worker fetch/navigation 可能受到影响；请测试离线场景以及提供或转发 blobs 的 fetch 处理程序。
-- webassembly: 通过 Blob URL 交付的 WASM 二进制在跨帧使用时需要分区感知的加载。
-- 弃用: 未宣布任何弃用；将此视为行为改变，在依赖 Blob 共享的场景中需要进行迁移/测试。
+## 区域专门知识（Navigation-Loading 的影响）
+
+- css: No direct CSS changes，但当 Blob URL 访问发生变化时，影响滚动/布局的跨源 iframe 行为可能需要重新验证。
+- webapi: Blob URL fetch/navigation 语义现在是 Storage Key–scoped；创建或解析 Blob URLs 的 API 必须考虑存储分区边界。
+- graphics-webgpu: 用作纹理或着色器的来自 Blob 的资源在跨站帧间可能会因 Storage Key 而不可访问；验证 GPU 渲染管线中的资源加载。
+- javascript: 在帧间生成或使用 Blob URL 的 JS 必须处理存储分区访问和回退机制。
+- security-privacy: 通过限制跨站 Blob 重用来加强隐私，降低通过 Blob URL 的跨站数据外泄风险。
+- performance: 分区可能影响跨上下文对基于 Blob 的资源的缓存/记忆化；审查导航的性能假设。
+- multimedia: 在跨源框架中使用 Blob URL 的媒体元素可能会受到访问限制；确保媒体供应考虑 Storage Key 范围。
+- devices: 基于 Blob 的设备数据（例如相机捕获）以 Blob URL 存储时，在帧或导航间使用需尊重 Storage Key 边界。
+- pwa-service-worker: 依赖 Blob URL 的 service worker fetchs 和导航流程应在 Storage Key 分区下进行测试。
+- webassembly: 从 Blob URL 加载的 WASM 模块需要验证在多源场景中跨 Storage Key 的可访问性。
+- 弃用: 将此视为行为更改而非弃用；提供迁移测试并为跨上下文的 Blob 共享提供显式处理。

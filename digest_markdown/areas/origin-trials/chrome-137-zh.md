@@ -3,81 +3,74 @@ layout: default
 title: chrome-137-zh
 ---
 
-## Area Summary
+## 详细更新
 
-Chrome 137's Origin Trials 专注于渲染性能的实验性控制、嵌入内容中的媒体行为以及设备端生成文本的 API。最具影响力的更改允许开发者管理渲染资源分配（`full-frame-rate` token）、通过权限策略暂停不可见 iframe 的媒体播放，以及在设备端测试两个新的 AI 驱动文本 API（Rewriter 和 Writer）。这些更新通过向开发者暴露性能和嵌入行为的控制项，同时在隐私和资源意识的设备端机器学习能力上进行迭代，推动平台发展。团队应评估 origin trial 的注册，以便尽早原型化集成并评估隐私、用户体验和性能的权衡。
+Below are concise, developer-focused descriptions of each origin-trial feature in Chrome 137 and how they affect implementation, security, and use cases.
 
-## Detailed Updates
+### Full frame rate render blocking attribute（全帧率渲染阻塞属性）
 
-Below are the Chrome 137 origin-trial features with succinct developer-focused explanations and relevant links.
+#### 新增内容
+新增一个名为 `full-frame-rate` 的渲染阻塞令牌。当渲染器被该令牌阻塞时，它会降低自身帧率以保留 CPU/GPU 资源用于加载。
 
-### Full frame rate render blocking attribute
+#### 技术细节
+这引入了一个由渲染器的节流逻辑检查的阻塞属性令牌；遵守该令牌的渲染器在被阻塞时将降低帧率，从而将资源重新分配到加载上。origin-trial 的门控允许开发者在更广泛发布前测试其对性能和响应性的影响。
 
-#### What's New
-Adds a new render blocking token named `full-frame-rate`. When a renderer is blocked with this token, it runs at a lower frame rate to reserve resources for loading.
+#### 适用场景
+- 通过降低动画顺滑性来改善重加载页面的加载性能。
+- 测试复杂单页应用或媒体密集型站点的资源管理策略。
 
-#### Technical Details
-这是一个 origin-trial 级别的标志，暴露了一个渲染阻塞属性。当渲染器带有 `full-frame-rate` token 时，它会降低帧率，以便为加载保留资源，进而影响 compositor/渲染管线和调度，优先处理加载任务而不是高频渲染。
-
-#### Use Cases
-- 在网络或 CPU 负载较重时，通过降低渲染开销来改善感知加载性能。
-- 在复杂页面上，当加载优先级应暂时高于平滑动画时，实现更好的资源分配。
-
-#### References
+#### 参考资料
 - https://bugs.chromium.org/p/chromium/issues/detail?id=397832388
 - https://chromestatus.com/feature/5109023781429248
 
-### Pause media playback on not-rendered iframes
+### Pause media playback on not-rendered iframes（在未渲染的 iframe 上暂停媒体播放）
 
-#### What's New
-Introduces a `media-playback-while-not-rendered` permission policy that allows embedders to pause media playback in iframes that are not rendered (e.g., `display:none`).
+#### 新增内容
+引入一个权限策略 `media-playback-while-not-rendered`，允许嵌入站点在嵌入的 iframe 显示为 `none`（未渲染）时暂停媒体。
 
-#### Technical Details
-该权限策略扩展了嵌入方的控制面（Permissions Policy），并钩入嵌套浏览上下文的媒体播放语义。当计算出的 display 为 `none` 时，用户代理可以挂起播放，从而减少不可见 iframe 的 CPU/多媒体解码使用。
+#### 技术细节
+以权限策略形式暴露，由嵌入方控制；当禁用时，嵌入方可以在未渲染的嵌入框架中暂停或阻止播放。该功能作为 origin-trial 门控特性实现，以观察互操作性和用户体验影响。
 
-#### Use Cases
-- 通过暂停隐藏嵌入中的音视频，减少 CPU 和电池消耗。
-- 防止来自屏外或隐藏第三方内容的意外音频，改善用户体验。
-- 对于性能敏感的页面和嵌入第三方媒体的 PWA 非常有用。
+#### 适用场景
+- 减少后台或隐藏 iframe 媒体产生的不必要 CPU/带宽消耗。
+- 改善复杂页面和广告容器中嵌入媒体的电池寿命和性能。
 
-#### References
+#### 参考资料
 - https://developer.chrome.com/origintrials/#/trials/active
 - https://bugs.chromium.org/p/chromium/issues/detail?id=351354996
 - https://chromestatus.com/feature/5082854470868992
 
-### Rewriter API
+### Rewriter API（重写器 API）
 
-#### What's New
-An origin-trial API that transforms and rephrases input text using an on-device AI language model (e.g., shorten, rephrase, make constructive).
+#### 新增内容
+一个 origin-trial API，使用本地设备上的 AI 语言模型对输入文本进行转换或改写（例如，缩短至字数限制、改变语气）。
 
-#### Technical Details
-暴露了一个在设备端通过本地模型执行文本转换的 web API。集成会触及 webapi 表面（新的 DOM interfaces）、隐私控制，并可能与资源管理（用于模型推理的 CPU/GPU 使用）交互。规范来自 WICG；需通过 origin trials 仪表盘注册参与。
+#### 技术细节
+暴露用于文本转换的 Web API，模型推理在本地设备上执行；规范和试验允许开发者在客户端进行隐私保护的文本重写实验，同时评估模型限制和性能。
 
-#### Use Cases
-- 在提交前对用户生成内容进行内联摘要或缩短。
-- 客户端侧重写以调整语气或适配受众，避免往返服务器。
-- 在本地进行预处理以强制内容长度限制并改善用户体验。
+#### 适用场景
+- 在提交前对用户生成内容进行摘要或简化的 UI 功能。
+- 保持文本在本地的客户端编辑工具以尊重隐私。
 
-#### References
+#### 参考资料
 - https://developer.chrome.com/origintrials/#/trials/active
 - https://bugs.chromium.org/p/chromium/issues/detail?id=358214322
 - https://chromestatus.com/feature/5089854436556800
 - https://wicg.github.io/rewriter-api/
 
-### Writer API
+### Writer API（写作 API）
 
-#### What's New
-An origin-trial API to generate new textual content from a writing task prompt using an on-device AI language model.
+#### 新增内容
+一个 origin-trial API，使得可通过本地 AI 模型根据提示生成新的文本内容。
 
-#### Technical Details
-提供了一个基于设备端模型、根据结构化提示生成文本的生成型 API 表面。作为 origin trial，这涉及请求/响应接口的 webapi 工作、围绕本地模型使用的隐私考量，以及潜在的许可/策略影响。为开发者审阅提供了规范和策略/许可参考资料。
+#### 技术细节
+在客户端提供基于提示的文本生成编程接口。origin-trial 的暴露让开发者评估内容质量、性能以及与策略/合规相关的考量。与实现相关的许可与策略文件包含在试验参考资料中。
 
-#### Use Cases
-- 为用户可见内容生成结构化数据的说明。
-- 在客户端编辑器中自动撰写商品描述或扩展大纲。
-- 在 Web 应用中直接集成的辅助写作工具，无需服务器端生成。
+#### 适用场景
+- 在无需服务器端 ML 的情况下生成结构化数据的解释、产品描述或草稿内容。
+- 通过本地执行文本生成增强 PWA 的离线能力。
 
-#### References
+#### 参考资料
 - https://developer.chrome.com/origintrials/#/trials/active
 - https://bugs.chromium.org/p/chromium/issues/detail?id=357967382
 - https://chromestatus.com/feature/5089855470993408
@@ -86,5 +79,5 @@ An origin-trial API to generate new textual content from a writing task prompt u
 - https://www.apache.org/licenses/LICENSE-2.0
 - https://developers.google.com/site-policies
 
-已保存的文件路径：
+此摘要的文件路径:
 digest_markdown/webplatform/Origin trials/chrome-137-stable-en.md

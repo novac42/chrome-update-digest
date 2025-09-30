@@ -1,45 +1,45 @@
 ---
 layout: default
-title: Area Summary
+title: chrome-137-zh
 ---
 
-# Area Summary
+## 区域摘要
 
-Chrome 137 (stable) 继续推进 Storage Partitioning 的工作，针对导航和 fetch 场景引入了对 Blob URL 的分区。主要方向是按 Storage Key（top-level site、frame origin 以及 has-cross-site-ancestor boolean）更严格地隔离对 Blob URL 的访问，但对顶层导航有一项声明的例外（仅按 frame origin 分区）。此更改最影响依赖在不同源、iframe 或存储分区之间共享 blob: URL 的开发者，并通过收紧隐私与存储隔离边界推动 Web 平台发展。由于发行说明文本被截断，请参阅参考链接以获取完整背景。
+Chrome 137 继续推进 Storage Partitioning 工作，将 Storage Key 分区应用于 Navigation-Loading 领域的 Blob URL 访问。主要更改是按 Storage Key（top-level site、frame origin 和 has-cross-site-ancestor）对 Blob URL 访问进行分区，但明确例外是顶层导航仍仅按 frame origin 分区。此更新主要影响依赖 Blob URL 的跨站嵌入和导航流，收紧隐私边界，同时将顶层导航的破坏降到最低。开发者应评估跨源框架中 Blob URL 的使用，并更新测试以反映新的访问语义。
 
-## Detailed Updates
+## 详细更新
 
-Below are the Navigation-Loading–specific changes in this release and what they mean for developers.
+This section lists the Navigation-Loading change in Chrome 137 and its developer implications.
 
-### Blob URL Partitioning: Fetching/Navigation (Blob URL 分区：导航与获取)
+### Blob URL Partitioning: Fetching/Navigation（Blob URL 分区：获取/导航）
 
-#### What's New
-Chrome 将对 Blob URL 的访问按 Storage Key（top-level site、frame origin、has-cross-site-ancestor boolean）进行分区，但顶层导航作为特殊情况，仅按 frame origin 分区。
+#### 新增内容
+Chrome 按 Storage Key（top-level site、frame origin 和 has-cross-site-ancestor 布尔值）对 Blob URL 访问进行分区，但顶层导航仍然仅按 frame origin 分区。
 
-#### Technical Details
-发行说明指出 Blob URL 访问与 Storage Key 的组成部分（top-level site、frame origin、has-cross-site-ancestor boolean）相关联。顶层导航被视为特殊情况，仍仅按 frame origin 分区。所给的描述被截断；请参阅下面的链接以获取完整的跟踪细节。
+#### 技术细节
+- Blob URL 访问被限定到由 top-level site、frame origin 及该帧是否具有跨站祖先（has-cross-site-ancestor）组成的 Storage Key。
+- 存在例外：顶层导航仍仅按 frame origin 分区（而不是完整的 Storage Key）。
+- 这使得 Blob URL 的访问控制与更广泛的 Storage Partitioning 模型保持一致，以减少跨站数据暴露。
 
-#### Use Cases
-- 在不同 iframe 或源之间创建并传递 blob: URL 的站点，在 Storage Key 不同时可能会遇到不同的可访问性语义。
-- 在相同 Storage Key 内用于导航或 fetch 的单一源 blob: URL 应继续可用，但跨分区重用可能会受到限制。
-- 使用 blob 与 service workers、跨源 iframe 或复杂多站点流程的开发者应审计 blob 使用情况，并在分区环境下测试导航/获取行为。
+#### 适用场景
+- 防止在一个 Storage Key（例如嵌入的跨站框架）中创建的 Blob URLs 在不同的 Storage Key 中被使用，从而改善隐私边界。
+- 通过使顶层导航仅按 frame origin 分区，尽量减少对顶层导航的回归影响。
+- 要求开发者审查跨框架的 Blob URL 共享模式并更新依赖全局 Blob URL 可访问性的导航/测试流程。
 
-#### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=40057646 (Tracking bug #40057646)  
-- https://chromestatus.com/feature/5037311976488960 (ChromeStatus.com entry)
+#### 参考资料
+- https://bugs.chromium.org/p/chromium/issues/detail?id=40057646
+- https://chromestatus.com/feature/5037311976488960
 
-## Area-Specific Expertise (Navigation-Loading relevance)
+## 区域专门知识（Navigation-Loading 的影响）
 
-- css: Blob URL 分区与 CSS 布局无直接关联，但会影响通过 blob: URL 引用的资源（图像、字体）在渲染流程中的可见性。
-- webapi: 直接影响 — Blob URL 的访问规则属于 fetch/导航 语义和资源解析的一部分。
-- graphics-webgpu: 直接影响有限；作为二进制输入用于 GPU 工作流的 blob: 资源应验证其在分区中的可见性。
-- javascript: 由 JS 创建的对象 URL（`URL.createObjectURL`）可能在不同 Storage Key 之间不再可访问；应审查跨上下文的消息传递。
-- security-privacy: 通过将 blob: 访问按 Storage Key 作用域化，加强隔离并减少跨站数据泄露向量。
-- performance: 分区可能会增加缓存碎片或在分区间重复数据；应测量存储和获取模式的影响。
-- multimedia: 用于媒体回放的 Blob URL 应在不同框架/源下测试，以确保分区不会破坏回放。
-- devices: 直接影响较小；接受 blob: 输入的设备 API 应遵循相同的访问约束。
-- pwa-service-worker: 向客户端提供 blob 或依赖共享 blob URL 的 service worker 可能需要调整以确保在分区内覆盖。
-- webassembly: 通过 blob: URL 加载的 WASM 模块受相同分区规则约束；验证模块加载路径。
-- 弃用: 将此视为行为迁移项 — 在跨分区 blob 共享模式上进行测试并更新。
-
-Saved to: digest_markdown/webplatform/Navigation-Loading/chrome-137-stable-en.md
+- css: No direct CSS changes，但当 Blob URL 访问发生变化时，影响滚动/布局的跨源 iframe 行为可能需要重新验证。
+- webapi: Blob URL fetch/navigation 语义现在是 Storage Key–scoped；创建或解析 Blob URLs 的 API 必须考虑存储分区边界。
+- graphics-webgpu: 用作纹理或着色器的来自 Blob 的资源在跨站帧间可能会因 Storage Key 而不可访问；验证 GPU 渲染管线中的资源加载。
+- javascript: 在帧间生成或使用 Blob URL 的 JS 必须处理存储分区访问和回退机制。
+- security-privacy: 通过限制跨站 Blob 重用来加强隐私，降低通过 Blob URL 的跨站数据外泄风险。
+- performance: 分区可能影响跨上下文对基于 Blob 的资源的缓存/记忆化；审查导航的性能假设。
+- multimedia: 在跨源框架中使用 Blob URL 的媒体元素可能会受到访问限制；确保媒体供应考虑 Storage Key 范围。
+- devices: 基于 Blob 的设备数据（例如相机捕获）以 Blob URL 存储时，在帧或导航间使用需尊重 Storage Key 边界。
+- pwa-service-worker: 依赖 Blob URL 的 service worker fetchs 和导航流程应在 Storage Key 分区下进行测试。
+- webassembly: 从 Blob URL 加载的 WASM 模块需要验证在多源场景中跨 Storage Key 的可访问性。
+- 弃用: 将此视为行为更改而非弃用；提供迁移测试并为跨上下文的 Blob 共享提供显式处理。
