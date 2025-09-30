@@ -1,0 +1,47 @@
+version: '138'
+channel: stable
+area: on-device-ai
+extraction_timestamp: '2025-09-30T19:04:43.489135'
+extraction_method: deterministic
+statistics:
+  total_features: 1
+  total_links: 4
+  primary_tags: {}
+  cross_cutting:
+    ai: 1
+    privacy: 1
+    enterprise: 1
+features:
+- title: Summarizer API
+  content: 'Summarizer API is a JavaScript API for producing summaries of input text, backed by an AI language model. Browsers
+    and operating systems are increasingly expected to gain access to a language model. By exposing this built-in model, we
+    avoid every website needing to download their own multi-gigabyte language model, or send input text to third-party APIs.
+    The summarizer API in particular exposes a high-level API for interfacing with a language model in order to summarize
+    inputs for a variety of use cases, in a way that does not depend on the specific language model in question. An enterprise
+    policy (`GenAILocalFoundationalModelSettings`) is available to disable the underlying model downloading which would render
+    this API unavailable.
+
+
+    **References:** [MDN Docs](https://developer.mozilla.org/docs/Web/API/Summarizer) | [Tracking bug #351744634](https://bugs.chromium.org/p/chromium/issues/detail?id=351744634)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5134971702001664) | [Spec](https://wicg.github.io/summarization-api/)'
+  heading_path:
+  - Summarizer API
+  links:
+  - url: https://developer.mozilla.org/docs/Web/API/Summarizer
+    link_type: mdn
+    title: MDN Docs
+  - url: https://bugs.chromium.org/p/chromium/issues/detail?id=351744634
+    link_type: tracking_bug
+    title: 'Tracking bug #351744634'
+  - url: https://chromestatus.com/feature/5134971702001664
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/summarization-api/
+    link_type: spec
+    title: Spec
+  line_number: 1
+  primary_tags: []
+  cross_cutting_concerns:
+  - ai
+  - privacy
+  - enterprise

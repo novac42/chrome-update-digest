@@ -379,7 +379,7 @@ class YAMLPipeline:
     
     def _determine_area(self, feature: Dict) -> str:
         """
-        Determine which area a feature belongs to based on its heading path.
+        Determine which area a feature belongs to based on its heading path and content keywords.
         
         Args:
             feature: Feature dictionary with heading_path
@@ -389,7 +389,7 @@ class YAMLPipeline:
         """
         heading_path = feature.get('heading_path', [])
         
-        # Look for heading2 (usually index 1 or 2 in the path)
+        # Step 1: Check heading patterns first (priority)
         for heading in heading_path:
             # Check each area mapping
             for area, headings in self.area_mappings.items():
@@ -411,6 +411,23 @@ class YAMLPipeline:
                                 break
                         else:
                             return area
+        
+        # Step 2: Check content keywords for configured areas (e.g., on-device-ai)
+        # Only check areas with search_content_keywords: true
+        focus_areas = self.focus_manager.config.get('focus_areas', {})
+        for area_key, area_config in focus_areas.items():
+            if area_config.get('search_content_keywords', False):
+                keywords = area_config.get('keywords', [])
+                if keywords:
+                    # Check if any keyword appears in feature content
+                    feature_content = (
+                        feature.get('content', '') + ' ' + 
+                        feature.get('title', '')
+                    ).lower()
+                    
+                    for keyword in keywords:
+                        if keyword.lower() in feature_content:
+                            return area_key
         
         # Default to 'other' if no match
         return 'other'
