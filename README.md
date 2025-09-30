@@ -44,6 +44,10 @@ pip install -r requirements.txt
 
 ### MCP Server Setup
 
+### Sampling Requirements
+
+This MCP server calls the connected MCP client's LLM using sampling to build its digests. Use a client that supports sampling workflows (for example, VS Code or VS Code Insiders). In VS Code, open `List Servers -> Configure Model Access (Sampling)` for `chrome-digest` and pick a sampling-capable model. `gpt-5-mini` is recommended for fast, high-quality output, but feel free to select the model you prefer.
+
 #### For Claude Desktop
 
 Add to your config file:

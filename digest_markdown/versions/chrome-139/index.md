@@ -12,8 +12,10 @@ title: Chrome 139 Release Notes
 - CSS: [English](./css-en.html) / [Chinese](./css-zh.html) — CSS styling, layout, and UI features
 - HTML-DOM: [English](./html-dom-en.html) / [Chinese](./html-dom-zh.html) — HTML elements and DOM manipulation
 - Graphics and WebGPU: [English](./graphics-webgpu-en.html) / [Chinese](./graphics-webgpu-zh.html) — Graphics rendering and WebGPU features
+- On-device AI: [English](./on-device-ai-en.html) / [Chinese](./on-device-ai-zh.html) — On-device AI and LLM features
 - Web API: [English](./webapi-en.html) / [Chinese](./webapi-zh.html) — Web APIs and browser interfaces
 - Origin trials: [English](./origin-trials-en.html) / [Chinese](./origin-trials-zh.html) — Experimental features in origin trials
+- Deprecations: [English](./deprecations-en.html) / [Chinese](./deprecations-zh.html) — Deprecated and removed features
 - Security-Privacy: [English](./security-privacy-en.html) / [Chinese](./security-privacy-zh.html) — Security and privacy features
 - Navigation-Loading: [English](./navigation-loading-en.html) / [Chinese](./navigation-loading-zh.html) — Navigation and resource loading features
 - Multimedia: [English](./multimedia-en.html) / [Chinese](./multimedia-zh.html) — Media, audio, and video features
@@ -21,7 +23,9 @@ title: Chrome 139 Release Notes
 - Devices: [English](./devices-en.html) / [Chinese](./devices-zh.html) — Device APIs and sensor features
 - JavaScript: [English](./javascript-en.html) / [Chinese](./javascript-zh.html) — JavaScript language features and runtime updates
 - Network: [English](./network-en.html) / [Chinese](./network-zh.html) — Networking and connectivity features
+- Payment: [English](./payment-en.html) / [Chinese](./payment-zh.html) — Payment and payment-related features
 - Deprecation: [English](./deprecation-en.html) / [Chinese](./deprecation-zh.html)
+- Other: [English](./other-en.html) / [Chinese](./other-zh.html)
 
 ## Navigation
 

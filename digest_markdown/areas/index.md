@@ -12,9 +12,10 @@ Browse Chrome release notes organized by feature area to track evolution over ti
 - [CSS](./css/index.html) - Updates in 5 versions — CSS styling, layout, and UI features
 - [HTML-DOM](./html-dom/index.html) - Updates in 4 versions — HTML elements and DOM manipulation
 - [Graphics and WebGPU](./graphics-webgpu/index.html) - Updates in 5 versions — Graphics rendering and WebGPU features
+- [On-device AI](./on-device-ai/index.html) - Updates in 1 version — On-device AI and LLM features
 - [Web API](./webapi/index.html) - Updates in 5 versions — Web APIs and browser interfaces
 - [Origin trials](./origin-trials/index.html) - Updates in 4 versions — Experimental features in origin trials
-- [Deprecations](./deprecations/index.html) - Updates in 1 version — Deprecated and removed features
+- [Deprecations](./deprecations/index.html) - Updates in 2 versions — Deprecated and removed features
 - [Security-Privacy](./security-privacy/index.html) - Updates in 3 versions — Security and privacy features
 - [Navigation-Loading](./navigation-loading/index.html) - Updates in 3 versions — Navigation and resource loading features
 - [Multimedia](./multimedia/index.html) - Updates in 4 versions — Media, audio, and video features
@@ -28,5 +29,7 @@ Browse Chrome release notes organized by feature area to track evolution over ti
 - [Network](./network/index.html) - Updates in 1 version — Networking and connectivity features
 - [Identity](./identity/index.html) - Updates in 1 version — Identity, sign-in, and account features
 - [Browser changes](./browser-changes/index.html) - Updates in 1 version — Platform-level browser behavior updates
+- [Payment](./payment/index.html) - Updates in 1 version — Payment and payment-related features
 - [Deprecation](./deprecation/index.html) - Updates in 3 versions
+- [Other](./other/index.html) - Updates in 1 version
 - [Storage](./storage/index.html) - Updates in 1 version

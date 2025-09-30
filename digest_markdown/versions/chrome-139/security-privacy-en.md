@@ -5,44 +5,36 @@ title: security-privacy-en
 
 ## Area Summary
 
-Chrome 139 tightens CSP integration for worker creation by conforming to the CSP3 spec: CSP is checked during fetch and a worker-blocking CSP now triggers an asynchronous error event instead of a thrown exception. This change affects how developers detect and handle worker load failures and improves predictable, spec-compliant failure semantics. It advances the web platform by aligning Chrome with the W3C CSP fetch-integration behavior, enabling more consistent cross-browser error handling. Teams should update logic that relied on synchronous exceptions around new Worker/new SharedWorker and add robust error-event handling and telemetry.
+Chrome 139 aligns worker creation behavior with the CSP3 fetch integration spec by checking Content Security Policy during fetch and firing an asynchronous error event instead of throwing on "new Worker(url)" or "new SharedWorker(url)". This change reduces unexpected exceptions in page scripts and gives developers an event-driven failure mode to handle CSP-blocked worker loads. For web platform security, it improves consistency across user agents and makes CSP enforcement observable without breaking script flow. Developers should update error handling for worker creation to listen for error events rather than relying on catchable exceptions.
 
 ## Detailed Updates
 
-The single Security-Privacy change in this release refines worker failure semantics under Content Security Policy and is directly relevant to error handling, CSP reporting, and secure script loading patterns.
+The single Security-Privacy update below expands on how Chrome changes worker failure behavior under CSP and what developers should do to adjust.
 
 ### Fire error event for Content Security Policy (CSP) blocked worker
 
 #### What's New
-Chrome now checks CSP during fetch and, when a worker script is blocked by CSP, fires an asynchronous error event instead of throwing an exception during the call to new Worker(url) or new SharedWorker(url).
+Chrome now checks Content Security Policy during the fetch used to create Worker and SharedWorker, and when CSP blocks the fetch it fires an asynchronous error event instead of throwing a synchronous exception from "new Worker(url)" or "new SharedWorker(url)".
 
 #### Technical Details
-- CSP evaluation occurs during the fetch for worker scripts per the CSP3 fetch-integration spec.
-- When CSP blocks the fetch, the browser does not throw synchronously; it emits an error event on the Worker/SharedWorker object asynchronously.
-- This behavior aligns Chrome with the W3C spec and changes observable control flow for worker creation failures.
+- Behavior change implements the CSP3 fetch integration guidance: CSP is evaluated during the worker fetch and a blocked fetch results in an error event dispatched to the worker object.
+- The error is emitted asynchronously, preserving script execution flow and avoiding synchronous exceptions thrown at the time of construction.
+- This aligns Chrome with the spec and the tracked implementation effort referenced in the Chromium bug.
 
 #### Use Cases
-- Update code that wraps new Worker(...) in try/catch to instead attach error listeners (worker.addEventListener('error', ...)) to reliably detect CSP blocks.
-- Improve telemetry and CSP reporting by listening for worker error events and logging or reporting CSP-related failures.
-- Libraries and frameworks that spawn workers should ensure they register error handlers before or immediately after worker creation to avoid missed failures.
+- Robust worker creation: Service authors can attach "error" handlers to Worker/SharedWorker instances to detect CSP rejections and implement fallback strategies (e.g., load alternative scripts, notify the user, or degrade functionality).
+- Error telemetry: Observability improves because blocked fetches emit events that can be logged without try/catch wrapping worker construction.
+- Progressive enhancement: Single-page apps and PWAs can avoid tearing down initialization flows due to unexpected exceptions and instead handle worker availability dynamically.
 
 #### References
-- Tracking bug #41285169: https://issues.chromium.org/issues/41285169
-- ChromeStatus.com entry: https://chromestatus.com/feature/5177205656911872
-- Spec: https://www.w3.org/TR/CSP3/#fetch-integration
+- https://issues.chromium.org/issues/41285169
+- https://chromestatus.com/feature/5177205656911872
+- https://www.w3.org/TR/CSP3/#fetch-integration
 
-## Area-Specific Expertise (Security-Privacy focused guidance)
+## Area-Specific Expertise and Developer Guidance (Security-Privacy focus)
 
-- css: Minimal direct impact; CSP policies that affect inline styles or script-src remain relevant—ensure style/script CSPs are consistent with worker script sources.
-- webapi: Worker/SharedWorker creation semantics changed — rely on event-based failure signals rather than synchronous exceptions.
-- graphics-webgpu: Worker-hosted GPU work that loads modules should handle asynchronous worker error events for CSP blocks.
-- javascript: Do not rely on try/catch around new Worker/new SharedWorker for CSP failures; attach 'error' handlers and propagate errors through Promise-based APIs if needed.
-- security-privacy: Aligns runtime enforcement with CSP3; improves observability and consistent enforcement of cross-origin/script-source restrictions.
-- performance: Slight timing difference (asynchronous vs synchronous failure) — ensure startup flows tolerate deferred failure callbacks.
-- multimedia: Worker-based media processing must handle worker load errors via events for graceful degradation.
-- devices: Hardware-accessing code in workers should validate worker availability via error events before assuming capabilities.
-- pwa-service-worker: ServiceWorker APIs are not changed by this feature; however, other worker types used by PWAs must handle CSP-block events.
-- webassembly: Loading Wasm modules via workers will surface CSP blocks through the error event; add handlers to surface module load failures.
-- deprecations: No deprecations here, but code relying on synchronous exceptions should be migrated to the new event-driven error handling.
-
-Save to: digest_markdown/webplatform/Security-Privacy/chrome-139-stable-en.md
+- security-privacy: This change clarifies CSP enforcement semantics for worker fetches; audit code to attach "error" listeners on Workers and SharedWorkers and avoid relying on constructor exceptions.
+- pwa-service-worker: For PWAs, ensure service worker registration and worker-based features handle asynchronous failure events and provide fallbacks offline.
+- webapi & javascript: Update client-side patterns to use event-driven error handling for worker lifecycle instead of try/catch around constructors; this aligns with event-based DOM APIs.
+- deprecations & performance: No deprecation here, but review initialization paths to prevent performance regressions when adding error listeners and fallback logic.
+- Other areas (css, graphics-webgpu, multimedia, devices, webassembly): While not directly affected, cross-team awareness is useful where worker usage touches these domains (e.g., offloading heavy compute via workers for WebGPU or WASM).

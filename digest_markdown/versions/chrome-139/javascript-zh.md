@@ -3,27 +3,31 @@ layout: default
 title: javascript-zh
 ---
 
-## Area Summary
+## 领域摘要
 
-Chrome 139 使 JSON MIME 类型检测符合规范：按照 WHATWG mimesniff 规范识别所有有效的 JSON MIME 类型。对开发者最重要的变化是对 JSON 有载荷（包括以 `+json` 结尾的厂商和自定义类型）的更广泛且一致的检测，从而减少基于 Content-Type 分支的 API 的互操作性意外。这一对齐通过在解析或处理 JSON 的功能间强制采用统一的基于标准的检测模型，推动了 Web 平台的进步。对 JavaScript 开发者而言，这提高了依赖 Content-Type 分类的 fetch/XHR 处理、service workers 和其他运行时行为的可靠性。
+Chrome 139 (stable) 更新了与 JavaScript 相关的 MIME 类型处理，以完全遵循 WHATWG mimesniff 规范中对 JSON 的要求。浏览器现在除了识别 `application/json` 和 `text/json` 外，还会识别任何以 `+json` 结尾的 MIME 子类型，这会影响通过 Content-Type 检测 JSON 的 API。此更改提升了 web APIs、service workers、fetch/XHR 处理器以及开发者自行实现的 MIME 检查的互操作性与正确性。开发者应检查服务器的 Content-Type 头，并避免仅匹配 `application/json` 的脆弱字符串检查。
 
-## Detailed Updates
+## 详细更新
 
-上述简要更改影响浏览器如何对 JSON 有载荷进行分类，进而影响 JavaScript 代码和 Web API 如何处理响应和请求体。
+Below are the specific changes that implement the summary above and what they mean for JavaScript developers.
 
 ### Specification-compliant JSON MIME type detection（符合规范的 JSON MIME 类型检测）
 
-#### What's New
-Chrome 现在会识别 WHATWG mimesniff 规范定义的所有有效 JSON MIME 类型。这包括任何子类型以 `+json` 结尾的 MIME 类型，以及 `application/json` 和 `text/json`。
+#### 新增内容
+Chrome 现在识别 WHATWG mimesniff 规范定义的所有有效 JSON MIME 类型，包括任何以 `+json` 结尾的 MIME 子类型，以及 `application/json` 和 `text/json`。
 
-#### Technical Details
-检测遵循 WHATWG mimesniff 关于 JSON MIME 类型的规则（子类型以 `+json` 结尾，或为 `application/json`/`text/json`），使 Chrome 的行为与规范保持一致。
+#### 技术细节
+Chromium 的 networking/content-sniffing 层中的检测逻辑已与 WHATWG mimesniff 规范对齐。对执行基于 MIME 启发式判断的 API 来说，任何子类型以 `+json` 结尾的 Content-Type 都会被视为 JSON。
 
-#### Use Cases
-- Fetch/XHR 响应处理：在根据 Content-Type 分支进行 JSON 解析的场景。
-- Service workers 和其他依赖准确 JSON 分类的请求/响应过滤器。
-- 使用厂商特定或自定义 `+json` 子类型（例如 `application/vnd.company+json`）的服务器和客户端集成将被正确视为 JSON。
+#### 适用场景
+- 服务器 API 可以使用类似 `application/vnd.api+json` 的厂商或自定义类型，fetch()、XHR 以及其他浏览器 API 仍会将其视为 JSON。
+- 在 Content-Type 上分支的 service workers 和中间件可以无需自定义列表就可靠地处理 `+json` 子类型。
+- 此前对 `application/json` 进行手动匹配的库应更新以接受 `+json`，或依赖于 response.json() 的行为。
 
-#### References
+#### 参考资料
 - https://chromestatus.com/feature/5470594816278528
 - https://mimesniff.spec.whatwg.org/#json-mime-type
+
+保存此摘要的文件：
+```text
+digest_markdown/webplatform/JavaScript/chrome-139-stable-en.md

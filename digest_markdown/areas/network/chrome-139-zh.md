@@ -3,57 +3,48 @@ layout: default
 title: chrome-139-zh
 ---
 
-## Detailed Updates
+## 领域摘要
 
-The following Network-specific items from Chrome 139 are summarized with practical implications for developers and operations teams.
+Chrome 139（稳定版）通过限制客户端头部中的标识面和强化 Windows 上的 TCP 暂时端口分配，提升了网络领域的隐私性和鲁棒性。对开发者影响最大的更改是减少完整 Accept-Language 列表的暴露（影响服务器端的语言检测和指纹识别）以及对临时 TCP 端口进行随机化（影响连接重用特性和临时端口的可预测性）。这些更新共同推动平台采用以隐私为先的默认设置，同时提高网络栈的弹性。这些更改很重要，因为它们改变了服务器能从请求推断的信息，并可能影响受影响 Windows 版本上的网络诊断和连接行为。
 
-### Reduce fingerprinting in Accept-Language header information (减少 Accept-Language 指纹识别信息)
+## 详细更新
 
-#### What's New
-Reduces the amount of information the `Accept-Language` header value string exposes in HTTP requests and in `navigator.languages`. Instead of sending a full list of the user's preferred languages on every HTTP request using the `Accept-Language` header, Chrome only sends the user's most preferred la...
+Below are the Network-area changes in Chrome 139 that follow from the summary above.
 
-#### Technical Details
-The change truncates the language signal sent from the browser to servers and to the `navigator.languages` API surface, limiting the data available for cross-site fingerprinting and server-side inference.
+### Reduce fingerprinting in Accept-Language header information（减少 Accept-Language 头信息中的指纹识别）
 
-#### Use Cases
-- Privacy-sensitive web apps and analytics should expect less granular per-request language data.
-- Server-side content negotiation relying on full language lists must adapt to receiving only the top-preferred language.
+#### 新增内容
+Chrome 减少了 `Accept-Language` 头和 `navigator.languages` 暴露的信息：不再在每个 HTTP 请求中发送用户完整的首选语言列表，而仅发送用户的首选语言。
 
-#### References
-- 跟踪 bug #1306905 — https://issues.chromium.org/issues/1306905
-- ChromeStatus.com entry — https://chromestatus.com/feature/5188040623390720
+#### 技术细节
+此更改限制了 `Accept-Language` 头的值字符串和 `navigator.languages`，以减少被动指纹识别可用的表面。该行为适用于 HTTP 请求头和 `navigator.languages` API。
 
-### Randomize TCP port allocation on Windows (在 Windows 上随机化 TCP 端口分配)
+#### 适用场景
+- 服务器端的本地化和内容协商每次请求只会看到首选语言；开发者应确保回退逻辑和显式语言协商保持健壮。
+- 减少分析或反欺诈启发式中被动指纹识别的向量。
 
-#### What's New
-Enables TCP port randomization on versions of Windows (2020 or later) where port re-use issues are not expected to occur too rapidly, addressing allocation predictability and reuse-related failures.
+#### 参考资料
+- https://issues.chromium.org/issues/1306905
+- https://chromestatus.com/feature/5188040623390720
 
-#### Technical Details
-The launch randomizes ephemeral TCP port selection to reduce collisions and the likelihood of rejections caused by rapid port re-use. The rollout targets Windows releases where the risk of problematic fast re-use (a manifestation of the Birthday problem) is low.
+### Randomize TCP port allocation on Windows（在 Windows 上随机化 TCP 端口分配）
 
-#### Use Cases
-- Servers and clients should see fewer transient connection failures due to port re-use collisions on supported Windows versions.
-- Network debugging and NAT/firewall rules should account for increased ephemeral port entropy.
+#### 新增内容
+Chrome 在大约 2020 年及以后的 Windows 版本上启用了随机化的 TCP 端口分配，前提是快速端口重用不会导致重用超时失败。
 
-#### References
-- 跟踪 bug #40744069 — https://issues.chromium.org/issues/40744069
-- ChromeStatus.com entry — https://chromestatus.com/feature/5106900286570496
+#### 技术细节
+该发布将临时 TCP 端口随机化，以避免由可预测分配引起的冲突模式（发行说明将生日问题列为快速端口重用冲突的来源）。这一更改针对那些端口重用时序对随机化分配是安全的 Windows 发行版。
 
-Area-Specific Expertise (Network implications)
+#### 适用场景
+- 加强网络栈对临时端口可预测性的抗性，提高隐私性，并使某些指纹识别或探测技术不那么可靠。
+- 可能改变诊断时观察到的连接重用特性；假定端口序列确定性的网络工具和测试应予以审查。
 
-- css: 本次发布无直接影响；样式/布局行为不受这些 Network 更改影响。
-- webapi: `navigator.languages` 暴露减少；读取此 API 的 Web 应用将收到更少的数据。
-- graphics-webgpu: 与这些 Network 项目无关。
-- javascript: 检查 `navigator.languages` 的客户端脚本应能处理更短的语言列表。
-- security-privacy: 主要受益方——减少指纹识别面并增加传输层不可预测性。
-- performance: TCP 端口随机化可提升连接可靠性，但可能影响假定端口可预测的诊断。
-- multimedia: 媒体流堆栈应能适应短暂端口行为；无编解码器更改。
-- devices: 无直接设备 API 影响。
-- pwa-service-worker: Service worker 应继续工作；accept-language 更改可能影响本地化的 fetch 响应。
-- webassembly: 无直接影响。
-- 弃用: 在此数据中未宣布 Network 的弃用。
+#### 参考资料
+- https://issues.chromium.org/issues/40744069
+- https://chromestatus.com/feature/5106900286570496
 
-Save path
-
-```text
-digest_markdown/webplatform/Network/chrome-139-stable-en.md
+领域特定说明（网络视角）
+- 安全-隐私：两个功能都减少了指纹识别表面并增加网络标识符的不可预测性。
+- 性能：端口随机化可能影响临时端口重用模式和对时序敏感的连接行为；请测试负载和连接重试逻辑。
+- pwa-service-worker / webapi：减少 `Accept-Language` 暴露适用于来源于 service workers 的请求，并影响客户端的语言检测 APIs。
+- 弃用：依赖完整 `Accept-Language` 列表的服务器端本地化应提供显式偏好机制或回退策略。

@@ -5,84 +5,71 @@ title: webapi-en
 
 ## Area Summary
 
-Chrome 139’s Web API updates focus on improving web app interoperability, platform correctness, and developer control over diagnostics. Key changes include cross-origin web app scope extensions, stricter JSON MIME type detection per the WHATWG mimesniff spec, WebGPU support labeling for spec-compliant core features and limits, and a targeted Crash Reporting API endpoint option. These updates reduce integration friction for multi-origin apps, make content-type handling predictable for JS APIs, clarify GPU capability signaling, and give developers more precise crash telemetry routing — all advancing reliability and developer ergonomics on the web.
+Chrome 139's Web API updates focus on standardization, cross-origin app boundaries, predictable feature detection, and clearer telemetry routing. Key changes let web apps extend scopes across origins, make JSON MIME detection fully WHATWG-compliant, signal WebGPU adapters/devices that meet core spec features and limits, and allow delivery of only crash reports to a dedicated endpoint. These advances improve interoperability, developer predictability, and operational clarity for platform-integrated features. Developers should evaluate manifest, content-type handling, GPU capability assumptions, and crash-reporting configuration in light of these changes.
 
 ## Detailed Updates
 
-The following summarizes each Web API feature in Chrome 139 and the practical implications for developers.
+The following entries expand on the summary above and present what changed, how it works, practical developer use cases, and links to tracking/spec resources.
 
 ### Web app scope extensions
 
 #### What's New
-Adds a `scope_extensions` web app manifest field that enables web apps to extend their scope to other origins, allowing sites that control multiple subdomains and top level domains to be presented as a single web app.
+Adds a `scope_extensions` web app manifest field that enables web apps to extend their scope to other origins, allowing sites that control multiple subdomains and top level domains to be presented as a single web app. Listed origins must confirm association with the web app using a `.well-known` association.
 
 #### Technical Details
-- Introduces a manifest field (`scope_extensions`) to list additional origins.
-- Listed origins must confirm association with the web app (see spec links for association requirements).
-- Relevant tags: webapi, service-worker/PWA integration and origin association semantics.
+This is a manifest-level extension that requires origin verification via the indicated association mechanism. Implementation and tracking are coordinated via the Chromium tracking bug and a spec PR.
 
 #### Use Cases
-- Consolidating multiple domains/subdomains into one installable web app.
-- Simplifying navigation, deep links, and back/forward behavior across related origins.
+Unify multi-origin properties (subdomains, related top-level domains) into a single PWA install/launch experience; simplify navigation, sharing, and service worker expectations across related origins.
 
 #### References
-- https://issues.chromium.org/issues/detail?id=1250011
-- https://chromestatus.com/feature/5746537956114432
-- https://github.com/WICG/manifest-incubations/pull/113
+- https://issues.chromium.org/issues/detail?id=1250011 (Tracking bug #detail?id=1250011)  
+- https://chromestatus.com/feature/5746537956114432 (ChromeStatus.com entry)  
+- https://github.com/WICG/manifest-incubations/pull/113 (Spec)
 
 ### Specification-compliant JSON MIME type detection
 
 #### What's New
-Chrome now recognizes all valid JSON MIME types as defined by the WHATWG mimesniff specification, including any MIME type whose subtype ends with `+json`, in addition to `application/json` and `text/json`.
+Chrome now recognizes all valid JSON MIME types per the WHATWG mimesniff specification, including any subtype ending with `+json`, in addition to `application/json` and `text/json`. This makes JSON detection consistent with the spec.
 
 #### Technical Details
-- MIME sniffing behavior for JSON detection updated to match the WHATWG mimesniff rules.
-- Affects APIs and features that branch behavior based on JSON content-type detection (fetch, XHR, content sniffers).
+MIME type recognition logic was updated to follow the WHATWG mimesniff rules for JSON. This affects any feature or API path that branches behavior based on detected JSON content types.
 
 #### Use Cases
-- Ensures consistent parsing/handling of vendor-specific JSON media types (e.g., `application/ld+json`, `application/vnd.example+json`).
-- Reduces accidental misclassification and parsing errors in client code that depends on content-type detection.
+APIs and client-side code that rely on content-type checks will see more consistent parsing/handling of JSON payloads when servers use `+json` vendor or vendor-tree subtypes; reduces surprises when interoperating with APIs using custom JSON-like MIME types.
 
 #### References
-- https://chromestatus.com/feature/5470594816278528
-- https://mimesniff.spec.whatwg.org/#json-mime-type
+- https://chromestatus.com/feature/5470594816278528 (ChromeStatus.com entry)  
+- https://mimesniff.spec.whatwg.org/#json-mime-type (Spec)
 
 ### WebGPU `core-features-and-limits`
 
 #### What's New
-The `core-features-and-limits` feature flag indicates a WebGPU adapter and device support the core features and limits defined by the WebGPU spec.
+Introduces the `core-features-and-limits` feature flag/status to signify that a WebGPU adapter and device support the core features and limits defined by the GPUWeb spec.
 
 #### Technical Details
-- Signals adapter/device conformance to a baseline set of features and limits.
-- Helps feature detection and capability probing in graphics and compute pipelines.
-- Relevant tags: webapi, webgpu, graphics-webgpu, performance.
+Adapters/devices that advertise this feature meet the spec's baseline features and limits. Tracking and specification alignment are documented in the referenced tracking bug and spec section.
 
 #### Use Cases
-- Allowing applications to reliably detect a spec-compliant GPU environment before enabling advanced rendering paths.
-- Simplifying feature-gating logic in libraries that target WebGPU.
+Graphics and compute applications can query for and rely on a well-defined baseline of WebGPU capabilities, simplifying capability negotiation and fallback strategies in high-performance rendering and GPU compute scenarios.
 
 #### References
-- https://issues.chromium.org/issues/418025721
-- https://chromestatus.com/feature/4744775089258496
-- https://gpuweb.github.io/gpuweb/#core-features-and-limits
+- https://issues.chromium.org/issues/418025721 (Tracking bug #418025721)  
+- https://chromestatus.com/feature/4744775089258496 (ChromeStatus.com entry)  
+- https://gpuweb.github.io/gpuweb/#core-features-and-limits (Spec)
 
 ### Crash Reporting API: Specify `crash-reporting` to receive only crash reports
 
 #### What's New
-Developers can specify the endpoint named `crash-reporting` to receive only crash reports; by default, crash reports go to the `default` endpoint which also receives other report types.
+Developers can specify an endpoint named `crash-reporting` so that only crash reports are delivered to that endpoint. By default, the `default` endpoint receives many report types; this feature separates crash delivery for focused telemetry.
 
 #### Technical Details
-- Adds a way to register a separate URL for crash report delivery via the well-known endpoint configuration.
-- Enables separation of crash telemetry from other reporting categories for finer-grained handling and privacy controls.
-- Relevant tags: webapi, security-privacy (telemetry routing and endpoint separation).
+The crash-reporting endpoint is configured via the well-known endpoint name in the Crash Reporting API. This allows a different URL to be used solely for crash reports, distinct from broader report delivery endpoints.
 
 #### Use Cases
-- Routing crash reports to a dedicated telemetry endpoint for processing without mixing other report types.
-- Implementing stricter ingestion and storage policies for crash data.
+Teams that want crash-only telemetry to go to a dedicated ingestion pipeline (for storage, alerting, or privacy separation) can configure the `crash-reporting` endpoint to avoid noise from other report types and minimize downstream filtering.
 
 #### References
-- https://issues.chromium.org/issues/414723480
-- https://chromestatus.com/feature/5129218731802624
-- https://wicg.github.io/crash-reporting/#crash-reports-delivery-priority
-
-Saved file: digest_markdown/webplatform/Web API/chrome-139-stable-en.md
+- https://issues.chromium.org/issues/414723480 (Tracking bug #414723480)  
+- https://chromestatus.com/feature/5129218731802624 (ChromeStatus.com entry)  
+- https://wicg.github.io/crash-reporting/#crash-reports-delivery-priority (Spec)
