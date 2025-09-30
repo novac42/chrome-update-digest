@@ -7,9 +7,7 @@
   ],
   "areas": [
     "css",
-    "deprecation",
     "deprecations",
-    "devices",
     "graphics-webgpu",
     "html-dom",
     "isolated-web-apps",
@@ -19,8 +17,8 @@
     "storage",
     "webapi"
   ],
-  "total_areas": 12,
-  "completed_areas": 12,
+  "total_areas": 10,
+  "completed_areas": 10,
   "per_area": {
     "css": {
       "en": "done",
@@ -28,23 +26,11 @@
       "en_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\css\\chrome-140-stable-en.md",
       "zh_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\css\\chrome-140-stable-zh.md"
     },
-    "deprecation": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\deprecation\\chrome-140-stable-en.md",
-      "zh_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\deprecation\\chrome-140-stable-zh.md"
-    },
     "deprecations": {
       "en": "done",
       "zh": "done",
       "en_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\deprecations\\chrome-140-stable-en.md",
       "zh_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\deprecations\\chrome-140-stable-zh.md"
-    },
-    "devices": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\devices\\chrome-140-stable-en.md",
-      "zh_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\devices\\chrome-140-stable-zh.md"
     },
     "graphics-webgpu": {
       "en": "done",
@@ -95,8 +81,8 @@
       "zh_path": "q:\\projects-repo\\chrome-update-digest\\digest_markdown\\webplatform\\webapi\\chrome-140-stable-zh.md"
     }
   },
-  "started_at": "2025-09-30T15:50:30.731950",
-  "updated_at": "2025-09-30T15:54:22.081744",
-  "completed_at": "2025-09-30T15:54:22.081640",
-  "total_time_seconds": 231.34881782531738
+  "started_at": "2025-09-30T18:12:38.179228",
+  "updated_at": "2025-09-30T18:15:42.641186",
+  "completed_at": "2025-09-30T18:15:42.641090",
+  "total_time_seconds": 184.4608438014984
 }

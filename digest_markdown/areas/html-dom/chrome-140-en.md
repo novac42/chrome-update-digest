@@ -5,41 +5,25 @@ title: chrome-140-en
 
 ## Area Summary
 
-Chrome 140 introduces a small but focused HTML‑DOM enhancement: a `source` attribute on the `ToggleEvent` interface. This attribute surfaces the element that triggered a `ToggleEvent` when applicable, improving event context for handlers. For developers, the change makes it easier to identify the initiating element (e.g., a button that opened a popover) without custom DOM traversal or extra attributes. This advances the platform by making built‑in DOM events more informative and reducing boilerplate for interactive components.
+Chrome 140 introduces a focused enhancement in the HTML-DOM area: the `ToggleEvent` gains a `source` attribute that identifies the element that triggered the event. This change helps developers reliably discover the trigger element for toggle-like UI (for example, popovers or command-driven controls). By standardizing trigger attribution on the event object, it reduces custom wiring and makes component logic and accessibility handling simpler. The update is a small but practical step toward more expressive, event-driven UI patterns on the web platform.
 
 ## Detailed Updates
 
-The single update below directly supports the summary above.
+The single HTML-DOM change in Chrome 140 is listed below and expands on the summary above.
 
 ### `ToggleEvent` source attribute
 
 #### What's New
-The `source` attribute of a `ToggleEvent` contains the element that triggered the `ToggleEvent` to be fired, if applicable.
+The `source` attribute of a `ToggleEvent` contains the element that triggered the `ToggleEvent` to be fired, if applicable. The release notes give the example that when a user clicks a `<button>` element with `popovertarget` or `commandfor` to open a popover, the `ToggleEvent` fired on the popover will have the triggering element available via its `source` attribute.
 
 #### Technical Details
-This adds an accessible property on the `ToggleEvent` DOM interface that references the triggering element when one exists. The release notes illustrate the behavior with an example involving a `<button>` element that opens a popover via attributes like `popovertarget` or `commandfor`.
+This is an event-level attribute on `ToggleEvent` that carries a reference to the element responsible for initiating the toggle action. For full specification details and the precise interface, consult the linked spec.
 
 #### Use Cases
-- Event handlers on popovers or toggled UI can inspect `event.source` to determine which control initiated the toggle.
-- Simplifies logic for components that need to differentiate user‑initiated toggles from programmatic ones.
-- Reduces reliance on attribute-based linkage or manual element lookup to find the initiating element.
+- Determining which control opened a popover or toggled a UI region without relying on DOM traversal or custom attributes.  
+- Simplifying component code that must map toggle events back to their originating control (e.g., for focus management or command routing).  
+- Making event handlers clearer and less brittle by providing explicit trigger information on the `ToggleEvent`.
 
 #### References
-- https://chromestatus.com/feature/5165304401100800
-- https://html.spec.whatwg.org/multipage/interaction.html#the-toggleevent-interface
-
-## Area-Specific Expertise (HTML-DOM)
-
-- css: Minimal direct impact on layout; enables clearer linkage between controls and toggled UI without extra DOM markup.
-- webapi: Extends the DOM event API by adding a `source` attribute to `ToggleEvent`.
-- graphics-webgpu: No direct relevance to GPU or rendering pipelines.
-- javascript: V8 consumers can read `event.source` from `ToggleEvent` handlers to simplify control flow.
-- security-privacy: Exposes an element reference in event objects; standard same-origin and DOM access rules continue to apply.
-- performance: Low overhead; avoids extra DOM queries in common toggle handling paths.
-- multimedia: Not applicable to codecs/streaming.
-- devices: No direct device API implications.
-- pwa-service-worker: No direct effect on service worker behavior.
-- webassembly: No direct WASM runtime impact.
-- deprecations: No deprecation implications reported. 
-
-Saved to: digest_markdown/webplatform/HTML-DOM/chrome-140-stable-en.md
+- https://chromestatus.com/feature/5165304401100800 (ChromeStatus.com entry)  
+- https://html.spec.whatwg.org/multipage/interaction.html#the-toggleevent-interface (Spec)

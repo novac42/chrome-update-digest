@@ -3,43 +3,27 @@ layout: default
 title: html-dom-zh
 ---
 
-## 区域摘要
+## 领域摘要
 
-Chrome 140 引入了一个小而集中的 HTML‑DOM 增强：在 `ToggleEvent` 接口上新增了一个 `source` 属性。该属性在适用时揭示触发 `ToggleEvent` 的元素，为处理器提供更丰富的事件上下文。对于开发者而言，此更改使得识别发起元素（例如打开 popover 的按钮）更容易，而无需自定义 DOM 遍历或额外属性。通过让内置 DOM 事件更具信息性并减少交互组件的样板代码，这项改进推进了平台发展。
+Chrome 140 在 HTML-DOM 领域引入了一项聚焦增强：`ToggleEvent` 增加了一个 `source` 属性，用于标识触发该事件的元素。此更改帮助开发者可靠地发现触发类似切换 UI（例如弹出框或基于命令的控件）的元素。通过在事件对象上标准化触发归因，它减少了自定义连接并使组件逻辑与无障碍处理更简单。该更新虽小但实用，推动了在 Web 平台上实现更具表现力的事件驱动 UI 模式。
 
 ## 详细更新
 
-下面的单一更新直接支持上述摘要。
+Chrome 140 中的单个 HTML-DOM 更改列在下方，并对上述摘要进行了扩展。
 
 ### `ToggleEvent` source attribute（source 属性）
 
 #### 新增内容
-`ToggleEvent` 的 `source` 属性包含触发该 `ToggleEvent` 被派发的元素（如适用）。
+`ToggleEvent` 的 `source` 属性包含触发该 `ToggleEvent` 被派发的元素（如果适用）。发行说明举例说明，当用户点击带有 `popovertarget` 或 `commandfor` 的 `<button>` 元素以打开弹出框时，在弹出框上触发的 `ToggleEvent` 将可以通过其 `source` 属性获得触发元素。
 
 #### 技术细节
-这为 `ToggleEvent` DOM 接口添加了一个可访问的属性，当存在触发元素时引用该元素。发布说明通过一个示例说明了该行为，该示例涉及通过诸如 `popovertarget` 或 `commandfor` 之类的属性由 `<button>` 元素打开弹出面板的情形。
+这是 `ToggleEvent` 上的事件级属性，携带对负责发起切换操作的元素的引用。有关完整规范细节和精确定义的接口，请查阅下面链接的规范。
 
 #### 适用场景
-- 弹出面板或可切换 UI 的事件处理器可以检查 `event.source` 以确定哪个控件发起了切换。
-- 简化需要区分用户触发的切换与编程触发切换的组件逻辑。
-- 减少对基于属性的关联或手动查找元素来定位发起元素的依赖。
+- 确定哪个控件打开了弹出框或切换了某个 UI 区域，而无需依赖 DOM 遍历或自定义属性。  
+- 简化必须将切换事件映射回其起源控件的组件代码（例如用于焦点管理或命令路由）。  
+- 通过在 `ToggleEvent` 上提供明确的触发信息，使事件处理程序更清晰且更不脆弱。
 
 #### 参考资料
-- https://chromestatus.com/feature/5165304401100800
-- https://html.spec.whatwg.org/multipage/interaction.html#the-toggleevent-interface
-
-## 区域专门知识 (HTML-DOM)
-
-- css: 对布局的直接影响最小；在不增加额外 DOM 标记的情况下，便于在控件与被切换的 UI 之间建立更清晰的关联。
-- webapi: 通过在 `ToggleEvent` 上添加 `source` 属性扩展了 DOM 事件 API。
-- graphics-webgpu: 与 GPU 或 渲染管线 无直接关联。
-- javascript: V8 使用者可以在 `ToggleEvent` 处理器中读取 `event.source` 以简化控制流。
-- security-privacy: 在事件对象中暴露了元素引用；标准的 same-origin 和 DOM 访问规则继续适用。
-- performance: 开销低；在常见的切换处理路径中避免了额外的 DOM 查询。
-- multimedia: 与编解码器/流媒体无关。
-- devices: 无直接设备 API 影响。
-- pwa-service-worker: 对 service worker 行为无直接影响。
-- webassembly: 对 WASM 运行时无直接影响。
-- deprecations: 未报告任何弃用影响。 
-
-已保存到：digest_markdown/webplatform/HTML-DOM/chrome-140-stable-en.md
+- https://chromestatus.com/feature/5165304401100800 (ChromeStatus.com 条目)  
+- https://html.spec.whatwg.org/multipage/interaction.html#the-toggleevent-interface (规范)

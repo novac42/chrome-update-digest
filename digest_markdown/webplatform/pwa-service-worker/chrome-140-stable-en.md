@@ -1,22 +1,22 @@
 ## Area Summary
 
-Chrome 140 (stable) introduces two focused updates in the PWA and service worker space: a spec-alignment fix so shared workers inherit controllers for blob-script URLs, and added timing telemetry for the ServiceWorker Static routing API. The SharedWorker fix changes runtime behavior to match the ServiceWorker spec and is gated by an enterprise policy. The timing additions expose routing-related marks in navigation/resource timing, improving observability for developers. Together these changes improve platform consistency and developer ability to measure and reason about service-worker-controlled navigation and routing.
+Chrome 140 for PWA and service worker focuses on spec alignment and improved observability. One change fixes SharedWorker behavior so blob-script shared workers inherit controllers per the ServiceWorker spec, closing a behavioral gap. The other exposes static routing timing points via navigation and resource timing APIs, improving developers' ability to measure service worker routing latency. Together these updates improve correctness and give developers better diagnostic data to optimize offline and routing performance.
 
 ## Detailed Updates
 
-The below entries expand on the summary above and show practical implications for PWA and service-worker development.
+The items below expand on the summary and highlight developer-facing implications.
 
 ### `SharedWorker` script inherits controller for blob script URL
 
 #### What's New
-Chrome now aligns with the ServiceWorker specification by allowing shared workers created from blob script URLs to inherit the controller, matching the behavior previously limited to dedicated workers.
+Shared workers created from blob script URLs now inherit the service worker controller as specified by the ServiceWorker spec, matching the behavior previously limited to dedicated workers.
 
 #### Technical Details
-The change fixes Chrome's prior divergence from the spec where only dedicated workers inherited a controller for blob URLs. An enterprise policy named SharedWorkerBlobURLFixEnabled is mentioned in the release notes to control this behavior rollout.
+Chrome's previous implementation limited controller inheritance to dedicated workers; this change aligns shared worker blob URL handling with the spec's control-and-use-worker-client rules. An enterprise policy `SharedWorkerBlobURLFixEnabled` is mentioned in the tracking notes for administrative control.
 
 #### Use Cases
-- Ensures consistent controller semantics across dedicated and shared workers for code paths that rely on controller presence (e.g., intercepting fetches or message flows).
-- Reduces diffs between browser behavior and the spec, simplifying cross-browser PWA logic and debugging.
+- PWAs that spawn shared workers from blob URLs will now see the same controlled-context semantics as dedicated workers, enabling consistent fetch interception and client-controlled behavior.
+- Improves predictability for apps relying on service worker-controlled network behavior in multi-page or multi-context architectures.
 
 #### References
 - https://issues.chromium.org/issues/324939068
@@ -26,18 +26,19 @@ The change fixes Chrome's prior divergence from the spec where only dedicated wo
 ### Add `ServiceWorkerStaticRouterTimingInfo`
 
 #### What's New
-Chrome adds timing information relevant to the ServiceWorker Static routing API and exposes it through the navigation timing API and resource timing API for developer use.
+Adds timing marks for ServiceWorker static routing to the navigation timing and resource timing APIs, providing explicit timestamps for key routing events.
 
 #### Technical Details
-ServiceWorker provides marks to denote routing-related points in time; this feature surfaces two Static routing API–relevant timing values into the platform timing APIs to aid measurement and diagnostics.
+The change exposes two static routing API-relevant timing points through the standard timing APIs, allowing the browser to report when service worker static routing decisions occur relative to navigation and resource load lifecycles. This integrates service worker routing telemetry into existing web performance interfaces.
 
 #### Use Cases
-- Enables precise measurement of routing decisions and their impact on navigation performance.
-- Helps developers and performance engineers correlate service-worker routing activity with navigation/resource timing data for optimization and debugging.
+- Measure and profile the latency introduced by service worker static routing for navigations and resource loads.
+- Correlate routing timings with rendering and network events to prioritize optimizations and detect regressions in PWA startup and resource fetch paths.
+- Use timing data in performance monitoring and synthetic tests to validate routing improvements across releases.
 
 #### References
 - https://issues.chromium.org/issues/41496865
 - https://chromestatus.com/feature/6309742380318720
 - https://github.com/w3c/ServiceWorker
 
-File: digest_markdown/webplatform/PWA and service worker/chrome-140-stable-en.md
+File saved to: digest_markdown/webplatform/PWA and service worker/chrome-140-stable-en.md

@@ -5,21 +5,18 @@ title: origin-trials-en
 
 ## Detailed Updates
 
-Below are concise, developer-focused breakdowns of each Origin Trial introduced in Chrome 140 stable, tied to the summary above.
+Below are concise, developer-focused explanations of each origin trial in this release and what they mean for implementation, security, and common use cases.
 
 ### Enable incoming call notifications
 
 #### What's New
-An extension to the Notifications API enabling installed PWAs to send incoming call notifications that include call-styled action buttons and a ringtone for more recognizable, answerable VoIP notifications.
+Extends the Notifications API for installed PWAs to send incoming-call style notifications with call-styled actions and a ringtone to surface VoIP calls more prominently.
 
 #### Technical Details
-- Implemented as a Notifications API extension surfaced via an Origin Trial token for sites that register.
-- Targets installed PWAs to present richer notification UI and auditory feedback; integration relies on platform notification plumbing.
-- Relevant areas: webapi, multimedia, devices, pwa-service-worker, security-privacy (user consent and notification permissions).
+This is an Origin Trial exposing call-like notification affordances via the Notifications API for installed PWAs. Expect integration points with PWA installation state, notification action buttons, and playing a ringtone. Pay attention to permission and UX constraints imposed by the Notifications spec and platform notification behavior.
 
 #### Use Cases
-- VoIP and teleconferencing web apps presenting native-like incoming call prompts.
-- Improving user engagement and reducing missed calls by surfacing ringtone and dedicated action buttons.
+VoIP and video-call web apps can present recognizable incoming-call UIs, improving user responsiveness and parity with native call notifications.
 
 #### References
 - https://developer.chrome.com/origintrials/#/register_trial/2876111312029483009
@@ -30,16 +27,13 @@ An extension to the Notifications API enabling installed PWAs to send incoming c
 ### Crash Reporting key-value API
 
 #### What's New
-A tentative window.crashReport key-value API that exposes a per-document map for attaching key/value data to be included in CrashReportBody when renderer crashes occur.
+Introduces a per-document key-value API (tentatively window.crashReport) whose map contents are appended to crash reports when renderer crashes occur.
 
 #### Technical Details
-- API surface: per-document map accessible from scripts; entries are serialized into CrashReportBody on renderer crash.
-- Intended to aid post-crash diagnostics without server-side instrumentation; must be evaluated for privacy and data leak risks.
-- Relevant areas: webapi, security-privacy, performance (debugging impact), deprecations (migration from custom logging patterns).
+The API provides a document-scoped backing map whose entries are serialized into the CrashReportBody on renderer process failure. This origin trial gives developers a controlled channel to attach diagnostic metadata to crash reports, improving post-mortem analysis while requiring careful handling of sensitive data.
 
 #### Use Cases
-- Attaching contextual debug metadata (state identifiers, feature flags) to aid crash triage.
-- Improving fidelity of crash analytics for complex single-page apps and PWAs.
+Improve crash triage by annotating renderer crashes with contextual state (feature flags, last actions). Useful for complex single-page apps, PWAs, and debugging production stability regressions.
 
 #### References
 - https://developer.chrome.com/origintrials/#/register_trial/1304355042077179905
@@ -50,16 +44,13 @@ A tentative window.crashReport key-value API that exposes a per-document map for
 ### Add the `clipboardchange` event
 
 #### What's New
-A DOM event that fires when the system clipboard changes, enabling web apps to synchronize their internal clipboard state without polling.
+Adds a clipboardchange event that fires when the system clipboard content changes, enabling efficient synchronization without polling.
 
 #### Technical Details
-- The event is dispatched to pages that opt in via the Origin Trial; it reflects system-level clipboard changes originating from any app.
-- Designers must consider user privacy and permission models because clipboard contents can contain sensitive data.
-- Relevant areas: webapi, security-privacy, performance, devices (input), multimedia (text/media clipboard).
+This Origin Trial surfaces a DOM event signifying system clipboard mutations. Implementations will need to reconcile platform clipboard privacy/security models and may gate event delivery by focus, permissions, or user gesture policy to mitigate exfiltration risks.
 
 #### Use Cases
-- Remote desktop and collaboration apps keeping local and remote clipboards synchronized efficiently.
-- Eliminating expensive periodic clipboard polling, reducing CPU and battery usage.
+Remote desktop clients and productivity web apps can keep in-page clipboard state synchronized with the system clipboard, improving user experience for copy/paste workflows.
 
 #### References
 - https://developer.chrome.com/origintrials/#/register_trial/137922738588221441
@@ -70,20 +61,17 @@ A DOM event that fires when the system clipboard changes, enabling web apps to s
 ### Enable `SharedWorker` on Android
 
 #### What's New
-An Origin Trial enabling SharedWorker support on Android to allow multiple browsing contexts (tabs) to share a single worker instance.
+Runs SharedWorker support on Android to allow multiple tabs/contexts to share a single worker, enabling shared connections and resource-efficient coordination.
 
 #### Technical Details
-- Enables SharedWorker API on Android builds behind an Origin Trial token so sites can test cross-tab shared scripts and connections.
-- Addresses resource-sharing scenarios like a shared WebSocket or SSE connection to reduce redundant network and CPU work.
-- Relevant areas: webapi, performance, pwa-service-worker, devices, security-privacy (origin isolation and lifetime).
+This Origin Trial enables the SharedWorker interface on Android platforms. SharedWorkers allow multiple browsing contexts from the same origin to communicate with a shared script context, useful for sharing WebSocket/SSE connections and centralized state. Expect developer attention on lifecycle semantics, cross-document messaging, and consistency with the HTML spec.
 
 #### Use Cases
-- Sharing a single WebSocket/SSE across multiple tabs to reduce connections and memory footprint.
-- Centralized coordination between tabs for caching, state sync, and background work on mobile.
+Conserve resources by sharing a single WebSocket or SSE across tabs; coordinate background tasks or centralized caching across multiple tabs of the same origin on Android.
 
 #### References
 - https://developer.chrome.com/origintrials/#/register_trial/4101090410674257921
 - https://chromestatus.com/feature/6265472244514816
 - https://html.spec.whatwg.org/multipage/workers.html#shared-workers-and-the-sharedworker-interface
 
-Saved file path: digest_markdown/webplatform/Origin trials/chrome-140-stable-en.md
+Saved file: digest_markdown/webplatform/Origin trials/chrome-140-stable-en.md

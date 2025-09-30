@@ -1,77 +1,76 @@
 ---
 layout: default
-title: 区域摘要
+title: chrome-140-zh
 ---
 
-# 区域摘要
+## 领域摘要
 
-Chrome 140 在 Graphics 和 WebGPU 方面的更新侧重于加强对 WebGPU 规范的一致性、改进 WGSL 的一致性，以及清理遗留或不正确的 API 表面。对开发者影响最大的更改包括适配器生命周期语义（已消耗的 adapters）、纹理的简写和采样器行为（包括 WGSL 中对 1D 支持），以及影响可移植性和迁移的弃用/移除（如 bgra8unorm 作为 storage 的使用和 isFallbackAdapter）。这些更新通过减少实现不一致、提高着色器表达能力并移除不可移植或冗余的 API 元素，推动了 Web 平台的发展——降低了跨平台 GPU 代码和工具链的风险。团队应评估设备/适配器生命周期在资源管理中的影响，调整着色器和绑定代码以适应简写和 1D 采样，并遵循弃用/迁移指导以避免运行时失败。
+Chrome 140 (stable) 继续使 WebGPU 和 WGSL 的行为与不断演进的 GPUWeb 规范和 Dawn 运行时对齐，重点是更严格的规范一致性、API 清理和着色器使用便利性。对开发者影响最大的更改包括 adapter 对 requestDevice() 的消费语义、在此前需要 GPUTextureView 的位置接受 GPUTexture 的简写、WGSL 支持使用 textureSampleLevel() 对 1D 纹理采样，以及对不可移植或冗余 API 的弃用/移除。这些更改提升了跨实现的 GPU 代码可移植性和可预测性、减少样板代码，并要求现有应用做少量迁移或校验工作。
 
 ## 详细更新
 
-下面列出 Chrome 140 中 Graphics 和 WebGPU 的变更，包含简明的技术说明和以开发者为中心的使用场景。
+下面是 Chrome 140 中每项 Graphics and WebGPU 更新的简洁、面向开发者的分解。
 
-### Device requests consume adapter（设备请求将消耗 adapter）
+### Device requests consume adapter（适配器被消耗）
 
 #### 新增内容
-在成功请求设备后，适配器现在会被标记为“已消耗”。对同一适配器的后续 `requestDevice()` 调用将会被拒绝。
+在成功的 requestDevice() 调用之后，adapter 会被标记为“已消耗”；对同一 adapter 进行的后续 requestDevice() 调用将被拒绝。
 
 #### 技术细节
-此行为使 Chrome 与 WebGPU 规范一致：创建 GPUDevice 后，适配器的状态变为已消耗。对同一适配器再次请求设备不再被允许，并会导致返回被拒绝的 promise。
+这强制实施了 WebGPU 规范中针对 DOM adapter 的状态机：一旦 adapter 产生了 device，该 adapter 即被视为已消耗，不能再产生额外的 device。实现会拒绝对该 adapter 的后续 requestDevice() 返回的 promise。
 
 #### 适用场景
-- 更新在应用和引擎中对 adapter/device 生命周期的处理，避免从同一适配器创建多个设备的模式。
-- 在创建设备时确保进行资源分配和清理，避免假设可以为同一适配器复用多个设备的用法。
+- 防止意外地从同一 adapter 分配多个 device。
+- 需要以前依赖对同一 adapter 重复调用 requestDevice() 的应用改为创建新的 adapter 或重新设计初始化流程。
 
 #### 参考资料
-- [WebGPU 规范](https://gpuweb.github.io/gpuweb/#ref-for-dom-adapter-state-consumed%E2%91%A1)  
+- [WebGPU 规范](https://gpuweb.github.io/gpuweb/#ref-for-dom-adapter-state-consumed%E2%91%A1)
 - [issue 415825174](https://issues.chromium.org/issues/415825174)
 
-### Shorthand for using texture where texture view is used（在需要 texture view 的地方使用 texture 的简写）
+### Shorthand for using texture where texture view is used（在需要 texture view 的位置使用 texture 的简写）
 
 #### 新增内容
-`GPUTexture` 现在可以直接用作 `GPUBindingResource`，并可用于此前需要 `GPUTextureView` 的位置（例如渲染通道颜色附件的 `view`）。
+可以直接将 GPUTexture 用作 GPUBindingResource，以及在此前需要 GPUTextureView 的位置（例如 render pass color attachment view）直接使用。
 
 #### 技术细节
-该简写通过允许纹理在绑定和附件点被隐式视为纹理视图，减少样板代码，符合规范中接受 `GPUTexture` 在这些角色中的更新。
+接收 GPUBindingResource 的 API 或类型为 GPUTextureView 的字段现在也接受 GPUTexture 对象作为简写。平台会执行等效的隐式 view 处理，因此开发者可以直接传入 texture。
 
 #### 适用场景
-- 在常见情况下，通过省略显式的纹理视图创建来简化绑定/组设置和渲染通道创建代码。
-- 在频繁创建一次性视图的引擎中减少代码路径和分配。
+- 在默认纹理视图已足够的常见模式下减少样板代码。
+- 简化构造 pass 和 binding 描述符的代码路径。
 
 #### 参考资料
-- [GPUTexture](https://gpuweb.github.io/gpuweb/#gputexture)  
-- [GPUBindingResource](https://gpuweb.github.io/gpuweb/#typedefdef-gpubindingresource)  
-- [GPUTextureView](https://gpuweb.github.io/gpuweb/#dictdef-gpubufferbinding)  
+- [GPUTexture](https://gpuweb.github.io/gpuweb/#gputexture)
+- [GPUBindingResource](https://gpuweb.github.io/gpuweb/#typedefdef-gpubindingresource)
+- [GPUTextureView](https://gpuweb.github.io/gpuweb/#dictdef-gpubufferbinding)
 - [issue 425906323](https://issues.chromium.org/issues/425906323)
 
-### WGSL textureSampleLevel supports 1D textures（WGSL 的 textureSampleLevel 支持 1D 纹理）
+### WGSL textureSampleLevel supports 1D textures（支持对 1D 纹理采样）
 
 #### 新增内容
-`textureSampleLevel()` 现在支持对 1D 纹理的采样，使其在着色器（包括顶点着色器）中的使用方式与 2D 纹理相同。
+WGSL 的 textureSampleLevel() 现在可以对 1D 纹理进行采样，使得在顶点着色器中对 1D 纹理的采样类似于对 2D 纹理的采样成为可能。
 
 #### 技术细节
-此更改使 1D 纹理在 `textureSampleLevel` 内与 2D 达到一致，允许在之前受限的采样行为之外，从着色器阶段显式调用 LOD 采样。
+WGSL 内置的 textureSampleLevel() 已扩展为接受 1D 纹理类型，因此允许在顶点阶段对 1D 纹理进行采样，并采用与 2D 采样相同的语义。
 
 #### 适用场景
-- 在顶点或计算着色器中对 1D 纹理进行显式 LOD 采样，用于程序化或基于曲线的查找。
-- 将依赖于仅片段采样模式的着色器代码移植到更早的管线阶段。
+- 允许在顶点着色器中使用 1D 纹理进行程序化或曲线采样。
+- 在 1D 和 2D 纹理之间实现一致的着色器代码路径，而无需对采样函数进行特殊处理。
 
 #### 参考资料
-- [sampled](https://gpuweb.github.io/gpuweb/wgsl/#texturesamplelevel)  
+- [sampled](https://gpuweb.github.io/gpuweb/wgsl/#texturesamplelevel)
 - [issue 382514673](https://issues.chromium.org/issues/382514673)
 
-### Deprecate bgra8unorm read-only storage texture usage（弃用将 bgra8unorm 用作只读 storage texture 的用法）
+### Deprecate bgra8unorm read-only storage texture usage（弃用将 bgra8unorm 用作只读存储纹理的用法）
 
 #### 新增内容
-将 "bgra8unorm" 格式用作只读 storage 纹理的用法已被弃用；此前 Chrome 中允许该用法是一个 bug。
+将 "bgra8unorm" 与只读存储纹理一同使用已被弃用；此前 Chrome 允许这种用法，但 WebGPU 规范禁止此类用法。
 
 #### 技术细节
-WebGPU 规范不允许对该格式进行只读 storage 访问，因为它旨在用于写入且不可移植。Chrome 现已弃用此前允许的该用法，以趋向于符合规范的行为。
+"bgra8unorm" 旨在用于只写存储使用，并不适合用于只读存储，因此在可移植性方面不可保证。Chrome 之前的允许行为正在被移除，以符合规范并避免不可移植的行为。
 
 #### 适用场景
-- 审计将 bgra8unorm 绑定为只读 storage 的代码，并迁移到可移植的格式或访问模式。
-- 优先使用明确允许作为只读 storage 的格式，以保证跨浏览器的可移植性和正确行为。
+- 开发者必须避免依赖对 bgra8unorm 纹理的只读存储访问，并迁移到受支持的格式或使用模式以保证可移植性。
 
 #### 参考资料
 - [issue 427681156](https://issues.chromium.org/issues/427681156)
@@ -79,14 +78,13 @@ WebGPU 规范不允许对该格式进行只读 storage 访问，因为它旨在�
 ### Remove GPUAdapter isFallbackAdapter attribute（移除 GPUAdapter 的 isFallbackAdapter 属性）
 
 #### 新增内容
-GPUAdapter 的 `isFallbackAdapter` 属性已被移除；该属性已迁移到 `GPUAdapterInfo` 并在之前引入。
+已移除 GPUAdapter.isFallbackAdapter；请改用在 Chrome 136 中引入的 GPUAdapterInfo.isFallbackAdapter。
 
 #### 技术细节
-此举完成了此前宣布的弃用/移除，将回退信息集中到 `GPUAdapterInfo`（在 Chrome 136 中添加），从 GPUAdapter 中移除了冗余信息。
+adapter 级别的布尔值已被弃用并移除，转而在 GPUAdapterInfo 上使用 isFallbackAdapter 标志，以整合 device/adapter 元数据并减少冗余。
 
 #### 适用场景
-- 更新适配器检测逻辑，从 `GPUAdapterInfo` 而非 `GPUAdapter` 读取 `isFallbackAdapter`。
-- 在引擎/平台检测层移除针对 GPUAdapter 属性的回退相关检测。
+- 迁移：将 adapter.isFallbackAdapter 的用法替换为 adapter.requestAdapterInfo().isFallbackAdapter 或等价的 GPUAdapterInfo 访问方式。
 
 #### 参考资料
 - [intent to remove](https://groups.google.com/a/chromium.org/g/blink-dev/c/Wzr22XXV3s8)
@@ -94,22 +92,21 @@ GPUAdapter 的 `isFallbackAdapter` 属性已被移除；该属性已迁移到 `G
 ### Dawn updates（Dawn 更新）
 
 #### 新增内容
-Dawn 的 `wgpuInstanceGetWGSLLanguageFeatures()` 不再返回 `WGPUStatus` 值，因为它不会失败；其他内部更改包括若干 bug 修复和调试改进。
+Dawn 的更改包括 API 清理，例如 wgpuInstanceGetWGSLLanguageFeatures() 不再返回 WGPUStatus（因为它不会失败），以及列入 Chromium 的多个内部修复和提交。
 
 #### 技术细节
-API 简化以移除不必要的状态返回。Dawn 更新还包括如缓存 VkFramebuffers 和调试文档/提交中的若干更改，详见链接资源。
+- wgpuInstanceGetWGSLLanguageFeatures() 现在通过 out-参数返回，不再使用状态码。
+- 其他 Dawn 更改包括调试文档、帧缓冲区缓存以及一系列用于 Chromium 的提交。
 
 #### 适用场景
-- 使用 Dawn 的原生工具和嵌入者应更新调用点以匹配新签名。
-- 审阅 Dawn 的变更日志，留意可能影响 GPU 行为和资源缓存的性能与后端修复。
+- 原生嵌入者和引擎维护者应更新对已修改 Dawn API 的调用。
+- 有助于减少对保证成功的函数的错误处理噪音。
 
 #### 参考资料
-- [issue 429178774](https://issues.chromium.org/issues/429178774)  
-- [issue 425930323](https://issues.chromium.org/issues/425930323)  
-- [issue 415825174](https://issues.chromium.org/issues/415825174)  
-- [调试用途](https://dawn.googlesource.com/dawn/+/refs/heads/main/docs/dawn/debugging.md)  
-- [issue 429187478](http://issues.chromium.org/issues/429187478)  
-- [缓存 VkFramebuffers](https://dawn.googlesource.com/dawn/+/ddf2e1f61d20171ecd10ae3be70acb750a56686d)  
-- [提交列表](https://dawn.googlesource.com/dawn/+log/chromium/7258..chromium/7339?n=1000)
-
-已保存到：digest_markdown/webplatform/Graphics and WebGPU/chrome-140-stable-en.md
+- [issue 429178774](https://issues.chromium.org/issues/429178774)
+- [issue 425930323](https://issues.chromium.org/issues/425930323)
+- [issue 415825174](https://issues.chromium.org/issues/415825174)
+- [调试文档](https://dawn.googlesource.com/dawn/+/refs/heads/main/docs/dawn/debugging.md)
+- [issue 429187478](http://issues.chromium.org/issues/429187478)
+- [caching VkFramebuffers](https://dawn.googlesource.com/dawn/+/ddf2e1f61d20171ecd10ae3be70acb750a56686d)
+- [list of commits](https://dawn.googlesource.com/dawn/+log/chromium/7258..chromium/7339?n=1000)

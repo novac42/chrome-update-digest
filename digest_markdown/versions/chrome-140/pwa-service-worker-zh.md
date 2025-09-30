@@ -3,46 +3,47 @@ layout: default
 title: pwa-service-worker-zh
 ---
 
-## 区域摘要
+## 领域摘要
 
-Chrome 140 (stable) 在 PWA 和 service worker 领域引入了两项重点更新：一个使 shared workers 从 blob 脚本 URL 继承 controller 的规范对齐修复，另一个为 ServiceWorker Static routing API 添加了计时遥测。SharedWorker 修复将运行时行为更改为与 ServiceWorker 规范一致，并由一个企业策略进行控制。计时添加在导航/资源计时中公开了与路由相关的标记，提升了开发者的可观测性。两者共同提升了平台一致性以及开发者测量和分析 service-worker 控制的导航与路由的能力。
+Chrome 140 针对 PWA and service worker 的更新侧重于与规范的一致性以及增强可观测性。一个更改修复了 SharedWorker 的行为，使 blob 脚本 shared workers 按照 ServiceWorker spec 继承 controllers，从而关闭了一个行为差异。另一个更改通过 navigation 和 resource timing APIs 暴露静态路由的时间点，提升了开发者衡量 service worker 路由延迟的能力。两项更新共同提升了正确性，并为开发者提供更好的诊断数据以优化离线和路由性能。
 
 ## 详细更新
 
-下面条目扩展了上文摘要，并展示了对 PWA 与 service-worker 开发的实际影响。
+以下条目对摘要做了扩展，并突出面向开发者的影响。
 
-### `SharedWorker` script inherits controller for blob script URL（SharedWorker 对 blob 脚本 URL 继承 controller）
+### `SharedWorker` script inherits controller for blob script URL（blob 脚本 URL 的 SharedWorker 继承 controller）
 
 #### 新增内容
-Chrome 现在与 ServiceWorker 规范对齐，允许由 blob 脚本 URL 创建的 shared workers 继承 controller，这与此前仅限于 dedicated workers 的行为一致。
+从 blob 脚本 URL 创建的 shared workers 现在会按 ServiceWorker spec 继承 service worker controller，与之前仅限于 dedicated workers 的行为一致。
 
 #### 技术细节
-此更改修复了 Chrome 先前在 blob URL 情形下只有 dedicated workers 会继承 controller 的偏差。发布说明中提到一个名为 SharedWorkerBlobURLFixEnabled 的企业策略用于控制该行为的推出。
+Chrome 之前的实现将 controller 继承限制为 dedicated workers；此更改使 shared worker 的 blob URL 处理与 spec 中的 control-and-use-worker-client 规则保持一致。跟踪说明中提到一个企业策略 `SharedWorkerBlobURLFixEnabled` 以供管理控制。
 
 #### 适用场景
-- 确保依赖 controller 存在的代码路径（例如拦截 fetch 或消息流）在 dedicated workers 和 shared workers 之间具有一致的 controller 语义。
-- 减少浏览器行为与规范之间的差异，简化跨浏览器 PWA 逻辑和调试。
+- 从 blob URL 派生 shared workers 的 PWA 现在将看到与 dedicated workers 相同的受控上下文语义，从而支持一致的 fetch 拦截和客户端控制行为。
+- 改善了依赖 service worker 控制网络行为的多页面或多上下文架构应用的可预测性。
 
 #### 参考资料
 - https://issues.chromium.org/issues/324939068
 - https://chromestatus.com/feature/5137897664806912
 - https://w3c.github.io/ServiceWorker/#control-and-use-worker-client
 
-### Add `ServiceWorkerStaticRouterTimingInfo`（添加静态路由计时信息）
+### Add `ServiceWorkerStaticRouterTimingInfo`（添加 ServiceWorkerStaticRouterTimingInfo）
 
 #### 新增内容
-Chrome 为 ServiceWorker Static routing API 添加了相关的计时信息，并通过导航计时 API 和资源计时 API 将其暴露给开发者使用。
+为 ServiceWorker 静态路由向 navigation timing 和 resource timing APIs 添加了时间标记，提供关键路由事件的明确时间戳。
 
 #### 技术细节
-ServiceWorker 提供用于表示路由相关时间点的标记；此功能将两个与 Static routing API 相关的计时值暴露到平台计时 API 中，以便测量和诊断。
+此更改通过标准的 timing APIs 暴露了两个与静态路由 API 相关的时间点，使浏览器能够报告 service worker 静态路由决策相对于导航和资源加载生命周期发生的时间。这将 service worker 路由遥测集成到现有的 Web 性能接口中。
 
 #### 适用场景
-- 支持精确测量路由决策及其对导航性能的影响。
-- 帮助开发者和性能工程师将 service-worker 路由活动与导航/资源计时数据相关联，以进行优化和调试。
+- 测量和分析 service worker 静态路由在导航和资源加载中引入的延迟。
+- 将路由时间与渲染和网络事件关联，以优先优化并在 PWA 启动和资源获取路径中检测性能回退。
+- 在性能监控和合成测试中使用时间数据以验证跨版本的路由改进。
 
 #### 参考资料
 - https://issues.chromium.org/issues/41496865
 - https://chromestatus.com/feature/6309742380318720
 - https://github.com/w3c/ServiceWorker
 
-File: digest_markdown/webplatform/PWA and service worker/chrome-140-stable-en.md
+文件已保存到：digest_markdown/webplatform/PWA and service worker/chrome-140-stable-en.md

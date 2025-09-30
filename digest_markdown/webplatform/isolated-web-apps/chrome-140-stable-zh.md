@@ -1,35 +1,34 @@
-## 区域摘要
+## 领域摘要
 
-Chrome 140 Stable 引入了 Controlled Frame API，专门面向 Isolated Web Apps (IWAs)。主要趋势是通过允许嵌入标准 <iframe> 拒绝的内容来扩展 IWA 的安全嵌入能力，同时让宿主应用对该内容拥有控制权。对于需要在不牺牲隔离保证的情况下将第三方或遗留内容集成到 IWA 的开发者来说，此更改具有重要影响。它通过提供一个新的、IWA 范围的 Web API 来推进 Web 平台，在更丰富的集成与明确的应用级控制之间取得平衡。
+Chrome 140 稳定版引入了仅面向 Isolated Web Apps (IWAs) 的 Controlled Frame API。主要趋势是扩展 IWAs 嵌入并控制第三方内容的能力，这类内容在传统的 <iframe> 嵌入中会被阻止。此更改对于需要在保持应用级隔离模型的同时集成外部内容的已安装网页应用开发者具有重要意义。它推动了平台发展，为 IWAs 提供了一个官方认可的、更丰富的嵌入场景表面，同时通过 IWA 模型实现集中控制与审查。
 
 ## 详细更新
 
-下面的单个功能直接源自摘要，并突出了对 IWA 开发者的实际影响。
+上面的简短摘要概述了本次发布中的具体更改。下面列出 Chrome 140 中为 Isolated Web Apps 添加的单一功能。
 
-### Controlled Frame API (available only to IWAs)（仅对 IWAs 可用）
+### Controlled Frame API (available only to IWAs)（仅适用于 IWAs）
 
 #### 新增内容
-Controlled Frame 是一个仅对 Isolated Web Apps 可用的新 API，能够嵌入所有内容——包括无法在标准 <iframe> 中嵌入的第三方内容——并对该嵌入内容提供编程控制。
+添加了一个仅面向 Isolated Web Apps 的 Controlled Frame API。它允许嵌入所有内容，包括无法在标准 <iframe> 中嵌入的第三方内容，并提供对嵌入内容表面的编程式控制。
 
 #### 技术细节
-- 范围：API 面向仅限 IWAs（依据 IWA 模型）。
-- 目的：通过提供受控的嵌入原语绕过 iframe 嵌入限制；控制语义和安全模型由规范定义。
-- 关键参考和规范文本可在链接的说明文档与规范中查看，以了解实现和行为细节。
-
-与平台领域的关联：
-- webapi / javascript: 引入一个新的 JS API，供 IWAs 实例化并控制嵌入的帧。
-- security-privacy：改变了 IWA 内的嵌入模型；预期为明确的 IWA 范围隔离语义，而不是广泛的跨源 iframe 行为。
-- performance / graphics-webgpu / css：嵌入任意内容可能影响布局和渲染管线；开发者应对渲染和绘制成本进行分析。
-- pwa-service-worker：使用 service workers 的 IWAs 可能需要考虑受控 frame 内容的资源路由和缓存。
-- 弃用：这并不移除 iframe，而是在 iframe 嵌入被阻止的情况下，提供一个仅限 IWA 的替代原语。
+- 该 API 作用域限定于 IWAs（面向隔离应用的安装与打包模型），不适用于常规网页。
+- 规范与实现工作通过下列规范和 Chromium 问题跟踪进行记录；请参阅这些链接以获取精确的 API 形态和安全模型。
+- 相关链接：
+  - 规范: https://wicg.github.io/controlled-frame
+  - 跟踪: https://issues.chromium.org/issues/40191772
+  - 解释说明: https://github.com/WICG/isolated-web-apps/blob/main/README.md
+  - ChromeStatus: https://chromestatus.com/feature/5199572022853632
 
 #### 适用场景
-- 在传统 <iframe> 嵌入被阻止的情况下，在 IWA 内集成第三方小部件或遗留页面。
-- 在 IWA 内构建需要对嵌入式导航和 UI 进行细粒度控制的自助终端或受管内容查看器。
-- 使用明确的应用级控制钩子（例如导航、输入调解）创建对远程内容的安全沙箱托管。
+- 在传统嵌入被 `frame-ancestors` 或其他限制阻止时，在 IWA 内嵌入第三方 UI 或内容。
+- 构建混合已安装应用，将本地受信任的应用逻辑与远程内容结合，同时保持应用界面在开发者控制之下。
+- 在 IWA 打包模型中，开发者需要对嵌入内容的运行时生命周期和集成点进行更细粒度控制的场景。
 
 #### 参考资料
-- https://github.com/WICG/isolated-web-apps/blob/main/README.md — Isolated Web Apps 说明
-- https://issues.chromium.org/issues/40191772 — '跟踪缺陷 #40191772'
-- https://chromestatus.com/feature/5199572022853632 — ChromeStatus.com 条目
-- https://wicg.github.io/controlled-frame — 规范
+- https://github.com/WICG/isolated-web-apps/blob/main/README.md
+- https://issues.chromium.org/issues/40191772
+- https://chromestatus.com/feature/5199572022853632
+- https://wicg.github.io/controlled-frame
+
+已保存至: digest_markdown/webplatform/Isolated Web Apps/chrome-140-stable-en.md

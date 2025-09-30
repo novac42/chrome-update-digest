@@ -5,44 +5,46 @@ title: chrome-140-en
 
 ## Area Summary
 
-Chrome 140 stable introduces two focused JavaScript-area changes: built-in conversion between Uint8Array and base64/hex representations, and an adjustment to the view transition finished promise timing. The Uint8Array conversion feature reduces the need for custom utilities for binary ↔ text encoding, improving interoperability and developer ergonomics. The view transition timing change targets a visual flicker caused by promise resolution ordering, improving animation robustness and perceived performance. Both updates tighten platform primitives so developers can rely less on ad-hoc workarounds.
+Chrome 140 continues to strengthen JavaScript ergonomics and animation timing. The release adds built-in conversion support between binary buffers and base64/hex and adjusts the timing of the view transition finished promise to avoid end-of-animation flicker. These changes reduce boilerplate for binary encoding/decoding and fix a subtle rendering-timing gotcha for view transitions, improving developer control over visual continuity. Both updates advance the platform by closing cross-cutting gaps in developer-facing APIs (binary handling and animation lifecycle), reducing platform-level workarounds.
 
 ## Detailed Updates
 
-Below are concise, developer-focused breakdowns of each JavaScript-area change and why they matter.
+The brief summary above connects to the specific JavaScript-focused changes in this release. Each feature below lists what changed, key technical notes relevant to JavaScript/runtime and browser integration, practical use cases, and the original links.
 
 ### `Uint8Array` to and from base64 and hex
 
 #### What's New
-Adds the ability and methods to convert between Uint8Array binary data and base64/hex text encodings.
+Built-in ability to convert between Uint8Array (binary data) and base64/hex string encodings, removing the need for ad-hoc helpers.
 
 #### Technical Details
-This feature standardizes conversion APIs for binary <-> textual encodings; see the language-level spec for exact method shapes and semantics.
+- Adds standardized methods for encoding ArrayBuffer/Uint8Array to base64 and hex and decoding back to binary.
+- Ties into the ArrayBuffer ecosystem and the ECMAScript-level proposal linked by the spec.
+- Relevant to the JavaScript engine and WebAPI boundary where binary data is marshaled for storage, network, or interop.
 
 #### Use Cases
-- Encoding binary data for transport or storage (e.g., embedding images, sending compact payloads).
-- Decoding base64/hex payloads into typed arrays for processing with Web APIs (crypto, WebAssembly, fetch response handling).
-- Reduces dependency on utility libraries and custom encoder/decoder code paths.
+- Simplifies client-side serialization for APIs that accept base64/hex (e.g., data URIs, JSON payloads).
+- Reduces dependency on manual loops or global helpers for encoding in web apps, service workers, and node-like utilities.
+- Beneficial for performance-sensitive code paths that previously used nonstandard helpers or intermediate strings.
 
 #### References
-- ChromeStatus.com entry: https://chromestatus.com/feature/6281131254874112  
-- Spec: https://tc39.es/proposal-arraybuffer-base64/spec
+- https://chromestatus.com/feature/6281131254874112
+- https://tc39.es/proposal-arraybuffer-base64/spec
 
 ### View transition finished promise timing change
 
 #### What's New
-The timing for the view transition finished promise has been changed to address cases where promise resolution occurs inside rendering lifecycle steps and causes a visible flicker at the end of the animation.
+The timing of the view transition finished promise has been changed so promise resolution does not run after the final frame that removes the view transition, preventing end-of-animation script-induced flicker.
 
 #### Technical Details
-The adjustment targets when the finished promise resolves relative to the rendering lifecycle so that scripts reacting to completion do not run after the visual frame that removes the view transition, avoiding an end-of-animation visual glitch.
+- Previously, the finished promise resolved within the rendering lifecycle steps such that resolution callbacks could execute after the visual frame that removed the transition was produced.
+- The timing change shifts promise resolution to avoid running developer script after that final removal frame, aligning script execution with visual continuity.
+- Impacts animation lifecycle semantics exposed to JavaScript and interacts with frame production and task scheduling in the rendering pipeline.
 
 #### Use Cases
-- Smoother view transition flows where post-transition scripts manipulate DOM or styles.
-- Reliable animation endpoints for frameworks and libraries that await the finished promise before performing final layout or cleanup.
-- Reduces need for fragile timing hacks and forceful reflows to avoid flicker.
+- Prevents flicker when post-transition promise handlers manipulate layout or perform DOM changes.
+- Makes view transitions more predictable for complex UIs that rely on promise callbacks to finalize state or trigger follow-up animations.
+- Useful for performance-sensitive pages where minimizing late-frame script work preserves smoothness.
 
 #### References
-- Tracking bug #430018991: https://issues.chromium.org/issues/430018991  
-- ChromeStatus.com entry: https://chromestatus.com/feature/5143135809961984
-
-Saved file path: digest_markdown/webplatform/JavaScript/chrome-140-stable-en.md
+- https://issues.chromium.org/issues/430018991
+- https://chromestatus.com/feature/5143135809961984
