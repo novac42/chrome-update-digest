@@ -1,0 +1,40 @@
+version: '141'
+channel: stable
+area: performance
+extraction_timestamp: '2025-10-13T20:58:45.695733'
+extraction_method: deterministic
+statistics:
+  total_features: 1
+  total_links: 2
+  primary_tags:
+    performance: 1
+  cross_cutting: {}
+features:
+- title: 'Speculation rules: desktop "eager" eagerness improvements'
+  content: 'On desktop, "eager" eagerness speculation rules prefetches and prerenders now trigger when users hover on a link
+    for a shorter time than the "moderate" mouse hover time.
+
+
+    The previous behavior, of starting prefetch and prerenders as soon as possible, was the same as "immediate" eagerness.
+    This new behavior is more useful as it better reflects the author''s intent to be more eager than the "moderate" and less
+    eager than "immediate".
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5113430155591680) | [Spec](https://wicg.github.io/nav-speculation/speculation-rules.html#:~:text=early%20as%20possible.-,%22moderate%22,balance%20between%20%22eager%22%20and%20%22conservative%22.,-%22conservative%22)'
+  heading_path:
+  - Performance
+  - 'Speculation rules: desktop "eager" eagerness improvements'
+  links:
+  - url: https://chromestatus.com/feature/5113430155591680
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/nav-speculation/speculation-rules.html#:~:text=early%20as%20possible.-,%22moderate%22,balance%20between%20%22eager%22%20and%20%22conservative%22.,-%22conservative%22
+    link_type: spec
+    title: Spec
+  line_number: 3
+  primary_tags:
+  - name: performance
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []

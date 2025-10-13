@@ -1,0 +1,41 @@
+version: '141'
+channel: stable
+area: javascript
+extraction_timestamp: '2025-10-13T20:58:45.697847'
+extraction_method: deterministic
+statistics:
+  total_features: 1
+  total_links: 3
+  primary_tags:
+    javascript: 1
+  cross_cutting:
+    privacy: 1
+features:
+- title: Align implementations on when RTP stats should be created
+  content: 'RTP stats objects, of type "outbound-rtp" or "inbound-rtp" in this case, represents a WebRTC stream. The identifier
+    of this stream is the SSRC (a number). This feature aligns with the specification on when these stats should be created.
+
+
+    [Tracking bug #406585888](https://issues.chromium.org/issues/406585888) | [ChromeStatus.com entry](https://chromestatus.com/feature/4580748730040320)
+    | [Spec](https://w3c.github.io/webrtc-stats/#the-rtp-statistics-hierarchy)'
+  heading_path:
+  - JavaScript
+  - Align implementations on when RTP stats should be created
+  links:
+  - url: https://issues.chromium.org/issues/406585888
+    link_type: other
+    title: 'Tracking bug #406585888'
+  - url: https://chromestatus.com/feature/4580748730040320
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://w3c.github.io/webrtc-stats/#the-rtp-statistics-hierarchy
+    link_type: spec
+    title: Spec
+  line_number: 3
+  primary_tags:
+  - name: javascript
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy

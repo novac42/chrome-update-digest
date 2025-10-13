@@ -1,0 +1,155 @@
+version: '141'
+channel: stable
+area: origin-trials
+extraction_timestamp: '2025-10-13T20:58:45.686121'
+extraction_method: deterministic
+statistics:
+  total_features: 4
+  total_links: 11
+  primary_tags:
+    origin-trials: 4
+    network: 1
+    webassembly: 1
+  cross_cutting:
+    security: 2
+    privacy: 3
+    ai: 1
+    enterprise: 1
+features:
+- title: Local network access restrictions
+  content: 'Chrome 141 [restricts the ability to make requests to the user''s local network](/blog/local-network-access),
+    gated behind a permission prompt.
+
+
+    This origin trial temporarily allows for access to resources on local networks to originate from non-secure contexts.
+    This will give developers more time to migrate Local Network Access requests to originate from a secure context.
+
+
+    [Origin Trial](/origintrials#/view_trial/3826370833404657665) | [Tracking bug #394009026](https://issues.chromium.org/issues/394009026)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5152728072060928) | [Spec](https://wicg.github.io/local-network-access)'
+  heading_path:
+  - Origin trials
+  - Local network access restrictions
+  links:
+  - url: https://issues.chromium.org/issues/394009026
+    link_type: other
+    title: 'Tracking bug #394009026'
+  - url: https://chromestatus.com/feature/5152728072060928
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/local-network-access
+    link_type: spec
+    title: Spec
+  line_number: 3
+  primary_tags:
+  - name: origin-trials
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: network
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - security
+  - privacy
+- title: Proofreader API
+  content: 'A JavaScript API for [proofreading input text with suggested corrections](/blog/proofreader-api-ot), backed by
+    an AI language model.
+
+
+    [Origin Trial](/origintrials#/register_trial/1988902185437495297) | [Tracking bug #403313556](https://issues.chromium.org/issues/403313556)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5164677291835392) | [Spec](https://github.com/webmachinelearning/proofreader-api/blob/main/README.md#full-api-surface-in-web-idl)'
+  heading_path:
+  - Origin trials
+  - Proofreader API
+  links:
+  - url: https://issues.chromium.org/issues/403313556
+    link_type: other
+    title: 'Tracking bug #403313556'
+  - url: https://chromestatus.com/feature/5164677291835392
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/webmachinelearning/proofreader-api/blob/main/README.md#full-api-surface-in-web-idl
+    link_type: github
+    title: Spec
+  line_number: 11
+  primary_tags:
+  - name: origin-trials
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - ai
+  - privacy
+- title: Extend CSP `script-src` (also known as `script-src-v2`)
+  content: 'This feature adds new keywords to the `script-src` Content Security Policy (CSP) directive. This adds two new
+    hash-based allowlisting mechanisms: script sources based on hashes of URLs and contents of `eval()` and `eval()`-like
+    functions. This is sometimes referred to as script-src-v2, although it is backward compatible with the existing script-src,
+    and uses the same directive.
+
+
+    Extending hashes to cover URL and `eval()` hashes lets developers set reasonably strict security policies by narrowly
+    allowlisting scripts by their hashes even when script contents are subject to frequent changes, and known-safe contents
+    of `eval()` without permitting unchecked use of `eval()` broadly.
+
+
+    The new keywords override host-based script-src when provided. This allows a single header to be compatible with browsers
+    that both do or do not implement the new keywords.
+
+
+    [Tracking bug #392657736](https://issues.chromium.org/issues/392657736) | [ChromeStatus.com entry](https://chromestatus.com/feature/5196368819519488)
+    | [Spec](https://github.com/w3c/webappsec-csp/pull/784)'
+  heading_path:
+  - Origin trials
+  - Extend CSP `script-src` (also known as `script-src-v2`)
+  links:
+  - url: https://issues.chromium.org/issues/392657736
+    link_type: other
+    title: 'Tracking bug #392657736'
+  - url: https://chromestatus.com/feature/5196368819519488
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/w3c/webappsec-csp/pull/784
+    link_type: github
+    title: Spec
+  line_number: 17
+  primary_tags:
+  - name: origin-trials
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - security
+  - privacy
+  - enterprise
+- title: WebAssembly custom descriptors
+  content: 'Lets WebAssembly store data associated with source-level types more efficiently in new "custom descriptor" objects.
+    These custom descriptors can be configured with prototypes for the WebAssembly objects of that source-level type. This
+    lets you install methods on a WebAssembly object''s prototype chain and call them directly from JavaScript using normal
+    method call syntax. The prototypes and methods can be configured declaratively using an imported built-in function.
+
+
+    [Origin Trial](/origintrials#/view_trial/619807898716864513) | [ChromeStatus.com entry](https://chromestatus.com/feature/6024844719947776)
+    | [Spec](https://github.com/WebAssembly/custom-descriptors/blob/main/proposals/custom-descriptors/Overview.md)'
+  heading_path:
+  - Origin trials
+  - WebAssembly custom descriptors
+  links:
+  - url: https://chromestatus.com/feature/6024844719947776
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/WebAssembly/custom-descriptors/blob/main/proposals/custom-descriptors/Overview.md
+    link_type: github
+    title: Spec
+  line_number: 27
+  primary_tags:
+  - name: origin-trials
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: webassembly
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []

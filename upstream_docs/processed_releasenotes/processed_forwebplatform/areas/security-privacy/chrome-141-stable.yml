@@ -1,0 +1,87 @@
+version: '141'
+channel: stable
+area: security-privacy
+extraction_timestamp: '2025-10-13T20:58:45.690551'
+extraction_method: deterministic
+statistics:
+  total_features: 2
+  total_links: 6
+  primary_tags:
+    security: 2
+    storage: 1
+  cross_cutting:
+    security: 2
+    privacy: 2
+    enterprise: 2
+features:
+- title: Strict Same Origin Policy for Storage Access API
+  content: 'Adjusts the Storage Access API semantics to strictly follow the Same Origin Policy with regard to security. That
+    is, using `document.requestStorageAccess()` in a frame only attaches cookies to requests to the iframe''s origin (not
+    site) by default.
+
+
+    **Note:** The `CookiesAllowedForUrls` policy or Storage Access Headers may still be used to unblock cross-site cookies.
+
+
+    [Tracking bug #379030052](https://issues.chromium.org/issues/379030052) | [ChromeStatus.com entry](https://chromestatus.com/feature/5169937372676096)
+    | [Spec](https://github.com/privacycg/storage-access/pull/213)'
+  heading_path:
+  - Security
+  - Strict Same Origin Policy for Storage Access API
+  links:
+  - url: https://issues.chromium.org/issues/379030052
+    link_type: other
+    title: 'Tracking bug #379030052'
+  - url: https://chromestatus.com/feature/5169937372676096
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/privacycg/storage-access/pull/213
+    link_type: github
+    title: Spec
+  line_number: 3
+  primary_tags:
+  - name: security
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: storage
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - security
+  - privacy
+  - enterprise
+- title: Signature-based Integrity
+  content: 'This feature provides web developers with a mechanism to verify the provenance of resources they depend upon,
+    creating a technical foundation for trust in a site''s dependencies. In short: servers can sign responses with a Ed25519
+    key pair, and web developers can require the user agent to verify the signature using a specific public key. This offers
+    a helpful addition to URL-based checks offered by Content Security Policy on the one hand, and Subresource Integrity''s
+    content-based checks on the other.
+
+
+    [Tracking bug #375224898](https://issues.chromium.org/issues/375224898) | [ChromeStatus.com entry](https://chromestatus.com/feature/5032324620877824)
+    | [Spec](https://wicg.github.io/signature-based-sri)'
+  heading_path:
+  - Security
+  - Signature-based Integrity
+  links:
+  - url: https://issues.chromium.org/issues/375224898
+    link_type: other
+    title: 'Tracking bug #375224898'
+  - url: https://chromestatus.com/feature/5032324620877824
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/signature-based-sri
+    link_type: spec
+    title: Spec
+  line_number: 11
+  primary_tags:
+  - name: security
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - security
+  - privacy
+  - enterprise

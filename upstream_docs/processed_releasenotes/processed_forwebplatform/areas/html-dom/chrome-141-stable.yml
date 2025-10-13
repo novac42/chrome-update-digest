@@ -1,0 +1,77 @@
+version: '141'
+channel: stable
+area: html-dom
+extraction_timestamp: '2025-10-13T20:58:45.681443'
+extraction_method: deterministic
+statistics:
+  total_features: 2
+  total_links: 6
+  primary_tags:
+    html-dom: 2
+  cross_cutting:
+    security: 1
+    privacy: 2
+    enterprise: 1
+features:
+- title: ARIA Notify API
+  content: '`ariaNotify` provides a JavaScript API that lets content authors tell a screen reader what to read.
+
+
+    `ariaNotify` improves reliability and developer control compared to ARIA live regions, allowing for announcing changes
+    not tied to DOM updates. This enables more consistent and ergonomic accessibility experiences across dynamic web applications.
+    Iframe usage of this feature can be controlled using the `"aria-notify"` permission policy.
+
+
+    [Tracking bug #326277796](https://issues.chromium.org/issues/326277796) | [ChromeStatus.com entry](https://chromestatus.com/feature/5745430754230272)
+    | [Spec](https://github.com/w3c/aria/pull/2577)'
+  heading_path:
+  - DOM
+  - ARIA Notify API
+  links:
+  - url: https://issues.chromium.org/issues/326277796
+    link_type: other
+    title: 'Tracking bug #326277796'
+  - url: https://chromestatus.com/feature/5745430754230272
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/w3c/aria/pull/2577
+    link_type: github
+    title: Spec
+  line_number: 3
+  primary_tags:
+  - name: html-dom
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - security
+  - privacy
+  - enterprise
+- title: Update `hidden=until-found` and details ancestor revealing algorithm
+  content: 'The specification recently had some small changes to the revealing algorithms for `hidden=until-found` and details
+    elements to prevent the browser from getting stuck in an infinite loop, these are now shipping in Chrome.
+
+
+    [Tracking bug #433545121](https://issues.chromium.org/issues/433545121) | [ChromeStatus.com entry](https://chromestatus.com/feature/5179013869993984)
+    | [Spec](https://github.com/whatwg/html/pull/11457)'
+  heading_path:
+  - DOM
+  - Update `hidden=until-found` and details ancestor revealing algorithm
+  links:
+  - url: https://issues.chromium.org/issues/433545121
+    link_type: other
+    title: 'Tracking bug #433545121'
+  - url: https://chromestatus.com/feature/5179013869993984
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/whatwg/html/pull/11457
+    link_type: github
+    title: Spec
+  line_number: 11
+  primary_tags:
+  - name: html-dom
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy

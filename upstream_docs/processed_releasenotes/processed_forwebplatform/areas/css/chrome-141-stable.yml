@@ -1,0 +1,36 @@
+version: '141'
+channel: stable
+area: css
+extraction_timestamp: '2025-10-13T20:58:45.678837'
+extraction_method: deterministic
+statistics:
+  total_features: 1
+  total_links: 2
+  primary_tags:
+    css: 1
+  cross_cutting: {}
+features:
+- title: Custom property enumeration in `getComputedStyle()`
+  content: 'When iterating over `window.getComputedStyle(element)` in Chrome, there was a bug where it forgets to include
+    any custom properties set on the element. Therefore, `length()` on the returned object forgets to account for the number
+    of custom properties set. This bug is fixed from Chrome 141, aligning Chrome with Firefox and Safari.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5070655645155328) | [Spec](https://drafts.csswg.org/cssom/#dom-window-getcomputedstyle)'
+  heading_path:
+  - CSS
+  - Custom property enumeration in `getComputedStyle()`
+  links:
+  - url: https://chromestatus.com/feature/5070655645155328
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://drafts.csswg.org/cssom/#dom-window-getcomputedstyle
+    link_type: other
+    title: Spec
+  line_number: 3
+  primary_tags:
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []

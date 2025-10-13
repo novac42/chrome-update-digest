@@ -1,0 +1,70 @@
+version: '141'
+channel: stable
+area: multimedia
+extraction_timestamp: '2025-10-13T20:58:45.693400'
+extraction_method: deterministic
+statistics:
+  total_features: 2
+  total_links: 5
+  primary_tags:
+    multimedia: 2
+  cross_cutting:
+    privacy: 1
+features:
+- title: WebRTC Encoded Transform (V2)
+  content: 'This API allows processing of encoded media flowing through an `RTCPeerConnection`. Chrome shipped an early version
+    of this API in 2020. Since then, the specification has changed and other browsers have shipped the updated version (Safari
+    in 2022 and Firefox in 2023). This launch aligns Chrome with the updated specification as part of Interop 2025.
+
+
+    This launch does not cover the `generateKeyFrame method`, which is still under discussion.
+
+
+    [Tracking bug #354881878](https://issues.chromium.org/issues/354881878) | [ChromeStatus.com entry](https://chromestatus.com/feature/5175278159265792)
+    | [Spec](https://github.com/w3c/webrtc-encoded-transform)'
+  heading_path:
+  - WebRTC
+  - WebRTC Encoded Transform (V2)
+  links:
+  - url: https://issues.chromium.org/issues/354881878
+    link_type: other
+    title: 'Tracking bug #354881878'
+  - url: https://chromestatus.com/feature/5175278159265792
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/w3c/webrtc-encoded-transform
+    link_type: github
+    title: Spec
+  line_number: 3
+  primary_tags:
+  - name: multimedia
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: '`echoCancellationMode` for `getUserMedia()`'
+  content: 'Extends the `echoCancellation` behavior of the `MediaTrackConstraints` dictionary. his previously accepted `true`
+    or `false` and now additionally accepts the values `"all"` and `"remote-only"`. This lets clients modify echo cancellation
+    behavior applied to audio tracks received from microphones, controlling how much of the user system playout (all, or only
+    audio received from `PeerConnections`) is removed from the microphone signal.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5585747985563648) | [Spec](https://www.w3.org/TR/mediacapture-streams/#dom-echocancellationmodeenum)'
+  heading_path:
+  - WebRTC
+  - '`echoCancellationMode` for `getUserMedia()`'
+  links:
+  - url: https://chromestatus.com/feature/5585747985563648
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://www.w3.org/TR/mediacapture-streams/#dom-echocancellationmodeenum
+    link_type: spec
+    title: Spec
+  line_number: 11
+  primary_tags:
+  - name: multimedia
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
