@@ -46,14 +46,15 @@ pip install -r requirements.txt
 
 ### Sampling Requirements
 
-This MCP server calls the connected MCP client's LLM using sampling to build its digests. Use a client that supports sampling workflows (for example, VS Code or VS Code Insiders). In VS Code, open `List Servers -> Configure Model Access (Sampling)` for `chrome-digest` and pick a sampling-capable model. `gpt-5-mini` is recommended for fast, high-quality output, but feel free to select the model you prefer.
+This MCP server calls the connected MCP client's LLM using sampling to build its digests. Use an MCP client that supports sampling workflows—we recommend VS Code or VS Code Insiders because they expose the full sampling controls needed by the server.
 
-#### For Claude Desktop
+When VS Code first loads the `chrome-digest` MCP server, it prompts to allow the tool to use the VS Code model. Click **Allow** so the server can make sampling calls through the client.
 
-Add to your config file:
-- **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
-- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
-- **Linux**: `~/.config/Claude/claude_desktop_config.json`
+In VS Code, open `List Servers -> Configure Model Access (Sampling)` for `chrome-digest` and set the **Preferred model** to a sampling-capable option. `gpt-5-mini` offers a good balance between speed and quality, but you can choose any model your workspace prefers.
+
+#### Configure Your MCP Client
+
+Connect the server through your preferred MCP client (VS Code, Cursor, Claude Desktop, etc.):
 
 **Configuration Example (macOS/Linux):**
 ```json
@@ -88,7 +89,7 @@ Add to your config file:
 **Important Notes:**
 - Replace `/path/to/chrome-update-digest` with your actual project path
 - Ensure the virtual environment is properly created before configuration
-- Restart Claude Desktop after modifying the configuration
+- Restart your MCP client after modifying its configuration
 
 #### Test the Server
 
