@@ -69,6 +69,7 @@ focus_areas:
     priority: 2
     heading_patterns:
       - "Deprecations"
+      - "Deprecations and removals"
       - "Removals"
     
   security-privacy:
