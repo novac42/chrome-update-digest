@@ -1,34 +1,40 @@
-# Area Summary
+## Area Summary
 
-Chrome 137 introduces a multimedia-focused permission policy that gives embedders explicit control over media playback in iframes that are not rendered. The change is surfaced as an Origin Trial and is aimed at embedder websites that need to pause media in embedded contexts whose CSS display property is set to `none`. This update matters to developers embedding third-party media because it formalizes a control point for playback behavior in non-rendered iframes and is tracked through an Origin Trial and Chromium issue.
+Chrome 137 introduces a focused Multimedia update: a permission policy to pause media playback in not-rendered iframes. The main developer-facing change is the new `media-playback-while-not-rendered` permission policy, allowing embedders to stop media inside iframes that have `display: none`. This gives sites explicit control over embedded media behavior and is being rolled out via origin trials and tracked in Chromium. These changes matter because they let developers reduce unexpected background playback and better control embedded media lifecycle.
 
 ## Detailed Updates
 
-Below are the details for the Multimedia change in Chrome 137 and its practical implications for developers.
+Below are the details for the Multimedia change in Chrome 137 and what developers should know.
 
 ### Pause media playback on not-rendered iframes
 
 #### What's New
-Adds a `media-playback-while-not-rendered` permission policy to allow embedder websites to pause media playback of embedded iframes which aren't rendered—that is, have their display property set to `none`. The release note text in the source is truncated after "improve the p...".
+Adds a `media-playback-while-not-rendered` permission policy to allow embedder websites to pause media playback of embedded iframes which aren't rendered—that is, have their display property set to `none`. 
 
 #### Technical Details
-- Introduces a permission policy named `media-playback-while-not-rendered`.
-- Applies to embedded iframes whose CSS `display` is `none` (definition of "not-rendered" in the note).
-- Marked as an Origin Trial in the provided metadata.
+- Exposed as a permission policy named `media-playback-while-not-rendered`.
+- Targets iframes that are not rendered (explicitly noted as having `display: none` in the release data).
+- Tagged in the release metadata as an origin-trials feature for staged rollout.
 
 #### Use Cases
-- Embedders can opt to pause media in non-rendered iframes to better control user experience (as stated).
-- Further explanatory text in the source is truncated; consult the Origin Trial and tracking links below for implementation and rollout details.
-
-#### Area-specific implications
-- css: Relies on the `display: none` state as the trigger for "not-rendered" behavior.
-- webapi: Exposes a permission-policy control surface for embedder pages to govern iframe playback.
-- performance: By allowing pausing of non-rendered iframe media, embedders can potentially reduce unnecessary background activity.
-- multimedia: Directly affects embedded media playback behavior and embedder-driven playback policies.
-- security-privacy: Permission policies are a web-facing control that influence cross-origin embed behavior.
-- javascript, graphics-webgpu, devices, pwa-service-worker, webassembly, deprecations: No additional details provided in the source; consult the Origin Trial and tracking bug for any related API interactions or migration guidance.
+- Enable embedders to prevent audio/video in hidden iframes from playing.
+- Allow developers to implement more predictable embedded-media UX (release notes state this "should allow developers to build more user-friendly experiences").
 
 #### References
-- [Origin Trial](https://developer.chrome.com/origintrials/#/trials/active)
-- [Tracking bug #351354996](https://bugs.chromium.org/p/chromium/issues/detail?id=351354996)
-- [ChromeStatus.com entry](https://chromestatus.com/feature/5082854470868992)
+- Origin Trial: https://developer.chrome.com/origintrials/#/trials/active
+- Tracking bug #351354996: https://bugs.chromium.org/p/chromium/issues/detail?id=351354996
+- ChromeStatus.com entry: https://chromestatus.com/feature/5082854470868992
+
+## Area-Specific Expertise (Multimedia-focused notes)
+
+- css: Relies on `display: none` as the signal for "not-rendered"; apply CSS changes intentionally when interacting with this policy.
+- webapi: Surface is a permission policy; embedders will opt into controlling iframe media via document-level policy headers or attributes.
+- graphics-webgpu: No direct API change for GPU pipelines; pausing media in hidden iframes can reduce rendering pressure in some scenarios.
+- javascript: Control remains at embedder policy level; scripts can still toggle iframe rendering states to affect playback behavior.
+- security-privacy: Implemented as a permission policy, keeping control with the embedding origin rather than cross-origin content.
+- performance: Pausing hidden iframe media helps avoid unnecessary CPU/network use from media elements that users can't see.
+- multimedia: Directly affects embedded audio/video playback behavior; useful for reducing unwanted background playback.
+- devices: Indirectly reduces device resource consumption by stopping hidden media playback.
+- pwa-service-worker: No direct service worker changes, but embedded media lifetime may be more predictable in offline/foreground scenarios.
+- webassembly: No change to WASM runtime; benefits are at embedding/DOM level.
+- deprecations: Released via origin trial—monitor ChromeStatus and the tracking bug for rollout and migration guidance.
