@@ -13,6 +13,7 @@ from datetime import datetime
 from fastmcp import Context
 from src.utils.yaml_pipeline import YAMLPipeline
 from src.utils.focus_area_manager import FocusAreaManager
+from src.utils.telemetry import DigestTelemetry
 
 
 class EnhancedWebplatformDigestTool:
@@ -43,6 +44,11 @@ class EnhancedWebplatformDigestTool:
         self.digest_dir.mkdir(parents=True, exist_ok=True)
         # Optional model preference hints for downstream sampling calls
         self._model_preferences: Optional[Union[Dict[str, Any], List[Any]]] = None
+        # Telemetry recorder for Prometheus metrics and structured events
+        self.telemetry = DigestTelemetry(self.base_path)
+        # Track the last time progress was flushed to avoid excessive I/O
+        self._last_progress_write: float = 0.0
+        self._last_progress_completed: int = -1
 
     def _resolve_model_preferences(
         self,
@@ -601,7 +607,19 @@ YAML Data:
                 print(f"System prompt: {system_prompt[:50]}...")
             
             try:
-                return await self._safe_sample_with_retry(ctx, user_message, system_prompt, debug)
+                return await self._safe_sample_with_retry(
+                    ctx,
+                    user_message,
+                    system_prompt,
+                    debug,
+                    telemetry_context={
+                        "operation": "bulk_digest_generation",
+                        "language": language,
+                        "target_area": target_area or "all",
+                        "version": version,
+                        "channel": yaml_data.get('channel'),
+                    },
+                )
             except Exception as e:
                 # Don't hide failures - raise them to be handled at higher level
                 raise Exception(f"Failed to generate digest via sampling: {str(e)}")
@@ -609,8 +627,16 @@ YAML Data:
             # No sampling capability - fail explicitly instead of fallback
             raise Exception("No sampling capability available in context")
     
-    async def _safe_sample_with_retry(self, ctx: Context, messages: str, system_prompt: str, 
-                                     debug: bool, max_retries: int = 3, timeout: int = 60) -> str:
+    async def _safe_sample_with_retry(
+        self,
+        ctx: Context,
+        messages: str,
+        system_prompt: str,
+        debug: bool,
+        max_retries: int = 3,
+        timeout: int = 60,
+        telemetry_context: Optional[Dict[str, Any]] = None,
+    ) -> str:
         """Safe sampling with exponential backoff retry and timeout.
         
         Args:
@@ -620,24 +646,38 @@ YAML Data:
             debug: Debug mode
             max_retries: Maximum number of retry attempts
             timeout: Timeout in seconds for each attempt
+            telemetry_context: Optional metadata used for telemetry
             
         Returns:
             Generated digest content or raises exception
         """
         import asyncio
+        import time
+
+        telemetry_context = telemetry_context or {}
+        operation = telemetry_context.get("operation", "llm_sampling")
+        context_extra = {
+            key: value
+            for key, value in telemetry_context.items()
+            if key not in {"operation"}
+        }
+        model_hint = telemetry_context.get("model")
+        if not model_hint and isinstance(self._model_preferences, dict):
+            model_hint = self._model_preferences.get("model")
 
         # Fixed max tokens for sampling per server configuration
         max_tokens = 60000
 
         for attempt in range(max_retries):
+            attempt_number = attempt + 1
+            attempt_start = time.perf_counter()
             try:
                 if debug:
-                    print(f"Sampling attempt {attempt + 1}/{max_retries}... (max_tokens={max_tokens})")
+                    print(f"Sampling attempt {attempt_number}/{max_retries}... (max_tokens={max_tokens})")
 
-                # Use asyncio.wait_for for timeout control
                 sample_kwargs = {
                     "messages": messages,
-                    "system_prompt": system_prompt,  # Pass as separate parameter
+                    "system_prompt": system_prompt,
                     "temperature": 0.7,
                     "max_tokens": max_tokens,
                 }
@@ -649,40 +689,77 @@ YAML Data:
                     ctx.sample(**sample_kwargs),
                     timeout=timeout
                 )
-                
-                # Extract result
+                duration = time.perf_counter() - attempt_start
+
                 if isinstance(response, str):
-                    if debug:
-                        print("Successfully generated digest")
-                    return response
+                    result = response
                 elif hasattr(response, 'content'):
-                    return response.content
+                    result = response.content
                 elif hasattr(response, 'text'):
-                    return response.text
+                    result = response.text
                 else:
-                    return str(response)
-                    
-            except asyncio.TimeoutError:
-                if attempt < max_retries - 1:
-                    wait_time = 2 ** attempt  # Exponential backoff: 1, 2, 4 seconds
-                    if debug:
-                        print(f"Sampling timeout, retrying in {wait_time}s (attempt {attempt + 1}/{max_retries})")
-                    await asyncio.sleep(wait_time)
-                    continue
-                else:
-                    raise Exception(f"Sampling timed out after {max_retries} retries")
-                    
-            except Exception as e:
+                    result = str(response)
+
+                self.telemetry.observe_llm_attempt(
+                    operation=operation,
+                    attempt=attempt_number,
+                    duration_seconds=duration,
+                    status="success",
+                    model=model_hint,
+                    extra={**context_extra, "max_retries": max_retries},
+                )
+                if debug:
+                    print("Successfully generated digest")
+                return result
+
+            except asyncio.TimeoutError as e:
+                duration = time.perf_counter() - attempt_start
+                self.telemetry.observe_llm_attempt(
+                    operation=operation,
+                    attempt=attempt_number,
+                    duration_seconds=duration,
+                    status="timeout",
+                    model=model_hint,
+                    extra={**context_extra, "max_retries": max_retries},
+                )
+                self.telemetry.record_error(
+                    operation=operation,
+                    kind="TimeoutError",
+                    detail=str(e) or "LLM sampling timeout",
+                    area=context_extra.get("area"),
+                )
                 if attempt < max_retries - 1:
                     wait_time = 2 ** attempt
                     if debug:
-                        print(f"Sampling failed: {e}, retrying in {wait_time}s (attempt {attempt + 1}/{max_retries})")
+                        print(f"Sampling timeout, retrying in {wait_time}s (attempt {attempt_number}/{max_retries})")
                     await asyncio.sleep(wait_time)
                     continue
-                else:
-                    raise Exception(f"Sampling failed after {max_retries} retries: {str(e)}")
+                raise Exception(f"Sampling timed out after {max_retries} retries")
+
+            except Exception as e:
+                duration = time.perf_counter() - attempt_start
+                self.telemetry.observe_llm_attempt(
+                    operation=operation,
+                    attempt=attempt_number,
+                    duration_seconds=duration,
+                    status="error",
+                    model=model_hint,
+                    extra={**context_extra, "max_retries": max_retries, "error": str(e)[:200]},
+                )
+                self.telemetry.record_error(
+                    operation=operation,
+                    kind=type(e).__name__,
+                    detail=str(e),
+                    area=context_extra.get("area"),
+                )
+                if attempt < max_retries - 1:
+                    wait_time = 2 ** attempt
+                    if debug:
+                        print(f"Sampling failed: {e}, retrying in {wait_time}s (attempt {attempt_number}/{max_retries})")
+                    await asyncio.sleep(wait_time)
+                    continue
+                raise Exception(f"Sampling failed after {max_retries} retries: {str(e)}")
         
-        # This should never be reached, but added for type safety
         raise Exception("Unexpected end of retry loop")
     
     async def _load_prompt(self, ctx: Context, language: str, target_area: Optional[str], debug: bool) -> str:
@@ -996,6 +1073,20 @@ Language: """ + language
             debug: Debug mode
         """
         try:
+            import time
+
+            now = time.perf_counter()
+            completed = progress_data.get("completed_areas", 0)
+            min_interval = float(os.getenv("WEBPLATFORM_PROGRESS_MIN_INTERVAL", "0.5"))
+
+            if (
+                not debug
+                and self._last_progress_write > 0
+                and completed == self._last_progress_completed
+                and (now - self._last_progress_write) < min_interval
+            ):
+                return
+
             # Ensure monitoring directory exists
             monitoring_dir = self.base_path / '.monitoring'
             monitoring_dir.mkdir(parents=True, exist_ok=True)
@@ -1006,6 +1097,9 @@ Language: """ + language
             
             with open(progress_file, 'w', encoding='utf-8') as f:
                 json.dump(progress_data, f, indent=2, ensure_ascii=False)
+            
+            self._last_progress_write = now
+            self._last_progress_completed = completed
             
             if debug and progress_data.get("completed_areas", 0) > 0:
                 total = progress_data.get("total_areas", 1)
@@ -1043,6 +1137,9 @@ Language: """ + language
         import os
         import time
         from datetime import datetime
+
+        run_started_at = datetime.now()
+        run_started_perf = time.perf_counter()
         
         # Determine languages to generate
         languages = ['en', 'zh'] if language in [None, 'bilingual'] else [language]
@@ -1051,6 +1148,17 @@ Language: """ + language
         areas = self._get_areas_from_yaml(yaml_data)
         if debug:
             print(f"Found {len(areas)} areas to process: {areas}")
+        
+        self.telemetry.log_event(
+            "per_area_run_context",
+            {
+                "version": version,
+                "channel": channel,
+                "languages": languages,
+                "area_count": len(areas),
+                "started_at": run_started_at.isoformat(),
+            },
+        )
         
         results = {
             "success": True,
@@ -1094,34 +1202,92 @@ Language: """ + language
         # Define async function to process single area
         async def process_area(area: str) -> None:
             async with sem:  # Control concurrency
-                start_time = time.time()
-                if debug:
-                    print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Starting area: {area}")
+                area_start_perf = time.perf_counter()
+                area_started_at = datetime.now()
                 
                 # Normalize area name
                 normalized_area = self.focus_manager.normalize_area(area)
+
+                if debug:
+                    print(f"\n[{area_started_at.strftime('%H:%M:%S')}] Starting area: {normalized_area}")
+                
+                self.telemetry.log_event(
+                    "area_started",
+                    {
+                        "area": normalized_area,
+                        "original_area": area,
+                        "version": version,
+                        "channel": channel,
+                        "languages": languages,
+                    },
+                )
+                area_status = "success"
+                area_error_detail: Optional[str] = None
             
                 # Load area-specific YAML
                 area_yaml = await self._load_area_yaml(ctx, version, channel, normalized_area, yaml_data, debug)
                 if not area_yaml or len(area_yaml.get('features', [])) == 0:
                     if debug:
                         print(f"No features for area {area}, generating fallback")
-                    # Generate minimal fallback
+
+                    area_status = "fallback"
+                    fallback_reason = "empty_area"
+                    fallback_start = time.perf_counter()
                     fallback_content = self._generate_minimal_fallback(version, channel, area, 'en')
+                    fallback_elapsed = time.perf_counter() - fallback_start
                     fallback_path = self._get_digest_path(version, channel, normalized_area, 'en')
                     await self._save_digest(fallback_content, fallback_path, debug)
+                    self.telemetry.observe_area_stage(
+                        area=normalized_area,
+                        stage="fallback_generation",
+                        language="en",
+                        duration_seconds=fallback_elapsed,
+                        status="success",
+                        extra={"reason": fallback_reason},
+                    )
                     
                     async with lock:
                         results["outputs"][normalized_area] = {"en": str(fallback_path)}
                         progress_data["per_area"][area] = {"en": "fallback", "zh": "pending"}
+                        await self._update_progress(progress_data, debug)
                     
                     if 'zh' in languages:
+                        zh_fallback_start = time.perf_counter()
                         fallback_zh = self._generate_minimal_fallback(version, channel, area, 'zh')
+                        zh_fallback_elapsed = time.perf_counter() - zh_fallback_start
                         fallback_zh_path = self._get_digest_path(version, channel, normalized_area, 'zh')
                         await self._save_digest(fallback_zh, fallback_zh_path, debug)
+                        self.telemetry.observe_area_stage(
+                            area=normalized_area,
+                            stage="fallback_generation",
+                            language="zh",
+                            duration_seconds=zh_fallback_elapsed,
+                            status="success",
+                            extra={"reason": fallback_reason},
+                        )
                         async with lock:
                             results["outputs"][normalized_area]["zh"] = str(fallback_zh_path)
                             progress_data["per_area"][area]["zh"] = "fallback"
+                            await self._update_progress(progress_data, debug)
+                    
+                    area_elapsed = time.perf_counter() - area_start_perf
+                    self.telemetry.observe_area_stage(
+                        area=normalized_area,
+                        stage="area_total",
+                        language=None,
+                        duration_seconds=area_elapsed,
+                        status="fallback",
+                        extra={"reason": fallback_reason, "features": 0},
+                    )
+                    self.telemetry.log_event(
+                        "area_completed",
+                        {
+                            "area": normalized_area,
+                            "status": "fallback",
+                            "duration_ms": round(area_elapsed * 1000, 2),
+                            "reason": fallback_reason,
+                        },
+                    )
                     
                     async with lock:
                         progress_data["completed_areas"] += 1
@@ -1129,35 +1295,127 @@ Language: """ + language
                     return
             
                 # Update progress to show area is in progress
+                feature_count = len(area_yaml.get('features', []))
                 async with lock:
                     progress_data["per_area"][area] = {"en": "in_progress", "zh": "pending"}
                     await self._update_progress(progress_data, debug)
                 
+                # Track retry/fallback state for telemetry
+                english_retried = False
+                english_fallback_used = False
+                translation_retried = False
+                translation_fallback_used = False
+
                 # Generate English digest first (canonical)
                 try:
                     if debug:
                         print(f"Generating English digest for {area}")
                     
-                    english_digest = await self._generate_area_digest(
-                        ctx, area_yaml, 'en', normalized_area, debug
-                    )
+                    english_stage_start = time.perf_counter()
+                    try:
+                        english_digest = await self._generate_area_digest(
+                            ctx, area_yaml, 'en', normalized_area, debug
+                        )
+                    except Exception as e:
+                        english_duration = time.perf_counter() - english_stage_start
+                        self.telemetry.observe_area_stage(
+                            area=normalized_area,
+                            stage="english_generation",
+                            language="en",
+                            duration_seconds=english_duration,
+                            status="error",
+                            extra={"attempt": 1},
+                        )
+                        self.telemetry.record_error(
+                            operation="english_generation",
+                            kind=type(e).__name__,
+                            detail=str(e),
+                            area=normalized_area,
+                        )
+                        area_status = "error"
+                        area_error_detail = str(e)
+                        raise
+                    else:
+                        english_duration = time.perf_counter() - english_stage_start
+                        self.telemetry.observe_area_stage(
+                            area=normalized_area,
+                            stage="english_generation",
+                            language="en",
+                            duration_seconds=english_duration,
+                            status="success",
+                            extra={"attempt": 1},
+                        )
                     
+                    english_retried = False
+                    english_fallback_used = False
+
                     # Validate English digest
                     validation_result = self._validate_digest(english_digest, area_yaml)
                     if not validation_result['valid']:
                         if debug:
                             print(f"Validation failed for {area}: {validation_result['issues']}")
                         # Retry once with corrective prompt
-                        english_digest = await self._generate_area_digest(
-                            ctx, area_yaml, 'en', normalized_area, debug,
-                            retry_context=validation_result['issues']
-                        )
+                        english_retried = True
+                        retry_start = time.perf_counter()
+                        try:
+                            english_digest = await self._generate_area_digest(
+                                ctx, area_yaml, 'en', normalized_area, debug,
+                                retry_context=validation_result['issues']
+                            )
+                        except Exception as e:
+                            retry_duration = time.perf_counter() - retry_start
+                            self.telemetry.observe_area_stage(
+                                area=normalized_area,
+                                stage="english_generation",
+                                language="en",
+                                duration_seconds=retry_duration,
+                                status="error",
+                                extra={"attempt": 2, "retry": True},
+                            )
+                            self.telemetry.record_error(
+                                operation="english_generation",
+                                kind=type(e).__name__,
+                                detail=str(e),
+                                area=normalized_area,
+                            )
+                            area_status = "error"
+                            area_error_detail = str(e)
+                            raise
+                        else:
+                            retry_duration = time.perf_counter() - retry_start
+                            self.telemetry.observe_area_stage(
+                                area=normalized_area,
+                                stage="english_generation",
+                                language="en",
+                                duration_seconds=retry_duration,
+                                status="success",
+                                extra={"attempt": 2, "retry": True},
+                            )
                         validation_result = self._validate_digest(english_digest, area_yaml)
                         if not validation_result['valid']:
                             # Generate fallback
+                            english_fallback_used = True
+                            fallback_start = time.perf_counter()
                             english_digest = self._generate_area_fallback(
                                 area_yaml, 'en', normalized_area, "LLM generation failed validation"
                             )
+                            fallback_duration = time.perf_counter() - fallback_start
+                            self.telemetry.observe_area_stage(
+                                area=normalized_area,
+                                stage="english_fallback",
+                                language="en",
+                                duration_seconds=fallback_duration,
+                                status="success",
+                                extra={"issues": validation_result['issues']},
+                            )
+                            self.telemetry.record_error(
+                                operation="english_generation",
+                                kind="validation_failed",
+                                detail=validation_result['issues'] or "unknown",
+                                area=normalized_area,
+                            )
+                            area_status = "fallback"
+                            area_error_detail = validation_result['issues']
                     
                     # Save English digest
                     en_path = self._get_digest_path(version, channel, normalized_area, 'en')
@@ -1181,9 +1439,40 @@ Language: """ + language
                             await self._update_progress(progress_data, debug)
                         
                         try:
-                            chinese_digest = await self._translate_digest(
-                                ctx, english_digest, normalized_area, version, channel, debug
-                            )
+                            translation_stage_start = time.perf_counter()
+                            try:
+                                chinese_digest = await self._translate_digest(
+                                    ctx, english_digest, normalized_area, version, channel, debug
+                                )
+                            except Exception as e:
+                                translation_duration = time.perf_counter() - translation_stage_start
+                                self.telemetry.observe_area_stage(
+                                    area=normalized_area,
+                                    stage="translation",
+                                    language="zh",
+                                    duration_seconds=translation_duration,
+                                    status="error",
+                                    extra={"attempt": 1},
+                                )
+                                self.telemetry.record_error(
+                                    operation="translation",
+                                    kind=type(e).__name__,
+                                    detail=str(e),
+                                    area=normalized_area,
+                                )
+                                area_status = "error"
+                                area_error_detail = str(e)
+                                raise
+                            else:
+                                translation_duration = time.perf_counter() - translation_stage_start
+                                self.telemetry.observe_area_stage(
+                                    area=normalized_area,
+                                    stage="translation",
+                                    language="zh",
+                                    duration_seconds=translation_duration,
+                                    status="success",
+                                    extra={"attempt": 1},
+                                )
                             
                             # Validate translation
                             translation_valid = self._validate_translation(english_digest, chinese_digest)
@@ -1191,18 +1480,69 @@ Language: """ + language
                                 if debug:
                                     print(f"Translation validation failed: {translation_valid['issues']}")
                                 # Retry translation once
-                                chinese_digest = await self._translate_digest(
-                                    ctx, english_digest, normalized_area, version, channel, debug,
-                                    retry_context=translation_valid['issues']
-                                )
+                                translation_retried = True
+                                translation_retry_start = time.perf_counter()
+                                try:
+                                    chinese_digest = await self._translate_digest(
+                                        ctx, english_digest, normalized_area, version, channel, debug,
+                                        retry_context=translation_valid['issues']
+                                    )
+                                except Exception as e:
+                                    retry_duration = time.perf_counter() - translation_retry_start
+                                    self.telemetry.observe_area_stage(
+                                        area=normalized_area,
+                                        stage="translation",
+                                        language="zh",
+                                        duration_seconds=retry_duration,
+                                        status="error",
+                                        extra={"attempt": 2, "retry": True},
+                                    )
+                                    self.telemetry.record_error(
+                                        operation="translation",
+                                        kind=type(e).__name__,
+                                        detail=str(e),
+                                        area=normalized_area,
+                                    )
+                                    area_status = "error"
+                                    area_error_detail = str(e)
+                                    raise
+                                else:
+                                    retry_duration = time.perf_counter() - translation_retry_start
+                                    self.telemetry.observe_area_stage(
+                                        area=normalized_area,
+                                        stage="translation",
+                                        language="zh",
+                                        duration_seconds=retry_duration,
+                                        status="success",
+                                        extra={"attempt": 2, "retry": True},
+                                    )
                                 translation_valid = self._validate_translation(english_digest, chinese_digest)
                                 if not translation_valid['valid']:
                                     # Translation fallback
+                                    translation_fallback_used = True
+                                    fallback_start = time.perf_counter()
                                     chinese_digest = self._generate_translation_fallback(
                                         version, channel, normalized_area, en_path
                                     )
+                                    fallback_duration = time.perf_counter() - fallback_start
                                     async with lock:
                                         results["translation_status"][normalized_area] = "fallback"
+                                    self.telemetry.observe_area_stage(
+                                        area=normalized_area,
+                                        stage="translation_fallback",
+                                        language="zh",
+                                        duration_seconds=fallback_duration,
+                                        status="success",
+                                        extra={"issues": translation_valid['issues']},
+                                    )
+                                    self.telemetry.record_error(
+                                        operation="translation",
+                                        kind="validation_failed",
+                                        detail=translation_valid['issues'] or "unknown",
+                                        area=normalized_area,
+                                    )
+                                    if area_status != "error":
+                                        area_status = "fallback"
                                 else:
                                     async with lock:
                                         results["translation_status"][normalized_area] = "retry_success"
@@ -1223,6 +1563,8 @@ Language: """ + language
                         except Exception as e:
                             if debug:
                                 print(f"Translation failed for {area}: {e}")
+                            area_status = "error"
+                            area_error_detail = str(e)
                             async with lock:
                                 results["errors"][f"{normalized_area}:zh"] = str(e)
                                 results["translation_status"][normalized_area] = "error"
@@ -1230,11 +1572,22 @@ Language: """ + language
                                 progress_data["per_area"][area]["zh_error"] = str(e)
                             
                             # Generate translation fallback
+                            translation_fallback_used = True
+                            fallback_start = time.perf_counter()
                             fallback = self._generate_translation_fallback(
                                 version, channel, normalized_area, en_path
                             )
+                            fallback_duration = time.perf_counter() - fallback_start
                             zh_path = self._get_digest_path(version, channel, normalized_area, 'zh')
                             await self._save_digest(fallback, zh_path, debug)
+                            self.telemetry.observe_area_stage(
+                                area=normalized_area,
+                                stage="translation_fallback",
+                                language="zh",
+                                duration_seconds=fallback_duration,
+                                status="success",
+                                extra={"reason": "exception"},
+                            )
                             async with lock:
                                 results["outputs"][normalized_area]["zh"] = str(zh_path)
                                 await self._update_progress(progress_data, debug)
@@ -1250,22 +1603,66 @@ Language: """ + language
                         await self._update_progress(progress_data, debug)
                 
                 # Mark area as completed
-                elapsed = time.time() - start_time
+                area_elapsed = time.perf_counter() - area_start_perf
+                area_extra = {
+                    "features": feature_count,
+                    "english_retried": english_retried,
+                    "english_fallback": english_fallback_used,
+                    "translation_retried": translation_retried,
+                    "translation_fallback": translation_fallback_used,
+                }
+                if area_error_detail:
+                    area_extra["error"] = area_error_detail
+
+                self.telemetry.observe_area_stage(
+                    area=normalized_area,
+                    stage="area_total",
+                    language=None,
+                    duration_seconds=area_elapsed,
+                    status=area_status,
+                    extra=area_extra,
+                )
+                self.telemetry.log_event(
+                    "area_completed",
+                    {
+                        "area": normalized_area,
+                        "status": area_status,
+                        "duration_ms": round(area_elapsed * 1000, 2),
+                        "features": feature_count,
+                        "english_retried": english_retried,
+                        "english_fallback": english_fallback_used,
+                        "translation_retried": translation_retried,
+                        "translation_fallback": translation_fallback_used,
+                        "error": area_error_detail,
+                    },
+                )
+
                 if debug:
-                    print(f"[{datetime.now().strftime('%H:%M:%S')}] Completed {area} in {elapsed:.1f}s")
+                    print(f"[{datetime.now().strftime('%H:%M:%S')}] Completed {normalized_area} in {area_elapsed:.1f}s")
                 
                 async with lock:
                     progress_data["completed_areas"] += 1
                     await self._update_progress(progress_data, debug)
         
         # Execute all areas in parallel with concurrency control
-        start_time = time.time()
+        run_exec_start = time.perf_counter()
         await asyncio.gather(*(process_area(area) for area in areas))
         
-        total_time = time.time() - start_time
+        total_time = time.perf_counter() - run_exec_start
         if debug:
             print(f"\n[COMPLETED] All {len(areas)} areas processed in {total_time:.1f} seconds")
             print(f"Average time per area: {total_time/len(areas):.1f} seconds")
+        
+        self.telemetry.log_event(
+            "per_area_run_completed",
+            {
+                "version": version,
+                "channel": channel,
+                "languages": languages,
+                "area_count": len(areas),
+                "duration_ms": round(total_time * 1000, 2),
+            },
+        )
         
         # Final progress update
         progress_data["completed_at"] = datetime.now().isoformat()
@@ -1413,7 +1810,19 @@ YAML Data:
 ```"""
         
         # Generate with LLM
-        return await self._safe_sample_with_retry(ctx, user_message, system_prompt, debug)
+        return await self._safe_sample_with_retry(
+            ctx,
+            user_message,
+            system_prompt,
+            debug,
+            telemetry_context={
+                "operation": "english_generation" if language == 'en' else f"{language}_generation",
+                "language": language,
+                "area": area,
+                "version": area_yaml.get('version'),
+                "channel": area_yaml.get('channel'),
+            },
+        )
     
     async def _load_area_prompt(self, ctx: Context, language: str, area: str, debug: bool) -> str:
         """Load prompt template for specific area."""
@@ -1551,7 +1960,19 @@ YAML Data:
         if debug:
             print(f"Translating digest for {area} to Chinese...")
         
-        return await self._safe_sample_with_retry(ctx, prompt, system_prompt, debug)
+        return await self._safe_sample_with_retry(
+            ctx,
+            prompt,
+            system_prompt,
+            debug,
+            telemetry_context={
+                "operation": "translation",
+                "language": "zh",
+                "area": area,
+                "version": version,
+                "channel": channel,
+            },
+        )
     
     def _validate_translation(self, english_digest: str, chinese_digest: str) -> Dict[str, Any]:
         """Validate that translation preserves structure and links."""
