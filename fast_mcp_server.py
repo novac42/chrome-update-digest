@@ -5,12 +5,11 @@ Modern MCP server implementation using FastMCP with sampling and resource manage
 Provides tools for generating web platform digests from processed Chrome release notes.
 """
 
-import asyncio
 import json
 import sys
 import os
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional
 from datetime import datetime
 
 from fastmcp import FastMCP, Context
@@ -20,7 +19,7 @@ from fastmcp.resources import FileResource
 sys.path.append(str(Path(__file__).parent / "src"))
 
 # Import tool classes
-from mcp_tools.enhanced_webplatform_digest import EnhancedWebplatformDigestTool
+from mcp_tools._digest_runtime import DigestRuntimeRegistry
 from mcp_tools.feature_splitter import FeatureSplitterTool
 from mcp_tools.github_pages_orchestrator import GithubPagesOrchestratorTool
 from mcp_tools.release_monitor import ReleaseMonitorTool
@@ -57,6 +56,19 @@ github_pages_orchestrator = GithubPagesOrchestratorTool(BASE_PATH)
 
 # Initialize resource handler
 release_notes_resource = ProcessedReleaseNotesResource(BASE_PATH)
+digest_registry = DigestRuntimeRegistry(BASE_PATH)
+
+
+def _jsonify(payload: Dict[str, Any]) -> str:
+    return json.dumps(payload, ensure_ascii=False, indent=2)
+
+
+async def _json_tool_call(coro) -> str:
+    try:
+        result = await coro
+    except Exception as exc:  # pragma: no cover - defensive path
+        return _jsonify({"success": False, "error": str(exc)})
+    return _jsonify(result)
 
 
 async def load_prompt_from_resource(resource_name: str) -> str:
@@ -116,32 +128,7 @@ async def get_webplatform_progress() -> str:
     
     Returns progress information from the monitoring JSON file if available.
     """
-    progress_file = BASE_PATH / ".monitoring" / "webplatform-progress.json"
-    
-    if not progress_file.exists():
-        return json.dumps({
-            "status": "idle",
-            "message": "No digest generation in progress"
-        })
-    
-    try:
-        with open(progress_file, 'r', encoding='utf-8') as f:
-            progress_data = json.load(f)
-        
-        # Calculate percentage
-        total = progress_data.get("total_areas", 0)
-        completed = progress_data.get("completed_areas", 0)
-        
-        if total > 0:
-            percentage = (completed / total) * 100
-            progress_data["percentage"] = f"{percentage:.0f}%"
-        
-        return json.dumps(progress_data, indent=2)
-    except Exception as e:
-        return json.dumps({
-            "status": "error",
-            "message": f"Failed to read progress: {str(e)}"
-        })
+    return await _json_tool_call(digest_registry.summarize_progress())
 
 
 @mcp.tool()
@@ -172,9 +159,8 @@ async def webplatform_digest(ctx: Context, version: str = "138", channel: str = 
     Returns:
         Generated digest in markdown format with accurate links in specified language
     """
-    enhanced_tool = EnhancedWebplatformDigestTool(BASE_PATH)
-    return await enhanced_tool.run(
-        ctx=ctx,
+    result = await digest_registry.run_full_digest(
+        ctx,
         version=version,
         channel=channel,
         focus_areas=focus_areas,
@@ -186,8 +172,153 @@ async def webplatform_digest(ctx: Context, version: str = "138", channel: str = 
         model=model,
         model_preferences=model_preferences,
     )
+    if isinstance(result, (dict, list)):
+        return _jsonify({"success": True, "payload": result})
+    return result
 
 
+@mcp.tool("digest_prepare_yaml")
+async def digest_prepare_yaml(
+    ctx: Context,
+    version: str,
+    channel: str = "stable",
+    focus_areas: Optional[str] = None,
+    use_cache: bool = True,
+    language: Optional[str] = "bilingual",
+    split_by_area: bool = True,
+    target_area: Optional[str] = None,
+    debug: bool = False,
+    model: Optional[str] = None,
+    model_preferences: Optional[Any] = None,
+) -> str:
+    """Preload YAML data, initialise shared run state, and return run metadata."""
+    return await _json_tool_call(
+        digest_registry.prepare_yaml(
+            ctx,
+            version=version,
+            channel=channel,
+            focus_areas=focus_areas,
+            use_cache=use_cache,
+            language=language,
+            split_by_area=split_by_area,
+            target_area=target_area,
+            debug=debug,
+            model=model,
+            model_preferences=model_preferences,
+        )
+    )
+
+
+@mcp.tool("digest_generate_area")
+async def digest_generate_area(
+    ctx: Context,
+    run_id: str,
+    area: str,
+    debug: Optional[bool] = None,
+) -> str:
+    """Generate the English digest for a specific area within an active run."""
+    return await _json_tool_call(
+        digest_registry.generate_area(
+            ctx,
+            run_id=run_id,
+            area=area,
+            debug=debug,
+        )
+    )
+
+
+@mcp.tool("digest_translate_area")
+async def digest_translate_area(
+    ctx: Context,
+    run_id: str,
+    area: str,
+    debug: Optional[bool] = None,
+) -> str:
+    """Translate a previously generated English digest to Chinese for an area."""
+    return await _json_tool_call(
+        digest_registry.translate_area(
+            ctx,
+            run_id=run_id,
+            area=area,
+            debug=debug,
+        )
+    )
+
+
+@mcp.tool("digest_write_outputs")
+async def digest_write_outputs(ctx: Context, run_id: str) -> str:
+    """Finalize a run by flushing progress data and returning the output manifest."""
+    return await _json_tool_call(digest_registry.write_outputs(run_id=run_id))
+
+
+@mcp.tool("digest_inspect_cache")
+async def digest_inspect_cache(area: Optional[str] = None) -> str:
+    """Inspect in-memory YAML cache statistics, optionally focusing on one area."""
+    return await _json_tool_call(digest_registry.inspect_cache(area=area))
+
+
+@mcp.tool("digest_validate_links")
+async def digest_validate_links(ctx: Context, version: str, channel: str = "stable") -> str:
+    """Validate all extracted links for the specified release notes dataset."""
+    return await _json_tool_call(
+        digest_registry.validate_links(ctx, version=version, channel=channel)
+    )
+
+
+@mcp.tool("digest_summarize_progress")
+async def digest_summarize_progress() -> str:
+    """Return the latest digest progress snapshot from the monitoring store."""
+    return await _json_tool_call(digest_registry.summarize_progress())
+
+
+@mcp.tool("digest_list_outputs")
+async def digest_list_outputs(run_id: Optional[str] = None) -> str:
+    """List generated digest files on disk, optionally restricted to a run."""
+    return await _json_tool_call(digest_registry.list_outputs(run_id=run_id))
+
+
+@mcp.tool("digest_describe_run_config")
+async def digest_describe_run_config(run_id: str) -> str:
+    """Describe the configuration and status of an active or cached run."""
+    return await _json_tool_call(digest_registry.describe_run_config(run_id))
+
+
+@mcp.tool("digest_reset_run_state")
+async def digest_reset_run_state(run_id: Optional[str] = None, reset_cache: bool = False) -> str:
+    """Clear tracked run state and optionally reset the per-process YAML cache."""
+    return await _json_tool_call(
+        digest_registry.reset_run_state(run_id=run_id, reset_cache=reset_cache)
+    )
+
+
+@mcp.tool("digest_available_prompts")
+async def digest_available_prompts() -> str:
+    """List available prompt templates that the digest pipeline can reference."""
+    return await _json_tool_call(digest_registry.available_prompts())
+
+
+@mcp.tool("digest_register_release_resources")
+async def digest_register_release_resources(include_release_notes: bool = True) -> str:
+    """Register processed release note resources on demand for MCP clients."""
+    count = register_dynamic_resources(include_release_notes=include_release_notes)
+    payload = {
+        "success": True,
+        "release_resources_registered": count,
+        "lazy_mode": not include_release_notes,
+    }
+    return _jsonify(payload)
+
+
+@mcp.tool("telemetry_report_metrics")
+async def telemetry_report_metrics() -> str:
+    """Return per-tool runtime metrics collected by the shared digest registry."""
+    return await _json_tool_call(digest_registry.report_metrics())
+
+
+@mcp.tool("progress_watch")
+async def progress_watch() -> str:
+    """Convenience wrapper that mirrors digest_summarize_progress for watchers."""
+    return await _json_tool_call(digest_registry.summarize_progress())
 
 
 @mcp.tool()
@@ -234,19 +365,25 @@ async def generate_github_pages(
     sampling pipeline when outputs are missing or force_regenerate is true.
     """
 
-    return await github_pages_orchestrator.run(
-        ctx,
-        version=version,
-        channel=channel,
-        focus_areas=focus_areas,
-        language=language,
-        force_regenerate=force_regenerate,
-        skip_clean=skip_clean,
-        skip_digest=skip_digest,
-        skip_validation=skip_validation,
-        target_area=target_area,
-        debug=debug
-    )
+    async def handler():
+        return await github_pages_orchestrator.run(
+            ctx,
+            version=version,
+            channel=channel,
+            focus_areas=focus_areas,
+            language=language,
+            force_regenerate=force_regenerate,
+            skip_clean=skip_clean,
+            skip_digest=skip_digest,
+            skip_validation=skip_validation,
+            target_area=target_area,
+            debug=debug,
+        )
+
+    result = await digest_registry.run_serialized("generate_github_pages", handler)
+    if isinstance(result, (dict, list)):
+        return _jsonify(result)
+    return result
 
 
 @mcp.tool()
@@ -281,9 +418,13 @@ async def crawl_missing_releases(ctx: Context, release_type: str = "webplatform"
 
 
 # Register all processed release notes as individual resources
-def register_dynamic_resources():
-    """Register all processed release notes as FastMCP resources"""
+def register_dynamic_resources(include_release_notes: bool = False) -> int:
+    """Register processed release notes as FastMCP resources when requested."""
+    if not include_release_notes:
+        return 0
+
     resources = release_notes_resource.list_resources()
+    registered = 0
     
     for resource in resources:
         uri = resource["uri"]
@@ -305,9 +446,14 @@ def register_dynamic_resources():
         
         # Register the resource
         make_resource_getter(uri)
+        registered += 1
 
-# Call the registration function when the server starts
-register_dynamic_resources()
+    return registered
+
+PRELOAD_RELEASE_RESOURCES = os.getenv("DIGEST_PRELOAD_RELEASE_RESOURCES", "0") == "1"
+PRELOADED_RELEASE_RESOURCES = (
+    register_dynamic_resources(include_release_notes=True) if PRELOAD_RELEASE_RESOURCES else 0
+)
 
 
 def main():
@@ -315,8 +461,11 @@ def main():
     
     print("Starting FastMCP Digest Server...")
     print("Resources registered:")
-    print("- file://webplatform-prompt") 
-    print(f"- {len(release_notes_resource.list_resources())} dynamic release note resources")
+    print("- file://webplatform-prompt")
+    if PRELOAD_RELEASE_RESOURCES:
+        print(f"- {PRELOADED_RELEASE_RESOURCES} dynamic release note resources (preloaded)")
+    else:
+        print("- Release note resources registered lazily on first request")
     print("\nTools available:")
     print("- webplatform_digest") 
     print("- split_features_by_heading")
