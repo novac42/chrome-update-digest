@@ -1,5 +1,3 @@
-import asyncio
-from pathlib import Path
 from typing import Dict, Any, List, Optional
 from fastmcp import Context
 
@@ -22,18 +20,26 @@ class AreaRunner:
         channel: str,
         languages: List[str],
         debug: bool,
+        full_yaml: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
         normalized_area = self.tool.focus_manager.normalize_area(area)
         import time
 
-        # Load or slice area YAML using existing tool pathways
-        area_yaml = await self.tool._load_area_yaml(ctx, version, channel, normalized_area, None, debug)
+        # Load or slice area YAML using shared cache manager
+        area_yaml = await self.tool.yaml_cache.load_area_yaml(
+            ctx,
+            version,
+            channel,
+            normalized_area,
+            full_yaml,
+            debug,
+        )
         if not area_yaml or len(area_yaml.get('features', [])) == 0:
             # Fallback minimal output (mirror telemetry semantics)
             fallback_reason = "empty_area"
-            en_fallback = self.tool._generate_minimal_fallback(version, channel, area, 'en')
+            en_fallback = self.tool.generation.generate_minimal_fallback(version, channel, area, 'en')
             fallback_start = time.perf_counter()
-            en_path = await self.tool._persist_output(
+            en_path = await self.tool.io.persist_output(
                 version=version,
                 channel=channel,
                 language='en',
@@ -52,9 +58,9 @@ class AreaRunner:
             )
             result = {"area": normalized_area, "paths": {"en": str(en_path)}, "status": "fallback"}
             if 'zh' in languages:
-                zh_fallback = self.tool._generate_translation_fallback(version, channel, normalized_area, en_path)
+                zh_fallback = self.tool.generation.generate_translation_fallback(version, channel, normalized_area, en_path)
                 zh_fallback_start = time.perf_counter()
-                zh_path = await self.tool._persist_output(
+                zh_path = await self.tool.io.persist_output(
                     version=version,
                     channel=channel,
                     language='zh',
@@ -76,7 +82,7 @@ class AreaRunner:
 
         # Generate English with timing and return paths; validation stays in tool
         english_stage_start = time.perf_counter()
-        english_digest = await self.tool._generate_area_digest(ctx, area_yaml, 'en', normalized_area, debug)
+        english_digest = await self.tool.generation.generate_area_digest(ctx, area_yaml, 'en', normalized_area, debug)
         english_duration = time.perf_counter() - english_stage_start
         self.tool.telemetry.observe_area_stage(
             area=normalized_area,
@@ -86,7 +92,7 @@ class AreaRunner:
             status="success",
             extra={"attempt": 1},
         )
-        en_path = await self.tool._persist_output(
+        en_path = await self.tool.io.persist_output(
             version=version,
             channel=channel,
             language='en',
@@ -99,7 +105,7 @@ class AreaRunner:
 
         if 'zh' in languages:
             translation_stage_start = time.perf_counter()
-            chinese_digest = await self.tool._translate_digest(ctx, english_digest, normalized_area, version, channel, debug)
+            chinese_digest = await self.tool.generation.translate_digest(ctx, english_digest, normalized_area, version, channel, debug)
             translation_duration = time.perf_counter() - translation_stage_start
             self.tool.telemetry.observe_area_stage(
                 area=normalized_area,
@@ -109,7 +115,7 @@ class AreaRunner:
                 status="success",
                 extra={"attempt": 1},
             )
-            zh_path = await self.tool._persist_output(
+            zh_path = await self.tool.io.persist_output(
                 version=version,
                 channel=channel,
                 language='zh',
