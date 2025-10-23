@@ -9,12 +9,31 @@
     <link rel="stylesheet" href="{{ "/assets/css/style.css?v=" | append: site.github.build_revision | relative_url }}">
     <style>
       .page-header .btn {
-        color: #fff;
+        color: #155799;
         font-weight: 700;
+        background-color: rgba(255, 255, 255, 0.9);
+        border: 2px solid rgba(255, 255, 255, 1);
+        border-radius: 6px;
+        padding: 0.75rem 1.5rem;
+        margin: 0 0.75rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-decoration: none;
+        display: inline-block;
       }
       .page-header .btn:focus,
       .page-header .btn:hover {
-        color: #fff;
+        color: #0d3a5f;
+        background-color: rgba(255, 255, 255, 1);
+        border-color: rgba(255, 255, 255, 1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        transform: translateY(-2px);
+        text-decoration: none;
+      }
+      .page-header .btn:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
       }
     </style>
   </head>
