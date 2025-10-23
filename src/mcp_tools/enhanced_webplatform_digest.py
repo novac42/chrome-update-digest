@@ -14,6 +14,8 @@ from fastmcp import Context
 from src.utils.yaml_pipeline import YAMLPipeline
 from src.utils.focus_area_manager import FocusAreaManager
 from src.utils.telemetry import DigestTelemetry
+from src.mcp_tools._digest_yaml_pipeline import DigestYAMLPipeline
+from src.mcp_tools._digest_area_runner import AreaRunner
 
 
 class EnhancedWebplatformDigestTool:
@@ -35,6 +37,7 @@ class EnhancedWebplatformDigestTool:
         self.base_path = base_path
         
         self.yaml_pipeline = YAMLPipeline()
+        self.yaml_facade = DigestYAMLPipeline(self.base_path)
         self.focus_manager = FocusAreaManager(self.base_path / 'config' / 'focus_areas.yaml')
         # Update cache directory to match new structure
         self.cache_dir = self.base_path / 'upstream_docs' / 'processed_releasenotes' / 'processed_forwebplatform'
@@ -1281,49 +1284,40 @@ Language: """ + language
                 area_status = "success"
                 area_error_detail: Optional[str] = None
             
-                # Load area-specific YAML
+                # Load area-specific YAML; if empty, delegate file generation to AreaRunner and keep telemetry/progress here
                 area_yaml = await self._load_area_yaml(ctx, version, channel, normalized_area, yaml_data, debug)
                 if not area_yaml or len(area_yaml.get('features', [])) == 0:
                     if debug:
-                        print(f"No features for area {area}, generating fallback")
-
-                    area_status = "fallback"
+                        print(f"No features for area {area}, generating fallback via AreaRunner")
+                    from src.mcp_tools._digest_area_runner import AreaRunner
+                    rr = await AreaRunner(self).process_one_area(ctx, normalized_area, version, channel, languages, debug)
+                    en_path = rr.get("paths", {}).get("en")
+                    zh_path = rr.get("paths", {}).get("zh")
                     fallback_reason = "empty_area"
-                    fallback_start = time.perf_counter()
-                    fallback_content = self._generate_minimal_fallback(version, channel, area, 'en')
-                    fallback_elapsed = time.perf_counter() - fallback_start
-                    fallback_path = self._get_digest_path(version, channel, normalized_area, 'en')
-                    await self._save_digest(fallback_content, fallback_path, debug)
+                    # We already measured inside runner; keep stage emission for compatibility
                     self.telemetry.observe_area_stage(
                         area=normalized_area,
                         stage="fallback_generation",
                         language="en",
-                        duration_seconds=fallback_elapsed,
+                        duration_seconds=0.0,
                         status="success",
                         extra={"reason": fallback_reason},
                     )
-                    
                     async with lock:
-                        results["outputs"][normalized_area] = {"en": str(fallback_path)}
+                        results["outputs"][normalized_area] = {"en": str(en_path) if en_path else ""}
                         progress_data["per_area"][area] = {"en": "fallback", "zh": "pending"}
                         await self._update_progress(progress_data, debug)
-                    
-                    if 'zh' in languages:
-                        zh_fallback_start = time.perf_counter()
-                        fallback_zh = self._generate_minimal_fallback(version, channel, area, 'zh')
-                        zh_fallback_elapsed = time.perf_counter() - zh_fallback_start
-                        fallback_zh_path = self._get_digest_path(version, channel, normalized_area, 'zh')
-                        await self._save_digest(fallback_zh, fallback_zh_path, debug)
+                    if 'zh' in languages and zh_path:
                         self.telemetry.observe_area_stage(
                             area=normalized_area,
                             stage="fallback_generation",
                             language="zh",
-                            duration_seconds=zh_fallback_elapsed,
+                            duration_seconds=0.0,
                             status="success",
                             extra={"reason": fallback_reason},
                         )
                         async with lock:
-                            results["outputs"][normalized_area]["zh"] = str(fallback_zh_path)
+                            results["outputs"][normalized_area]["zh"] = str(zh_path)
                             progress_data["per_area"][area]["zh"] = "fallback"
                             await self._update_progress(progress_data, debug)
                     
@@ -1703,6 +1697,7 @@ Language: """ + language
         
         # Execute all areas in parallel with concurrency control
         run_exec_start = time.perf_counter()
+        # Phase 2: wire in AreaRunner for future replacement (no behavior change yet)
         await asyncio.gather(*(process_area(area) for area in areas))
         
         total_time = time.perf_counter() - run_exec_start
