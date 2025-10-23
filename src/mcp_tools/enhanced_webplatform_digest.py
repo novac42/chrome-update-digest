@@ -6,6 +6,7 @@ Uses script-based extraction for 100% link accuracy.
 import asyncio
 import json
 import os
+from contextlib import contextmanager
 from pathlib import Path
 from typing import Optional, Dict, List, Any, Union
 from datetime import datetime
@@ -123,6 +124,16 @@ class EnhancedWebplatformDigestTool:
         if self._current_run_config:
             return self._current_run_config.model_preferences
         return None
+
+    @contextmanager
+    def run_context(self, run_config: DigestRunConfig):
+        """Context manager to apply run-scoped configuration safely."""
+        previous = self._current_run_config
+        self._current_run_config = run_config
+        try:
+            yield
+        finally:
+            self._current_run_config = previous
     
     async def run(
         self,

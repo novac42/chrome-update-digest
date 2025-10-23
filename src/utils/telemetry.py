@@ -218,6 +218,28 @@ class DigestTelemetry:
         """Expose a lightweight structured event logger."""
         self._append_event(event_type, payload or {})
 
+    def log_tool_operation(
+        self,
+        *,
+        tool_name: str,
+        status: str,
+        duration_seconds: float,
+        wait_seconds: float,
+        queue_depth: int,
+        extra: Optional[Dict[str, Any]] = None,
+    ) -> None:
+        """Record an MCP tool invocation with wait/execute timings."""
+        payload: Dict[str, Any] = {
+            "tool": tool_name,
+            "status": status,
+            "duration_ms": round(duration_seconds * 1000, 2),
+            "wait_ms": round(wait_seconds * 1000, 2),
+            "queue_depth": queue_depth,
+        }
+        if extra:
+            payload.update(extra)
+        self._append_event("mcp_tool_operation", payload)
+
     @contextmanager
     def track_stage(
         self,
