@@ -191,6 +191,7 @@ async def digest_prepare_yaml(
     model: Optional[str] = None,
     model_preferences: Optional[Any] = None,
 ) -> str:
+    """Preload YAML data, initialise shared run state, and return run metadata."""
     return await _json_tool_call(
         digest_registry.prepare_yaml(
             ctx,
@@ -215,6 +216,7 @@ async def digest_generate_area(
     area: str,
     debug: Optional[bool] = None,
 ) -> str:
+    """Generate the English digest for a specific area within an active run."""
     return await _json_tool_call(
         digest_registry.generate_area(
             ctx,
@@ -232,6 +234,7 @@ async def digest_translate_area(
     area: str,
     debug: Optional[bool] = None,
 ) -> str:
+    """Translate a previously generated English digest to Chinese for an area."""
     return await _json_tool_call(
         digest_registry.translate_area(
             ctx,
@@ -244,16 +247,19 @@ async def digest_translate_area(
 
 @mcp.tool("digest.write_outputs")
 async def digest_write_outputs(ctx: Context, run_id: str) -> str:
+    """Finalize a run by flushing progress data and returning the output manifest."""
     return await _json_tool_call(digest_registry.write_outputs(run_id=run_id))
 
 
 @mcp.tool("digest.inspect_cache")
 async def digest_inspect_cache(area: Optional[str] = None) -> str:
+    """Inspect in-memory YAML cache statistics, optionally focusing on one area."""
     return await _json_tool_call(digest_registry.inspect_cache(area=area))
 
 
 @mcp.tool("digest.validate_links")
 async def digest_validate_links(ctx: Context, version: str, channel: str = "stable") -> str:
+    """Validate all extracted links for the specified release notes dataset."""
     return await _json_tool_call(
         digest_registry.validate_links(ctx, version=version, channel=channel)
     )
@@ -261,21 +267,25 @@ async def digest_validate_links(ctx: Context, version: str, channel: str = "stab
 
 @mcp.tool("digest.summarize_progress")
 async def digest_summarize_progress() -> str:
+    """Return the latest digest progress snapshot from the monitoring store."""
     return await _json_tool_call(digest_registry.summarize_progress())
 
 
 @mcp.tool("digest.list_outputs")
 async def digest_list_outputs(run_id: Optional[str] = None) -> str:
+    """List generated digest files on disk, optionally restricted to a run."""
     return await _json_tool_call(digest_registry.list_outputs(run_id=run_id))
 
 
 @mcp.tool("digest.describe_run_config")
 async def digest_describe_run_config(run_id: str) -> str:
+    """Describe the configuration and status of an active or cached run."""
     return await _json_tool_call(digest_registry.describe_run_config(run_id))
 
 
 @mcp.tool("digest.reset_run_state")
 async def digest_reset_run_state(run_id: Optional[str] = None, reset_cache: bool = False) -> str:
+    """Clear tracked run state and optionally reset the per-process YAML cache."""
     return await _json_tool_call(
         digest_registry.reset_run_state(run_id=run_id, reset_cache=reset_cache)
     )
@@ -283,11 +293,13 @@ async def digest_reset_run_state(run_id: Optional[str] = None, reset_cache: bool
 
 @mcp.tool("digest.available_prompts")
 async def digest_available_prompts() -> str:
+    """List available prompt templates that the digest pipeline can reference."""
     return await _json_tool_call(digest_registry.available_prompts())
 
 
 @mcp.tool("digest.register_release_resources")
 async def digest_register_release_resources(include_release_notes: bool = True) -> str:
+    """Register processed release note resources on demand for MCP clients."""
     count = register_dynamic_resources(include_release_notes=include_release_notes)
     payload = {
         "success": True,
@@ -299,11 +311,13 @@ async def digest_register_release_resources(include_release_notes: bool = True) 
 
 @mcp.tool("telemetry.report_metrics")
 async def telemetry_report_metrics() -> str:
+    """Return per-tool runtime metrics collected by the shared digest registry."""
     return await _json_tool_call(digest_registry.report_metrics())
 
 
 @mcp.tool("progress.watch")
 async def progress_watch() -> str:
+    """Convenience wrapper that mirrors digest.summarize_progress for watchers."""
     return await _json_tool_call(digest_registry.summarize_progress())
 
 
