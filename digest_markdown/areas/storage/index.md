@@ -13,7 +13,8 @@ Track the evolution of Storage features across Chrome releases.
 
 ### Available Versions
 
-- Chrome 140 **(Latest)**: [English](./chrome-140-en.html) / [Chinese](./chrome-140-zh.html)
+- Chrome 141 **(Latest)**: [English](./chrome-141-en.html) / [Chinese](./chrome-141-zh.html)
+- Chrome 140: [English](./chrome-140-en.html) / [Chinese](./chrome-140-zh.html)
 
 ## Navigation
 

@@ -24,6 +24,7 @@ title: Chrome 140 Release Notes
 
 ## Navigation
 
+- [← Chrome 141 (Newer)](../chrome-141/index.html)
 - [Chrome 139 (Older) →](../chrome-139/index.html)
 - [View all versions](../index.html)
 - [Browse by feature area](../../areas/index.html)
