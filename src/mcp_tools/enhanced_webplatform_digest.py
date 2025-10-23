@@ -49,6 +49,19 @@ class EnhancedWebplatformDigestTool:
         # Track the last time progress was flushed to avoid excessive I/O
         self._last_progress_write: float = 0.0
         self._last_progress_completed: int = -1
+        # M3: lightweight in-memory caches to avoid repeated YAML loads and FS I/O
+        self._yaml_cache: Dict[str, Dict[str, Any]] = {}
+        self._yaml_cache_hits: int = 0
+        self._yaml_cache_misses: int = 0
+        # M2: concurrency and rate governance
+        self._max_concurrency: int = int(os.getenv("WEBPLATFORM_MAX_CONCURRENCY", "4"))
+        self._rate_limit_per_sec: float = float(os.getenv("WEBPLATFORM_RATE_LIMIT", "2"))
+        self._failure_cooldown_sec: float = float(os.getenv("WEBPLATFORM_FAILURE_COOLDOWN", "5"))
+        self._circuit_breaker_threshold: int = int(os.getenv("WEBPLATFORM_CIRCUIT_THRESHOLD", "3"))
+        self._recent_failures: int = 0
+        self._last_failure_ts: float = 0.0
+        self._semaphore = asyncio.Semaphore(self._max_concurrency)
+        self._last_token_ts: float = 0.0
 
     def _resolve_model_preferences(
         self,
@@ -304,10 +317,27 @@ class EnhancedWebplatformDigestTool:
             # For "all" or no target_area, aggregate from all area-specific files
             return await self._aggregate_area_files(ctx, version, channel, use_cache, debug)
         
-        if use_cache and yaml_path.exists():
+        # M3: in-process cache layer keyed by absolute path string
+        cache_key = None
+        if target_area and target_area != "all":
+            cache_key = str(yaml_path)
+        # Try memory cache first
+        if use_cache and cache_key:
+            cached = self._yaml_cache.get(cache_key)
+            if cached is not None:
+                self._yaml_cache_hits += 1
+                if debug:
+                    print(f"YAML cache hit: {cache_key} (hits={self._yaml_cache_hits})")
+                return cached
+        # Then disk cache
+        if use_cache and cache_key and yaml_path.exists():
             if debug:
-                print(f"Using cached YAML: {yaml_path}")
-            return self.yaml_pipeline.load_from_yaml(yaml_path)
+                print(f"Using cached YAML file: {yaml_path}")
+            loaded = self.yaml_pipeline.load_from_yaml(yaml_path)
+            # populate memory cache
+            self._yaml_cache[cache_key] = loaded
+            self._yaml_cache_misses += 1
+            return loaded
         
         # Load release notes (with WebGPU merging if target_area is graphics-webgpu)
         release_notes = await self._load_release_notes(ctx, version, channel, debug, target_area)
@@ -327,6 +357,13 @@ class EnhancedWebplatformDigestTool:
             save_yaml=True,
             split_by_area=split_by_area
         )
+
+        # Populate memory cache if an area-specific file exists after processing
+        if target_area and target_area != "all":
+            if yaml_path.exists():
+                self._yaml_cache[str(yaml_path)] = self.yaml_pipeline.load_from_yaml(yaml_path)
+                if debug:
+                    print(f"YAML cached in memory: {yaml_path}")
         
         if debug:
             stats = yaml_data.get('statistics', {})
@@ -637,7 +674,7 @@ YAML Data:
         timeout: int = 60,
         telemetry_context: Optional[Dict[str, Any]] = None,
     ) -> str:
-        """Safe sampling with exponential backoff retry and timeout.
+        """Safe sampling with exponential backoff retry and timeout, plus M2 governance.
         
         Args:
             ctx: FastMCP context
@@ -675,6 +712,18 @@ YAML Data:
                 if debug:
                     print(f"Sampling attempt {attempt_number}/{max_retries}... (max_tokens={max_tokens})")
 
+                # Circuit breaker cooldown when too many recent failures
+                if self._recent_failures >= self._circuit_breaker_threshold:
+                    since_last = time.perf_counter() - self._last_failure_ts
+                    if since_last < self._failure_cooldown_sec:
+                        await asyncio.sleep(self._failure_cooldown_sec - since_last)
+
+                # Rate limiting between calls
+                min_interval = 1.0 / max(1e-6, self._rate_limit_per_sec)
+                wait_needed = max(0.0, (self._last_token_ts + min_interval) - time.perf_counter())
+                if wait_needed > 0:
+                    await asyncio.sleep(wait_needed)
+
                 sample_kwargs = {
                     "messages": messages,
                     "system_prompt": system_prompt,
@@ -685,10 +734,12 @@ YAML Data:
                 if self._model_preferences:
                     sample_kwargs["model_preferences"] = self._model_preferences
 
-                response = await asyncio.wait_for(
-                    ctx.sample(**sample_kwargs),
-                    timeout=timeout
-                )
+                async with self._semaphore:
+                    response = await asyncio.wait_for(
+                        ctx.sample(**sample_kwargs),
+                        timeout=timeout
+                    )
+                self._last_token_ts = time.perf_counter()
                 duration = time.perf_counter() - attempt_start
 
                 if isinstance(response, str):
@@ -710,6 +761,8 @@ YAML Data:
                 )
                 if debug:
                     print("Successfully generated digest")
+                # reset failure window
+                self._recent_failures = 0
                 return result
 
             except asyncio.TimeoutError as e:
@@ -722,6 +775,8 @@ YAML Data:
                     model=model_hint,
                     extra={**context_extra, "max_retries": max_retries},
                 )
+                self._recent_failures += 1
+                self._last_failure_ts = time.perf_counter()
                 self.telemetry.record_error(
                     operation=operation,
                     kind="TimeoutError",
@@ -752,6 +807,8 @@ YAML Data:
                     detail=str(e),
                     area=context_extra.get("area"),
                 )
+                self._recent_failures += 1
+                self._last_failure_ts = time.perf_counter()
                 if attempt < max_retries - 1:
                     wait_time = 2 ** attempt
                     if debug:
