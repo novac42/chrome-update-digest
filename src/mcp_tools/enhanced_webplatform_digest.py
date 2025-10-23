@@ -15,6 +15,7 @@ from src.utils.yaml_pipeline import YAMLPipeline
 from src.utils.focus_area_manager import FocusAreaManager
 from src.utils.telemetry import DigestTelemetry
 from src.mcp_tools._digest_yaml_pipeline import DigestYAMLPipeline
+from src.mcp_tools._digest_config import DigestRunConfig
 from src.mcp_tools._digest_area_runner import AreaRunner
 
 
@@ -45,8 +46,8 @@ class EnhancedWebplatformDigestTool:
         # Digest output directory
         self.digest_dir = self.base_path / 'digest_markdown' / 'webplatform'
         self.digest_dir.mkdir(parents=True, exist_ok=True)
-        # Optional model preference hints for downstream sampling calls
-        self._model_preferences: Optional[Union[Dict[str, Any], List[Any]]] = None
+        # Run-scoped configuration (populated for each invocation)
+        self._current_run_config: Optional[DigestRunConfig] = None
         # Telemetry recorder for Prometheus metrics and structured events
         self.telemetry = DigestTelemetry(self.base_path)
         # Track the last time progress was flushed to avoid excessive I/O
@@ -118,6 +119,13 @@ class EnhancedWebplatformDigestTool:
 
         # Unsupported types are ignored silently to avoid breaking the run
         return None
+
+    @property
+    def _run_model_preferences(self) -> Optional[Union[Dict[str, Any], List[Any]]]:
+        """Return model preferences scoped to the active run (if any)."""
+        if self._current_run_config:
+            return self._current_run_config.model_preferences
+        return None
     
     async def run(
         self,
@@ -160,14 +168,23 @@ class EnhancedWebplatformDigestTool:
                 if debug:
                     print(f"Filtering by focus areas: {focus_area_list}")
 
-            # Resolve model preferences once per run so all sampling calls share the same hint
-            self._model_preferences = self._resolve_model_preferences(
-                explicit_preferences=model_preferences,
-                explicit_model=model
+            run_config = DigestRunConfig(
+                version=version,
+                channel=channel,
+                language=language,
+                split_by_area=split_by_area,
+                target_area=target_area,
+                model_preferences=self._resolve_model_preferences(
+                    explicit_preferences=model_preferences,
+                    explicit_model=model,
+                ),
+                explicit_model=model,
             )
+            self._current_run_config = run_config
+
             if debug:
-                if self._model_preferences:
-                    print(f"Using model preferences: {self._model_preferences}")
+                if run_config.model_preferences:
+                    print(f"Using model preferences: {run_config.model_preferences}")
                 else:
                     print("No explicit model preferences provided; deferring to client defaults")
             
@@ -194,18 +211,22 @@ class EnhancedWebplatformDigestTool:
             
             # Step 3: Handle per-area generation if split_by_area is True
             if split_by_area:
-                return await self._generate_per_area_digests(ctx, yaml_data, version, channel, language, debug)
+                return await self._generate_per_area_digests(ctx, yaml_data, version, channel, language, debug, run_config)
             
             # Step 4: Generate digest from YAML data with language support
             # Default to generating both languages if not specified
-            if language is None or language == 'bilingual':
+            if run_config.language in (None, 'bilingual'):
                 # Generate both EN and ZH versions
                 try:
                     digest_en = await self._generate_digest_from_yaml(ctx, yaml_data, 'en', target_area, debug)
-                    digest_path_en = self._get_digest_path(version, channel, target_area, 'en')
-                    await self._save_digest(digest_en, digest_path_en, debug)
-                    if debug:
-                        print(f"English digest saved to: {digest_path_en}")
+                    digest_path_en = await self._persist_output(
+                        version=version,
+                        channel=channel,
+                        language='en',
+                        content=digest_en,
+                        area=target_area,
+                        debug=debug,
+                    )
                 except Exception as e:
                     return json.dumps({
                         "success": False,
@@ -218,10 +239,14 @@ class EnhancedWebplatformDigestTool:
                 
                 try:
                     digest_zh = await self._generate_digest_from_yaml(ctx, yaml_data, 'zh', target_area, debug)
-                    digest_path_zh = self._get_digest_path(version, channel, target_area, 'zh')
-                    await self._save_digest(digest_zh, digest_path_zh, debug)
-                    if debug:
-                        print(f"Chinese digest saved to: {digest_path_zh}")
+                    digest_path_zh = await self._persist_output(
+                        version=version,
+                        channel=channel,
+                        language='zh',
+                        content=digest_zh,
+                        area=target_area,
+                        debug=debug,
+                    )
                 except Exception as e:
                     return json.dumps({
                         "success": False,
@@ -257,8 +282,14 @@ class EnhancedWebplatformDigestTool:
                 digest = await self._generate_digest_from_yaml(ctx, yaml_data, language, target_area, debug)
                 
                 # Save digest to file with area-based folder structure
-                digest_path = self._get_digest_path(version, channel, target_area, language)
-                await self._save_digest(digest, digest_path, debug)
+                digest_path = await self._persist_output(
+                    version=version,
+                    channel=channel,
+                    language=language,
+                    content=digest,
+                    area=target_area,
+                    debug=debug,
+                )
                 if debug:
                     print(f"Digest saved to: {digest_path}")
                 
@@ -284,6 +315,9 @@ class EnhancedWebplatformDigestTool:
                 "language": language,
                 "target_area": target_area
             }, ensure_ascii=False)
+        finally:
+            # Ensure run-scoped config is cleared even if errors occur
+            self._current_run_config = None
     
     async def _get_yaml_data(
         self,
@@ -702,8 +736,9 @@ YAML Data:
             if key not in {"operation"}
         }
         model_hint = telemetry_context.get("model")
-        if not model_hint and isinstance(self._model_preferences, dict):
-            model_hint = self._model_preferences.get("model")
+        run_preferences = self._run_model_preferences
+        if not model_hint and isinstance(run_preferences, dict):
+            model_hint = run_preferences.get("model")
 
         # Fixed max tokens for sampling per server configuration
         max_tokens = 60000
@@ -734,8 +769,8 @@ YAML Data:
                     "max_tokens": max_tokens,
                 }
 
-                if self._model_preferences:
-                    sample_kwargs["model_preferences"] = self._model_preferences
+                if run_preferences:
+                    sample_kwargs["model_preferences"] = run_preferences
 
                 async with self._semaphore:
                     response = await asyncio.wait_for(
@@ -1123,6 +1158,67 @@ Language: """ + language
             if debug:
                 print(f"Error saving digest: {e}")
             raise
+
+    async def _persist_output(
+        self,
+        *,
+        version: str,
+        channel: str,
+        language: str,
+        content: str,
+        area: Optional[str],
+        debug: bool = False,
+    ) -> Path:
+        """Persist digest content and return the path."""
+        file_path = self._get_digest_path(version, channel, area, language)
+        await self._save_digest(content, file_path, debug)
+        return file_path
+
+    async def _persist_area_language_output(
+        self,
+        *,
+        version: str,
+        channel: str,
+        normalized_area: str,
+        area_key: str,
+        language: str,
+        content: str,
+        lock: asyncio.Lock,
+        progress_data: Dict[str, Any],
+        results: Dict[str, Any],
+        status: str,
+        debug: bool,
+        reason: Optional[str] = None,
+    ) -> Path:
+        """Persist per-area output while updating tracking and telemetry."""
+        file_path = await self._persist_output(
+            version=version,
+            channel=channel,
+            language=language,
+            content=content,
+            area=normalized_area,
+            debug=debug,
+        )
+
+        async with lock:
+            outputs = results["outputs"].setdefault(normalized_area, {})
+            outputs[language] = str(file_path)
+            area_progress = progress_data["per_area"].setdefault(area_key, {"en": "pending", "zh": "pending"})
+            area_progress[language] = status
+            area_progress[f"{language}_path"] = str(file_path)
+            progress_data["updated_at"] = datetime.now().isoformat()
+            await self._update_progress(progress_data, debug)
+
+        event_payload: Dict[str, Any] = {
+            "area": normalized_area,
+            "language": language,
+            "status": status,
+        }
+        if reason:
+            event_payload["reason"] = reason
+        self.telemetry.log_event("area_language_persisted", event_payload)
+
+        return file_path
     
     async def _update_progress(self, progress_data: Dict, debug: bool = False) -> None:
         """
@@ -1178,7 +1274,8 @@ Language: """ + language
         version: str,
         channel: str,
         language: Optional[str],
-        debug: bool
+        debug: bool,
+        run_config: DigestRunConfig
     ) -> str:
         """
         Generate digests for each area separately with parallel processing.
@@ -1201,8 +1298,8 @@ Language: """ + language
         run_started_at = datetime.now()
         run_started_perf = time.perf_counter()
         
-        # Determine languages to generate
-        languages = ['en', 'zh'] if language in [None, 'bilingual'] else [language]
+        # Determine languages to generate based on run configuration
+        languages = run_config.resolved_languages()
         
         # Get all areas from YAML data
         areas = self._get_areas_from_yaml(yaml_data)
@@ -1225,7 +1322,7 @@ Language: """ + language
             "mode": "per_area",
             "version": version,
             "channel": channel,
-            "language": language or "bilingual",
+            "language": run_config.language_mode(),
             "languages": languages,
             "areas": areas,
             "outputs": {},
@@ -1356,6 +1453,7 @@ Language: """ + language
                 english_fallback_used = False
                 translation_retried = False
                 translation_fallback_used = False
+                translation_fallback_reason: Optional[str] = None
 
                 # Generate English digest first (canonical)
                 try:
@@ -1468,17 +1566,22 @@ Language: """ + language
                             area_status = "fallback"
                             area_error_detail = validation_result['issues']
                     
-                    # Save English digest
-                    en_path = self._get_digest_path(version, channel, normalized_area, 'en')
-                    await self._save_digest(english_digest, en_path, debug)
-                    
-                    async with lock:
-                        if normalized_area not in results["outputs"]:
-                            results["outputs"][normalized_area] = {}
-                        results["outputs"][normalized_area]["en"] = str(en_path)
-                        progress_data["per_area"][area]["en"] = "done"
-                        progress_data["per_area"][area]["en_path"] = str(en_path)
-                        await self._update_progress(progress_data, debug)
+                    english_status = "fallback" if english_fallback_used else "done"
+                    english_reason = area_error_detail if english_fallback_used else None
+                    en_path = await self._persist_area_language_output(
+                        version=version,
+                        channel=channel,
+                        normalized_area=normalized_area,
+                        area_key=area,
+                        language='en',
+                        content=english_digest,
+                        lock=lock,
+                        progress_data=progress_data,
+                        results=results,
+                        status=english_status,
+                        debug=debug,
+                        reason=english_reason,
+                    )
                     
                     # Generate Chinese translation if needed
                     if 'zh' in languages:
@@ -1592,8 +1695,10 @@ Language: """ + language
                                         detail=translation_valid['issues'] or "unknown",
                                         area=normalized_area,
                                     )
+                                    translation_fallback_reason = translation_valid['issues'] or "validation_failed"
                                     if area_status != "error":
                                         area_status = "fallback"
+                                        area_error_detail = translation_fallback_reason
                                 else:
                                     async with lock:
                                         results["translation_status"][normalized_area] = "retry_success"
@@ -1601,21 +1706,28 @@ Language: """ + language
                                 async with lock:
                                     results["translation_status"][normalized_area] = "ok"
                             
-                            # Save Chinese digest
-                            zh_path = self._get_digest_path(version, channel, normalized_area, 'zh')
-                            await self._save_digest(chinese_digest, zh_path, debug)
-                            
-                            async with lock:
-                                results["outputs"][normalized_area]["zh"] = str(zh_path)
-                                progress_data["per_area"][area]["zh"] = "done"
-                                progress_data["per_area"][area]["zh_path"] = str(zh_path)
-                                await self._update_progress(progress_data, debug)
+                            translation_status_label = "fallback" if translation_fallback_used else "done"
+                            zh_path = await self._persist_area_language_output(
+                                version=version,
+                                channel=channel,
+                                normalized_area=normalized_area,
+                                area_key=area,
+                                language='zh',
+                                content=chinese_digest,
+                                lock=lock,
+                                progress_data=progress_data,
+                                results=results,
+                                status=translation_status_label,
+                                debug=debug,
+                                reason=translation_fallback_reason if translation_fallback_used else None,
+                            )
                             
                         except Exception as e:
                             if debug:
                                 print(f"Translation failed for {area}: {e}")
                             area_status = "error"
                             area_error_detail = str(e)
+                            translation_fallback_reason = f"exception: {e}"
                             async with lock:
                                 results["errors"][f"{normalized_area}:zh"] = str(e)
                                 results["translation_status"][normalized_area] = "error"
@@ -1629,8 +1741,20 @@ Language: """ + language
                                 version, channel, normalized_area, en_path
                             )
                             fallback_duration = time.perf_counter() - fallback_start
-                            zh_path = self._get_digest_path(version, channel, normalized_area, 'zh')
-                            await self._save_digest(fallback, zh_path, debug)
+                            zh_path = await self._persist_area_language_output(
+                                version=version,
+                                channel=channel,
+                                normalized_area=normalized_area,
+                                area_key=area,
+                                language='zh',
+                                content=fallback,
+                                lock=lock,
+                                progress_data=progress_data,
+                                results=results,
+                                status="error",
+                                debug=debug,
+                                reason=translation_fallback_reason,
+                            )
                             self.telemetry.observe_area_stage(
                                 area=normalized_area,
                                 stage="translation_fallback",
@@ -1639,9 +1763,6 @@ Language: """ + language
                                 status="success",
                                 extra={"reason": "exception"},
                             )
-                            async with lock:
-                                results["outputs"][normalized_area]["zh"] = str(zh_path)
-                                await self._update_progress(progress_data, debug)
                     
                 except Exception as e:
                     if debug:

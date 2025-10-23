@@ -33,8 +33,14 @@ class AreaRunner:
             fallback_reason = "empty_area"
             en_fallback = self.tool._generate_minimal_fallback(version, channel, area, 'en')
             fallback_start = time.perf_counter()
-            en_path = self.tool._get_digest_path(version, channel, normalized_area, 'en')
-            await self.tool._save_digest(en_fallback, en_path, debug)
+            en_path = await self.tool._persist_output(
+                version=version,
+                channel=channel,
+                language='en',
+                content=en_fallback,
+                area=normalized_area,
+                debug=debug,
+            )
             fallback_elapsed = time.perf_counter() - fallback_start
             self.tool.telemetry.observe_area_stage(
                 area=normalized_area,
@@ -47,9 +53,15 @@ class AreaRunner:
             result = {"area": normalized_area, "paths": {"en": str(en_path)}, "status": "fallback"}
             if 'zh' in languages:
                 zh_fallback = self.tool._generate_translation_fallback(version, channel, normalized_area, en_path)
-                zh_path = self.tool._get_digest_path(version, channel, normalized_area, 'zh')
                 zh_fallback_start = time.perf_counter()
-                await self.tool._save_digest(zh_fallback, zh_path, debug)
+                zh_path = await self.tool._persist_output(
+                    version=version,
+                    channel=channel,
+                    language='zh',
+                    content=zh_fallback,
+                    area=normalized_area,
+                    debug=debug,
+                )
                 zh_fallback_elapsed = time.perf_counter() - zh_fallback_start
                 self.tool.telemetry.observe_area_stage(
                     area=normalized_area,
@@ -74,8 +86,14 @@ class AreaRunner:
             status="success",
             extra={"attempt": 1},
         )
-        en_path = self.tool._get_digest_path(version, channel, normalized_area, 'en')
-        await self.tool._save_digest(english_digest, en_path, debug)
+        en_path = await self.tool._persist_output(
+            version=version,
+            channel=channel,
+            language='en',
+            content=english_digest,
+            area=normalized_area,
+            debug=debug,
+        )
 
         result_paths: Dict[str, str] = {"en": str(en_path)}
 
@@ -91,8 +109,14 @@ class AreaRunner:
                 status="success",
                 extra={"attempt": 1},
             )
-            zh_path = self.tool._get_digest_path(version, channel, normalized_area, 'zh')
-            await self.tool._save_digest(chinese_digest, zh_path, debug)
+            zh_path = await self.tool._persist_output(
+                version=version,
+                channel=channel,
+                language='zh',
+                content=chinese_digest,
+                area=normalized_area,
+                debug=debug,
+            )
             result_paths['zh'] = str(zh_path)
 
         return {"area": normalized_area, "paths": result_paths, "status": "success"}
