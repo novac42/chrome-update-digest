@@ -7,7 +7,7 @@ import uuid
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Awaitable, Callable, Dict, List, Optional
+from typing import Any, Awaitable, Callable, Dict, List, Optional, Set
 
 from fastmcp import Context
 
@@ -53,6 +53,7 @@ class DigestRuntimeRegistry:
         self.io = self.tool.io
         self.focus_manager = self.tool.focus_manager
         self.digest_dir = self.tool.digest_dir
+        self.metrics_file = self.telemetry.monitoring_dir / "webplatform-mcp-metrics.json"
 
         self._runs: Dict[str, DigestRunState] = {}
         self._runtime_lock = asyncio.Lock()
@@ -521,20 +522,11 @@ class DigestRuntimeRegistry:
         """Return per-tool runtime metrics tracked by the registry."""
 
         async def _operation() -> Dict[str, Any]:
-            summary = {}
-            for tool_name, metrics in self._tool_metrics.items():
-                count = metrics.get("count", 0)
-                total_duration = metrics.get("total_duration", 0.0)
-                avg_duration = total_duration / count if count else 0.0
-                summary[tool_name] = {
-                    "count": count,
-                    "avg_duration_seconds": round(avg_duration, 4),
-                    "last_status": metrics.get("last_status"),
-                    "last_duration_seconds": round(metrics.get("last_duration", 0.0), 4),
-                    "last_wait_seconds": round(metrics.get("last_wait", 0.0), 4),
-                    "max_queue_depth": metrics.get("max_queue_depth", 0),
-                }
-            return {"success": True, "tool_metrics": summary}
+            snapshot = self._build_metrics_snapshot()
+            self._persist_metrics_snapshot(snapshot)
+            payload = {"success": True, **snapshot}
+            payload["metrics_file"] = str(self.metrics_file)
+            return payload
 
         return await self._execute("telemetry.report_metrics", _operation)
 
@@ -581,14 +573,25 @@ class DigestRuntimeRegistry:
     ) -> None:
         metrics = self._tool_metrics.setdefault(
             tool_name,
-            {"count": 0, "total_duration": 0.0, "max_queue_depth": 0},
+            {
+                "count": 0,
+                "total_duration": 0.0,
+                "total_wait": 0.0,
+                "max_queue_depth": 0,
+                "error_count": 0,
+            },
         )
         metrics["count"] += 1
         metrics["total_duration"] += duration_seconds
+        metrics["total_wait"] += wait_seconds
         metrics["last_status"] = status
         metrics["last_duration"] = duration_seconds
         metrics["last_wait"] = wait_seconds
+        metrics["last_queue_depth"] = queue_depth
+        metrics["last_updated_at"] = _utcnow().isoformat()
         metrics["max_queue_depth"] = max(metrics.get("max_queue_depth", 0), queue_depth)
+        if status == "error":
+            metrics["error_count"] = metrics.get("error_count", 0) + 1
 
         self.telemetry.log_tool_operation(
             tool_name=tool_name,
@@ -597,6 +600,110 @@ class DigestRuntimeRegistry:
             wait_seconds=wait_seconds,
             queue_depth=queue_depth,
         )
+
+    def _build_metrics_snapshot(self) -> Dict[str, Any]:
+        generated_at = _utcnow().isoformat()
+        tool_entries: Dict[str, Any] = {}
+        digest_tools: Set[str] = set()
+        digest_totals = {"count": 0, "duration": 0.0, "wait": 0.0, "max_queue": 0, "error": 0}
+        overall_totals = {"count": 0, "duration": 0.0, "wait": 0.0, "max_queue": 0, "error": 0}
+
+        for tool_name, metrics in self._tool_metrics.items():
+            count = int(metrics.get("count", 0))
+            total_duration = float(metrics.get("total_duration", 0.0))
+            total_wait = float(metrics.get("total_wait", 0.0))
+            error_count = int(metrics.get("error_count", 0))
+            max_queue = int(metrics.get("max_queue_depth", 0))
+            avg_duration = total_duration / count if count else 0.0
+            avg_wait = total_wait / count if count else 0.0
+
+            entry = {
+                "count": count,
+                "total_duration_seconds": round(total_duration, 4),
+                "avg_duration_seconds": round(avg_duration, 4),
+                "total_wait_seconds": round(total_wait, 4),
+                "avg_wait_seconds": round(avg_wait, 4),
+                "max_queue_depth": max_queue,
+                "error_count": error_count,
+                "last_status": metrics.get("last_status"),
+                "last_duration_seconds": round(metrics.get("last_duration", 0.0), 4),
+                "last_wait_seconds": round(metrics.get("last_wait", 0.0), 4),
+                "last_queue_depth": metrics.get("last_queue_depth", 0),
+                "last_updated_at": metrics.get("last_updated_at"),
+            }
+            tool_entries[tool_name] = entry
+
+            overall_totals["count"] += count
+            overall_totals["duration"] += total_duration
+            overall_totals["wait"] += total_wait
+            overall_totals["error"] += error_count
+            overall_totals["max_queue"] = max(overall_totals["max_queue"], max_queue)
+
+            if self._is_digest_tool(tool_name):
+                digest_tools.add(tool_name)
+                digest_totals["count"] += count
+                digest_totals["duration"] += total_duration
+                digest_totals["wait"] += total_wait
+                digest_totals["error"] += error_count
+                digest_totals["max_queue"] = max(digest_totals["max_queue"], max_queue)
+
+        digest_summary = self._format_group_summary(
+            digest_tools,
+            digest_totals["count"],
+            digest_totals["duration"],
+            digest_totals["wait"],
+            digest_totals["max_queue"],
+            digest_totals["error"],
+        )
+        overall_summary = self._format_group_summary(
+            set(tool_entries.keys()),
+            overall_totals["count"],
+            overall_totals["duration"],
+            overall_totals["wait"],
+            overall_totals["max_queue"],
+            overall_totals["error"],
+        )
+
+        return {
+            "generated_at": generated_at,
+            "tool_metrics": tool_entries,
+            "digest_summary": digest_summary,
+            "overall_summary": overall_summary,
+        }
+
+    def _format_group_summary(
+        self,
+        tool_names: Set[str],
+        count: int,
+        total_duration: float,
+        total_wait: float,
+        max_queue: int,
+        error_count: int,
+    ) -> Dict[str, Any]:
+        avg_duration = total_duration / count if count else 0.0
+        avg_wait = total_wait / count if count else 0.0
+        return {
+            "tools": sorted(tool_names),
+            "count": count,
+            "total_duration_seconds": round(total_duration, 4),
+            "avg_duration_seconds": round(avg_duration, 4),
+            "total_wait_seconds": round(total_wait, 4),
+            "avg_wait_seconds": round(avg_wait, 4),
+            "max_queue_depth": max_queue,
+            "error_count": error_count,
+        }
+
+    def _persist_metrics_snapshot(self, snapshot: Dict[str, Any]) -> None:
+        try:
+            self.metrics_file.parent.mkdir(parents=True, exist_ok=True)
+            with open(self.metrics_file, "w", encoding="utf-8") as handle:
+                json.dump(snapshot, handle, ensure_ascii=False, indent=2)
+        except Exception:
+            # Persistence failures should not break tool execution; best-effort only.
+            return None
+
+    def _is_digest_tool(self, tool_name: str) -> bool:
+        return tool_name.startswith("digest.") or tool_name in {"webplatform_digest", "generate_github_pages"}
 
     def _parse_focus_areas(self, focus_areas: Optional[str]) -> List[str]:
         if not focus_areas:
