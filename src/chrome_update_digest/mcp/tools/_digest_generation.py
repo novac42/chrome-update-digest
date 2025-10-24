@@ -6,7 +6,7 @@ from typing import Any, Awaitable, Callable, Dict, List, Optional
 
 from fastmcp import Context
 
-from src.utils.focus_area_manager import FocusAreaManager
+from chrome_update_digest.utils.focus_area_manager import FocusAreaManager
 
 
 SafeSampler = Callable[..., Awaitable[str]]

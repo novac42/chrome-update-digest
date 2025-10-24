@@ -11,12 +11,12 @@ from typing import List, Dict, Optional, Any
 from datetime import datetime
 from dataclasses import dataclass, asdict
 
-from src.utils.link_extractor import LinkExtractor, ExtractedFeature
-from src.models.feature_tagging import HeadingBasedTagger, TaggedFeature
-from src.utils.focus_area_manager import FocusAreaManager
-from src.utils.area_classifier import WebGPUClassifier
-from src.utils.release_note_locator import find_webgpu_release_note
-from src.chrome_update_digest.utils.project_paths import PROJECT_ROOT, get_config_path
+from chrome_update_digest.utils.link_extractor import LinkExtractor, ExtractedFeature
+from chrome_update_digest.models.feature_tagging import HeadingBasedTagger, TaggedFeature
+from chrome_update_digest.utils.focus_area_manager import FocusAreaManager
+from chrome_update_digest.utils.area_classifier import WebGPUClassifier
+from chrome_update_digest.utils.release_note_locator import find_webgpu_release_note
+from chrome_update_digest.utils.project_paths import PROJECT_ROOT, get_config_path
 
 
 @dataclass

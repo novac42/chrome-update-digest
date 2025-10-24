@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Optional, Dict, Any
 from fastmcp import Context
 
-from src.utils.yaml_pipeline import YAMLPipeline
+from chrome_update_digest.utils.yaml_pipeline import YAMLPipeline
 
 
 class DigestYAMLPipeline:

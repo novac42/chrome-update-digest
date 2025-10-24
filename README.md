@@ -23,9 +23,9 @@ This MCP server provides access to:
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Python 3.8 or higher
-- pip package manager
-- Claude Desktop or MCP-compatible client
+- Python 3.11 or higher
+- [uv](https://docs.astral.sh/uv/) (install via `pip install uv` or your platform package manager)
+- Claude Desktop or another MCP-compatible client
 
 ### Installation
 
@@ -34,12 +34,8 @@ This MCP server provides access to:
 git clone https://github.com/yourusername/chrome-update-digest.git
 cd chrome-update-digest
 
-# Create and activate virtual environment
-python3 -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
+# Install dependencies and create a uv-managed environment
+uv sync
 ```
 
 ### MCP Server Setup
@@ -56,31 +52,39 @@ In VS Code, open `List Servers -> Configure Model Access (Sampling)` for `chrome
 
 Connect the server through your preferred MCP client (VS Code, Cursor, Claude Desktop, etc.):
 
-**Configuration Example (macOS/Linux):**
+**Configuration Example (macOS/Linux using uv project runner):**
 ```json
 {
   "mcpServers": {
     "chrome-digest": {
-      "command": "/path/to/chrome-update-digest/.venv/bin/python",
-      "args": ["/path/to/chrome-update-digest/fast_mcp_server.py"],
-      "env": {
-        "PYTHONPATH": "/path/to/chrome-update-digest"
-      }
+      "command": "uv",
+      "args": [
+        "run",
+        "--project",
+        "/path/to/chrome-update-digest",
+        "chrome-update-digest-mcp",
+        "--base-path",
+        "/path/to/chrome-update-digest"
+      ]
     }
   }
 }
 ```
 
-**Configuration Example (Windows):**
+**Configuration Example (Windows PowerShell):**
 ```json
 {
   "mcpServers": {
     "chrome-digest": {
-      "command": "C:\\path\\to\\chrome-update-digest\\.venv\\Scripts\\python.exe",
-      "args": ["C:\\path\\to\\chrome-update-digest\\fast_mcp_server.py"],
-      "env": {
-        "PYTHONPATH": "C:\\path\\to\\chrome-update-digest"
-      }
+      "command": "uv.exe",
+      "args": [
+        "run",
+        "--project",
+        "C:\\path\\to\\chrome-update-digest",
+        "chrome-update-digest-mcp",
+        "--base-path",
+        "C:\\path\\to\\chrome-update-digest"
+      ]
     }
   }
 }
@@ -88,17 +92,26 @@ Connect the server through your preferred MCP client (VS Code, Cursor, Claude De
 
 **Important Notes:**
 - Replace `/path/to/chrome-update-digest` with your actual project path
-- Ensure the virtual environment is properly created before configuration
+- Run `uv sync` at least once so dependencies are available to the runner
 - Restart your MCP client after modifying its configuration
 
 #### Test the Server
 
 ```bash
-# Activate virtual environment
-source .venv/bin/activate
+# Run the packaged MCP server (uses base path for prompts/config/data)
+uv run chrome-update-digest-mcp --base-path .
+```
 
-# Start the MCP server
-python fast_mcp_server.py
+### Command Line Utilities
+
+The bundled CLI wraps the existing processor scripts so you can run them through uv:
+
+```bash
+# Clean data pipeline (arguments forwarded to clean_data_pipeline.py)
+uv run chrome-update-digest-cli process -- --version 140 --channel stable --with-yaml
+
+# Monitor upstream releases (forwards to monitor_releases.py)
+uv run chrome-update-digest-cli monitor
 ```
 
 ## 📚 Available MCP Tools
@@ -171,22 +184,22 @@ chrome-update-digest/
 └── prompts/                          # AI prompt templates
 ```
 
-## 🔧 Direct Python Usage
+## 🔧 CLI & Module Usage
 
-For batch processing or automation, you can also use the Python scripts directly:
+For automation and scripting you can keep everything inside the uv-managed environment:
 
 ```bash
-# Process release notes using the clean data pipeline (Recommended)
-python3 src/processors/clean_data_pipeline.py --version 139 --with-yaml
+# Clean data pipeline (recommended)
+uv run chrome-update-digest-cli process -- --version 139 --with-yaml
 
 # Process beta channel
-python3 src/processors/clean_data_pipeline.py --version 139 --channel beta --with-yaml
+uv run chrome-update-digest-cli process -- --version 139 --channel beta --with-yaml
 
-# Legacy pipeline (deprecated but functional)
-python3 src/processors/split_and_process_release_notes.py --version 139
+# Legacy pipeline (still available, but deprecated)
+uv run python -m chrome_update_digest.processors.split_and_process_release_notes --version 139
 
-# Monitor releases
-python src/processors/monitor_releases.py
+# Monitor releases from the command line
+uv run chrome-update-digest-cli monitor
 
 # Preview GitHub Pages output locally (requires Ruby/Jekyll)
 bundle exec jekyll serve --source digest_markdown --destination _site
@@ -194,7 +207,7 @@ bundle exec jekyll serve --source digest_markdown --destination _site
 
 ## 📖 Documentation
 
-- **Technical Overview**: See [docs/tech_docs/technical-overview.md](docs/tech_docs/technical-overview.md) for detailed architecture and pipeline information
+- **Technical Overview**: See [project_docs/tech_docs/technical-overview.md](project_docs/tech_docs/technical-overview.md) for detailed architecture and pipeline information
 - **Development Guide**: Check [CLAUDE.md](CLAUDE.md) for development instructions
 - **API Reference**: MCP tools are self-documenting through the protocol
 
@@ -223,8 +236,8 @@ A: WebGPU features are extracted from both Chrome Graphics sections and dedicate
 ### Troubleshooting
 
 If the MCP server doesn't start:
-1. Ensure virtual environment is activated
-2. Check all dependencies are installed: `pip install -r requirements.txt`
+1. Ensure dependencies are synced: `uv sync`
+2. Confirm the launch command uses `uv run chrome-update-digest-mcp --base-path <workspace>`
 3. Verify the path in your MCP client configuration
 
 If tools aren't working:

@@ -16,7 +16,7 @@ pytestmark = pytest.mark.skip(reason="MergedDigestHtmlTool module doesn't exist"
 # Add src to path
 sys.path.append(str(Path(__file__).parent.parent))
 
-# from src.mcp_tools.merged_digest_html import MergedDigestHtmlTool
+# from chrome_update_digest.mcp.tools.merged_digest_html import MergedDigestHtmlTool
 
 async def test_html_generation():
     """Test HTML generation"""

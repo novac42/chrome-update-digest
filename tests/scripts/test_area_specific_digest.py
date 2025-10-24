@@ -13,7 +13,7 @@ from unittest.mock import Mock
 # Add root directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from src.mcp_tools.enhanced_webplatform_digest import EnhancedWebplatformDigestTool
+from chrome_update_digest.mcp.tools.enhanced_webplatform_digest import EnhancedWebplatformDigestTool
 
 
 @pytest.mark.asyncio

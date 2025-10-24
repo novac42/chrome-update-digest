@@ -1,0 +1,56 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "chrome-update-digest"
+version = "0.1.0"
+description = "Chrome release-note processing pipeline and FastMCP server."
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "Chrome Update Digest Team" }]
+keywords = ["chrome", "release-notes", "mcp", "uv"]
+dependencies = [
+  "beautifulsoup4>=4.11.0",
+  "feedparser>=6.0.11",
+  "fastmcp>=2.0.0",
+  "html2text>=2020.1.16",
+  "markdown>=3.4.0",
+  "mcp>=1.0.0",
+  "prometheus-client>=0.19.0",
+  "pyyaml>=6.0.0",
+  "requests>=2.28.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=7.0.0",
+  "pytest-cov>=4.0.0",
+  "unittest-xml-reporting>=3.0.0",
+]
+
+[project.scripts]
+chrome-update-digest-cli = "chrome_update_digest.cli:main"
+chrome-update-digest-mcp = "chrome_update_digest.mcp.server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/chrome_update_digest"]
+
+[tool.hatch.build]
+include = [
+  "prompts/**/*",
+  "config/**/*",
+  "upstream_docs/**/*",
+]
+
+[tool.uv]
+dev-dependencies = [
+  "pytest>=7.0.0",
+  "pytest-cov>=4.0.0",
+  "unittest-xml-reporting>=3.0.0",
+]
+
+[tool.uv.scripts]
+test = "pytest"
+lint = "pytest -q"
+mcp = "chrome-update-digest-mcp --base-path ."

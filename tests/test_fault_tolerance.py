@@ -17,7 +17,7 @@ pytestmark = pytest.mark.skip(reason="MergedDigestHtmlTool module doesn't exist"
 # Add src directory to Python path
 sys.path.append(str(Path(__file__).parent.parent))
 
-# from src.mcp_tools.merged_digest_html import MergedDigestHtmlTool
+# from chrome_update_digest.mcp.tools.merged_digest_html import MergedDigestHtmlTool
 
 
 def test_file_discovery():

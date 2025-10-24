@@ -9,8 +9,8 @@ from typing import Dict, List, Optional, Tuple
 from datetime import datetime
 import hashlib
 
-from src.utils.link_extractor import LinkExtractor, ExtractedFeature
-from src.models.feature_tagging import HeadingBasedTagger, TaggedFeature
+from chrome_update_digest.utils.link_extractor import LinkExtractor, ExtractedFeature
+from chrome_update_digest.models.feature_tagging import HeadingBasedTagger, TaggedFeature
 
 
 class LinkExtractionService:

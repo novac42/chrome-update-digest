@@ -9,7 +9,7 @@ from pathlib import Path
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.mcp_resources.processed_releasenotes import ProcessedReleaseNotesResource
+from chrome_update_digest.mcp.resources.processed_releasenotes import ProcessedReleaseNotesResource
 
 
 @pytest.mark.asyncio

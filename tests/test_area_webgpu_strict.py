@@ -5,7 +5,7 @@ Tests the new WebGPUClassifier to ensure correct categorization.
 
 import pytest
 from unittest.mock import patch
-from src.utils.area_classifier import WebGPUClassifier, ClassificationResult
+from chrome_update_digest.utils.area_classifier import WebGPUClassifier, ClassificationResult
 
 
 class TestWebGPUClassifier:
@@ -204,7 +204,7 @@ class TestYamlPipelineIntegration:
     @patch.dict('os.environ', {'STRICT_WEBGPU_AREA': '1'})
     def test_strict_mode_enabled_via_env(self):
         """Test that strict mode can be enabled via environment variable."""
-        from src.utils.yaml_pipeline import YAMLPipeline
+        from chrome_update_digest.utils.yaml_pipeline import YAMLPipeline
         
         pipeline = YAMLPipeline()
         assert pipeline.webgpu_classifier.strict_mode is True
@@ -212,7 +212,7 @@ class TestYamlPipelineIntegration:
     @patch.dict('os.environ', {})  # No env var set
     def test_strict_mode_enabled_by_default(self):
         """Test that strict mode is enabled by default."""
-        from src.utils.yaml_pipeline import YAMLPipeline
+        from chrome_update_digest.utils.yaml_pipeline import YAMLPipeline
         
         pipeline = YAMLPipeline()
         assert pipeline.webgpu_classifier.strict_mode is True
@@ -220,7 +220,7 @@ class TestYamlPipelineIntegration:
     @patch.dict('os.environ', {'STRICT_WEBGPU_AREA': '0'})
     def test_strict_mode_can_be_disabled(self):
         """Test that strict mode can be disabled via environment variable."""
-        from src.utils.yaml_pipeline import YAMLPipeline
+        from chrome_update_digest.utils.yaml_pipeline import YAMLPipeline
         
         pipeline = YAMLPipeline()
         assert pipeline.webgpu_classifier.strict_mode is False
@@ -228,7 +228,7 @@ class TestYamlPipelineIntegration:
     @patch.dict('os.environ', {'STRICT_WEBGPU_AREA': '1'})
     def test_determine_area_with_strict_classifier(self):
         """Test that _determine_area uses strict classifier for WebGPU."""
-        from src.utils.yaml_pipeline import YAMLPipeline
+        from chrome_update_digest.utils.yaml_pipeline import YAMLPipeline
         
         pipeline = YAMLPipeline()
         

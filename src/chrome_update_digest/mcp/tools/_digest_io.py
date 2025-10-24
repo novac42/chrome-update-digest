@@ -6,7 +6,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-from src.utils.telemetry import DigestTelemetry
+from chrome_update_digest.utils.telemetry import DigestTelemetry
 
 
 class DigestIOManager:

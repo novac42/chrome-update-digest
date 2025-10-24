@@ -12,14 +12,14 @@ from typing import Optional, Dict, List, Any, Union
 from datetime import datetime
 
 from fastmcp import Context
-from src.utils.yaml_pipeline import YAMLPipeline
-from src.utils.focus_area_manager import FocusAreaManager
-from src.utils.telemetry import DigestTelemetry
-from src.mcp_tools._digest_yaml_cache import DigestYAMLCache
-from src.mcp_tools._digest_generation import DigestGenerationEngine
-from src.mcp_tools._digest_io import DigestIOManager
-from src.mcp_tools._digest_config import DigestRunConfig
-from src.mcp_tools._digest_area_runner import AreaRunner
+from chrome_update_digest.utils.yaml_pipeline import YAMLPipeline
+from chrome_update_digest.utils.focus_area_manager import FocusAreaManager
+from chrome_update_digest.utils.telemetry import DigestTelemetry
+from chrome_update_digest.mcp.tools._digest_yaml_cache import DigestYAMLCache
+from chrome_update_digest.mcp.tools._digest_generation import DigestGenerationEngine
+from chrome_update_digest.mcp.tools._digest_io import DigestIOManager
+from chrome_update_digest.mcp.tools._digest_config import DigestRunConfig
+from chrome_update_digest.mcp.tools._digest_area_runner import AreaRunner
 
 
 class EnhancedWebplatformDigestTool:
@@ -776,7 +776,7 @@ class EnhancedWebplatformDigestTool:
                 if not area_yaml or len(area_yaml.get('features', [])) == 0:
                     if debug:
                         print(f"No features for area {area}, generating fallback via AreaRunner")
-                    from src.mcp_tools._digest_area_runner import AreaRunner
+                    from chrome_update_digest.mcp.tools._digest_area_runner import AreaRunner
                     rr = await AreaRunner(self).process_one_area(
                         ctx,
                         normalized_area,

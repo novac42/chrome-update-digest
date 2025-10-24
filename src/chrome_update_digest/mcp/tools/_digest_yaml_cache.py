@@ -6,8 +6,8 @@ from typing import Any, Dict, Optional
 
 from fastmcp import Context
 
-from src.mcp_tools._digest_yaml_pipeline import DigestYAMLPipeline
-from src.utils.yaml_pipeline import YAMLPipeline
+from chrome_update_digest.mcp.tools._digest_yaml_pipeline import DigestYAMLPipeline
+from chrome_update_digest.utils.yaml_pipeline import YAMLPipeline
 
 
 class DigestYAMLCache:

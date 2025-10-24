@@ -1,3 +1,6 @@
+# Legacy requirements file retained for reference.
+# Prefer using `uv sync` with pyproject.toml to manage dependencies.
+
 # Core dependencies
 markdown>=3.4.0
 beautifulsoup4>=4.11.0

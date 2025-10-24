@@ -21,7 +21,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 import requests
 from bs4 import BeautifulSoup
 import html2text
-from utils.config_manager import (
+from chrome_update_digest.utils.config_manager import (
     get_webplatform_base_url, 
     get_webplatform_version_url,
     get_webgpu_base_url,
@@ -139,7 +139,7 @@ class ReleaseMonitor:
             import sys
             from pathlib import Path
             sys.path.insert(0, str(Path(__file__).parent.parent))
-            from src.utils.rss_version_detector import RSSVersionDetector
+            from chrome_update_digest.utils.rss_version_detector import RSSVersionDetector
             
             detector = RSSVersionDetector()
             
@@ -234,7 +234,7 @@ class ReleaseMonitor:
         # Auto-detect channel if not provided
         if channel is None:
             # Check RSS to determine if this is stable or beta
-            from src.utils.rss_version_detector import RSSVersionDetector
+            from chrome_update_digest.utils.rss_version_detector import RSSVersionDetector
             detector = RSSVersionDetector()
             versions_info = detector.detect_latest_versions(days_back=60)
             

@@ -13,8 +13,8 @@ sys.path.append('src')
 # Skip all tests in this file
 pytestmark = pytest.mark.skip(reason="EnterpriseDigestTool module doesn't exist")
 
-# from src.mcp_tools.enterprise_digest import EnterpriseDigestTool
-from src.mcp_tools.enhanced_webplatform_digest import EnhancedWebplatformDigestTool as WebplatformDigestTool
+# from chrome_update_digest.mcp.tools.enterprise_digest import EnterpriseDigestTool
+from chrome_update_digest.mcp.tools.enhanced_webplatform_digest import EnhancedWebplatformDigestTool as WebplatformDigestTool
 import json
 
 

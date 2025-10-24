@@ -7,7 +7,7 @@ import re
 from dataclasses import dataclass, field
 from typing import List, Dict, Set, Optional
 from enum import Enum
-from src.utils.link_extractor import ExtractedFeature
+from chrome_update_digest.utils.link_extractor import ExtractedFeature
 
 
 class TagPriority(Enum):
@@ -427,7 +427,7 @@ class HeadingBasedTagger:
 if __name__ == "__main__":
     # Example usage
     from pathlib import Path
-    from src.utils.link_extractor import LinkExtractor
+    from chrome_update_digest.utils.link_extractor import LinkExtractor
     
     # Test with a sample file
     test_file = Path("upstream_docs/release_notes/webplatform/chrome-138.md")

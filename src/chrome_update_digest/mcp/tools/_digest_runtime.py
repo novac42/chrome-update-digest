@@ -11,10 +11,10 @@ from typing import Any, Awaitable, Callable, Dict, List, Optional
 
 from fastmcp import Context
 
-from src.mcp_tools._digest_area_runner import AreaRunner
-from src.mcp_tools._digest_config import DigestRunConfig
-from src.mcp_tools.enhanced_webplatform_digest import EnhancedWebplatformDigestTool
-from src.utils.telemetry import DigestTelemetry
+from chrome_update_digest.mcp.tools._digest_area_runner import AreaRunner
+from chrome_update_digest.mcp.tools._digest_config import DigestRunConfig
+from chrome_update_digest.mcp.tools.enhanced_webplatform_digest import EnhancedWebplatformDigestTool
+from chrome_update_digest.utils.telemetry import DigestTelemetry
 
 
 def _utcnow() -> datetime:

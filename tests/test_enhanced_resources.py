@@ -11,7 +11,7 @@ from pathlib import Path
 # Add src directory to Python path
 sys.path.append(str(Path(__file__).parent.parent / "src"))
 
-from mcp_resources.processed_releasenotes import ProcessedReleaseNotesResource
+from chrome_update_digest.mcp.resources.processed_releasenotes import ProcessedReleaseNotesResource
 
 
 def test_resource_metadata():

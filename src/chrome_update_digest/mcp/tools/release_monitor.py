@@ -7,7 +7,7 @@ import logging
 from pathlib import Path
 from typing import Dict, List, Optional
 
-from utils.release_monitor_core import ReleaseMonitorCore
+from chrome_update_digest.utils.release_monitor_core import ReleaseMonitorCore
 
 logger = logging.getLogger(__name__)
 
