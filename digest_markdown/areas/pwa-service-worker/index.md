@@ -17,6 +17,7 @@ Progressive Web Apps and service worker features
 
 - Chrome 140 **(Latest)**: [English](./chrome-140-en.html) / [Chinese](./chrome-140-zh.html)
 - Chrome 138: [English](./chrome-138-en.html) / [Chinese](./chrome-138-zh.html)
+- Chrome 135: [English](./chrome-135-en.html) / [Chinese](./chrome-135-zh.html)
 
 ## Navigation
 

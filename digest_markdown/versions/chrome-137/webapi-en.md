@@ -3,95 +3,87 @@ layout: default
 title: webapi-en
 ---
 
-## Area Summary
-
-Chrome 137's Web API updates emphasize privacy, security, and developer diagnostics across the platform. Key changes include stronger resource and storage partitioning, a document-level isolation policy for cross-origin isolation, built-in Ed25519 support in Web Crypto, mitigation of HSTS-based tracking, and richer crash diagnostics for unresponsive pages. These updates advance the web by tightening isolation boundaries, expanding cryptographic capabilities, reducing cross-site tracking vectors, and improving developer ability to diagnose client-side hangs. Together they lower risk for web developers and enhance user privacy and security guarantees.
-
 ## Detailed Updates
 
-The following items expand on the themes above and highlight practical implications for Web API consumers and implementers.
+Below are focused summaries and developer-facing implications for each Web API change in Chrome 137.
 
 ### Blob URL Partitioning: Fetching/Navigation
 
 #### What's New
-Partitioning of Blob URL access by Storage Key (top-level site, frame origin, and the has-cross-site-ancestor boolean) has been implemented; top-level navigations remain partitioned only by frame origin.
+As part of Storage Partitioning, Chrome partitions Blob URL access by Storage Key (top-level site, frame origin, and the has-cross-site-ancestor boolean). Top-level navigations remain partitioned only by frame origin.
 
 #### Technical Details
-Blob URL access is now scoped to Storage Key boundaries to align with Storage Partitioning. This changes how blob URLs are resolved for subresources and frames, enforcing per-site/frame isolation except for top-level navigations which keep origin-only partitioning.
+Partitioning uses the Storage Key components to scope Blob URL access, reducing cross-site data leakage across frames and sites. Top-level navigation behavior is an explicit exception, remaining frame-origin partitioned.
 
 #### Use Cases
-- Prevents cross-site leakage via blob URLs in embedded frames.
-- Helps developers relying on blob URLs for resource delivery understand cross-origin resolution changes.
+Helps developers building multi-origin apps or embeds avoid accidental Blob-based data exposure across storage partitions and improves alignment with site-isolated storage expectations.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=40057646 (Tracking bug #40057646)
-- https://chromestatus.com/feature/5037311976488960 (ChromeStatus.com entry)
+- Tracking bug #40057646: https://bugs.chromium.org/p/chromium/issues/detail?id=40057646
+- ChromeStatus.com entry: https://chromestatus.com/feature/5037311976488960
 
 ### Call stacks in crash reports from unresponsive web pages
 
 #### What's New
-When a page becomes unresponsive due to long-running JavaScript (e.g., infinite loop), Chrome captures and includes the JavaScript call stack in crash/unresponsive reports.
+Chrome captures the JavaScript call stack when a page becomes unresponsive due to long-running or infinite JS execution; the call stack is included in crash/unresponsive reports.
 
 #### Technical Details
-The feature records the JS call stack at unresponsive time and includes it in the reporting payload, enabling root-cause analysis for runtime hangs.
+The feature collects the runtime JS call stack at the time of unresponsiveness and attaches it to reporting artifacts, aligning with reporting/crash telemetry flows to aid root-cause analysis.
 
 #### Use Cases
-- Improves developer debugging for performance and liveness issues.
-- Aids triage of client-side infinite loops or blocking computations.
+Improves debugging of pages that hang from long computations or runaway loops; useful for observability, error triage, and prioritizing fixes for performance- or correctness-related hangs.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=1445539 (Tracking bug #1445539)
-- https://chromestatus.com/feature/5045134925406208 (ChromeStatus.com entry)
-- https://w3c.github.io/reporting/#crash-report (Spec)
+- Tracking bug #1445539: https://bugs.chromium.org/p/chromium/issues/detail?id=1445539
+- ChromeStatus.com entry: https://chromestatus.com/feature/5045134925406208
+- Spec: https://w3c.github.io/reporting/#crash-report
 
 ### Document-Isolation-Policy
 
 #### What's New
-Document-Isolation-Policy lets a document enable crossOriginIsolation for itself (independent of page COOP/COEP) and is backed by process isolation; non-CORS cross-origin subresources are treated differently under the policy.
+Document-Isolation-Policy allows an individual document to enable crossOriginIsolation for itself without deploying COOP/COEP site-wide, backed by process isolation.
 
 #### Technical Details
-A document can declare isolation at the document level, triggering process isolation and changing handling of cross-origin non-CORS subresources according to the policy semantics.
+The policy signals per-document isolation (process isolation) and affects handling of non-CORS cross-origin subresources (behavior described in linked spec/notes). It provides a mechanism to opt a document into stronger isolation independently of the embedding page’s global headers.
 
 #### Use Cases
-- Allows pages to opt into cross-origin isolation features without whole-site COOP/COEP deployment.
-- Useful for developers needing isolated contexts (e.g., for powerful APIs) while avoiding site-wide header changes.
+Enables third-party or embedded documents to opt into cross-origin isolation for features that require it (e.g., certain powerful APIs) without requiring site-wide COOP/COEP deployment.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=333029146 (Tracking bug #333029146)
-- https://chromestatus.com/feature/5048940296830976 (ChromeStatus.com entry)
-- https://wicg.github.io/document-isolation-policy/ (Spec)
+- Tracking bug #333029146: https://bugs.chromium.org/p/chromium/issues/detail?id=333029146
+- ChromeStatus.com entry: https://chromestatus.com/feature/5048940296830976
+- Spec: https://wicg.github.io/document-isolation-policy/
 
 ### Ed25519 in web cryptography
 
 #### What's New
-Adds support for Curve25519 algorithms in the Web Cryptography API, notably the Ed25519 signature algorithm.
+Chrome adds support for Curve25519 algorithms in the Web Cryptography API, specifically the Ed25519 signature algorithm.
 
 #### Technical Details
-Ed25519 key generation, signing, and verification are exposed via the WebCrypto API surface so web apps can use Ed25519 primitives natively.
+Ed25519 support is exposed via the Web Crypto API (SubtleCrypto) as a native signing/verification primitive, aligning browser crypto capabilities with RFC 8032 for Ed25519 signatures.
 
 #### Use Cases
-- Modern signature schemes for client-side cryptography and authentication.
-- Enables libraries and applications to adopt Ed25519 without polyfills or WASM fallbacks.
+Allows web applications to perform modern, secure signature operations (e.g., authentication tokens, signed metadata) using Ed25519 without shipping JS/WASM crypto libraries.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=1370697 (Tracking bug #1370697)
-- https://chromestatus.com/feature/5056122982457344 (ChromeStatus.com entry)
-- https://www.rfc-editor.org/rfc/rfc8032.html (Spec)
+- Tracking bug #1370697: https://bugs.chromium.org/p/chromium/issues/detail?id=1370697
+- ChromeStatus.com entry: https://chromestatus.com/feature/5056122982457344
+- Spec: https://www.rfc-editor.org/rfc/rfc8032.html
 
 ### HSTS tracking prevention
 
 #### What's New
-Mitigates third-party tracking via the HSTS cache by allowing HSTS upgrades only for top-level navigations and blocking HSTS upgrades for subresource requests.
+Chrome prevents third-party tracking using the HSTS cache by allowing HSTS upgrades only for top-level navigations and blocking HSTS upgrades for sub-resource requests.
 
 #### Technical Details
-The HSTS upgrade behavior is restricted so subresource requests cannot leverage the HSTS cache for cross-site tracking; top-level navigations still receive HSTS upgrades.
+HSTS upgrades are restricted based on request context: top-level navigations may be upgraded, while subresource requests are blocked from performing HSTS-driven upgrades, reducing a third party’s ability to fingerprint users via HSTS state.
 
 #### Use Cases
-- Reduces feasibility of using HSTS state as a cross-site tracking channel.
-- Web developers concerned with third-party privacy implications should expect fewer cross-site HSTS-induced redirects for subresources.
+Mitigates tracking techniques that relied on HSTS state to differentiate users across sites; relevant for developers concerned with privacy-preserving defaults and third-party resource loading behavior.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=40725781 (Tracking bug #40725781)
-- https://chromestatus.com/feature/5065878464307200 (ChromeStatus.com entry)
+- Tracking bug #40725781: https://bugs.chromium.org/p/chromium/issues/detail?id=40725781
+- ChromeStatus.com entry: https://chromestatus.com/feature/5065878464307200
 
-Saved to: digest_markdown/webplatform/Web API/chrome-137-stable-en.md
+File target path:
+digest_markdown/webplatform/Web API/chrome-137-stable-en.md
