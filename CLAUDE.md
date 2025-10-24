@@ -108,9 +108,14 @@ python3 src/processors/split_and_process_release_notes.py --version {VERSION}
 
 ### MCP Server
 FastMCP-based server providing:
-- **Tools**: `webplatform_digest`
-- **Resources**: Prompts, processed release notes
-- **Sampling**: AI-powered content analysis
+- **Pipeline tools**: `digest_prepare_yaml`, `digest_generate_area`, `digest_translate_area`, `digest_write_outputs` (run id orchestration with shared cache)
+- **Legacy fallback**: `webplatform_digest` when the monolithic flow is required
+- **Diagnostics & ops**: `digest_inspect_cache`, `digest_validate_links`, `digest_describe_run_config`, `digest_reset_run_state`, `digest_available_prompts`, `digest_list_outputs`, `digest_summarize_progress`, `progress_watch`, `telemetry_report_metrics`
+- **Content orchestration**: `generate_github_pages` (ties digest, navigation refresh, validation)
+- **Utilities**: `split_features_by_heading`, `check_latest_releases`, `crawl_missing_releases`, `digest_register_release_resources`
+- **Resources**: `file://webplatform-prompt`, lazily-registered processed release notes via `digest_register_release_resources`
+
+**Granular workflow**: Call `digest_prepare_yaml` (obtain `run_id` and areas) → `digest_generate_area` for each area/language needed → optionally `digest_translate_area` → `digest_write_outputs` to flush markdown and progress. Use diagnostic tools between steps to inspect cache state, progress, or telemetry.
 
 ### Processing Flow
 ```
