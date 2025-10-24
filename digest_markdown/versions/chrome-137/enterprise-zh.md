@@ -5,26 +5,25 @@ title: enterprise-zh
 
 ## 领域摘要
 
-Chrome 137 (stable) 针对企业的重点是增强安全监控和事件响应。该版本新增收集和报告本地和远程 IP 地址，并将这些地址转发到 Security Investigation Logs (SIT)。管理员被提示可以选择是否发送 IP 地址相关的控制。这些更新加强了企业在调查和集中安全工具方面的可见性。
+Chrome 137（stable）引入针对 Enterprise 的定向遥测增强，重点在于网络可见性：Chrome Enterprise 将收集并报告本地和远程 IP 地址以改进安全监控。对开发者和 IT 团队影响最大的更改是将这些 IP 地址集成到 Security Investigation Logs (SIT)，从而增强事件响应和取证关联。此类更新通过提高可审计性并在安全调查中提供更丰富的上下文，推进了企业场景下的 Web 平台。团队应据此评估日志、保留和隐私实践。
 
 ## 详细更新
 
-下面是对上述摘要的企业领域更改的详细说明。
+本次发布的唯一 Enterprise 功能加强了面向企业客户和安全团队的与网络相关的遥测。
 
-### IP address logging and reporting (IP 地址记录和报告)
+### IP address logging and reporting（IP 地址记录与报告）
 
 #### 新增内容
-Chrome Enterprise 正在通过收集并报告本地和远程 IP 地址并将这些 IP 地址发送到 Security Investigation Logs (SIT)，来增强安全监控和事件响应能力。此外，Chrome Enterprise 将允许管理员可选择性地发送 IP 地址...
+Chrome Enterprise 收集并报告本地和远程 IP 地址，并将这些 IP 地址发送到 Security Investigation Logs (SIT)。管理员将可以选择将 IP 地址数据作为该能力的一部分发送的选项。
 
 #### 技术细节
-- 发布说明指出，Chrome 将收集本地和远程 IP 地址，并将其报告到 SIT。
-- 说明还指出存在一个管理员选项，可用于选择性地发送 IP 地址（详见参考资料以获取完整细节）。
+- 收集的数据包括与相关浏览器活动关联的本地和远程 IP 地址，并会转发到 SIT 以供企业安全调查。
+- 管理员将有一个选择加入机制以启用发送 IP 地址数据（详细信息和控制请参考官方链接）。
 
 #### 适用场景
-- 通过在集中日志中呈现网络级指标，改善企业安全监控和事件响应。
-- 使使用 SIT 的组织能够在调查中将浏览器活动与 IP 级数据关联。
+- 安全调查与事件响应：将浏览器事件与网络端点关联。
+- 审计与取证：为 SIT 条目添加网络上下文，以改进根因分析。
+- 企业监控：用浏览器收集的 IP 数据丰富现有的安全遥测，以加快检测速度。
 
 #### 参考资料
 - ChromeStatus.com 条目: https://chromestatus.com/feature/5110849951309824
-
-保存路径: digest_markdown/webplatform/Enterprise/chrome-137-stable-en.md

@@ -16,11 +16,11 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 CONFIG_PATH = Path(__file__).resolve().parent.parent / 'config' / 'focus_areas.yaml'
 
-from src.utils.focus_area_manager import FocusAreaManager
-from src.utils.yaml_pipeline import YAMLPipeline, PipelineStatistics
-from src.utils.link_extractor import LinkExtractor, ExtractedFeature, ExtractedLink
-from src.models.feature_tagging import HeadingBasedTagger, TaggedFeature, FeatureTag, TagPriority
-from src.mcp_tools.enhanced_webplatform_digest import EnhancedWebplatformDigestTool
+from chrome_update_digest.utils.focus_area_manager import FocusAreaManager
+from chrome_update_digest.utils.yaml_pipeline import YAMLPipeline, PipelineStatistics
+from chrome_update_digest.utils.link_extractor import LinkExtractor, ExtractedFeature, ExtractedLink
+from chrome_update_digest.models.feature_tagging import HeadingBasedTagger, TaggedFeature, FeatureTag, TagPriority
+from chrome_update_digest.mcp.tools.enhanced_webplatform_digest import EnhancedWebplatformDigestTool
 
 
 class TestFocusAreaManager:

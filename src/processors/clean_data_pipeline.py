@@ -13,9 +13,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 # Import everything from the new location
-from src.chrome_update_digest.processors.clean_data_pipeline import *
+from chrome_update_digest.processors.clean_data_pipeline import *
 
 # Ensure the module can be run directly
 if __name__ == "__main__":
-    from src.chrome_update_digest.processors.clean_data_pipeline import main
+    from chrome_update_digest.processors.clean_data_pipeline import main
     sys.exit(main())

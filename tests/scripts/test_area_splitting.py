@@ -10,7 +10,7 @@ import asyncio
 # Add root directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from src.utils.yaml_pipeline import YAMLPipeline
+from chrome_update_digest.utils.yaml_pipeline import YAMLPipeline
 
 
 def test_area_splitting():
@@ -109,7 +109,7 @@ def list_all_areas():
             content = f.read()
         
         # Extract features to analyze areas
-        from src.utils.link_extractor import LinkExtractor
+        from chrome_update_digest.utils.link_extractor import LinkExtractor
         extractor = LinkExtractor()
         features = extractor.extract_from_content(content)
         

@@ -16,7 +16,7 @@ from pathlib import Path
 # Add project root to path to allow importing from src
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from src.mcp_tools.feature_splitter import FeatureSplitterTool
+from chrome_update_digest.mcp.tools.feature_splitter import FeatureSplitterTool
 
 
 @pytest.mark.asyncio

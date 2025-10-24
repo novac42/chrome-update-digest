@@ -47,7 +47,7 @@ def _unlock_file(f):
         except Exception:
             pass
 
-from src.chrome_update_digest.utils.config_manager import (
+from chrome_update_digest.utils.config_manager import (
     get_webplatform_base_url, 
     get_webplatform_version_url,
     get_webgpu_base_url,

@@ -20,8 +20,8 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 import yaml
 
-from src.chrome_update_digest.utils.yaml_pipeline import YAMLPipeline
-from src.chrome_update_digest.utils.release_note_locator import (
+from chrome_update_digest.utils.yaml_pipeline import YAMLPipeline
+from chrome_update_digest.utils.release_note_locator import (
     find_chrome_release_note,
     find_webgpu_release_note,
 )

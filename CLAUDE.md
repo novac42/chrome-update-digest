@@ -4,12 +4,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Environment Setup
 
-- **Virtual Environment**: All dependencies are installed in `.venv`. Always activate before running commands:
-  ```bash
-  source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-  ```
-- **WSL Environment**: Use `python3` command instead of `python`
-- **Project Planning**: Use phase-based planning (Phase 1, Phase 2, etc.) instead of week-based timelines
+- **Dependency Management**: Sync everything with `uv sync`; this creates/updates the managed virtual environment automatically.
+- **Command Execution**: Run tools with `uv run …` (e.g., `uv run chrome-update-digest-mcp --base-path .` or `uv run python -m chrome_update_digest.processors.clean_data_pipeline ...`).
+- **Workspace Resolution**: Override the working directory by exporting `CHROME_UPDATE_DIGEST_BASE_PATH` when the prompts/config/data live outside the current repo root.
+- **Project Planning**: Use phase-based planning (Phase 1, Phase 2, etc.) instead of week-based timelines.
 
 ## Chrome Release Notes Data Characteristics
 
@@ -90,18 +88,18 @@ WebGPU has **dual release note structure**:
 ### Clean Data Pipeline (Recommended)
 ```bash
 # Process stable channel
-python3 src/processors/clean_data_pipeline.py --version {VERSION} --with-yaml
+uv run chrome-update-digest-cli process -- --version {VERSION} --with-yaml
 
 # Process beta channel
-python3 src/processors/clean_data_pipeline.py --version {VERSION} --channel beta --with-yaml
+uv run chrome-update-digest-cli process -- --version {VERSION} --channel beta --with-yaml
 
 # Validation only
-python3 src/processors/clean_data_pipeline.py --version {VERSION} --validate-only
+uv run chrome-update-digest-cli process -- --version {VERSION} --validate-only
 ```
 
 ### Legacy Pipeline (Deprecated)
 ```bash
-python3 src/processors/split_and_process_release_notes.py --version {VERSION}
+uv run python -m chrome_update_digest.processors.split_and_process_release_notes --version {VERSION}
 ```
 
 ## Architecture Overview
@@ -193,13 +191,13 @@ Areas are defined in `config/focus_areas.yaml`:
 
 ```bash
 # Run all tests
-pytest tests/ -v
+uv run pytest tests/ -v
 
 # Test specific functionality
-pytest tests/test_process_enterprise_release.py -v
+uv run pytest tests/test_process_enterprise_release.py -v
 
 # Run with coverage
-pytest tests/ --cov=. --cov-report=html
+uv run pytest tests/ --cov=. --cov-report=html
 ```
 
 ## Debugging

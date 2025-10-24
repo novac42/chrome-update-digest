@@ -141,7 +141,7 @@ async def test_import_dependencies():
     
     try:
         print("   📦 测试 feature_splitter 导入...")
-        from src.mcp_tools.feature_splitter import FeatureSplitterTool
+        from chrome_update_digest.mcp.tools.feature_splitter import FeatureSplitterTool
         print("   ✅ FeatureSplitterTool 导入成功")
     except ImportError as e:
         print(f"   ❌ FeatureSplitterTool 导入失败: {e}")

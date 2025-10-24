@@ -9,7 +9,7 @@ from pathlib import Path
 # Add src directory to Python path
 sys.path.append(str(Path(__file__).parent / "src"))
 
-from utils.release_monitor_core import ReleaseMonitorCore
+from chrome_update_digest.utils.release_monitor_core import ReleaseMonitorCore
 
 
 def test_release_monitor():

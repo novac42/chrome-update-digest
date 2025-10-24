@@ -10,7 +10,7 @@ from pathlib import Path
 # Add root directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from src.utils.focus_area_manager import FocusAreaManager
+from chrome_update_digest.utils.focus_area_manager import FocusAreaManager
 
 
 def test_focus_area_manager():

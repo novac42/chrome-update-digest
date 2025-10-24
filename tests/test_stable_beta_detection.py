@@ -13,7 +13,7 @@ import sys
 # Add src to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / 'src'))
 
-from utils.release_monitor_core import ReleaseMonitorCore
+from chrome_update_digest.utils.release_monitor_core import ReleaseMonitorCore
 
 
 def test_stable_beta_channel_detection():

@@ -23,8 +23,8 @@ import yaml
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from utils.yaml_pipeline import YAMLPipeline
-from utils.release_note_locator import (
+from chrome_update_digest.utils.yaml_pipeline import YAMLPipeline
+from chrome_update_digest.utils.release_note_locator import (
     find_chrome_release_note,
     find_webgpu_release_note,
 )

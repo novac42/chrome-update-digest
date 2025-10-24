@@ -1,12 +1,12 @@
-title: Chrome Release Digests
-description: Comprehensive Chrome web platform release notes with version selection
-theme: minima
-plugins:
-  - jekyll-feed
-  - jekyll-sitemap
 defaults:
-  - scope:
-      path: ''
-      type: pages
-    values:
-      layout: default
+- scope:
+    path: ''
+    type: pages
+  values:
+    layout: default
+description: Comprehensive Chrome web platform release notes with version selection
+plugins:
+- jekyll-feed
+- jekyll-sitemap
+theme: minima
+title: Chrome Release Digests

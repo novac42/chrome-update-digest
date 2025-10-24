@@ -14,9 +14,9 @@ from datetime import datetime
 # Add root directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from src.utils.yaml_pipeline import YAMLPipeline
-from src.utils.link_extractor import LinkExtractor
-from src.models.feature_tagging import HeadingBasedTagger
+from chrome_update_digest.utils.yaml_pipeline import YAMLPipeline
+from chrome_update_digest.utils.link_extractor import LinkExtractor
+from chrome_update_digest.models.feature_tagging import HeadingBasedTagger
 
 
 class ExtractionValidator:

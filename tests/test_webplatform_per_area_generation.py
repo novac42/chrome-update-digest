@@ -15,8 +15,8 @@ import yaml
 # Add parent directory to path for imports
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.mcp_tools.enhanced_webplatform_digest import EnhancedWebplatformDigestTool
-from src.utils.focus_area_manager import FocusAreaManager
+from chrome_update_digest.mcp.tools.enhanced_webplatform_digest import EnhancedWebplatformDigestTool
+from chrome_update_digest.utils.focus_area_manager import FocusAreaManager
 
 
 class TestWebplatformPerAreaGeneration:

@@ -12,8 +12,8 @@ import pytest
 # Add src to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / 'src'))
 
-from utils.release_monitor_core import ReleaseMonitorCore
-from mcp_tools.release_monitor import ReleaseMonitorTool
+from chrome_update_digest.utils.release_monitor_core import ReleaseMonitorCore
+from chrome_update_digest.mcp.tools.release_monitor import ReleaseMonitorTool
 
 
 class TestReleaseMonitorCore:

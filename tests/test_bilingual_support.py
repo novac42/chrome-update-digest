@@ -9,7 +9,7 @@ from unittest.mock import AsyncMock, Mock, patch
 
 import pytest
 
-from src.mcp_tools.enhanced_webplatform_digest import EnhancedWebplatformDigestTool
+from chrome_update_digest.mcp.tools.enhanced_webplatform_digest import EnhancedWebplatformDigestTool
 
 
 @pytest.fixture

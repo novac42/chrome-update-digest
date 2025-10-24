@@ -13,11 +13,11 @@ from datetime import datetime
 import yaml
 import json
 
-from src.chrome_update_digest.utils.release_note_locator import (
+from chrome_update_digest.utils.release_note_locator import (
     find_chrome_release_note,
     find_webgpu_release_note,
 )
-from src.chrome_update_digest.processors.area_extractors import (
+from chrome_update_digest.processors.area_extractors import (
     Section,
     AreaExtractorFactory,
     WebGPUAreaExtractor,
@@ -674,7 +674,7 @@ class CleanDataPipeline:
         
         # Step 2: Convert to YAML
         print("\n  Step 2: Converting to YAML...")
-        from src.chrome_update_digest.utils.yaml_pipeline import YAMLPipeline
+        from chrome_update_digest.utils.yaml_pipeline import YAMLPipeline
         
         yaml_pipeline = YAMLPipeline()
         yaml_files = {}

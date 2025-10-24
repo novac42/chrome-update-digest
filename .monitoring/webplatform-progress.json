@@ -1,98 +1,64 @@
 {
-  "version": "137",
+  "run_id": "35203dbc-3f01-4020-be3f-1f3e7aa4edf6",
+  "mode": "per_area",
+  "version": "135",
   "channel": "stable",
   "languages": [
     "en",
     "zh"
   ],
+  "focus_areas": [],
   "areas": [
     "css",
-    "enterprise",
+    "devices",
     "graphics-webgpu",
-    "javascript",
+    "html-dom",
     "multimedia",
-    "navigation-loading",
     "origin-trials",
-    "other",
     "payment",
-    "security-privacy",
-    "webapi",
-    "webassembly"
+    "pwa-service-worker",
+    "webapi"
   ],
-  "total_areas": 12,
-  "completed_areas": 12,
+  "total_areas": 9,
+  "completed_areas": 0,
   "per_area": {
     "css": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/css/chrome-137-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/css/chrome-137-stable-zh.md"
+      "en": "pending",
+      "zh": "pending"
     },
-    "enterprise": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/enterprise/chrome-137-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/enterprise/chrome-137-stable-zh.md"
+    "devices": {
+      "en": "pending",
+      "zh": "pending"
     },
     "graphics-webgpu": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/graphics-webgpu/chrome-137-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/graphics-webgpu/chrome-137-stable-zh.md"
+      "en": "pending",
+      "zh": "pending"
     },
-    "javascript": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/javascript/chrome-137-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/javascript/chrome-137-stable-zh.md"
+    "html-dom": {
+      "en": "pending",
+      "zh": "pending"
     },
     "multimedia": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/multimedia/chrome-137-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/multimedia/chrome-137-stable-zh.md"
-    },
-    "navigation-loading": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/navigation-loading/chrome-137-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/navigation-loading/chrome-137-stable-zh.md"
+      "en": "pending",
+      "zh": "pending"
     },
     "origin-trials": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/origin-trials/chrome-137-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/origin-trials/chrome-137-stable-zh.md"
-    },
-    "other": {
-      "en": "fallback",
-      "zh": "fallback"
+      "en": "pending",
+      "zh": "pending"
     },
     "payment": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/payment/chrome-137-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/payment/chrome-137-stable-zh.md"
+      "en": "pending",
+      "zh": "pending"
     },
-    "security-privacy": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/security-privacy/chrome-137-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/security-privacy/chrome-137-stable-zh.md"
+    "pwa-service-worker": {
+      "en": "pending",
+      "zh": "pending"
     },
     "webapi": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/webapi/chrome-137-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/webapi/chrome-137-stable-zh.md"
-    },
-    "webassembly": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/webassembly/chrome-137-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/webassembly/chrome-137-stable-zh.md"
+      "en": "pending",
+      "zh": "pending"
     }
   },
-  "started_at": "2025-10-23T18:02:39.286189",
-  "updated_at": "2025-10-23T18:06:46.185317"
+  "started_at": "2025-10-24T09:05:03.781963+00:00",
+  "updated_at": "2025-10-24T17:05:03.782036"
 }

@@ -13,7 +13,7 @@ import sys
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.processors.merge_webgpu_graphics import WebGPUGraphicsMerger
+from chrome_update_digest.processors.merge_webgpu_graphics import WebGPUGraphicsMerger
 
 
 class TestWebGPUGraphicsMerger(unittest.TestCase):

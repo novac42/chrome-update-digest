@@ -17,7 +17,7 @@ pytestmark = pytest.mark.skip(reason="merge_webgpu_notes and extract_webgpu_feat
 
 # Add project root to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from src.processors.merge_webgpu_graphics import WebGPUGraphicsMerger
+from chrome_update_digest.processors.merge_webgpu_graphics import WebGPUGraphicsMerger
 
 
 class TestWebGPUMergerV2(unittest.TestCase):
