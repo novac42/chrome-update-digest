@@ -15,6 +15,7 @@ from fastmcp import Context
 from chrome_update_digest.utils.yaml_pipeline import YAMLPipeline
 from chrome_update_digest.utils.focus_area_manager import FocusAreaManager
 from chrome_update_digest.utils.telemetry import DigestTelemetry
+from chrome_update_digest.utils.project_paths import PROJECT_ROOT
 from chrome_update_digest.mcp.tools._digest_yaml_cache import DigestYAMLCache
 from chrome_update_digest.mcp.tools._digest_generation import DigestGenerationEngine
 from chrome_update_digest.mcp.tools._digest_io import DigestIOManager
@@ -33,11 +34,11 @@ class EnhancedWebplatformDigestTool:
     4. Tag-based organization
     """
     
-    def __init__(self, base_path: Path = None):
+    def __init__(self, base_path: Optional[Path] = None):
         """Initialize the enhanced tool."""
-        # Use provided base_path or default to current working directory
+        # Use provided base_path or default to repository root
         if base_path is None:
-            base_path = Path.cwd()
+            base_path = PROJECT_ROOT
         self.base_path = base_path
         
         self.yaml_pipeline = YAMLPipeline()
