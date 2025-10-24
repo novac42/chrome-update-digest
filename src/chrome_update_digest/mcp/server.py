@@ -236,11 +236,13 @@ class DigestServerApp:
         github_pages_orchestrator = self.github_pages_orchestrator
         register_dynamic_resources = self.register_dynamic_resources
 
-        @self.mcp.tool()
+        @self.mcp.tool(description="Return the latest WebPlatform digest progress snapshot.")
         async def get_webplatform_progress() -> str:
             return await self._json_tool_call(digest_registry.summarize_progress())
 
-        @self.mcp.tool()
+        @self.mcp.tool(
+            description="Run the full WebPlatform digest pipeline and return structured results."
+        )
         async def webplatform_digest(
             ctx: Context,
             version: str = "138",
@@ -271,7 +273,10 @@ class DigestServerApp:
                 return result
             return self._jsonify({"success": True, "payload": result})
 
-        @self.mcp.tool("digest_prepare_yaml")
+        @self.mcp.tool(
+            "digest_prepare_yaml",
+            description="Prepare structured digest YAML for a release without generating outputs.",
+        )
         async def digest_prepare_yaml(
             ctx: Context,
             version: str,
@@ -301,7 +306,10 @@ class DigestServerApp:
                 )
             )
 
-        @self.mcp.tool("digest_generate_area")
+        @self.mcp.tool(
+            "digest_generate_area",
+            description="Generate digest content for a specific area within a prepared run.",
+        )
         async def digest_generate_area(
             ctx: Context,
             run_id: str,
@@ -317,7 +325,10 @@ class DigestServerApp:
                 )
             )
 
-        @self.mcp.tool("digest_translate_area")
+        @self.mcp.tool(
+            "digest_translate_area",
+            description="Translate an area digest into the target language set for a run.",
+        )
         async def digest_translate_area(
             ctx: Context,
             run_id: str,
@@ -333,17 +344,26 @@ class DigestServerApp:
                 )
             )
 
-        @self.mcp.tool("digest_write_outputs")
+        @self.mcp.tool(
+            "digest_write_outputs",
+            description="Persist all generated digest outputs for the specified run to disk.",
+        )
         async def digest_write_outputs(ctx: Context, run_id: str) -> str:
             return await self._json_tool_call(
                 digest_registry.write_outputs(run_id=run_id)
             )
 
-        @self.mcp.tool("digest_inspect_cache")
+        @self.mcp.tool(
+            "digest_inspect_cache",
+            description="Inspect cached digest artefacts, optionally filtered by area.",
+        )
         async def digest_inspect_cache(area: Optional[str] = None) -> str:
             return await self._json_tool_call(digest_registry.inspect_cache(area=area))
 
-        @self.mcp.tool("digest_validate_links")
+        @self.mcp.tool(
+            "digest_validate_links",
+            description="Validate outbound links for a WebPlatform release digest.",
+        )
         async def digest_validate_links(
             ctx: Context, version: str, channel: str = "stable"
         ) -> str:
@@ -351,23 +371,35 @@ class DigestServerApp:
                 digest_registry.validate_links(ctx, version=version, channel=channel)
             )
 
-        @self.mcp.tool("digest_summarize_progress")
+        @self.mcp.tool(
+            "digest_summarize_progress",
+            description="Summarize overall progress across active and historical digest runs.",
+        )
         async def digest_summarize_progress() -> str:
             return await self._json_tool_call(digest_registry.summarize_progress())
 
-        @self.mcp.tool("digest_list_outputs")
+        @self.mcp.tool(
+            "digest_list_outputs",
+            description="List generated output files for a digest run.",
+        )
         async def digest_list_outputs(run_id: Optional[str] = None) -> str:
             return await self._json_tool_call(
                 digest_registry.list_outputs(run_id=run_id)
             )
 
-        @self.mcp.tool("digest_describe_run_config")
+        @self.mcp.tool(
+            "digest_describe_run_config",
+            description="Describe the configuration and parameters captured for a run.",
+        )
         async def digest_describe_run_config(run_id: str) -> str:
             return await self._json_tool_call(
                 digest_registry.describe_run_config(run_id)
             )
 
-        @self.mcp.tool("digest_reset_run_state")
+        @self.mcp.tool(
+            "digest_reset_run_state",
+            description="Reset run state metadata and optionally clear cached artefacts.",
+        )
         async def digest_reset_run_state(
             run_id: Optional[str] = None, reset_cache: bool = False
         ) -> str:
@@ -378,11 +410,17 @@ class DigestServerApp:
                 )
             )
 
-        @self.mcp.tool("digest_available_prompts")
+        @self.mcp.tool(
+            "digest_available_prompts",
+            description="List available prompt templates for digest generation workflows.",
+        )
         async def digest_available_prompts() -> str:
             return await self._json_tool_call(digest_registry.available_prompts())
 
-        @self.mcp.tool("digest_register_release_resources")
+        @self.mcp.tool(
+            "digest_register_release_resources",
+            description="Register processed release notes as FastMCP resources.",
+        )
         async def digest_register_release_resources(
             include_release_notes: bool = True,
         ) -> str:
@@ -394,15 +432,23 @@ class DigestServerApp:
             }
             return self._jsonify(payload)
 
-        @self.mcp.tool("telemetry_report_metrics")
+        @self.mcp.tool(
+            "telemetry_report_metrics",
+            description="Report collected telemetry metrics for digest operations.",
+        )
         async def telemetry_report_metrics() -> str:
             return await self._json_tool_call(digest_registry.report_metrics())
 
-        @self.mcp.tool("progress_watch")
+        @self.mcp.tool(
+            "progress_watch",
+            description="Return the latest progress snapshot for long-running digest jobs.",
+        )
         async def progress_watch() -> str:
             return await self._json_tool_call(digest_registry.summarize_progress())
 
-        @self.mcp.tool()
+        @self.mcp.tool(
+            description="Split release notes into feature groups using the requested heading depth."
+        )
         async def split_features_by_heading(
             content: str, target_heading_level: int = 3
         ) -> str:
@@ -410,7 +456,9 @@ class DigestServerApp:
                 {"content": content, "target_heading_level": target_heading_level}
             )
 
-        @self.mcp.tool()
+        @self.mcp.tool(
+            description="Check upstream channels for the latest available release versions."
+        )
         async def check_latest_releases(
             ctx: Context,
             release_type: str = "webplatform",
@@ -420,7 +468,9 @@ class DigestServerApp:
                 ctx, {"release_type": release_type, "channel": channel}
             )
 
-        @self.mcp.tool()
+        @self.mcp.tool(
+            description="Generate or refresh the GitHub Pages site for a WebPlatform release."
+        )
         async def generate_github_pages(
             ctx: Context,
             version: str,
@@ -456,7 +506,9 @@ class DigestServerApp:
                 return result
             return self._jsonify(result)
 
-        @self.mcp.tool()
+        @self.mcp.tool(
+            description="Backfill missing release metadata by crawling upstream sources."
+        )
         async def crawl_missing_releases(
             ctx: Context,
             release_type: str = "webplatform",
