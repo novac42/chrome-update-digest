@@ -467,10 +467,15 @@ def main():
     else:
         print("- Release note resources registered lazily on first request")
     print("\nTools available:")
-    print("- webplatform_digest") 
+    print("- webplatform_digest (monolithic fallback)")
+    print("- digest_prepare_yaml / digest_generate_area / digest_translate_area / digest_write_outputs")
+    print("- digest_inspect_cache / digest_validate_links / digest_list_outputs")
+    print("- digest_describe_run_config / digest_reset_run_state / digest_available_prompts")
+    print("- digest_summarize_progress / progress_watch / telemetry_report_metrics")
+    print("- digest_register_release_resources")
+    print("- generate_github_pages")
     print("- split_features_by_heading")
-    print("- check_latest_releases")
-    print("- crawl_missing_releases")
+    print("- check_latest_releases / crawl_missing_releases")
     print("\nServer starting...")
     
     # Run the server
