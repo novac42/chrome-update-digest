@@ -27,6 +27,7 @@ from chrome_update_digest.mcp.tools.github_pages_orchestrator import (
     GithubPagesOrchestratorTool,
 )
 from chrome_update_digest.mcp.tools.release_monitor import ReleaseMonitorTool
+from chrome_update_digest.utils.project_paths import get_project_root
 
 LOGGER = logging.getLogger(__name__)
 
@@ -75,9 +76,17 @@ def resolve_base_path(base_path: Optional[Path | str] = None) -> Path:
             candidates.append(_normalize(env_path))
 
     package_root = Path(__file__).resolve().parents[1]
+    project_root = get_project_root()
     repo_root = package_root.parent
 
-    candidates.extend([repo_root, package_root, Path.cwd().resolve()])
+    candidates.extend(
+        [
+            project_root,
+            repo_root,
+            package_root,
+            Path.cwd().resolve(),
+        ]
+    )
 
     for candidate in candidates:
         if _looks_like_workspace(candidate):
