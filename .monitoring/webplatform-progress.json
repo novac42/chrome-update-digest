@@ -6,21 +6,11 @@
     "zh"
   ],
   "areas": [
-    "css",
-    "deprecations",
-    "graphics-webgpu",
-    "html-dom",
-    "multimedia",
-    "origin-trials",
-    "other",
-    "performance",
-    "pwa-service-worker",
-    "storage",
-    "webapi"
+    "css"
   ],
-  "total_areas": 11,
+  "total_areas": 1,
   "completed_areas": 0,
   "per_area": {},
-  "started_at": "2025-10-27T17:28:39.600010",
-  "updated_at": "2025-10-27T17:28:39.600070"
+  "started_at": "2025-10-27T17:49:04.335313",
+  "updated_at": "2025-10-27T17:49:04.335463"
 }

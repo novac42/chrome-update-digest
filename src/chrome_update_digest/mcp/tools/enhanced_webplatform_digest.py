@@ -11,6 +11,11 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence, Union
 
+try:  # Optional dependency; guards ValidationError handling
+    from pydantic import ValidationError as PydanticValidationError
+except Exception:  # pragma: no cover - keep runtime resilient if pydantic missing
+    PydanticValidationError = None
+
 from fastmcp import Context
 from fastmcp.server.context import SamplingMessage, TextContent
 from chrome_update_digest.utils.yaml_pipeline import YAMLPipeline
@@ -58,7 +63,7 @@ class EnhancedWebplatformDigestTool:
         # Run-scoped configuration (populated for each invocation)
         self._current_run_config: Optional[DigestRunConfig] = None
         # M2: concurrency and rate governance
-        self._max_concurrency: int = int(os.getenv("WEBPLATFORM_MAX_CONCURRENCY", "4"))
+        self._max_concurrency: int = int(os.getenv("WEBPLATFORM_MAX_CONCURRENCY", "1"))
         self._rate_limit_per_sec: float = float(os.getenv("WEBPLATFORM_RATE_LIMIT", "2"))
         self._failure_cooldown_sec: float = float(os.getenv("WEBPLATFORM_FAILURE_COOLDOWN", "5"))
         self._circuit_breaker_threshold: int = int(os.getenv("WEBPLATFORM_CIRCUIT_THRESHOLD", "3"))
@@ -154,6 +159,20 @@ class EnhancedWebplatformDigestTool:
             self._sanitize_preparation_notice(notice)
         )
         return payload
+
+    def _sampling_payload_preview(
+        self,
+        messages: Union[str, Sequence[Any]],
+        limit: int = 400,
+    ) -> str:
+        """Return a compact preview of the sampling payload for telemetry."""
+        if isinstance(messages, str):
+            return messages[:limit]
+        try:
+            serialized = json.dumps(messages, ensure_ascii=False)
+        except Exception:
+            serialized = str(messages)
+        return serialized[:limit]
 
     @property
     def _run_model_preferences(self) -> Optional[Union[Dict[str, Any], List[Any]]]:
@@ -515,6 +534,17 @@ class EnhancedWebplatformDigestTool:
         if not model_hint and isinstance(run_preferences, dict):
             model_hint = run_preferences.get("model")
 
+        sample_fn = getattr(ctx, "sample", None)
+        if not callable(sample_fn):
+            detail = "FastMCP context does not expose a callable sample() method"
+            self.telemetry.record_error(
+                operation=operation,
+                kind="ConfigurationError",
+                detail=detail,
+                area=context_extra.get("area"),
+            )
+            raise RuntimeError(detail)
+
         # Fixed max tokens for sampling per server configuration
         max_tokens = 60000
 
@@ -549,7 +579,7 @@ class EnhancedWebplatformDigestTool:
 
                 async with self._semaphore:
                     response = await asyncio.wait_for(
-                        ctx.sample(**sample_kwargs),
+                        sample_fn(**sample_kwargs),
                         timeout=timeout
                     )
                 self._last_token_ts = time.perf_counter()
@@ -606,6 +636,22 @@ class EnhancedWebplatformDigestTool:
 
             except Exception as e:
                 duration = time.perf_counter() - attempt_start
+                is_validation_error = (
+                    PydanticValidationError is not None
+                    and isinstance(e, PydanticValidationError)
+                )
+                if is_validation_error:
+                    payload_preview = self._sampling_payload_preview(sample_kwargs.get("messages", messages))
+                    self.telemetry.log_event(
+                        "llm_payload_validation_error",
+                        {
+                            "operation": operation,
+                            "area": context_extra.get("area"),
+                            "attempt": attempt_number,
+                            "payload_preview": payload_preview,
+                        },
+                    )
+
                 self.telemetry.observe_llm_attempt(
                     operation=operation,
                     attempt=attempt_number,
@@ -616,7 +662,7 @@ class EnhancedWebplatformDigestTool:
                 )
                 self.telemetry.record_error(
                     operation=operation,
-                    kind=type(e).__name__,
+                    kind="ValidationError" if is_validation_error else type(e).__name__,
                     detail=str(e),
                     area=context_extra.get("area"),
                 )
@@ -869,7 +915,7 @@ class EnhancedWebplatformDigestTool:
         await self.io.update_progress(progress_data, debug)
         
         # Get concurrency limit from environment
-        max_concurrency = int(os.getenv("WEBPLATFORM_MAX_CONCURRENCY", "3"))
+        max_concurrency = int(os.getenv("WEBPLATFORM_MAX_CONCURRENCY", str(self._max_concurrency)))
         if debug:
             print(f"Using parallel processing with max concurrency: {max_concurrency}")
         

@@ -1,0 +1,118 @@
+version: '134'
+channel: stable
+area: graphics-webgpu
+extraction_timestamp: '2025-10-27T17:40:35.733342'
+extraction_method: deterministic
+statistics:
+  total_features: 3
+  total_links: 12
+  primary_tags:
+    webgpu: 3
+  cross_cutting:
+    webgpu: 3
+features:
+- title: Improve machine-learning workloads with subgroups
+  content: "After a year of development and trials, the subgroups WebGPU feature enabling SIMD-level parallelism is now available.\
+    \ It allows threads in a workgroup to communicate and execute collective math operations, such as calculating a sum of\
+    \ numbers, and offers an efficient method for cross-thread data sharing. See the [original proposal](https://github.com/gpuweb/gpuweb/blob/main/proposals/subgroups.md)\
+    \ and [chromestatus entry](https://chromestatus.com/feature/5126409856221184).\n\nFor reference, Google Meet saw 2.3-2.9\
+    \ times speed increases when benchmarking subgroups against [packed integer dot products](/blog/io24-webassembly-webgpu-2#packed_integer_dot_products)\
+    \ for matrix-vector multiply shaders on some devices during the [origin trial](https://developer.chrome.com/origintrials/#/view_trial/4130363808252166145).\n\
+    \nWhen the `\"subgroups\"` feature is available in a `GPUAdapter`, request a `GPUDevice` with this feature to get subgroups\
+    \ support in WGSL. It's helpful to check `subgroupMinSize` and `subgroupMaxSize` adapter info values—for example, if you\
+    \ have a hardcoded algorithm that requires a subgroup of a certain size.\n\nYou also need to explicitly enable this extension\
+    \ in your WGSL code with `enable subgroups;` to get access to the following built-in values in both compute and fragment\
+    \ shaders stages:\n\n  * `subgroup_invocation_id`: A built-in value for the index of the thread within the subgroup.\n\
+    \n  * `subgroup_size`: A built-in value for subgroup size access.\n\nThe numerous [subgroup built-in functions](https://gpuweb.github.io/gpuweb/wgsl/#subgroup-builtin-functions)\
+    \ (for example, `subgroupAdd()`, `subgroupBallot()`, `subgroupBroadcast()`, `subgroupShuffle()`) enable efficient communication\
+    \ and computation between invocations within a subgroup. These subgroup operations are classified as single-instruction\
+    \ multiple-thread (SIMT) operations. Additionally, the [quad built-in functions](https://gpuweb.github.io/gpuweb/wgsl/#quad-builtin-functions),\
+    \ which operate on a [quad](https://gpuweb.github.io/gpuweb/wgsl/#quad) of invocations facilitate data communication within\
+    \ the quad.\n\nYou can use f16 values with subgroups when you request a `GPUDevice` with both `\"shader-f16\"` and `\"\
+    subgroups\"` features.\n\nThe following sample is a good starting point for exploring subgroups: it shows a shader that\
+    \ uses the `subgroupExclusiveMul()` built-in function to compute factorials without reading or writing memory to communicate\
+    \ intermediate results.\n\nSee the Pen [WebGPU subgroups](https://codepen.io/web-dot-dev/pen/emOqWQJ)."
+  heading_path:
+  - Graphics and WebGPU - Chrome 134
+  - Improve machine-learning workloads with subgroups
+  links:
+  - url: https://github.com/gpuweb/gpuweb/blob/main/proposals/subgroups.md
+    link_type: github
+    title: original proposal
+  - url: https://chromestatus.com/feature/5126409856221184
+    link_type: chromestatus
+    title: chromestatus entry
+  - url: https://developer.chrome.com/origintrials/#/view_trial/4130363808252166145
+    link_type: other
+    title: origin trial
+  - url: https://gpuweb.github.io/gpuweb/wgsl/#subgroup-builtin-functions
+    link_type: github
+    title: subgroup built-in functions
+  - url: https://gpuweb.github.io/gpuweb/wgsl/#quad-builtin-functions
+    link_type: github
+    title: quad built-in functions
+  - url: https://gpuweb.github.io/gpuweb/wgsl/#quad
+    link_type: github
+    title: quad
+  - url: https://codepen.io/web-dot-dev/pen/emOqWQJ
+    link_type: other
+    title: WebGPU subgroups
+  line_number: 5
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Remove float filterable texture types support as blendable
+  content: Now that the [32-bit float textures blending](/blog/new-in-webgpu-132#32-bit_float_textures_blending) is available
+    with the `"float32-blendable"` feature, the incorrect support for float filterable texture types as blendable is removed.
+    See [issue 364987733](https://issues.chromium.org/issues/364987733).
+  heading_path:
+  - Graphics and WebGPU - Chrome 134
+  - Remove float filterable texture types support as blendable
+  links:
+  - url: https://issues.chromium.org/issues/364987733
+    link_type: other
+    title: issue 364987733
+  line_number: 28
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Dawn updates
+  content: "Dawn now requires macOS 11 and iOS 14 and only supports Metal 2.3+. See [issue 381117827](https://crbug.com/381117827).\n\
+    \nThe new `GetWGSLLanguageFeatures()` method of the `wgpu::Instance` now replaces `EnumerateWGSLLanguageFeatures()`. See\
+    \ [issue 368672124](https://issues.chromium.org/issues/368672124).\n\nThe following binding types have an `Undefined`\
+    \ value and their default values in binding layout have been changed. See [issue 377820810](https://issues.chromium.org/issues/377820810).\n\
+    \n  * `wgpu::BufferBindingType::Undefined` is now `Uniform`\n  * `wgpu::SamplerBindingType::Undefined` is now `Filtering`\n\
+    \  * `wgpu::TextureSampleType::Undefined` is now `Float`\n  * `wgpu::StorageTextureAccess::Undefined`is now `WriteOnly`\n\
+    \nThis covers only some of the key highlights. Check out the exhaustive [list of commits](https://dawn.googlesource.com/dawn/+log/chromium/6943..chromium/6998?n=1000)."
+  heading_path:
+  - Graphics and WebGPU - Chrome 134
+  - Dawn updates
+  links:
+  - url: https://crbug.com/381117827
+    link_type: tracking_bug
+    title: issue 381117827
+  - url: https://issues.chromium.org/issues/368672124
+    link_type: other
+    title: issue 368672124
+  - url: https://issues.chromium.org/issues/377820810
+    link_type: other
+    title: issue 377820810
+  - url: https://dawn.googlesource.com/dawn/+log/chromium/6943..chromium/6998?n=1000
+    link_type: other
+    title: list of commits
+  line_number: 33
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu

@@ -1,0 +1,74 @@
+version: '134'
+channel: stable
+area: origin-trials
+extraction_timestamp: '2025-10-27T17:40:35.717307'
+extraction_method: deterministic
+statistics:
+  total_features: 2
+  total_links: 4
+  primary_tags:
+    origin-trials: 2
+    deprecations: 1
+  cross_cutting:
+    privacy: 1
+features:
+- title: Digital Credential API
+  content: 'Websites can and do get credentials from mobile wallet apps through a variety of mechanisms today, for example,
+    custom URL handlers and QR code scanning. This feature lets sites request identity information from wallets using Android''s
+    `IdentityCredential` `CredMan` system. It is extensible to support multiple credential formats (for example, ISO mDoc
+    and W3C verifiable credential) and allows multiple wallet apps to be used. Mechanisms are being added to help reduce the
+    risk of ecosystem-scale abuse of real-world identity.
+
+
+    The origin trial starting in Chrome 134 adds support for this API on desktop platform, where Chrome on Desktop will securely
+    communicate with the digital wallet on the Android phone to fetch the requested credentials.
+
+
+    [Origin Trial](/origintrials#/view_trial/3139571890230657025) | [Tracking bug #40257092](https://issues.chromium.org/issues/40257092)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5166035265650688) | [Spec](https://wicg.github.io/digital-credentials)'
+  heading_path:
+  - Origin trials
+  - Digital Credential API
+  links:
+  - url: https://issues.chromium.org/issues/40257092
+    link_type: other
+    title: 'Tracking bug #40257092'
+  - url: https://chromestatus.com/feature/5166035265650688
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/digital-credentials
+    link_type: spec
+    title: Spec
+  line_number: 3
+  primary_tags:
+  - name: origin-trials
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Deprecation trial for `SelectParserRelaxation`
+  content: 'This is a deprecation trial, which re-enables the old parser behavior for parsing `<select>` tags. Under that
+    old behavior, non-supported content is silently discarded and not included in the DOM content underneath the `<select>`.
+    This trial can be used in case the new behavior enabled from Chrome 135 breaks a site.
+
+
+    [Origin Trial](/origintrials#/view_trial/182958734861926401) | [ChromeStatus.com entry](https://chromestatus.com/feature/5145948356083712)'
+  heading_path:
+  - Origin trials
+  - Deprecation trial for `SelectParserRelaxation`
+  links:
+  - url: https://chromestatus.com/feature/5145948356083712
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 11
+  primary_tags:
+  - name: origin-trials
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: deprecations
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []
