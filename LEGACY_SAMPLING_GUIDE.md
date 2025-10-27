@@ -13,8 +13,8 @@ Based on telemetry analysis from `.monitoring/webplatform-telemetry.jsonl` (row 
 
 The legacy mode has been implemented in branch `fix/legacy-sampling-mode` to:
 - ✅ Bypass message transformation (pass messages directly as strings)
-- ✅ Skip model preferences coercion
-- ✅ Use simpler sampling call path
+- ✅ **Remove model preferences completely** - let the client choose the model automatically
+- ✅ Use simpler sampling call path without any model specification
 
 ## How to Use
 
@@ -41,8 +41,10 @@ Use your MCP client (Copilot, Claude, etc.) to invoke the `webplatform_digest` t
 
 Look for this log message in debug output:
 ```
-🔧 Legacy sampling mode enabled
+🔧 Legacy sampling mode enabled (no model preferences)
 ```
+
+The client will automatically select an appropriate model.
 
 ## Expected Behavior Changes
 
@@ -73,8 +75,8 @@ The legacy mode implementation is in:
 1. Added environment variable check: `USE_LEGACY_SAMPLING`
 2. Added simplified sampling path that:
    - Skips `_prepare_sampling_messages()` transformation
-   - Skips `_coerce_model_preferences_for_client()` coercion
-   - Uses direct `ctx.sample()` call
+   - **Does NOT pass model_preferences** - allows client to choose model automatically
+   - Uses direct `ctx.sample()` call with minimal parameters
 3. Added telemetry logging for legacy mode
 
 ## Debugging
@@ -103,14 +105,25 @@ Look for:
 
 ## Model Preferences
 
-### Legacy Mode (Recommended)
+### Legacy Mode (Recommended - No Model Specification)
 ```bash
-# Pass model preferences as-is (no coercion)
+# Legacy mode does NOT specify model preferences
+# The MCP client automatically selects a compatible model
 export USE_LEGACY_SAMPLING=true
 ```
 
+**Benefits:**
+- ✅ Avoids API compatibility issues
+- ✅ Client chooses best available model automatically
+- ✅ No "model not supported" errors
+
 ### New Mode (Currently Broken)
-The new mode tries to coerce model preferences, which causes issues with the Responses API.
+The new mode tries to:
+1. Transform messages to `SamplingMessage` objects
+2. Coerce model preferences to specific formats
+3. Pass model preferences like `gpt-5-mini`
+
+This causes: `"model gpt-5-mini is not supported via Responses API"`
 
 ## Rollback Plan
 
@@ -138,7 +151,13 @@ This will restore the version from 24 hours ago that was working.
 **Working (Legacy):**
 ```python
 messages = "# Chrome Update Analyzer...\n\nAnalyze the following..."
-ctx.sample(messages=messages, system_prompt="...", ...)
+ctx.sample(
+    messages=messages, 
+    system_prompt="...", 
+    temperature=0.7,
+    max_tokens=60000
+    # NO model_preferences parameter - client chooses automatically
+)
 ```
 
 **Broken (New):**
@@ -149,12 +168,21 @@ messages = [
         content=TextContent(type="text", text="...")
     )
 ]
-ctx.sample(messages=messages, system_prompt="...", ...)
+ctx.sample(
+    messages=messages, 
+    system_prompt="...", 
+    model_preferences="gpt-5-mini"  # ❌ Causes API rejection
+)
 ```
 
 ### Why This Breaks
 
-The MCP client (Copilot) expects messages in a specific format for the Responses API. The `SamplingMessage` object transformation is incompatible with this API, causing the rejection.
+The MCP client (Copilot) expects messages in a specific format for the Responses API. Two issues cause failures:
+
+1. **Message Format**: The `SamplingMessage` object transformation is incompatible with the API
+2. **Model Specification**: Specifying models like `gpt-5-mini` via `model_preferences` causes rejection because that model isn't available through the Responses API
+
+**Legacy mode fixes both** by using simple string messages and letting the client choose the model.
 
 ## Related Files
 
