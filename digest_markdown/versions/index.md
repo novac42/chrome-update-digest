@@ -16,3 +16,4 @@ Browse Chrome release notes organized by version number.
 - [Chrome 137](./chrome-137/index.html) - 13 areas with updates
 - [Chrome 136](./chrome-136/index.html) - 13 areas with updates
 - [Chrome 135](./chrome-135/index.html) - 9 areas with updates
+- [Chrome 134](./chrome-134/index.html) - 10 areas with updates

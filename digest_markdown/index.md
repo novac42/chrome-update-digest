@@ -14,17 +14,17 @@ Explore what's new in each Chrome release:
 - [Chrome 141 **(Latest Stable)**](./versions/chrome-141/index.html) - 12 areas with updates
 - [Chrome 140](./versions/chrome-140/index.html) - 12 areas with updates
 - [Chrome 139](./versions/chrome-139/index.html) - 17 areas with updates
-- [View all 7 versions →](./versions/index.html)
+- [View all 8 versions →](./versions/index.html)
 
 ## Browse by Feature Area
 
 Track the evolution of specific features across Chrome versions:
 
-- [CSS](./areas/css/index.html) - Updates in 7 versions
-- [Graphics and WebGPU](./areas/graphics-webgpu/index.html) - Updates in 7 versions
-- [HTML-DOM](./areas/html-dom/index.html) - Updates in 6 versions
-- [Web API](./areas/webapi/index.html) - Updates in 6 versions
-- [Origin trials](./areas/origin-trials/index.html) - Updates in 6 versions
+- [CSS](./areas/css/index.html) - Updates in 8 versions
+- [Graphics and WebGPU](./areas/graphics-webgpu/index.html) - Updates in 8 versions
+- [HTML-DOM](./areas/html-dom/index.html) - Updates in 7 versions
+- [Web API](./areas/webapi/index.html) - Updates in 7 versions
+- [Origin trials](./areas/origin-trials/index.html) - Updates in 7 versions
 - [View all 24 feature areas →](./areas/index.html)
 
 ## Quick Links
