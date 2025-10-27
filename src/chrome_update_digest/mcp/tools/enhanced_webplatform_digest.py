@@ -662,7 +662,9 @@ class EnhancedWebplatformDigestTool:
 
                 if run_preferences is not None:
                     coerced = self._coerce_model_preferences_for_client(run_preferences)
-                    if coerced is not None:
+                    if isinstance(coerced, str) and coerced:
+                        sample_kwargs["model"] = coerced
+                    elif isinstance(coerced, list) and coerced:
                         sample_kwargs["model_preferences"] = coerced
 
                 payload_preview = self._sampling_payload_preview(sample_kwargs["messages"])
