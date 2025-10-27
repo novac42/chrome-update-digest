@@ -170,6 +170,88 @@ class EnhancedWebplatformDigestTool:
             yield
         finally:
             self._current_run_config = previous
+
+    def _prepare_sampling_messages(self, messages: Union[str, List[Any]]) -> Union[List[Any], str]:
+        """Normalize sampling payloads to structures accepted by FastMCP 2.x."""
+        if isinstance(messages, str):
+            return [
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": messages,
+                        }
+                    ],
+                }
+            ]
+
+        if isinstance(messages, list):
+            normalized: List[Any] = []
+            for entry in messages:
+                if isinstance(entry, str):
+                    normalized.append(
+                        {
+                            "role": "user",
+                            "content": [
+                                {
+                                    "type": "text",
+                                    "text": entry,
+                                }
+                            ],
+                        }
+                    )
+                    continue
+
+                if isinstance(entry, dict):
+                    content = entry.get("content")
+                    if isinstance(content, str):
+                        normalized.append(
+                            {
+                                **entry,
+                                "content": [
+                                    {
+                                        "type": "text",
+                                        "text": content,
+                                    }
+                                ],
+                            }
+                        )
+                        continue
+
+                    if isinstance(content, list):
+                        content_blocks: List[Any] = []
+                        for block in content:
+                            if isinstance(block, str):
+                                content_blocks.append(
+                                    {
+                                        "type": "text",
+                                        "text": block,
+                                    }
+                                )
+                            elif isinstance(block, dict):
+                                block_type = block.get("type")
+                                if block_type is None and "text" in block:
+                                    content_blocks.append(
+                                        {
+                                            "type": "text",
+                                            "text": block["text"],
+                                        }
+                                    )
+                                else:
+                                    content_blocks.append(block)
+                            else:
+                                # Skip unsupported block types rather than failing hard
+                                continue
+
+                        normalized.append({**entry, "content": content_blocks})
+                        continue
+
+                normalized.append(entry)
+
+            return normalized
+
+        return messages
     
     async def run(
         self,
@@ -461,7 +543,7 @@ class EnhancedWebplatformDigestTool:
                     await asyncio.sleep(wait_needed)
 
                 sample_kwargs = {
-                    "messages": messages,
+                    "messages": self._prepare_sampling_messages(messages),
                     "system_prompt": system_prompt,
                     "temperature": 0.7,
                     "max_tokens": max_tokens,

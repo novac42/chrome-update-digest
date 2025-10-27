@@ -96,7 +96,10 @@ async def test_generate_digest_from_yaml_calls_sample(tool: EnhancedWebplatformD
     messages = captured_payload["messages"]
     assert isinstance(messages, list)
     assert messages and messages[0].get("role") == "user"
-    assert isinstance(messages[0].get("content"), str)
+    first_content = messages[0].get("content")
+    assert isinstance(first_content, list)
+    assert first_content and first_content[0].get("type") == "text"
+    assert isinstance(first_content[0].get("text"), str)
 
 
 @pytest.mark.asyncio

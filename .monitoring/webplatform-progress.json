@@ -1,24 +1,42 @@
 {
-  "version": "138",
+  "version": "134",
   "channel": "stable",
   "languages": [
     "en",
     "zh"
   ],
   "areas": [
-    "security-privacy"
+    "css",
+    "deprecations",
+    "graphics-webgpu",
+    "html-dom",
+    "multimedia",
+    "origin-trials",
+    "other",
+    "performance",
+    "pwa-service-worker",
+    "storage",
+    "webapi"
   ],
-  "total_areas": 1,
-  "completed_areas": 1,
+  "total_areas": 11,
+  "completed_areas": 3,
   "per_area": {
-    "security-privacy": {
+    "css": {
       "en": "error",
       "zh": "pending",
-      "error": "Sampling failed after 3 retries: 'NoneType' object is not callable"
+      "error": "Sampling timed out after 3 retries"
+    },
+    "deprecations": {
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling timed out after 3 retries"
+    },
+    "graphics-webgpu": {
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling timed out after 3 retries"
     }
   },
-  "started_at": "2025-10-27T14:44:26.074822",
-  "updated_at": "2025-10-27T14:44:40.987640",
-  "completed_at": "2025-10-27T14:44:40.986779",
-  "total_time_seconds": 14.905337125001097
+  "started_at": "2025-10-27T16:16:29.302116",
+  "updated_at": "2025-10-27T16:19:39.609269"
 }
