@@ -49,9 +49,9 @@ When VS Code first loads the `chrome-digest` MCP server, it prompts to allow the
 In VS Code, open `List Servers -> Configure Model Access (Sampling)` for `chrome-digest` and set the **Preferred model** to a sampling-capable option. `gpt-5-mini` offers a good balance between speed and quality, but you can choose any model your workspace prefers.
 
 Environment overrides (optional):
-- `WEBPLATFORM_MODEL_PREFERENCES`: JSON or shorthand to pass through to the client (e.g. `{ "model": "copilot/gpt-5-mini" }` or `copilot/gpt-5-mini`).
-- `WEBPLATFORM_MODEL`: Shorthand model string used when preferences JSON is not provided.
-- `WEBPLATFORM_DEFAULT_MODEL`: Fallback when neither of the above is set. Defaults to `copilot/gpt-5-mini`.
+- `WEBPLATFORM_MODEL_PREFERENCES`: JSON or shorthand to pass through to the client (e.g. `{ "model": "gpt-5-mini" }` or `gpt-5-mini`).
+- `WEBPLATFORM_MODEL`: Shorthand model string used when preferences JSON is not provided (e.g. `gpt-5-mini`).
+- `WEBPLATFORM_DEFAULT_MODEL`: Fallback when neither of the above is set. Defaults to `gpt-5-mini`.
 - `WEBPLATFORM_SAMPLING_TIMEOUT`: Per-attempt timeout in seconds (default 120).
 
 #### Configure Your MCP Client

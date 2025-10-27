@@ -72,6 +72,45 @@ class EnhancedWebplatformDigestTool:
         self._semaphore = asyncio.Semaphore(self._max_concurrency)
         self._last_token_ts: float = 0.0
 
+    def _coerce_model_preferences_for_client(
+        self, value: Optional[Union[Dict[str, Any], List[Any], str]]
+    ) -> Optional[Union[str, List[str]]]:
+        """Coerce internal model preferences into FastMCP-accepted types.
+
+        FastMCP sampling accepts `model_preferences` as one of:
+        - str (single model)
+        - list[str] (priority-ordered models)
+        - a specific `ModelPreferences` object (not constructed here)
+
+        This helper converts our flexible internal shapes to str or list[str].
+        """
+        if value is None:
+            return None
+
+        if isinstance(value, str):
+            return value.strip() or None
+
+        if isinstance(value, list):
+            # Only keep string-like entries
+            models: List[str] = [str(v).strip() for v in value if str(v).strip()]
+            return models or None
+
+        if isinstance(value, dict):
+            # Common shapes: {"model": "name"} or {"models": ["a", "b"]}
+            model_name = value.get("model")
+            if isinstance(model_name, str) and model_name.strip():
+                return model_name.strip()
+            models_value = value.get("models")
+            if isinstance(models_value, list):
+                models: List[str] = [str(v).strip() for v in models_value if str(v).strip()]
+                if models:
+                    return models
+            # Unknown dict shape – fall back to None so we don't send invalid payloads
+            return None
+
+        # Unsupported types are ignored
+        return None
+
     def _resolve_model_preferences(
         self,
         explicit_preferences: Optional[Union[Dict[str, Any], List[Any], str]],
@@ -107,7 +146,7 @@ class EnhancedWebplatformDigestTool:
 
         # Final fallback to ensure a concrete model is always provided to the client
         if normalized is None:
-            default_model = os.getenv("WEBPLATFORM_DEFAULT_MODEL", "copilot/gpt-5-mini").strip()
+            default_model = os.getenv("WEBPLATFORM_DEFAULT_MODEL", "gpt-5-mini").strip()
             if default_model:
                 normalized = {"model": default_model}
 
@@ -553,8 +592,18 @@ class EnhancedWebplatformDigestTool:
         }
         model_hint = telemetry_context.get("model")
         run_preferences = self._run_model_preferences
-        if not model_hint and isinstance(run_preferences, dict):
-            model_hint = run_preferences.get("model")
+        # Derive a telemetry hint from preferences (string or first in list)
+        if not model_hint and run_preferences is not None:
+            if isinstance(run_preferences, dict):
+                model_hint = run_preferences.get("model")
+                if not model_hint:
+                    models_list = run_preferences.get("models")
+                    if isinstance(models_list, list) and models_list:
+                        model_hint = str(models_list[0])
+            elif isinstance(run_preferences, str):
+                model_hint = run_preferences
+            elif isinstance(run_preferences, list) and run_preferences:
+                model_hint = str(run_preferences[0])
 
         sample_fn = getattr(ctx, "sample", None)
         if not callable(sample_fn):
@@ -611,8 +660,10 @@ class EnhancedWebplatformDigestTool:
                     "max_tokens": max_tokens,
                 }
 
-                if run_preferences:
-                    sample_kwargs["model_preferences"] = run_preferences
+                if run_preferences is not None:
+                    coerced = self._coerce_model_preferences_for_client(run_preferences)
+                    if coerced is not None:
+                        sample_kwargs["model_preferences"] = coerced
 
                 payload_preview = self._sampling_payload_preview(sample_kwargs["messages"])
 
@@ -632,11 +683,14 @@ class EnhancedWebplatformDigestTool:
                         "Prepared sampling payload preview: "
                         f"{payload_preview}"
                     )
-                    if run_preferences:
-                        print(
-                            "Applying model preferences: "
-                            f"{json.dumps(run_preferences, ensure_ascii=False)}"
-                        )
+                    if run_preferences is not None:
+                        try:
+                            print(
+                                "Applying model preferences: "
+                                f"{json.dumps(run_preferences, ensure_ascii=False)}"
+                            )
+                        except Exception:
+                            print(f"Applying model preferences: {run_preferences}")
 
                 async with self._semaphore:
                     response = await asyncio.wait_for(
