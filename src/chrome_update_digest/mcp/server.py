@@ -22,6 +22,9 @@ from chrome_update_digest.mcp.resources.processed_releasenotes import (
     ProcessedReleaseNotesResource,
 )
 from chrome_update_digest.mcp.tools._digest_runtime import DigestRuntimeRegistry
+from chrome_update_digest.mcp.tools.clean_data_pipeline_tool import (
+    CleanDataPipelineTool,
+)
 from chrome_update_digest.mcp.tools.feature_splitter import FeatureSplitterTool
 from chrome_update_digest.mcp.tools.github_pages_orchestrator import (
     GithubPagesOrchestratorTool,
@@ -111,6 +114,7 @@ class DigestServerApp:
         self.feature_splitter = FeatureSplitterTool(base_path)
         self.release_monitor_tool = ReleaseMonitorTool(base_path)
         self.github_pages_orchestrator = GithubPagesOrchestratorTool(base_path)
+        self.clean_data_pipeline_tool = CleanDataPipelineTool(base_path)
         self.release_notes_resource = ProcessedReleaseNotesResource(base_path)
         self.digest_registry = DigestRuntimeRegistry(base_path)
 
@@ -234,6 +238,7 @@ class DigestServerApp:
         feature_splitter = self.feature_splitter
         release_monitor_tool = self.release_monitor_tool
         github_pages_orchestrator = self.github_pages_orchestrator
+        clean_data_pipeline_tool = self.clean_data_pipeline_tool
         register_dynamic_resources = self.register_dynamic_resources
 
         @self.mcp.tool(description="Return the latest WebPlatform digest progress snapshot.")
@@ -467,6 +472,67 @@ class DigestServerApp:
             return await release_monitor_tool.check_latest_releases(
                 ctx, {"release_type": release_type, "channel": channel}
             )
+
+        @self.mcp.tool(
+            "clean_data_pipeline_run",
+            description="Run the clean data pipeline to process and materialize release notes by area."
+        )
+        async def clean_data_pipeline_run(
+            ctx: Context,
+            version: str,
+            channel: str = "stable",
+            with_yaml: bool = True,
+            debug: bool = False,
+        ) -> str:
+            """
+            Process Chrome release notes into area-specific markdown and YAML files.
+            
+            This tool wraps CleanDataPipeline.process_version_with_yaml to automatically
+            generate processed files when they're needed by the digest pipeline.
+            
+            Args:
+                version: Chrome version number (e.g., "138")
+                channel: Release channel ("stable" or "beta")
+                with_yaml: Generate YAML output in addition to markdown (default: True)
+                debug: Enable debug logging
+            
+            Returns:
+                JSON result with file paths and processing statistics
+            """
+            result = await clean_data_pipeline_tool.run_pipeline(
+                version=version,
+                channel=channel,
+                with_yaml=with_yaml,
+                debug=debug,
+            )
+            return self._jsonify(result)
+
+        @self.mcp.tool(
+            "clean_data_pipeline_check",
+            description="Check if processed files exist for a version without running the pipeline."
+        )
+        async def clean_data_pipeline_check(
+            version: str,
+            channel: str = "stable",
+            split_by_area: bool = True,
+        ) -> str:
+            """
+            Check if processed markdown/YAML files already exist.
+            
+            Args:
+                version: Chrome version number
+                channel: Release channel
+                split_by_area: Check for split area files (vs single file)
+            
+            Returns:
+                JSON result indicating which files exist and which are missing
+            """
+            result = clean_data_pipeline_tool.check_processed_files_exist(
+                version=version,
+                channel=channel,
+                split_by_area=split_by_area,
+            )
+            return self._jsonify(result)
 
         @self.mcp.tool(
             description="Generate or refresh the GitHub Pages site for a WebPlatform release."

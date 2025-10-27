@@ -15,8 +15,74 @@ python3 src/tools/generate_github_pages_navigation.py
 
 Use the `--clean` flag when regenerating from scratch (removes existing `versions/` and `areas/`). The generator automatically pulls display names and descriptions from `config/focus_areas.yaml`, ensuring a single source of truth for area metadata.
 
-## Directory Layout
+## Auto-Regeneration of Processed Files
+
+**New in this version:** The digest pipeline now automatically materializes processed release notes when they're missing.
+
+### Behavior
+
+When `webplatform_digest` (or related tools) need processed markdown/YAML files that don't exist in `upstream_docs/processed_releasenotes/processed_forwebplatform/areas/`, the system will:
+
+1. **Detect missing files** – Check for the presence of both markdown (`.md`) and YAML (`.yml`) files for the requested version/channel.
+2. **Auto-regenerate** – If files are missing, automatically invoke the clean data pipeline to process the release notes and generate area-specific files.
+3. **Log telemetry** – Record structured telemetry events for the auto-triggered regeneration, including duration, version, channel, and success status.
+4. **Continue processing** – Once files are materialized, the digest pipeline continues normally with the newly generated data.
+
+### Configuration
+
+Auto-regeneration is **enabled by default** but can be controlled through the `DigestYAMLCache` instance:
+
+```python
+# Disable auto-regeneration (for testing or manual control)
+yaml_cache._auto_regeneration_enabled = False
 ```
+
+### MCP Tools
+
+Two new MCP tools are available for manual control:
+
+1. **`clean_data_pipeline_run`** – Manually trigger processing of release notes:
+
+   ```text
+   version: str (required)    # Chrome version (e.g., "138")
+   channel: str = "stable"    # Release channel
+   with_yaml: bool = True     # Generate YAML in addition to markdown
+   debug: bool = False        # Enable debug logging
+   ```
+
+2. **`clean_data_pipeline_check`** – Check if processed files exist without running the pipeline:
+
+   ```text
+   version: str (required)    # Chrome version
+   channel: str = "stable"    # Release channel
+   split_by_area: bool = True # Check for split area files
+   ```
+
+### Telemetry
+
+All auto-regeneration events are recorded in `.monitoring/webplatform-telemetry.jsonl` with:
+
+- Event type: `clean_data_pipeline_run`
+- Metadata: version, channel, success status, duration, file counts
+- Trigger source: `triggered_by: "mcp_tool"` (for auto-regeneration)
+
+### File Locations
+
+Processed files are generated in standard locations:
+
+- **Markdown**: `upstream_docs/processed_releasenotes/processed_forwebplatform/areas/{area}/chrome-{version}-{channel}.md`
+- **YAML**: `upstream_docs/processed_releasenotes/processed_forwebplatform/processed_yaml/areas/{area}/chrome-{version}-{channel}.yml`
+
+### Performance Considerations
+
+- Auto-regeneration only runs when **both** markdown and YAML files are missing for an area.
+- If either file exists, the system uses cached data without regeneration.
+- Multiple concurrent digest requests for the same version will only trigger one regeneration.
+- The clean data pipeline respects all existing configuration (focus areas, WebGPU merge, etc.).
+
+## Directory Layout
+
+```text
 digest_markdown/
 ├── _config.yml               # Jekyll site configuration (auto-generated)
 ├── _layouts/default.html     # Shared layout with Versions/Areas navigation
@@ -36,6 +102,7 @@ digest_markdown/
 The legacy `webplatform/` directory is removed during generation to keep the output focused on the dual navigation structure.
 
 ## File Naming Rules
+
 - Version directory names: `chrome-{version}` (e.g., `chrome-140`).
 - Area content files inside a version: `{area}.md` (e.g., `css.md`).
 - Area directories reuse the focus area slugs from `config/focus_areas.yaml` (e.g., `isolated-web-apps`).
@@ -44,15 +111,19 @@ The legacy `webplatform/` directory is removed during generation to keep the out
 All generated markdown files include Jekyll front matter (`layout: default`) so that Pages renders them with the shared layout.
 
 ## Generation Workflow
+
 1. The generator scans `upstream_docs/processed_releasenotes/processed_forwebplatform/areas/` for `chrome-{version}-stable.md` files.
 2. Stable-channel content is copied into the appropriate Version and Area pages.
 3. Navigation copy (pluralisation, descriptions, quick links) is derived from `focus_areas.yaml` and live content counts.
 4. `_config.yml` is rewritten to keep the Jekyll site consistent, and the legacy `webplatform/` tree is deleted if present.
 
 ## Validation
+
 Run `python3 src/tools/validate_github_pages.py` after generation to check for missing files, broken links, or missing front matter. This step is integrated into the MCP orchestration flow.
 
 ## Maintenance Tips
+
 - Update `config/focus_areas.yaml` when adding or renaming feature areas; the generator will pick up the change automatically.
 - Keep the shared layout (`digest_markdown/_layouts/default.html`) limited to the core navigation buttons (Home, Versions, Feature Areas).
 - Regenerate the site after each Chrome stable release so the landing page and per-area timelines stay current.
+

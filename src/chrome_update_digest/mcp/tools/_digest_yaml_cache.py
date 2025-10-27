@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, Optional
@@ -8,6 +9,8 @@ from fastmcp import Context
 
 from chrome_update_digest.mcp.tools._digest_yaml_pipeline import DigestYAMLPipeline
 from chrome_update_digest.utils.yaml_pipeline import YAMLPipeline
+
+LOGGER = logging.getLogger(__name__)
 
 
 class DigestYAMLCache:
@@ -21,6 +24,7 @@ class DigestYAMLCache:
         self._memory_cache: Dict[str, Dict[str, Any]] = {}
         self._cache_hits: int = 0
         self._cache_misses: int = 0
+        self._auto_regeneration_enabled: bool = True  # Enable auto-regeneration by default
 
     @property
     def cache_hits(self) -> int:
@@ -44,6 +48,16 @@ class DigestYAMLCache:
         normalized_area: Optional[str] = None
         if target_area and target_area != "all":
             normalized_area = 'graphics-webgpu' if target_area in ['webgpu', 'graphics-webgpu'] else target_area
+
+        # Check if processed files exist and auto-regenerate if needed
+        if self._auto_regeneration_enabled and split_by_area and use_cache:
+            missing_files = await self._check_and_regenerate_if_missing(
+                version, channel, normalized_area, debug
+            )
+            if missing_files and debug:
+                LOGGER.info(
+                    f"Auto-regenerated missing processed files for Chrome {version} ({channel})"
+                )
 
         if normalized_area is None:
             if use_cache:
@@ -330,3 +344,98 @@ class DigestYAMLCache:
 
     def _area_yaml_path(self, area: str, version: str, channel: str) -> Path:
         return self.cache_dir / 'areas' / area / f"chrome-{version}-{channel}.yml"
+
+    async def _check_and_regenerate_if_missing(
+        self,
+        version: str,
+        channel: str,
+        target_area: Optional[str],
+        debug: bool,
+    ) -> bool:
+        """
+        Check if processed files are missing and auto-regenerate them.
+
+        Args:
+            version: Chrome version number
+            channel: Release channel
+            target_area: Specific area to check (None for all areas)
+            debug: Enable debug logging
+
+        Returns:
+            True if files were regenerated, False otherwise
+        """
+        from chrome_update_digest.mcp.tools.clean_data_pipeline_tool import (
+            CleanDataPipelineTool,
+        )
+
+        # Determine which areas to check
+        areas_to_check = []
+        if target_area:
+            areas_to_check = [target_area]
+        else:
+            # Check all expected areas
+            from chrome_update_digest.processors.clean_data_pipeline import (
+                CleanDataPipeline,
+            )
+
+            pipeline = CleanDataPipeline()
+            areas_to_check = list(
+                pipeline.focus_areas_config.get("focus_areas", {}).keys()
+            )
+
+        # Check for missing files
+        missing_areas = []
+        for area in areas_to_check:
+            yaml_path = self._area_yaml_path(area, version, channel)
+            markdown_path = (
+                self.base_path
+                / "upstream_docs"
+                / "processed_releasenotes"
+                / "processed_forwebplatform"
+                / "areas"
+                / area
+                / f"chrome-{version}-{channel}.md"
+            )
+
+            # If either markdown or YAML is missing, we need to regenerate
+            if not yaml_path.exists() or not markdown_path.exists():
+                missing_areas.append(area)
+
+        # If no files are missing, return early
+        if not missing_areas:
+            return False
+
+        if debug:
+            LOGGER.info(
+                f"Detected missing processed files for Chrome {version} ({channel}) "
+                f"in areas: {', '.join(missing_areas)}"
+            )
+            LOGGER.info("Auto-regenerating processed files...")
+
+        # Run the clean data pipeline
+        try:
+            pipeline_tool = CleanDataPipelineTool(self.base_path)
+            result = await pipeline_tool.run_pipeline(
+                version=version,
+                channel=channel,
+                with_yaml=True,
+                debug=debug,
+            )
+
+            if result.get("success"):
+                if debug:
+                    LOGGER.info(
+                        f"Successfully regenerated processed files for Chrome {version} ({channel})"
+                    )
+                return True
+            else:
+                LOGGER.warning(
+                    f"Failed to regenerate processed files: {result.get('message')}"
+                )
+                return False
+
+        except Exception as e:
+            LOGGER.exception(
+                f"Error during auto-regeneration for Chrome {version} ({channel}): {e}"
+            )
+            return False
