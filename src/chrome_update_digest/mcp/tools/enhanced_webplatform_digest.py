@@ -77,7 +77,16 @@ class EnhancedWebplatformDigestTool:
         explicit_preferences: Optional[Union[Dict[str, Any], List[Any], str]],
         explicit_model: Optional[str]
     ) -> Optional[Union[Dict[str, Any], List[Any]]]:
-        """Determine the model preference payload for sampling requests."""
+        """Determine the model preference payload for sampling requests.
+
+        Resolution order:
+        1) Explicit structured preferences
+        2) Explicit model name
+        3) WEBPLATFORM_MODEL_PREFERENCES (JSON or shorthand)
+        4) WEBPLATFORM_MODEL (shorthand)
+        5) WEBPLATFORM_DEFAULT_MODEL (shorthand)
+        6) Built-in fallback: copilot/gpt-5-mini
+        """
         preference_source: Optional[Union[Dict[str, Any], List[Any], str]] = explicit_preferences
 
         # Direct model override takes effect only when full preferences are not provided
@@ -94,7 +103,15 @@ class EnhancedWebplatformDigestTool:
                 if env_model:
                     preference_source = env_model
 
-        return self._normalize_model_preferences(preference_source)
+        normalized = self._normalize_model_preferences(preference_source)
+
+        # Final fallback to ensure a concrete model is always provided to the client
+        if normalized is None:
+            default_model = os.getenv("WEBPLATFORM_DEFAULT_MODEL", "copilot/gpt-5-mini").strip()
+            if default_model:
+                normalized = {"model": default_model}
+
+        return normalized
 
     def _normalize_model_preferences(
         self,
@@ -550,6 +567,13 @@ class EnhancedWebplatformDigestTool:
             )
             raise RuntimeError(detail)
 
+        # Allow timeout override from environment
+        try:
+            env_timeout = os.getenv("WEBPLATFORM_SAMPLING_TIMEOUT")
+            eff_timeout = int(env_timeout) if env_timeout else int(timeout)
+        except Exception:
+            eff_timeout = int(timeout)
+
         # Fixed max tokens for sampling per server configuration
         max_tokens = 60000
 
@@ -617,7 +641,7 @@ class EnhancedWebplatformDigestTool:
                 async with self._semaphore:
                     response = await asyncio.wait_for(
                         sample_fn(**sample_kwargs),
-                        timeout=timeout
+                        timeout=eff_timeout,
                     )
                 self._last_token_ts = time.perf_counter()
                 duration = time.perf_counter() - attempt_start
@@ -676,7 +700,7 @@ class EnhancedWebplatformDigestTool:
                         "attempt": attempt_number,
                         "status": "timeout",
                         "duration_ms": round(duration * 1000, 2),
-                        "timeout_seconds": timeout,
+                        "timeout_seconds": eff_timeout,
                     },
                 )
                 self._recent_failures += 1

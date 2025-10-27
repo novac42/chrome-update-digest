@@ -6,11 +6,25 @@
     "zh"
   ],
   "areas": [
-    "css"
+    "css",
+    "deprecations",
+    "graphics-webgpu",
+    "html-dom",
+    "multimedia",
+    "origin-trials",
+    "performance",
+    "pwa-service-worker",
+    "storage",
+    "webapi"
   ],
-  "total_areas": 1,
+  "total_areas": 10,
   "completed_areas": 0,
-  "per_area": {},
-  "started_at": "2025-10-27T17:49:04.335313",
-  "updated_at": "2025-10-27T17:49:04.335463"
+  "per_area": {
+    "css": {
+      "en": "in_progress",
+      "zh": "pending"
+    }
+  },
+  "started_at": "2025-10-27T20:51:55.817874",
+  "updated_at": "2025-10-27T20:51:55.819508"
 }
