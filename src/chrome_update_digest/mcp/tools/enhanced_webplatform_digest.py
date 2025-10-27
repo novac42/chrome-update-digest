@@ -563,7 +563,7 @@ class EnhancedWebplatformDigestTool:
         system_prompt: str,
         debug: bool,
         max_retries: int = 3,
-        timeout: int = 120,
+        timeout: int = 60,
         telemetry_context: Optional[Dict[str, Any]] = None,
     ) -> str:
         """Safe sampling with exponential backoff retry and timeout, plus M2 governance.
@@ -616,7 +616,7 @@ class EnhancedWebplatformDigestTool:
                 "messages": messages,  # Pass messages directly without transformation
                 "system_prompt": system_prompt,
                 "temperature": 0.7,
-                "max_tokens": 60000,
+                "max_tokens": 20000,
             }
             
             # DO NOT add model preferences - let the client choose the model
@@ -687,11 +687,12 @@ class EnhancedWebplatformDigestTool:
             eff_timeout = int(timeout)
 
         # Fixed max tokens for sampling per server configuration
-        max_tokens = 60000
+        max_tokens = 20000
 
         for attempt in range(max_retries):
             attempt_number = attempt + 1
             attempt_start = time.perf_counter()
+            dispatch_start = None
             try:
                 if debug:
                     print(f"Sampling attempt {attempt_number}/{max_retries}... (max_tokens={max_tokens})")
@@ -762,12 +763,16 @@ class EnhancedWebplatformDigestTool:
                             print(f"Applying model preferences: {run_preferences}")
 
                 async with self._semaphore:
+                    dispatch_start = time.perf_counter()
                     response = await asyncio.wait_for(
                         sample_fn(**sample_kwargs),
                         timeout=eff_timeout,
                     )
-                self._last_token_ts = time.perf_counter()
-                duration = time.perf_counter() - attempt_start
+                dispatch_end = time.perf_counter()
+                self._last_token_ts = dispatch_end
+                duration = dispatch_end - attempt_start
+                wait_duration = 0.0 if dispatch_start is None else max(0.0, dispatch_start - attempt_start)
+                service_duration = max(0.0, duration - wait_duration)
 
                 if isinstance(response, str):
                     result = response
@@ -778,13 +783,19 @@ class EnhancedWebplatformDigestTool:
                 else:
                     result = str(response)
 
+                attempt_extra = {
+                    **context_extra,
+                    "max_retries": max_retries,
+                    "wait_seconds": wait_duration,
+                    "service_seconds": service_duration,
+                }
                 self.telemetry.observe_llm_attempt(
                     operation=operation,
                     attempt=attempt_number,
                     duration_seconds=duration,
                     status="success",
                     model=model_hint,
-                    extra={**context_extra, "max_retries": max_retries},
+                    extra=attempt_extra,
                     debug=debug,
                 )
                 # Only log detailed completion events in debug mode
@@ -805,19 +816,39 @@ class EnhancedWebplatformDigestTool:
                             "Truncated digest output preview: "
                             f"{result[:200]}"
                         )
+                breakdown_payload = {
+                    "operation": operation,
+                    "attempt": attempt_number,
+                    "status": "success",
+                    "wait_ms": round(wait_duration * 1000, 2),
+                    "service_ms": round(service_duration * 1000, 2),
+                }
+                if "area" in context_extra:
+                    breakdown_payload["area"] = context_extra["area"]
+                if "language" in context_extra:
+                    breakdown_payload["language"] = context_extra["language"]
+                self.telemetry.log_event("llm_timing_breakdown", breakdown_payload)
                 # reset failure window
                 self._recent_failures = 0
                 return result
 
             except asyncio.TimeoutError as e:
                 duration = time.perf_counter() - attempt_start
+                wait_duration = 0.0 if dispatch_start is None else max(0.0, dispatch_start - attempt_start)
+                service_duration = max(0.0, duration - wait_duration)
+                attempt_extra = {
+                    **context_extra,
+                    "max_retries": max_retries,
+                    "wait_seconds": wait_duration,
+                    "service_seconds": service_duration,
+                }
                 self.telemetry.observe_llm_attempt(
                     operation=operation,
                     attempt=attempt_number,
                     duration_seconds=duration,
                     status="timeout",
                     model=model_hint,
-                    extra={**context_extra, "max_retries": max_retries},
+                    extra=attempt_extra,
                     debug=debug,
                 )
                 # Only log detailed completion events in debug mode
@@ -833,6 +864,18 @@ class EnhancedWebplatformDigestTool:
                         },
                         debug=True,
                     )
+                breakdown_payload = {
+                    "operation": operation,
+                    "attempt": attempt_number,
+                    "status": "timeout",
+                    "wait_ms": round(wait_duration * 1000, 2),
+                    "service_ms": round(service_duration * 1000, 2),
+                }
+                if "area" in context_extra:
+                    breakdown_payload["area"] = context_extra["area"]
+                if "language" in context_extra:
+                    breakdown_payload["language"] = context_extra["language"]
+                self.telemetry.log_event("llm_timing_breakdown", breakdown_payload)
                 self._recent_failures += 1
                 self._last_failure_ts = time.perf_counter()
                 self.telemetry.record_error(
@@ -851,6 +894,8 @@ class EnhancedWebplatformDigestTool:
 
             except Exception as e:
                 duration = time.perf_counter() - attempt_start
+                wait_duration = 0.0 if dispatch_start is None else max(0.0, dispatch_start - attempt_start)
+                service_duration = max(0.0, duration - wait_duration)
                 is_validation_error = (
                     PydanticValidationError is not None
                     and isinstance(e, PydanticValidationError)
@@ -870,13 +915,20 @@ class EnhancedWebplatformDigestTool:
                             debug=True,
                         )
 
+                attempt_extra = {
+                    **context_extra,
+                    "max_retries": max_retries,
+                    "wait_seconds": wait_duration,
+                    "service_seconds": service_duration,
+                    "error": str(e)[:200],
+                }
                 self.telemetry.observe_llm_attempt(
                     operation=operation,
                     attempt=attempt_number,
                     duration_seconds=duration,
                     status="error",
                     model=model_hint,
-                    extra={**context_extra, "max_retries": max_retries, "error": str(e)[:200]},
+                    extra=attempt_extra,
                     debug=debug,
                 )
                 self.telemetry.record_error(
@@ -899,6 +951,18 @@ class EnhancedWebplatformDigestTool:
                         },
                         debug=True,
                     )
+                breakdown_payload = {
+                    "operation": operation,
+                    "attempt": attempt_number,
+                    "status": "error",
+                    "wait_ms": round(wait_duration * 1000, 2),
+                    "service_ms": round(service_duration * 1000, 2),
+                }
+                if "area" in context_extra:
+                    breakdown_payload["area"] = context_extra["area"]
+                if "language" in context_extra:
+                    breakdown_payload["language"] = context_extra["language"]
+                self.telemetry.log_event("llm_timing_breakdown", breakdown_payload)
                 self._recent_failures += 1
                 self._last_failure_ts = time.perf_counter()
                 if attempt < max_retries - 1:

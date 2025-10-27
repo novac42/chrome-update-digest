@@ -208,7 +208,16 @@ class DigestTelemetry:
         else:
             # In non-debug mode, only include essential context
             if extra:
-                essential_keys = {"language", "area", "version", "channel"}
+                essential_keys = {
+                    "language",
+                    "area",
+                    "version",
+                    "channel",
+                    "max_retries",
+                    "wait_seconds",
+                    "service_seconds",
+                    "error",
+                }
                 payload.update({k: v for k, v in extra.items() if k in essential_keys})
         self._append_event("llm_attempt", payload)
 
