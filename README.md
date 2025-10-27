@@ -116,26 +116,37 @@ uv run chrome-update-digest-cli monitor
 
 ## 📚 Available MCP Tools
 
-### Release Monitoring
-- **`check_latest_releases`**: Check for new Chrome releases
-- **`crawl_missing_releases`**: Download missing release notes
+### Digest Orchestration
+- `webplatform_digest`: Run the full pipeline (sampling) and return structured results.
+- `digest_prepare_yaml`: Pre-stage structured YAML without writing outputs.
+- `digest_generate_area`: Generate a single area within a prepared run (sampling).
+- `digest_translate_area`: Translate an area to the run's target language (sampling).
+- `digest_write_outputs`: Persist artefacts for a specific run to disk.
+- `digest_validate_links`: Verify outbound links for a release digest.
+- `digest_available_prompts`: List prompt templates bundled with the server.
+- `digest_register_release_resources`: Register processed release notes as FastMCP resources.
 
-### Digest Generation
-- **`webplatform_digest`**: Generate web platform digest
-  - Parameters: `version`, `channel`, `focus_areas`, `language`, `target_area`
-  - Focus areas: ai, webgpu, devices, css, security, performance
+### Run Insight & Maintenance
+- `get_webplatform_progress`: Quick snapshot of active digest work.
+- `digest_summarize_progress`: Historical and in-flight run status.
+- `progress_watch`: Streaming-friendly progress watcher for long jobs.
+- `digest_list_outputs`: Enumerate outputs associated with a run ID.
+- `digest_describe_run_config`: Inspect stored parameters for a run.
+- `digest_inspect_cache`: Check cached artefacts, optionally per area.
+- `digest_reset_run_state`: Reset metadata and optionally clear cache.
+- `telemetry_report_metrics`: Return telemetry gathered during runs.
+
+### Release Monitoring
+- `check_latest_releases`: Check upstream channels for the newest versions.
+- `crawl_missing_releases`: Crawl and backfill missing release metadata.
+
+### Data Preparation (no sampling)
+- `clean_data_pipeline_run`: Produce processed markdown/YAML release notes entirely offline.
+- `clean_data_pipeline_check`: Confirm whether processed files already exist.
+- `split_features_by_heading`: Split arbitrary content by heading depth for downstream tooling.
 
 ### Site Publishing
-- **`generate_github_pages`**: Refresh `digest_markdown/versions` and area navigation
-  - Reuses existing digests when present; re-generates only if content is missing or `force_regenerate` is `true`
-  - Parameters: `version`, `channel`, `language`, `force_regenerate`, `skip_clean`, `skip_digest`, `skip_validation`
-  - `language` accepts `en`, `zh`, or `bilingual`
-    - `en` → writes `*-en.md` pages inside `digest_markdown/versions/` and `digest_markdown/areas/`
-    - `zh` → writes `*-zh.md` pages in the same directories
-    - `bilingual` → refreshes both variants in one run (shared tree, language-suffixed leaves)
-
-### Data Processing
-- **`split_features_by_heading`**: Split content by heading levels
+- `generate_github_pages`: Refresh `digest_markdown/versions` and area navigation, reusing cached digest data where possible.
 
 ## 💡 Usage Examples
 
@@ -158,6 +169,18 @@ uv run chrome-update-digest-cli monitor
   "parameters": {
     "release_type": "webplatform",
     "channel": "stable"
+  }
+}
+```
+
+### Materialize Processed Release Notes Without Sampling
+```json
+{
+  "tool": "clean_data_pipeline_run",
+  "parameters": {
+    "version": "140",
+    "channel": "stable",
+    "with_yaml": true
   }
 }
 ```
