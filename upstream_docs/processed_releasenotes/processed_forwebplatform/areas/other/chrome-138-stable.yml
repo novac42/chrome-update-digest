@@ -1,77 +1,17 @@
 version: '138'
 channel: stable
-extraction_timestamp: '2025-10-27T14:44:42.782147'
+area: other
+extraction_timestamp: '2025-10-27T14:44:42.303565'
 extraction_method: deterministic
 statistics:
-  total_features: 8
-  total_links: 4
+  total_features: 5
+  total_links: 0
   primary_tags:
-    webapi: 2
-    webgpu: 2
+    webgpu: 1
     deprecations: 1
-    css: 1
   cross_cutting:
-    ai: 1
-    webgpu: 5
+    webgpu: 4
 features:
-- title: AI Translation API
-  content: 'New API for AI-powered translation with language detection.
-
-
-    **References:**
-
-    - [MDN: Translation API](https://developer.mozilla.org/docs/Web/API/Translation)
-
-    - [Chrome Status](https://chromestatus.com/feature/translation-api)'
-  heading_path:
-  - Chrome 138 Release Notes
-  - Web APIs
-  - AI Translation API
-  links:
-  - url: https://developer.mozilla.org/docs/Web/API/Translation
-    link_type: mdn
-    title: 'MDN: Translation API'
-  - url: https://chromestatus.com/feature/translation-api
-    link_type: chromestatus
-    title: Chrome Status
-  line_number: 6
-  primary_tags:
-  - name: webapi
-    priority: primary
-    source: heading
-    confidence: 1.0
-  cross_cutting_concerns:
-  - ai
-- title: WebGPU Compute
-  content: '*This section includes both Chrome WebGPU highlights and detailed WebGPU release notes.*
-
-
-    Enhanced compute shader support in WebGPU.
-
-
-    **References:**
-
-    - [WebGPU Spec](https://gpuweb.github.io/gpuweb/)'
-  heading_path:
-  - Chrome 138 Release Notes
-  - Web APIs
-  - WebGPU Compute
-  links:
-  - url: https://gpuweb.github.io/gpuweb/
-    link_type: github
-    title: WebGPU Spec
-  line_number: 13
-  primary_tags:
-  - name: webapi
-    priority: primary
-    source: heading
-    confidence: 1.0
-  - name: webgpu
-    priority: primary
-    source: heading
-    confidence: 1.0
-  cross_cutting_concerns:
-  - webgpu
 - title: Shorthand for Using Buffer as a Binding Resource
   content: "Developers can now use a `GPUBuffer` directly as a `GPUBindingResource`. This simplifies binding and makes it\
     \ consistent with other binding types:\n\n```javascript\nconst bindGroup = myDevice.createBindGroup({\n  layout: myPipeline.getBindGroupLayout(0),\n\
@@ -82,7 +22,7 @@ features:
   - Chrome 138 Release Notes
   - Shorthand for Using Buffer as a Binding Resource
   links: []
-  line_number: 26
+  line_number: 25
   primary_tags: []
   cross_cutting_concerns:
   - webgpu
@@ -94,7 +34,7 @@ features:
   - Chrome 138 Release Notes
   - Size Requirement Changes for Buffers Mapped at Creation
   links: []
-  line_number: 43
+  line_number: 42
   primary_tags: []
   cross_cutting_concerns: []
 - title: Architecture Report for Recent GPUs
@@ -107,7 +47,7 @@ features:
   - Chrome 138 Release Notes
   - Architecture Report for Recent GPUs
   links: []
-  line_number: 55
+  line_number: 54
   primary_tags:
   - name: webgpu
     priority: primary
@@ -122,7 +62,7 @@ features:
   - Chrome 138 Release Notes
   - Deprecation of GPUAdapter isFallbackAdapter Attribute
   links: []
-  line_number: 61
+  line_number: 60
   primary_tags:
   - name: deprecations
     priority: primary
@@ -140,29 +80,7 @@ features:
   - Chrome 138 Release Notes
   - Dawn Updates
   links: []
-  line_number: 65
+  line_number: 64
   primary_tags: []
   cross_cutting_concerns:
   - webgpu
-- title: CSS Grid Improvements
-  content: 'Better grid layout with subgrid support.
-
-
-    **References:**
-
-    - [MDN: CSS Grid](https://developer.mozilla.org/docs/Web/CSS/grid)'
-  heading_path:
-  - Chrome 138 Release Notes
-  - CSS
-  - CSS Grid Improvements
-  links:
-  - url: https://developer.mozilla.org/docs/Web/CSS/grid
-    link_type: mdn
-    title: 'MDN: CSS Grid'
-  line_number: 73
-  primary_tags:
-  - name: css
-    priority: primary
-    source: heading
-    confidence: 1.0
-  cross_cutting_concerns: []

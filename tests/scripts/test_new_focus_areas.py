@@ -29,7 +29,8 @@ def test_focus_area_manager():
     areas = manager.list_areas()
     for area in areas:
         info = manager.get_area_info(area)
-        print(f"  {area}: {info.get('name', area)}")
+        display_name = info.name if info else area
+        print(f"  {area}: {display_name}")
     
     # Test cases for heading-first matching
     print("\n" + "=" * 60)

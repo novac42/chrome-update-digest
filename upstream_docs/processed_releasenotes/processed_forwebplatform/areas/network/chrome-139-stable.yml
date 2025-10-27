@@ -1,12 +1,13 @@
 version: '139'
 channel: stable
 area: network
-extraction_timestamp: '2025-09-30T18:10:41.474240'
+extraction_timestamp: '2025-10-27T14:44:41.203823'
 extraction_method: deterministic
 statistics:
   total_features: 2
   total_links: 4
   primary_tags:
+    webgpu: 2
     network: 2
     html-dom: 1
   cross_cutting:
@@ -20,6 +21,7 @@ features:
 
     [Tracking bug #1306905](https://issues.chromium.org/issues/1306905) | [ChromeStatus.com entry](https://chromestatus.com/feature/5188040623390720)'
   heading_path:
+  - What's New in WebGPU (Chrome 139)
   - Network
   - Reduce fingerprinting in Accept-Language header information
   links:
@@ -29,8 +31,12 @@ features:
   - url: https://chromestatus.com/feature/5188040623390720
     link_type: chromestatus
     title: ChromeStatus.com entry
-  line_number: 3
+  line_number: 261
   primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
   - name: network
     priority: primary
     source: heading
@@ -46,6 +52,7 @@ features:
 
     [Tracking bug #40744069](https://issues.chromium.org/issues/40744069) | [ChromeStatus.com entry](https://chromestatus.com/feature/5106900286570496)'
   heading_path:
+  - What's New in WebGPU (Chrome 139)
   - Network
   - Randomize TCP port allocation on Windows
   links:
@@ -55,8 +62,12 @@ features:
   - url: https://chromestatus.com/feature/5106900286570496
     link_type: chromestatus
     title: ChromeStatus.com entry
-  line_number: 9
+  line_number: 267
   primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
   - name: network
     priority: primary
     source: heading

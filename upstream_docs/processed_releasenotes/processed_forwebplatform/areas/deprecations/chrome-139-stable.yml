@@ -1,14 +1,14 @@
 version: '139'
 channel: stable
 area: deprecations
-extraction_timestamp: '2025-09-30T16:25:47.947530'
+extraction_timestamp: '2025-10-27T14:44:41.217681'
 extraction_method: deterministic
 statistics:
   total_features: 3
   total_links: 10
   primary_tags:
     webgpu: 3
-    deprecation: 3
+    deprecations: 3
   cross_cutting:
     privacy: 2
     security: 1
@@ -45,7 +45,7 @@ features:
     priority: secondary
     source: heading
     confidence: 1.0
-  - name: deprecation
+  - name: deprecations
     priority: primary
     source: heading
     confidence: 1.0
@@ -77,7 +77,7 @@ features:
     priority: secondary
     source: heading
     confidence: 1.0
-  - name: deprecation
+  - name: deprecations
     priority: primary
     source: heading
     confidence: 1.0
@@ -133,7 +133,7 @@ features:
     priority: secondary
     source: heading
     confidence: 1.0
-  - name: deprecation
+  - name: deprecations
     priority: primary
     source: heading
     confidence: 1.0

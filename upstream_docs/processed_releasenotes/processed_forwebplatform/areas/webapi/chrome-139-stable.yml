@@ -1,18 +1,17 @@
 version: '139'
 channel: stable
 area: webapi
-extraction_timestamp: '2025-09-30T18:10:41.431271'
+extraction_timestamp: '2025-10-27T14:44:41.210192'
 extraction_method: deterministic
 statistics:
-  total_features: 4
-  total_links: 11
+  total_features: 3
+  total_links: 8
   primary_tags:
-    webapi: 4
+    webgpu: 3
+    webapi: 3
     javascript: 1
-    webgpu: 1
   cross_cutting:
-    privacy: 3
-    webgpu: 1
+    privacy: 2
 features:
 - title: Web app scope extensions
   content: 'Adds a `scope_extensions` web app manifest field that enables web apps to extend their scope to other origins.
@@ -28,6 +27,7 @@ features:
     [Tracking bug #detail?id=1250011](https://issues.chromium.org/issues/detail?id=1250011) | [ChromeStatus.com entry](https://chromestatus.com/feature/5746537956114432)
     | [Spec](https://github.com/WICG/manifest-incubations/pull/113)'
   heading_path:
+  - What's New in WebGPU (Chrome 139)
   - Web APIs
   - Web app scope extensions
   links:
@@ -40,8 +40,12 @@ features:
   - url: https://github.com/WICG/manifest-incubations/pull/113
     link_type: github
     title: Spec
-  line_number: 3
+  line_number: 299
   primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
   - name: webapi
     priority: primary
     source: heading
@@ -56,6 +60,7 @@ features:
 
     [ChromeStatus.com entry](https://chromestatus.com/feature/5470594816278528) | [Spec](https://mimesniff.spec.whatwg.org/#json-mime-type)'
   heading_path:
+  - What's New in WebGPU (Chrome 139)
   - Web APIs
   - Specification-compliant JSON MIME type detection
   links:
@@ -65,8 +70,12 @@ features:
   - url: https://mimesniff.spec.whatwg.org/#json-mime-type
     link_type: spec
     title: Spec
-  line_number: 13
+  line_number: 309
   primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
   - name: webapi
     priority: primary
     source: heading
@@ -76,39 +85,6 @@ features:
     source: heading
     confidence: 1.0
   cross_cutting_concerns: []
-- title: WebGPU `core-features-and-limits`
-  content: 'The `core-features-and-limits` feature signifies a WebGPU adapter and device support the core features and limits
-    of the spec.
-
-
-    [Tracking bug #418025721](https://issues.chromium.org/issues/418025721) | [ChromeStatus.com entry](https://chromestatus.com/feature/4744775089258496)
-    | [Spec](https://gpuweb.github.io/gpuweb/#core-features-and-limits)'
-  heading_path:
-  - Web APIs
-  - WebGPU `core-features-and-limits`
-  links:
-  - url: https://issues.chromium.org/issues/418025721
-    link_type: other
-    title: 'Tracking bug #418025721'
-  - url: https://chromestatus.com/feature/4744775089258496
-    link_type: chromestatus
-    title: ChromeStatus.com entry
-  - url: https://gpuweb.github.io/gpuweb/#core-features-and-limits
-    link_type: github
-    title: Spec
-  line_number: 19
-  primary_tags:
-  - name: webapi
-    priority: primary
-    source: heading
-    confidence: 1.0
-  - name: webgpu
-    priority: primary
-    source: heading
-    confidence: 1.0
-  cross_cutting_concerns:
-  - webgpu
-  - privacy
 - title: 'Crash Reporting API: Specify `crash-reporting` to receive only crash reports'
   content: 'This feature ensures developers receive only crash reports by specifying the endpoint named `crash-reporting`.
     By default, crash reports are delivered to the `default` endpoint which receives many other kinds of reports besides crash
@@ -119,6 +95,7 @@ features:
     [Tracking bug #414723480](https://issues.chromium.org/issues/414723480) | [ChromeStatus.com entry](https://chromestatus.com/feature/5129218731802624)
     | [Spec](https://wicg.github.io/crash-reporting/#crash-reports-delivery-priority)'
   heading_path:
+  - What's New in WebGPU (Chrome 139)
   - Web APIs
   - 'Crash Reporting API: Specify `crash-reporting` to receive only crash reports'
   links:
@@ -131,8 +108,12 @@ features:
   - url: https://wicg.github.io/crash-reporting/#crash-reports-delivery-priority
     link_type: spec
     title: Spec
-  line_number: 25
+  line_number: 321
   primary_tags:
+  - name: webgpu
+    priority: secondary
+    source: heading
+    confidence: 1.0
   - name: webapi
     priority: primary
     source: heading

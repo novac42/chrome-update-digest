@@ -61,7 +61,7 @@ async def test_load_prompt_falls_back_when_language_missing(tool: EnhancedWebpla
     ctx = Mock()
     zh_prompt = await tool._load_prompt(ctx, "zh", None, False)
 
-    assert "Language: zh" in zh_prompt
+    assert zh_prompt.startswith("你是 Chrome 更新分析专家")
 
 
 @pytest.mark.asyncio
@@ -93,7 +93,10 @@ async def test_generate_digest_from_yaml_calls_sample(tool: EnhancedWebplatformD
     digest = await tool._generate_digest_from_yaml(ctx, yaml_data, "en", None, False)
 
     assert "Generated Digest" in digest
-    assert isinstance(captured_payload["messages"], str)
+    messages = captured_payload["messages"]
+    assert isinstance(messages, list)
+    assert messages and messages[0].get("role") == "user"
+    assert isinstance(messages[0].get("content"), str)
 
 
 @pytest.mark.asyncio

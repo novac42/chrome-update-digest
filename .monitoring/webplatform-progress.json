@@ -1,64 +1,24 @@
 {
-  "run_id": "35203dbc-3f01-4020-be3f-1f3e7aa4edf6",
-  "mode": "per_area",
-  "version": "135",
+  "version": "138",
   "channel": "stable",
   "languages": [
     "en",
     "zh"
   ],
-  "focus_areas": [],
   "areas": [
-    "css",
-    "devices",
-    "graphics-webgpu",
-    "html-dom",
-    "multimedia",
-    "origin-trials",
-    "payment",
-    "pwa-service-worker",
-    "webapi"
+    "security-privacy"
   ],
-  "total_areas": 9,
-  "completed_areas": 0,
+  "total_areas": 1,
+  "completed_areas": 1,
   "per_area": {
-    "css": {
-      "en": "pending",
-      "zh": "pending"
-    },
-    "devices": {
-      "en": "pending",
-      "zh": "pending"
-    },
-    "graphics-webgpu": {
-      "en": "pending",
-      "zh": "pending"
-    },
-    "html-dom": {
-      "en": "pending",
-      "zh": "pending"
-    },
-    "multimedia": {
-      "en": "pending",
-      "zh": "pending"
-    },
-    "origin-trials": {
-      "en": "pending",
-      "zh": "pending"
-    },
-    "payment": {
-      "en": "pending",
-      "zh": "pending"
-    },
-    "pwa-service-worker": {
-      "en": "pending",
-      "zh": "pending"
-    },
-    "webapi": {
-      "en": "pending",
-      "zh": "pending"
+    "security-privacy": {
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: 'NoneType' object is not callable"
     }
   },
-  "started_at": "2025-10-24T09:05:03.781963+00:00",
-  "updated_at": "2025-10-24T17:05:03.782036"
+  "started_at": "2025-10-27T14:44:26.074822",
+  "updated_at": "2025-10-27T14:44:40.987640",
+  "completed_at": "2025-10-27T14:44:40.986779",
+  "total_time_seconds": 14.905337125001097
 }
