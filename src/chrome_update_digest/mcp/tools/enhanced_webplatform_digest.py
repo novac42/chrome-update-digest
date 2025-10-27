@@ -197,7 +197,12 @@ class EnhancedWebplatformDigestTool:
     ) -> Union[str, Sequence[Union[str, SamplingMessage]]]:
         """Normalize sampling payloads to structures accepted by FastMCP 2.x."""
         if isinstance(messages, str):
-            return messages
+            return [
+                SamplingMessage(
+                    role="user",
+                    content=TextContent(type="text", text=messages),
+                )
+            ]
 
         if isinstance(messages, SamplingMessage):
             return [messages]
@@ -559,12 +564,20 @@ class EnhancedWebplatformDigestTool:
                 if self._recent_failures >= self._circuit_breaker_threshold:
                     since_last = time.perf_counter() - self._last_failure_ts
                     if since_last < self._failure_cooldown_sec:
+                        if debug:
+                            remaining = self._failure_cooldown_sec - since_last
+                            print(
+                                "Circuit breaker active; sleeping for "
+                                f"{remaining:.2f}s before retry"
+                            )
                         await asyncio.sleep(self._failure_cooldown_sec - since_last)
 
                 # Rate limiting between calls
                 min_interval = 1.0 / max(1e-6, self._rate_limit_per_sec)
                 wait_needed = max(0.0, (self._last_token_ts + min_interval) - time.perf_counter())
                 if wait_needed > 0:
+                    if debug:
+                        print(f"Rate limit enforced; waiting {wait_needed:.2f}s before sampling")
                     await asyncio.sleep(wait_needed)
 
                 sample_kwargs = {
@@ -576,6 +589,30 @@ class EnhancedWebplatformDigestTool:
 
                 if run_preferences:
                     sample_kwargs["model_preferences"] = run_preferences
+
+                payload_preview = self._sampling_payload_preview(sample_kwargs["messages"])
+
+                self.telemetry.log_event(
+                    "llm_sampling_attempt_start",
+                    {
+                        "operation": operation,
+                        "attempt": attempt_number,
+                        "model": model_hint,
+                        "has_model_preferences": bool(run_preferences),
+                        "payload_preview": payload_preview,
+                    },
+                )
+
+                if debug:
+                    print(
+                        "Prepared sampling payload preview: "
+                        f"{payload_preview}"
+                    )
+                    if run_preferences:
+                        print(
+                            "Applying model preferences: "
+                            f"{json.dumps(run_preferences, ensure_ascii=False)}"
+                        )
 
                 async with self._semaphore:
                     response = await asyncio.wait_for(
@@ -602,8 +639,22 @@ class EnhancedWebplatformDigestTool:
                     model=model_hint,
                     extra={**context_extra, "max_retries": max_retries},
                 )
+                self.telemetry.log_event(
+                    "llm_sampling_attempt_complete",
+                    {
+                        "operation": operation,
+                        "attempt": attempt_number,
+                        "status": "success",
+                        "duration_ms": round(duration * 1000, 2),
+                    },
+                )
                 if debug:
                     print("Successfully generated digest")
+                    if isinstance(result, str):
+                        print(
+                            "Truncated digest output preview: "
+                            f"{result[:200]}"
+                        )
                 # reset failure window
                 self._recent_failures = 0
                 return result
@@ -617,6 +668,16 @@ class EnhancedWebplatformDigestTool:
                     status="timeout",
                     model=model_hint,
                     extra={**context_extra, "max_retries": max_retries},
+                )
+                self.telemetry.log_event(
+                    "llm_sampling_attempt_complete",
+                    {
+                        "operation": operation,
+                        "attempt": attempt_number,
+                        "status": "timeout",
+                        "duration_ms": round(duration * 1000, 2),
+                        "timeout_seconds": timeout,
+                    },
                 )
                 self._recent_failures += 1
                 self._last_failure_ts = time.perf_counter()
@@ -665,6 +726,17 @@ class EnhancedWebplatformDigestTool:
                     kind="ValidationError" if is_validation_error else type(e).__name__,
                     detail=str(e),
                     area=context_extra.get("area"),
+                )
+                self.telemetry.log_event(
+                    "llm_sampling_attempt_complete",
+                    {
+                        "operation": operation,
+                        "attempt": attempt_number,
+                        "status": "error",
+                        "duration_ms": round(duration * 1000, 2),
+                        "error": str(e),
+                        "payload_preview": payload_preview,
+                    },
                 )
                 self._recent_failures += 1
                 self._last_failure_ts = time.perf_counter()
