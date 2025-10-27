@@ -7,11 +7,12 @@ import asyncio
 import json
 import os
 from contextlib import contextmanager
-from pathlib import Path
-from typing import Optional, Dict, List, Any, Union
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Sequence, Union
 
 from fastmcp import Context
+from fastmcp.server.context import SamplingMessage, TextContent
 from chrome_update_digest.utils.yaml_pipeline import YAMLPipeline
 from chrome_update_digest.utils.focus_area_manager import FocusAreaManager
 from chrome_update_digest.utils.telemetry import DigestTelemetry
@@ -171,87 +172,81 @@ class EnhancedWebplatformDigestTool:
         finally:
             self._current_run_config = previous
 
-    def _prepare_sampling_messages(self, messages: Union[str, List[Any]]) -> Union[List[Any], str]:
+    def _prepare_sampling_messages(
+        self,
+        messages: Union[str, Sequence[Union[str, SamplingMessage, Dict[str, Any]]]],
+    ) -> Union[str, Sequence[Union[str, SamplingMessage]]]:
         """Normalize sampling payloads to structures accepted by FastMCP 2.x."""
         if isinstance(messages, str):
-            return [
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "text",
-                            "text": messages,
-                        }
-                    ],
-                }
-            ]
+            return messages
 
-        if isinstance(messages, list):
-            normalized: List[Any] = []
+        if isinstance(messages, SamplingMessage):
+            return [messages]
+
+        if isinstance(messages, Sequence):
+            normalized: List[Union[str, SamplingMessage]] = []
             for entry in messages:
-                if isinstance(entry, str):
-                    normalized.append(
-                        {
-                            "role": "user",
-                            "content": [
-                                {
-                                    "type": "text",
-                                    "text": entry,
-                                }
-                            ],
-                        }
-                    )
+                if isinstance(entry, (str, SamplingMessage)):
+                    normalized.append(entry)
                     continue
 
                 if isinstance(entry, dict):
+                    role = entry.get("role", "user")
                     content = entry.get("content")
-                    if isinstance(content, str):
+                    text_content = self._convert_content_to_text(content)
+                    if text_content is not None:
                         normalized.append(
-                            {
-                                **entry,
-                                "content": [
-                                    {
-                                        "type": "text",
-                                        "text": content,
-                                    }
-                                ],
-                            }
+                            SamplingMessage(
+                                role=role,
+                                content=text_content,
+                            )
                         )
                         continue
 
-                    if isinstance(content, list):
-                        content_blocks: List[Any] = []
-                        for block in content:
-                            if isinstance(block, str):
-                                content_blocks.append(
-                                    {
-                                        "type": "text",
-                                        "text": block,
-                                    }
-                                )
-                            elif isinstance(block, dict):
-                                block_type = block.get("type")
-                                if block_type is None and "text" in block:
-                                    content_blocks.append(
-                                        {
-                                            "type": "text",
-                                            "text": block["text"],
-                                        }
-                                    )
-                                else:
-                                    content_blocks.append(block)
-                            else:
-                                # Skip unsupported block types rather than failing hard
-                                continue
+                    normalized.append(json.dumps(entry, ensure_ascii=False))
+                    continue
 
-                        normalized.append({**entry, "content": content_blocks})
-                        continue
-
-                normalized.append(entry)
+                normalized.append(str(entry))
 
             return normalized
 
-        return messages
+        return str(messages)
+
+    def _convert_content_to_text(
+        self,
+        content: Any,
+    ) -> Optional[TextContent]:
+        """Convert mixed content payloads into TextContent blocks when possible."""
+        if content is None:
+            return None
+
+        if isinstance(content, TextContent):
+            return content
+
+        if isinstance(content, str):
+            return TextContent(type="text", text=content)
+
+        if isinstance(content, dict):
+            content_type = content.get("type")
+            if content_type in (None, "text"):
+                text = content.get("text")
+                if isinstance(text, str):
+                    return TextContent(type="text", text=text)
+            return None
+
+        if isinstance(content, Sequence):
+            text_parts: List[str] = []
+            for block in content:
+                if isinstance(block, str):
+                    text_parts.append(block)
+                elif isinstance(block, dict):
+                    block_type = block.get("type")
+                    if block_type in (None, "text") and isinstance(block.get("text"), str):
+                        text_parts.append(block["text"])
+            if text_parts:
+                return TextContent(type="text", text="\n".join(text_parts))
+
+        return None
     
     async def run(
         self,

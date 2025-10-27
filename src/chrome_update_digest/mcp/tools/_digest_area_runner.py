@@ -58,7 +58,7 @@ class AreaRunner:
             )
             result = {"area": normalized_area, "paths": {"en": str(en_path)}, "status": "fallback"}
             if 'zh' in languages:
-                zh_fallback = self.tool.generation.generate_translation_fallback(version, channel, normalized_area, en_path)
+                zh_fallback = self.tool.generation.generate_minimal_fallback(version, channel, normalized_area, 'zh')
                 zh_fallback_start = time.perf_counter()
                 zh_path = await self.tool.io.persist_output(
                     version=version,
