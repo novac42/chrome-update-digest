@@ -183,6 +183,7 @@ class DigestTelemetry:
         status: str,
         model: Optional[str] = None,
         extra: Optional[Dict[str, Any]] = None,
+        debug: bool = False,
     ) -> None:
         """Record latency for an LLM attempt and track retry counters."""
         labels = {"operation": operation, "status": status, "attempt": str(attempt)}
@@ -198,10 +199,17 @@ class DigestTelemetry:
             "status": status,
             "duration_ms": round(duration_seconds * 1000, 2),
         }
-        if model:
-            payload["model"] = model
-        if extra:
-            payload.update(extra)
+        # Only include verbose details in debug mode
+        if debug:
+            if model:
+                payload["model"] = model
+            if extra:
+                payload.update(extra)
+        else:
+            # In non-debug mode, only include essential context
+            if extra:
+                essential_keys = {"language", "area", "version", "channel"}
+                payload.update({k: v for k, v in extra.items() if k in essential_keys})
         self._append_event("llm_attempt", payload)
 
     def record_error(self, *, operation: str, kind: str, detail: Optional[str] = None, area: Optional[str] = None) -> None:
@@ -223,9 +231,25 @@ class DigestTelemetry:
         """
         self.log_event(event_type, data or {})
 
-    def log_event(self, event_type: str, payload: Optional[Dict[str, Any]] = None) -> None:
-        """Expose a lightweight structured event logger."""
-        self._append_event(event_type, payload or {})
+    def log_event(self, event_type: str, payload: Optional[Dict[str, Any]] = None, debug: bool = False) -> None:
+        """
+        Expose a lightweight structured event logger.
+        
+        Args:
+            event_type: The type of event to log
+            payload: Optional dictionary of event data
+            debug: If True, include verbose/debug information. If False, skip certain debug-only events.
+        """
+        # Skip debug-only events when not in debug mode
+        if not debug and event_type in ("llm_sampling_attempt_start", "llm_sampling_attempt_complete"):
+            return
+        
+        # Filter out verbose payload fields when not in debug mode
+        if not debug and payload:
+            filtered_payload = {k: v for k, v in payload.items() if k not in ("payload_preview", "model", "has_model_preferences")}
+            self._append_event(event_type, filtered_payload)
+        else:
+            self._append_event(event_type, payload or {})
 
     def log_tool_operation(
         self,

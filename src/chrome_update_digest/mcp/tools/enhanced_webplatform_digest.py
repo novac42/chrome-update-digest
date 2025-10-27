@@ -733,16 +733,19 @@ class EnhancedWebplatformDigestTool:
 
                 payload_preview = self._sampling_payload_preview(sample_kwargs["messages"])
 
-                self.telemetry.log_event(
-                    "llm_sampling_attempt_start",
-                    {
-                        "operation": operation,
-                        "attempt": attempt_number,
-                        "model": model_hint,
-                        "has_model_preferences": bool(run_preferences),
-                        "payload_preview": payload_preview,
-                    },
-                )
+                # Only log detailed sampling events in debug mode
+                if debug:
+                    self.telemetry.log_event(
+                        "llm_sampling_attempt_start",
+                        {
+                            "operation": operation,
+                            "attempt": attempt_number,
+                            "model": model_hint,
+                            "has_model_preferences": bool(run_preferences),
+                            "payload_preview": payload_preview,
+                        },
+                        debug=True,
+                    )
 
                 if debug:
                     print(
@@ -782,17 +785,20 @@ class EnhancedWebplatformDigestTool:
                     status="success",
                     model=model_hint,
                     extra={**context_extra, "max_retries": max_retries},
+                    debug=debug,
                 )
-                self.telemetry.log_event(
-                    "llm_sampling_attempt_complete",
-                    {
-                        "operation": operation,
-                        "attempt": attempt_number,
-                        "status": "success",
-                        "duration_ms": round(duration * 1000, 2),
-                    },
-                )
+                # Only log detailed completion events in debug mode
                 if debug:
+                    self.telemetry.log_event(
+                        "llm_sampling_attempt_complete",
+                        {
+                            "operation": operation,
+                            "attempt": attempt_number,
+                            "status": "success",
+                            "duration_ms": round(duration * 1000, 2),
+                        },
+                        debug=True,
+                    )
                     print("Successfully generated digest")
                     if isinstance(result, str):
                         print(
@@ -812,17 +818,21 @@ class EnhancedWebplatformDigestTool:
                     status="timeout",
                     model=model_hint,
                     extra={**context_extra, "max_retries": max_retries},
+                    debug=debug,
                 )
-                self.telemetry.log_event(
-                    "llm_sampling_attempt_complete",
-                    {
-                        "operation": operation,
-                        "attempt": attempt_number,
-                        "status": "timeout",
-                        "duration_ms": round(duration * 1000, 2),
-                        "timeout_seconds": eff_timeout,
-                    },
-                )
+                # Only log detailed completion events in debug mode
+                if debug:
+                    self.telemetry.log_event(
+                        "llm_sampling_attempt_complete",
+                        {
+                            "operation": operation,
+                            "attempt": attempt_number,
+                            "status": "timeout",
+                            "duration_ms": round(duration * 1000, 2),
+                            "timeout_seconds": eff_timeout,
+                        },
+                        debug=True,
+                    )
                 self._recent_failures += 1
                 self._last_failure_ts = time.perf_counter()
                 self.telemetry.record_error(
@@ -847,15 +857,18 @@ class EnhancedWebplatformDigestTool:
                 )
                 if is_validation_error:
                     payload_preview = self._sampling_payload_preview(sample_kwargs.get("messages", messages))
-                    self.telemetry.log_event(
-                        "llm_payload_validation_error",
-                        {
-                            "operation": operation,
-                            "area": context_extra.get("area"),
-                            "attempt": attempt_number,
-                            "payload_preview": payload_preview,
-                        },
-                    )
+                    # Only log detailed validation errors in debug mode
+                    if debug:
+                        self.telemetry.log_event(
+                            "llm_payload_validation_error",
+                            {
+                                "operation": operation,
+                                "area": context_extra.get("area"),
+                                "attempt": attempt_number,
+                                "payload_preview": payload_preview,
+                            },
+                            debug=True,
+                        )
 
                 self.telemetry.observe_llm_attempt(
                     operation=operation,
@@ -864,6 +877,7 @@ class EnhancedWebplatformDigestTool:
                     status="error",
                     model=model_hint,
                     extra={**context_extra, "max_retries": max_retries, "error": str(e)[:200]},
+                    debug=debug,
                 )
                 self.telemetry.record_error(
                     operation=operation,
@@ -871,17 +885,20 @@ class EnhancedWebplatformDigestTool:
                     detail=str(e),
                     area=context_extra.get("area"),
                 )
-                self.telemetry.log_event(
-                    "llm_sampling_attempt_complete",
-                    {
-                        "operation": operation,
-                        "attempt": attempt_number,
-                        "status": "error",
-                        "duration_ms": round(duration * 1000, 2),
-                        "error": str(e),
-                        "payload_preview": payload_preview,
-                    },
-                )
+                # Only log detailed completion events in debug mode
+                if debug:
+                    self.telemetry.log_event(
+                        "llm_sampling_attempt_complete",
+                        {
+                            "operation": operation,
+                            "attempt": attempt_number,
+                            "status": "error",
+                            "duration_ms": round(duration * 1000, 2),
+                            "error": str(e),
+                            "payload_preview": payload_preview,
+                        },
+                        debug=True,
+                    )
                 self._recent_failures += 1
                 self._last_failure_ts = time.perf_counter()
                 if attempt < max_retries - 1:
