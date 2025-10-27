@@ -68,6 +68,22 @@ class FocusAreaManager:
     )
     _TAG_MATCH_WEIGHT: float = 1.0
     _HEADING_MATCH_WEIGHT: float = 0.9
+    _BASE_ALIAS_PAIRS: Dict[str, str] = {
+        "ai": "on-device-ai",
+        "machine-learning": "on-device-ai",
+        "ml": "on-device-ai",
+        "webgpu": "graphics-webgpu",
+        "gpu": "graphics-webgpu",
+        "graphics": "graphics-webgpu",
+        "security": "security-privacy",
+        "privacy": "security-privacy",
+        "pwa": "pwa-service-worker",
+        "service-worker": "pwa-service-worker",
+        "serviceworker": "pwa-service-worker",
+        "web-api": "webapi",
+        "api": "webapi",
+        "css-and-ui": "css",
+    }
 
     def __init__(self, config_path: Path):
         """Initialize with configuration file."""
@@ -174,7 +190,7 @@ class FocusAreaManager:
         }
 
         aliases: Dict[str, str] = {}
-        for alias, canonical in alias_pairs.items():
+        for alias, canonical in self._BASE_ALIAS_PAIRS.items():
             norm_alias = self._normalize_key(alias)
             norm_canonical = self._normalize_key(canonical)
             if norm_canonical in self._focus_areas:
@@ -360,8 +376,12 @@ class FocusAreaManager:
         normalized = self._normalize_key(area_name)
         if normalized in self._focus_areas:
             return normalized
-        if normalized in self._aliases:
-            return self._aliases[normalized]
+        alias_target = self._aliases.get(normalized)
+        if alias_target:
+            return alias_target
+        fallback_target = self._BASE_ALIAS_PAIRS.get(normalized)
+        if fallback_target:
+            return self._normalize_key(fallback_target)
         return area_name
 
     # ---------------------------------------------------------------------

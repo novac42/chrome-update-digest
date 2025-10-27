@@ -1440,6 +1440,9 @@ class EnhancedWebplatformDigestTool:
                 target_area,
                 debug,
             )
+        except asyncio.CancelledError:
+            # Preserve cooperative cancellation semantics for upstream callers.
+            raise
         except Exception as exc:
             if debug:
                 print(f"LLM digest generation failed ({language or 'en'}): {exc}; falling back to deterministic output")
