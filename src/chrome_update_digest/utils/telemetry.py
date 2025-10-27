@@ -214,6 +214,15 @@ class DigestTelemetry:
             payload["detail"] = detail
         self._append_event("error", payload)
 
+    def record_event(self, *, event_type: str, data: Optional[Dict[str, Any]] = None) -> None:
+        """
+        Backward-compatible wrapper used by legacy tools/tests.
+
+        Clean data pipeline tests still call `record_event`, so we delegate to the
+        modern `log_event` helper.
+        """
+        self.log_event(event_type, data or {})
+
     def log_event(self, event_type: str, payload: Optional[Dict[str, Any]] = None) -> None:
         """Expose a lightweight structured event logger."""
         self._append_event(event_type, payload or {})

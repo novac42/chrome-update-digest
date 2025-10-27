@@ -235,7 +235,7 @@ class EnhancedWebplatformDigestTool:
                     print("No explicit model preferences provided; deferring to client defaults")
             
             # Step 1: Get or generate YAML data
-            yaml_data = await self.yaml_cache.get_yaml_data(
+            yaml_data = await self._get_yaml_data(
                 ctx,
                 version,
                 channel,
@@ -284,7 +284,7 @@ class EnhancedWebplatformDigestTool:
             if run_config.language in (None, 'bilingual'):
                 # Generate both EN and ZH versions
                 try:
-                    digest_en = await self.generation.generate_digest_from_yaml(ctx, yaml_data, 'en', target_area, debug)
+                    digest_en = await self._generate_digest_from_yaml(ctx, yaml_data, 'en', target_area, debug)
                     digest_path_en = await self.io.persist_output(
                         version=version,
                         channel=channel,
@@ -306,7 +306,7 @@ class EnhancedWebplatformDigestTool:
                     return json.dumps(payload, ensure_ascii=False)
                 
                 try:
-                    digest_zh = await self.generation.generate_digest_from_yaml(ctx, yaml_data, 'zh', target_area, debug)
+                    digest_zh = await self._generate_digest_from_yaml(ctx, yaml_data, 'zh', target_area, debug)
                     digest_path_zh = await self.io.persist_output(
                         version=version,
                         channel=channel,
@@ -351,7 +351,7 @@ class EnhancedWebplatformDigestTool:
                 return json.dumps(payload, ensure_ascii=False)
             else:
                 # Single language mode
-                digest = await self.generation.generate_digest_from_yaml(ctx, yaml_data, language, target_area, debug)
+                digest = await self._generate_digest_from_yaml(ctx, yaml_data, language, target_area, debug)
                 
                 # Save digest to file with area-based folder structure
                 digest_path = await self.io.persist_output(
@@ -460,8 +460,16 @@ class EnhancedWebplatformDigestTool:
                 if wait_needed > 0:
                     await asyncio.sleep(wait_needed)
 
+                formatted_messages = messages
+                if isinstance(formatted_messages, str):
+                    formatted_messages = [
+                        {
+                            "role": "user",
+                            "content": formatted_messages,
+                        }
+                    ]
                 sample_kwargs = {
-                    "messages": messages,
+                    "messages": formatted_messages,
                     "system_prompt": system_prompt,
                     "temperature": 0.7,
                     "max_tokens": max_tokens,
@@ -1383,4 +1391,149 @@ class EnhancedWebplatformDigestTool:
             'missing_ratio': missing_ratio,
             'issues': '; '.join(issues) if issues else None
         }
+
+    async def _get_yaml_data(
+        self,
+        ctx: Context,
+        version: str,
+        channel: str,
+        use_cache: bool = True,
+        split_by_area: bool = True,
+        target_area: Optional[str] = None,
+        debug: bool = False,
+    ) -> Optional[Dict[str, Any]]:
+        """
+        Compatibility shim for tests that patch YAML loading directly.
+
+        Delegates to the DigestYAMLCache while preserving the asynchronous signature
+        expected by the original implementation.
+        """
+        return await self.yaml_cache.get_yaml_data(
+            ctx=ctx,
+            version=version,
+            channel=channel,
+            use_cache=use_cache,
+            split_by_area=split_by_area,
+            target_area=target_area,
+            debug=debug,
+        )
+
+    async def _generate_digest_from_yaml(
+        self,
+        ctx: Context,
+        yaml_data: Dict[str, Any],
+        language: Optional[str],
+        target_area: Optional[str],
+        debug: bool,
+    ) -> str:
+        """
+        Generate a digest with graceful fallback when sampling fails.
+
+        Older tests expect this helper to exist on the tool class rather than on the
+        generation engine, so we proxy the call and surface the same behaviour.
+        """
+        try:
+            return await self.generation.generate_digest_from_yaml(
+                ctx,
+                yaml_data,
+                language or 'en',
+                target_area,
+                debug,
+            )
+        except Exception as exc:
+            if debug:
+                print(f"LLM digest generation failed ({language or 'en'}): {exc}; falling back to deterministic output")
+            self.telemetry.record_error(
+                operation="bulk_digest_generation",
+                kind=type(exc).__name__,
+                detail=str(exc),
+                area=target_area,
+            )
+            return self._generate_fallback_digest(yaml_data, language or 'en')
+
+    def _format_features_for_llm(self, yaml_data: Dict[str, Any]) -> str:
+        """Expose formatting helper retained for backward-compatible tests."""
+        return self.generation._format_features_for_llm(yaml_data)
+
+    def _truncate_features(self, yaml_data: Dict[str, Any], max_content_length: int = 300) -> Dict[str, Any]:
+        """Delegate to the generation engine's truncation logic."""
+        return self.generation._truncate_features(yaml_data, max_content_length=max_content_length)
+
+    def _validate_translation(self, english_digest: str, chinese_digest: str) -> Dict[str, Any]:
+        """Compatibility wrapper for translation validation helper."""
+        return self.generation.validate_translation(english_digest, chinese_digest)
+
+    def _generate_area_fallback(self, area_yaml: Dict[str, Any], language: str, area: str, reason: str) -> str:
+        """Proxy to the generation engine for area-level fallback content."""
+        return self.generation.generate_area_fallback(area_yaml, language, area, reason)
+
+    def _generate_translation_fallback(self, version: str, channel: str, area: str, en_path: Path) -> str:
+        """Proxy helper retained for legacy tests."""
+        return self.generation.generate_translation_fallback(version, channel, area, en_path)
+
+    def _generate_minimal_fallback(self, version: str, channel: str, area: str, language: str) -> str:
+        """Proxy helper retained for legacy tests."""
+        return self.generation.generate_minimal_fallback(version, channel, area, language)
+
+    async def _load_prompt(
+        self,
+        ctx: Context,
+        language: str,
+        target_area: Optional[str],
+        debug: bool,
+    ) -> str:
+        """Expose prompt loading for tests that assert on template contents."""
+        return await self.generation._load_prompt(language, target_area, debug)
+
+    async def _load_release_notes(
+        self,
+        ctx: Context,
+        version: str,
+        channel: str,
+        target_area: Optional[str],
+        debug: bool,
+    ) -> Optional[str]:
+        """
+        Backward-compatible wrapper around the YAML cache release note loader.
+
+        Tests patching this helper expect it to exist directly on the tool.
+        """
+        return await self.yaml_cache._load_release_notes(
+            ctx,
+            version,
+            channel,
+            debug,
+            target_area,
+        )
+
+    def _get_digest_path(
+        self,
+        version: str,
+        channel: str,
+        target_area: Optional[str],
+        language: str,
+    ) -> Path:
+        """Return the expected digest path without writing the file."""
+        return self.io.get_digest_path(version, channel, target_area, language)
+
+    def _read_digest_file(self, digest_type: str, version: int, channel: str) -> Optional[str]:
+        """
+        Legacy helper retained for scripts that introspect generated markdown.
+
+        Args:
+            digest_type: Currently only 'webplatform' is supported by this tool.
+            version: Chrome version number
+            channel: Release channel
+
+        Returns:
+            File contents if the digest exists, otherwise None.
+        """
+        if digest_type not in {"webplatform", "webgpu"}:
+            raise ValueError(f"Unsupported digest type: {digest_type}")
+
+        target_area = None if digest_type == "webplatform" else "graphics-webgpu"
+        path = self._get_digest_path(str(version), channel, target_area, "en")
+        if not path.exists():
+            return None
+        return path.read_text(encoding="utf-8")
     
