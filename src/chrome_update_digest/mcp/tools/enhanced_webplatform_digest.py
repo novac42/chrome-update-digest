@@ -606,7 +606,7 @@ class EnhancedWebplatformDigestTool:
                 model_hint = str(run_preferences[0])
 
         # 🔧 Legacy mode: use simplified sampling approach (bypass message transformation)
-        USE_LEGACY_SAMPLING = os.getenv("USE_LEGACY_SAMPLING", "false").lower() == "true"
+        USE_LEGACY_SAMPLING = os.getenv("USE_LEGACY_SAMPLING", "true").lower() == "true"
         
         if USE_LEGACY_SAMPLING:
             if debug:
