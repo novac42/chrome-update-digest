@@ -662,8 +662,9 @@ class EnhancedWebplatformDigestTool:
 
                 if run_preferences is not None:
                     coerced = self._coerce_model_preferences_for_client(run_preferences)
+                    # FastMCP Context.sample expects model_preferences as str or list[str]
                     if isinstance(coerced, str) and coerced:
-                        sample_kwargs["model"] = coerced
+                        sample_kwargs["model_preferences"] = coerced
                     elif isinstance(coerced, list) and coerced:
                         sample_kwargs["model_preferences"] = coerced
 
