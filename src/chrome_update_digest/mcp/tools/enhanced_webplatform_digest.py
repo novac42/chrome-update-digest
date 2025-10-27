@@ -605,6 +605,69 @@ class EnhancedWebplatformDigestTool:
             elif isinstance(run_preferences, list) and run_preferences:
                 model_hint = str(run_preferences[0])
 
+        # 🔧 Legacy mode: use simplified sampling approach (bypass message transformation)
+        USE_LEGACY_SAMPLING = os.getenv("USE_LEGACY_SAMPLING", "false").lower() == "true"
+        
+        if USE_LEGACY_SAMPLING:
+            if debug:
+                print("🔧 Legacy sampling mode enabled (no model preferences)")
+            
+            sample_kwargs = {
+                "messages": messages,  # Pass messages directly without transformation
+                "system_prompt": system_prompt,
+                "temperature": 0.7,
+                "max_tokens": 60000,
+            }
+            
+            # DO NOT add model preferences - let the client choose the model
+            
+            try:
+                if debug:
+                    print(f"Legacy sampling with timeout={timeout}s (client will select model)")
+                
+                response = await asyncio.wait_for(
+                    ctx.sample(**sample_kwargs),
+                    timeout=timeout
+                )
+                
+                # Extract text from response
+                if isinstance(response, str):
+                    result = response
+                elif hasattr(response, 'content'):
+                    result = response.content
+                elif hasattr(response, 'text'):
+                    result = response.text
+                else:
+                    result = str(response)
+                
+                if debug:
+                    print("✅ Legacy sampling successful")
+                
+                return result
+                
+            except asyncio.TimeoutError as e:
+                error_msg = f"Legacy sampling timeout after {timeout}s"
+                if debug:
+                    print(f"❌ {error_msg}")
+                self.telemetry.record_error(
+                    operation=operation,
+                    kind="TimeoutError",
+                    detail=error_msg,
+                    area=context_extra.get("area"),
+                )
+                raise RuntimeError(error_msg) from e
+            except Exception as e:
+                error_msg = f"Legacy sampling failed: {e}"
+                if debug:
+                    print(f"❌ {error_msg}")
+                self.telemetry.record_error(
+                    operation=operation,
+                    kind=type(e).__name__,
+                    detail=error_msg,
+                    area=context_extra.get("area"),
+                )
+                raise RuntimeError(error_msg) from e
+
         sample_fn = getattr(ctx, "sample", None)
         if not callable(sample_fn):
             detail = "FastMCP context does not expose a callable sample() method"

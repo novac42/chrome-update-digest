@@ -18,13 +18,71 @@
     "webapi"
   ],
   "total_areas": 10,
-  "completed_areas": 0,
+  "completed_areas": 10,
   "per_area": {
     "css": {
-      "en": "in_progress",
-      "zh": "pending"
+      "en": "done",
+      "zh": "done",
+      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/css/chrome-134-stable-en.md",
+      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/css/chrome-134-stable-zh.md"
+    },
+    "deprecations": {
+      "en": "done",
+      "zh": "done",
+      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/deprecations/chrome-134-stable-en.md",
+      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/deprecations/chrome-134-stable-zh.md"
+    },
+    "graphics-webgpu": {
+      "en": "done",
+      "zh": "done",
+      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/graphics-webgpu/chrome-134-stable-en.md",
+      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/graphics-webgpu/chrome-134-stable-zh.md"
+    },
+    "html-dom": {
+      "en": "done",
+      "zh": "done",
+      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/html-dom/chrome-134-stable-en.md",
+      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/html-dom/chrome-134-stable-zh.md"
+    },
+    "multimedia": {
+      "en": "done",
+      "zh": "done",
+      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/multimedia/chrome-134-stable-en.md",
+      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/multimedia/chrome-134-stable-zh.md"
+    },
+    "origin-trials": {
+      "en": "done",
+      "zh": "done",
+      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/origin-trials/chrome-134-stable-en.md",
+      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/origin-trials/chrome-134-stable-zh.md"
+    },
+    "performance": {
+      "en": "done",
+      "zh": "done",
+      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/performance/chrome-134-stable-en.md",
+      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/performance/chrome-134-stable-zh.md"
+    },
+    "pwa-service-worker": {
+      "en": "done",
+      "zh": "done",
+      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/pwa-service-worker/chrome-134-stable-en.md",
+      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/pwa-service-worker/chrome-134-stable-zh.md"
+    },
+    "storage": {
+      "en": "done",
+      "zh": "done",
+      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/storage/chrome-134-stable-en.md",
+      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/storage/chrome-134-stable-zh.md"
+    },
+    "webapi": {
+      "en": "done",
+      "zh": "done",
+      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/webapi/chrome-134-stable-en.md",
+      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/webapi/chrome-134-stable-zh.md"
     }
   },
-  "started_at": "2025-10-27T20:51:55.817874",
-  "updated_at": "2025-10-27T20:51:55.819508"
+  "started_at": "2025-10-27T23:07:22.170784",
+  "updated_at": "2025-10-27T23:22:38.903137",
+  "completed_at": "2025-10-27T23:22:38.903098",
+  "total_time_seconds": 916.7433137090011
 }
