@@ -483,7 +483,7 @@ class EnhancedWebplatformDigestTool:
         system_prompt: str,
         debug: bool,
         max_retries: int = 3,
-        timeout: int = 60,
+        timeout: int = 120,
         telemetry_context: Optional[Dict[str, Any]] = None,
     ) -> str:
         """Safe sampling with exponential backoff retry and timeout, plus M2 governance.
