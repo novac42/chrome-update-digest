@@ -19,24 +19,63 @@
     "webapi"
   ],
   "total_areas": 11,
-  "completed_areas": 3,
+  "completed_areas": 11,
   "per_area": {
     "css": {
       "en": "error",
       "zh": "pending",
-      "error": "Sampling timed out after 3 retries"
+      "error": "Sampling failed after 3 retries: 3 validation errors for CreateMessageRequestParams\nmessages.0.content.TextContent\n  Input should be a valid dictionary or instance of TextContent [type=model_type, input_value=[{'type': 'text', 'text':...onfidence: 1.0\\n\\n```'}], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.12/v/model_type\nmessages.0.content.ImageContent\n  Input should be a valid dictionary or instance of ImageContent [type=model_type, input_value=[{'type': 'text', 'text':...onfidence: 1.0\\n\\n```'}], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.12/v/model_type\nmessages.0.content.AudioContent\n  Input should be a valid dictionary or instance of AudioContent [type=model_type, input_value=[{'type': 'text', 'text':...onfidence: 1.0\\n\\n```'}], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.12/v/model_type"
     },
     "deprecations": {
       "en": "error",
       "zh": "pending",
-      "error": "Sampling timed out after 3 retries"
+      "error": "Sampling failed after 3 retries: 3 validation errors for CreateMessageRequestParams\nmessages.0.content.TextContent\n  Input should be a valid dictionary or instance of TextContent [type=model_type, input_value=[{'type': 'text', 'text':...onfidence: 1.0\\n\\n```'}], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.12/v/model_type\nmessages.0.content.ImageContent\n  Input should be a valid dictionary or instance of ImageContent [type=model_type, input_value=[{'type': 'text', 'text':...onfidence: 1.0\\n\\n```'}], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.12/v/model_type\nmessages.0.content.AudioContent\n  Input should be a valid dictionary or instance of AudioContent [type=model_type, input_value=[{'type': 'text', 'text':...onfidence: 1.0\\n\\n```'}], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.12/v/model_type"
     },
     "graphics-webgpu": {
       "en": "error",
       "zh": "pending",
-      "error": "Sampling timed out after 3 retries"
+      "error": "Sampling failed after 3 retries: 3 validation errors for CreateMessageRequestParams\nmessages.0.content.TextContent\n  Input should be a valid dictionary or instance of TextContent [type=model_type, input_value=[{'type': 'text', 'text':...onfidence: 1.0\\n\\n```'}], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.12/v/model_type\nmessages.0.content.ImageContent\n  Input should be a valid dictionary or instance of ImageContent [type=model_type, input_value=[{'type': 'text', 'text':...onfidence: 1.0\\n\\n```'}], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.12/v/model_type\nmessages.0.content.AudioContent\n  Input should be a valid dictionary or instance of AudioContent [type=model_type, input_value=[{'type': 'text', 'text':...onfidence: 1.0\\n\\n```'}], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.12/v/model_type"
+    },
+    "html-dom": {
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: 3 validation errors for CreateMessageRequestParams\nmessages.0.content.TextContent\n  Input should be a valid dictionary or instance of TextContent [type=model_type, input_value=[{'type': 'text', 'text':...onfidence: 1.0\\n\\n```'}], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.12/v/model_type\nmessages.0.content.ImageContent\n  Input should be a valid dictionary or instance of ImageContent [type=model_type, input_value=[{'type': 'text', 'text':...onfidence: 1.0\\n\\n```'}], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.12/v/model_type\nmessages.0.content.AudioContent\n  Input should be a valid dictionary or instance of AudioContent [type=model_type, input_value=[{'type': 'text', 'text':...onfidence: 1.0\\n\\n```'}], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.12/v/model_type"
+    },
+    "multimedia": {
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: 3 validation errors for CreateMessageRequestParams\nmessages.0.content.TextContent\n  Input should be a valid dictionary or instance of TextContent [type=model_type, input_value=[{'type': 'text', 'text':...onfidence: 1.0\\n\\n```'}], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.12/v/model_type\nmessages.0.content.ImageContent\n  Input should be a valid dictionary or instance of ImageContent [type=model_type, input_value=[{'type': 'text', 'text':...onfidence: 1.0\\n\\n```'}], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.12/v/model_type\nmessages.0.content.AudioContent\n  Input should be a valid dictionary or instance of AudioContent [type=model_type, input_value=[{'type': 'text', 'text':...onfidence: 1.0\\n\\n```'}], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.12/v/model_type"
+    },
+    "origin-trials": {
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: 3 validation errors for CreateMessageRequestParams\nmessages.0.content.TextContent\n  Input should be a valid dictionary or instance of TextContent [type=model_type, input_value=[{'type': 'text', 'text':...onfidence: 1.0\\n\\n```'}], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.12/v/model_type\nmessages.0.content.ImageContent\n  Input should be a valid dictionary or instance of ImageContent [type=model_type, input_value=[{'type': 'text', 'text':...onfidence: 1.0\\n\\n```'}], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.12/v/model_type\nmessages.0.content.AudioContent\n  Input should be a valid dictionary or instance of AudioContent [type=model_type, input_value=[{'type': 'text', 'text':...onfidence: 1.0\\n\\n```'}], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.12/v/model_type"
+    },
+    "other": {
+      "en": "fallback",
+      "zh": "fallback"
+    },
+    "performance": {
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: 3 validation errors for CreateMessageRequestParams\nmessages.0.content.TextContent\n  Input should be a valid dictionary or instance of TextContent [type=model_type, input_value=[{'type': 'text', 'text':...onfidence: 1.0\\n\\n```'}], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.12/v/model_type\nmessages.0.content.ImageContent\n  Input should be a valid dictionary or instance of ImageContent [type=model_type, input_value=[{'type': 'text', 'text':...onfidence: 1.0\\n\\n```'}], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.12/v/model_type\nmessages.0.content.AudioContent\n  Input should be a valid dictionary or instance of AudioContent [type=model_type, input_value=[{'type': 'text', 'text':...onfidence: 1.0\\n\\n```'}], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.12/v/model_type"
+    },
+    "pwa-service-worker": {
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: 3 validation errors for CreateMessageRequestParams\nmessages.0.content.TextContent\n  Input should be a valid dictionary or instance of TextContent [type=model_type, input_value=[{'type': 'text', 'text':...onfidence: 1.0\\n\\n```'}], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.12/v/model_type\nmessages.0.content.ImageContent\n  Input should be a valid dictionary or instance of ImageContent [type=model_type, input_value=[{'type': 'text', 'text':...onfidence: 1.0\\n\\n```'}], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.12/v/model_type\nmessages.0.content.AudioContent\n  Input should be a valid dictionary or instance of AudioContent [type=model_type, input_value=[{'type': 'text', 'text':...onfidence: 1.0\\n\\n```'}], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.12/v/model_type"
+    },
+    "storage": {
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: 3 validation errors for CreateMessageRequestParams\nmessages.0.content.TextContent\n  Input should be a valid dictionary or instance of TextContent [type=model_type, input_value=[{'type': 'text', 'text':...onfidence: 1.0\\n\\n```'}], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.12/v/model_type\nmessages.0.content.ImageContent\n  Input should be a valid dictionary or instance of ImageContent [type=model_type, input_value=[{'type': 'text', 'text':...onfidence: 1.0\\n\\n```'}], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.12/v/model_type\nmessages.0.content.AudioContent\n  Input should be a valid dictionary or instance of AudioContent [type=model_type, input_value=[{'type': 'text', 'text':...onfidence: 1.0\\n\\n```'}], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.12/v/model_type"
+    },
+    "webapi": {
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: 3 validation errors for CreateMessageRequestParams\nmessages.0.content.TextContent\n  Input should be a valid dictionary or instance of TextContent [type=model_type, input_value=[{'type': 'text', 'text':...onfidence: 1.0\\n\\n```'}], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.12/v/model_type\nmessages.0.content.ImageContent\n  Input should be a valid dictionary or instance of ImageContent [type=model_type, input_value=[{'type': 'text', 'text':...onfidence: 1.0\\n\\n```'}], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.12/v/model_type\nmessages.0.content.AudioContent\n  Input should be a valid dictionary or instance of AudioContent [type=model_type, input_value=[{'type': 'text', 'text':...onfidence: 1.0\\n\\n```'}], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.12/v/model_type"
     }
   },
-  "started_at": "2025-10-27T16:16:29.302116",
-  "updated_at": "2025-10-27T16:19:39.609269"
+  "started_at": "2025-10-27T17:17:39.438200",
+  "updated_at": "2025-10-27T17:18:35.279433"
 }
