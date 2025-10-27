@@ -18,13 +18,23 @@
     "webapi"
   ],
   "total_areas": 10,
-  "completed_areas": 0,
+  "completed_areas": 2,
   "per_area": {
     "css": {
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: Unknown error: Error: Request Failed: 400 {\"error\":{\"message\":\"model gpt-5-mini is not supported via Responses API.\",\"code\":\"unsupported_api_for_model\"}}\n\n    at UC._provideLanguageModelResponse (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.32.3/dist/extension.js:614:8778)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+    },
+    "deprecations": {
+      "en": "error",
+      "zh": "pending",
+      "error": "Sampling failed after 3 retries: Unknown error: Error: Request Failed: 400 {\"error\":{\"message\":\"model gpt-5-mini is not supported via Responses API.\",\"code\":\"unsupported_api_for_model\"}}\n\n    at UC._provideLanguageModelResponse (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.32.3/dist/extension.js:614:8778)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+    },
+    "graphics-webgpu": {
       "en": "in_progress",
       "zh": "pending"
     }
   },
-  "started_at": "2025-10-27T20:51:55.817874",
-  "updated_at": "2025-10-27T20:51:55.819508"
+  "started_at": "2025-10-27T22:57:17.492424",
+  "updated_at": "2025-10-27T22:59:41.279449"
 }

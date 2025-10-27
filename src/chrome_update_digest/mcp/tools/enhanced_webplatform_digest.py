@@ -610,7 +610,7 @@ class EnhancedWebplatformDigestTool:
         
         if USE_LEGACY_SAMPLING:
             if debug:
-                print("🔧 Legacy sampling mode enabled")
+                print("🔧 Legacy sampling mode enabled (no model preferences)")
             
             sample_kwargs = {
                 "messages": messages,  # Pass messages directly without transformation
@@ -619,15 +619,11 @@ class EnhancedWebplatformDigestTool:
                 "max_tokens": 60000,
             }
             
-            # Add model preferences if available (without coercion)
-            if self._run_model_preferences:
-                sample_kwargs["model_preferences"] = self._run_model_preferences
+            # DO NOT add model preferences - let the client choose the model
             
             try:
                 if debug:
-                    print(f"Legacy sampling with timeout={timeout}s")
-                    if self._run_model_preferences:
-                        print(f"Model preferences: {self._run_model_preferences}")
+                    print(f"Legacy sampling with timeout={timeout}s (client will select model)")
                 
                 response = await asyncio.wait_for(
                     ctx.sample(**sample_kwargs),
