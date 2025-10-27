@@ -460,16 +460,8 @@ class EnhancedWebplatformDigestTool:
                 if wait_needed > 0:
                     await asyncio.sleep(wait_needed)
 
-                formatted_messages = messages
-                if isinstance(formatted_messages, str):
-                    formatted_messages = [
-                        {
-                            "role": "user",
-                            "content": formatted_messages,
-                        }
-                    ]
                 sample_kwargs = {
-                    "messages": formatted_messages,
+                    "messages": messages,
                     "system_prompt": system_prompt,
                     "temperature": 0.7,
                     "max_tokens": max_tokens,
