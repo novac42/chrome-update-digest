@@ -118,3 +118,7 @@ digest_converter.log
 
 # Claude AI configuration
 .claude/
+
+# Archive folders
+archive/
+**/archive/
