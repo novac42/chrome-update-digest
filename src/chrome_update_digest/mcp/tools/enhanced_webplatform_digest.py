@@ -119,6 +119,41 @@ class EnhancedWebplatformDigestTool:
         # Unsupported types are ignored silently to avoid breaking the run
         return None
 
+    def _sanitize_preparation_notice(self, notice: Dict[str, Any]) -> Dict[str, Any]:
+        """Shape regeneration notices into a compact, user-facing payload."""
+        if not notice:
+            return {}
+
+        sanitized = {
+            "step": notice.get("step", "clean_data_pipeline_run"),
+            "triggered": bool(notice.get("triggered")),
+            "success": bool(notice.get("success")),
+            "areas_missing": list(notice.get("areas_missing", [])),
+            "message": notice.get("message"),
+            "version": notice.get("version"),
+            "channel": notice.get("channel"),
+        }
+
+        details = notice.get("details")
+        if isinstance(details, dict):
+            sanitized["details"] = details
+
+        return sanitized
+
+    def _attach_preparation_notice(
+        self,
+        payload: Dict[str, Any],
+        notice: Optional[Dict[str, Any]],
+    ) -> Dict[str, Any]:
+        """Attach regeneration notice to outgoing payload if present."""
+        if not payload or not notice or not notice.get("triggered"):
+            return payload
+
+        payload.setdefault("preparation_steps", []).append(
+            self._sanitize_preparation_notice(notice)
+        )
+        return payload
+
     @property
     def _run_model_preferences(self) -> Optional[Union[Dict[str, Any], List[Any]]]:
         """Return model preferences scoped to the active run (if any)."""
@@ -169,6 +204,8 @@ class EnhancedWebplatformDigestTool:
         Returns:
             Generated digest in markdown format or JSON with per-area results
         """
+        regeneration_notice: Optional[Dict[str, Any]] = None
+
         try:
             # Parse focus areas
             focus_area_list = []
@@ -207,15 +244,18 @@ class EnhancedWebplatformDigestTool:
                 target_area,
                 debug,
             )
+            regeneration_notice = self.yaml_cache.consume_last_regeneration_notice()
             
             if not yaml_data:
-                return json.dumps({
+                payload = {
                     "success": False,
                     "error": f"Release notes for Chrome {version} {channel} channel not found. This specific channel needs to be processed separately. Do NOT use other channels as alternatives.",
                     "version": version,
                     "channel": channel,
                     "note": f"To process {channel} channel, run: python src/processors/clean_data_pipeline.py --version {version} --channel {channel} --with-yaml"
-                }, ensure_ascii=False)
+                }
+                self._attach_preparation_notice(payload, regeneration_notice)
+                return json.dumps(payload, ensure_ascii=False)
             
             # Step 2: Apply focus area filtering if specified
             if focus_area_list:
@@ -228,7 +268,16 @@ class EnhancedWebplatformDigestTool:
             
             # Step 3: Handle per-area generation if split_by_area is True
             if split_by_area:
-                return await self._generate_per_area_digests(ctx, yaml_data, version, channel, language, debug, run_config)
+                return await self._generate_per_area_digests(
+                    ctx,
+                    yaml_data,
+                    version,
+                    channel,
+                    language,
+                    debug,
+                    run_config,
+                    regeneration_notice,
+                )
             
             # Step 4: Generate digest from YAML data with language support
             # Default to generating both languages if not specified
@@ -245,14 +294,16 @@ class EnhancedWebplatformDigestTool:
                         debug=debug,
                     )
                 except Exception as e:
-                    return json.dumps({
+                    payload = {
                         "success": False,
                         "error": f"Failed to generate English digest: {str(e)}",
                         "version": version,
                         "channel": channel,
                         "language": "en",
                         "target_area": target_area
-                    }, ensure_ascii=False)
+                    }
+                    self._attach_preparation_notice(payload, regeneration_notice)
+                    return json.dumps(payload, ensure_ascii=False)
                 
                 try:
                     digest_zh = await self.generation.generate_digest_from_yaml(ctx, yaml_data, 'zh', target_area, debug)
@@ -265,17 +316,19 @@ class EnhancedWebplatformDigestTool:
                         debug=debug,
                     )
                 except Exception as e:
-                    return json.dumps({
+                    payload = {
                         "success": False,
                         "error": f"Failed to generate Chinese digest: {str(e)}",
                         "version": version,
                         "channel": channel,
                         "language": "zh",
                         "target_area": target_area
-                    }, ensure_ascii=False)
+                    }
+                    self._attach_preparation_notice(payload, regeneration_notice)
+                    return json.dumps(payload, ensure_ascii=False)
                 
                 # Return structured success response
-                return json.dumps({
+                payload = {
                     "success": True,
                     "version": version,
                     "channel": channel,
@@ -293,7 +346,9 @@ class EnhancedWebplatformDigestTool:
                         "en": len(digest_en),
                         "zh": len(digest_zh)
                     }
-                }, ensure_ascii=False)
+                }
+                self._attach_preparation_notice(payload, regeneration_notice)
+                return json.dumps(payload, ensure_ascii=False)
             else:
                 # Single language mode
                 digest = await self.generation.generate_digest_from_yaml(ctx, yaml_data, language, target_area, debug)
@@ -311,7 +366,7 @@ class EnhancedWebplatformDigestTool:
                     print(f"Digest saved to: {digest_path}")
                 
                 # Return structured success response
-                return json.dumps({
+                payload = {
                     "success": True,
                     "version": version,
                     "channel": channel,
@@ -320,18 +375,22 @@ class EnhancedWebplatformDigestTool:
                     "output_path": str(digest_path),
                     "content_preview": digest[:500] + "..." if len(digest) > 500 else digest,
                     "total_length": len(digest)
-                }, ensure_ascii=False)
+                }
+                self._attach_preparation_notice(payload, regeneration_notice)
+                return json.dumps(payload, ensure_ascii=False)
             
         except Exception as e:
             # Return structured error response
-            return json.dumps({
+            payload = {
                 "success": False,
                 "error": str(e),
                 "version": version,
                 "channel": channel,
                 "language": language,
                 "target_area": target_area
-            }, ensure_ascii=False)
+            }
+            self._attach_preparation_notice(payload, regeneration_notice)
+            return json.dumps(payload, ensure_ascii=False)
         finally:
             # Ensure run-scoped config is cleared even if errors occur
             self._current_run_config = None
@@ -659,7 +718,8 @@ class EnhancedWebplatformDigestTool:
         channel: str,
         language: Optional[str],
         debug: bool,
-        run_config: DigestRunConfig
+        run_config: DigestRunConfig,
+        preparation_notice: Optional[Dict[str, Any]] = None,
     ) -> str:
         """
         Generate digests for each area separately with parallel processing.
@@ -671,6 +731,7 @@ class EnhancedWebplatformDigestTool:
             channel: Release channel
             language: Output language ("en", "zh", or None for bilingual)
             debug: Debug mode
+            preparation_notice: Optional information about auto-regenerated inputs
             
         Returns:
             JSON response with status and output paths
@@ -1228,7 +1289,12 @@ class EnhancedWebplatformDigestTool:
         progress_data["completed_at"] = datetime.now().isoformat()
         progress_data["total_time_seconds"] = total_time
         await self.io.update_progress(progress_data, debug)
-        
+
+        if preparation_notice and preparation_notice.get("triggered"):
+            results.setdefault("preparation_steps", []).append(
+                self._sanitize_preparation_notice(preparation_notice)
+            )
+
         return json.dumps(results, ensure_ascii=False, indent=2)
     
     def _get_areas_from_yaml(self, yaml_data: Dict) -> List[str]:

@@ -25,6 +25,7 @@ class DigestYAMLCache:
         self._cache_hits: int = 0
         self._cache_misses: int = 0
         self._auto_regeneration_enabled: bool = True  # Enable auto-regeneration by default
+        self._last_regeneration_notice: Optional[Dict[str, Any]] = None
 
     @property
     def cache_hits(self) -> int:
@@ -51,13 +52,20 @@ class DigestYAMLCache:
 
         # Check if processed files exist and auto-regenerate if needed
         if self._auto_regeneration_enabled and split_by_area and use_cache:
-            missing_files = await self._check_and_regenerate_if_missing(
+            regeneration = await self._check_and_regenerate_if_missing(
                 version, channel, normalized_area, debug
             )
-            if missing_files and debug:
+            if regeneration.get("triggered"):
+                self._last_regeneration_notice = regeneration
+            else:
+                self._last_regeneration_notice = None
+
+            if regeneration.get("triggered") and debug:
                 LOGGER.info(
                     f"Auto-regenerated missing processed files for Chrome {version} ({channel})"
                 )
+                if not regeneration.get("success"):
+                    LOGGER.warning(regeneration.get("message"))
 
         if normalized_area is None:
             if use_cache:
@@ -345,13 +353,19 @@ class DigestYAMLCache:
     def _area_yaml_path(self, area: str, version: str, channel: str) -> Path:
         return self.cache_dir / 'areas' / area / f"chrome-{version}-{channel}.yml"
 
+    def consume_last_regeneration_notice(self) -> Optional[Dict[str, Any]]:
+        """Return the latest regeneration notice (if any) and clear it."""
+        notice = self._last_regeneration_notice
+        self._last_regeneration_notice = None
+        return notice
+
     async def _check_and_regenerate_if_missing(
         self,
         version: str,
         channel: str,
         target_area: Optional[str],
         debug: bool,
-    ) -> bool:
+    ) -> Dict[str, Any]:
         """
         Check if processed files are missing and auto-regenerate them.
 
@@ -362,8 +376,19 @@ class DigestYAMLCache:
             debug: Enable debug logging
 
         Returns:
-            True if files were regenerated, False otherwise
+            Structured notice describing regeneration outcome.
         """
+        notice: Dict[str, Any] = {
+            "step": "clean_data_pipeline_run",
+            "triggered": False,
+            "success": True,
+            "areas_missing": [],
+            "version": version,
+            "channel": channel,
+            "message": "",
+            "details": None,
+        }
+
         from chrome_update_digest.mcp.tools.clean_data_pipeline_tool import (
             CleanDataPipelineTool,
         )
@@ -403,7 +428,10 @@ class DigestYAMLCache:
 
         # If no files are missing, return early
         if not missing_areas:
-            return False
+            return notice
+
+        notice["triggered"] = True
+        notice["areas_missing"] = missing_areas
 
         if debug:
             LOGGER.info(
@@ -423,19 +451,46 @@ class DigestYAMLCache:
             )
 
             if result.get("success"):
+                notice["success"] = True
+                notice["details"] = {
+                    "markdown_files_count": result.get("markdown_files_count"),
+                    "yaml_files_count": result.get("yaml_files_count"),
+                    "duration_seconds": result.get("duration_seconds"),
+                    "timestamp": result.get("timestamp"),
+                }
+                notice["message"] = (
+                    "Detected missing per-area processed data; automatically ran the clean data "
+                    f"pipeline before continuing digest for Chrome {version} ({channel})."
+                )
                 if debug:
                     LOGGER.info(
                         f"Successfully regenerated processed files for Chrome {version} ({channel})"
                     )
-                return True
+                return notice
             else:
+                notice["success"] = False
+                notice["details"] = {
+                    "error": result.get("error") or result.get("message"),
+                    "duration_seconds": result.get("duration_seconds"),
+                    "timestamp": result.get("timestamp"),
+                }
+                notice["message"] = (
+                    "Detected missing per-area processed data and attempted to run the clean data "
+                    f"pipeline for Chrome {version} ({channel}), but it reported a failure."
+                )
                 LOGGER.warning(
                     f"Failed to regenerate processed files: {result.get('message')}"
                 )
-                return False
+                return notice
 
         except Exception as e:
             LOGGER.exception(
                 f"Error during auto-regeneration for Chrome {version} ({channel}): {e}"
             )
-            return False
+            notice["success"] = False
+            notice["details"] = {"error": str(e)}
+            notice["message"] = (
+                "Detected missing per-area processed data but encountered an unexpected error "
+                "while auto-running the clean data pipeline."
+            )
+            return notice

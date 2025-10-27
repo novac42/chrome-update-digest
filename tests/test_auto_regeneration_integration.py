@@ -111,6 +111,12 @@ async def test_auto_regeneration_when_files_missing(yaml_cache, mock_base_path):
     assert (areas_dir / "css" / "chrome-138-stable.md").exists()
     assert result is not None
 
+    notice = yaml_cache.consume_last_regeneration_notice()
+    assert notice is not None
+    assert notice.get("triggered") is True
+    assert notice.get("success") is True
+    assert "css" in notice.get("areas_missing", [])
+
 
 @pytest.mark.asyncio
 async def test_no_regeneration_when_files_exist(yaml_cache, mock_base_path):
@@ -173,6 +179,9 @@ statistics:
     # Verify result loaded from cache
     assert result is not None
     assert result.get("area") == "css"
+
+    # Ensure no regeneration notice is left behind
+    assert yaml_cache.consume_last_regeneration_notice() is None
     
     # Check that no new telemetry events were added for regeneration
     # (some events may be added for normal cache operations)
@@ -214,6 +223,7 @@ async def test_auto_regeneration_disabled(yaml_cache, mock_base_path):
     
     # Result may still be generated through normal pipeline
     # but no pre-emptive regeneration should occur
+    assert yaml_cache.consume_last_regeneration_notice() is None
 
 
 @pytest.mark.asyncio
@@ -248,6 +258,9 @@ async def test_auto_regeneration_for_all_areas(yaml_cache, mock_base_path):
         # Some areas should have been processed
         assert len(result["areas"]) > 0
 
+    notice = yaml_cache.consume_last_regeneration_notice()
+    assert notice is not None and notice.get("triggered")
+
 
 @pytest.mark.asyncio
 async def test_auto_regeneration_failure_handling(yaml_cache, mock_base_path):
@@ -279,6 +292,11 @@ async def test_auto_regeneration_failure_handling(yaml_cache, mock_base_path):
     # Should return None or handle failure gracefully
     assert result is None
 
+    notice = yaml_cache.consume_last_regeneration_notice()
+    assert notice is not None
+    assert notice.get("triggered") is True
+    assert notice.get("success") is False
+
 
 @pytest.mark.asyncio
 async def test_cache_hit_after_regeneration(yaml_cache, mock_base_path):
@@ -296,8 +314,11 @@ async def test_cache_hit_after_regeneration(yaml_cache, mock_base_path):
         target_area="css",
         debug=False,
     )
-    
+
     initial_cache_hits = yaml_cache.cache_hits
+
+    notice = yaml_cache.consume_last_regeneration_notice()
+    assert notice is not None and notice.get("triggered")
     
     # Second call - should hit cache
     result2 = await yaml_cache.get_yaml_data(
@@ -362,6 +383,9 @@ async def test_partial_files_trigger_regeneration(yaml_cache, mock_base_path):
     assert yaml_path.exists()
     assert result is not None
 
+    notice = yaml_cache.consume_last_regeneration_notice()
+    assert notice is not None and notice.get("triggered")
+
 
 @pytest.mark.asyncio
 async def test_telemetry_for_auto_regeneration(yaml_cache, mock_base_path):
@@ -384,7 +408,7 @@ async def test_telemetry_for_auto_regeneration(yaml_cache, mock_base_path):
         target_area="css",
         debug=True,
     )
-    
+
     # Check telemetry was recorded
     assert telemetry_file.exists()
     content = telemetry_file.read_text()
@@ -392,3 +416,6 @@ async def test_telemetry_for_auto_regeneration(yaml_cache, mock_base_path):
     # Should contain clean_data_pipeline_run event
     assert "clean_data_pipeline_run" in content
     assert '"triggered_by": "mcp_tool"' in content
+
+    notice = yaml_cache.consume_last_regeneration_notice()
+    assert notice is not None and notice.get("triggered")
