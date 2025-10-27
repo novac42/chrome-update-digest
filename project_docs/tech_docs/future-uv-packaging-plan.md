@@ -1,32 +1,53 @@
-# UV Packaging Transition Plan
+# UV Packaging Hardening Plan
 
-## Goals
-- Maintain a working pipeline command immediately, without waiting for packaging refactors.
-- Prepare the codebase to become a proper `uv`-managed package with clean import semantics.
-- Eliminate ad-hoc path hacks once the package namespace is established.
+This document tracks follow-up work now that the `chrome_update_digest`
+package is already managed by `uv` (`pyproject.toml`, `uv.lock`, CLI entry
+points, and FastMCP server module are in place).
 
-## Immediate Actions (Working Code Now)
-1. **Adopt module execution**: run tooling via `python -m src.processors.clean_data_pipeline ...` and update CLAUDE.md/scripts accordingly.
-2. **Harden script entry points**: make sure every runnable script has `if __name__ == "__main__": main()` so module execution behaves correctly.
-3. **Smoke-test pipeline**: with the virtualenv active (`pyyaml` installed), run the stable and beta commands to confirm imports succeed under the new convention.
+## Current Status
+- `uv sync` is the canonical setup flow; `README` and `CLAUDE.md` already
+  reference `uv run` commands.
+- `chrome_update_digest.cli` and `chrome_update_digest.mcp.server` ship via
+  `[project.scripts]`, with `fast_mcp_server.py` and legacy `src/processors`
+  modules acting as compatibility shims.
+- Tests still manipulate `sys.path` directly, and several runbooks reference
+  legacy `python -m src.processors...` execution.
 
-## Phase 1: Prep for Package Namespace
-1. **Introduce package directory**: choose a canonical name (e.g., `chrome_update_digest`) under `src/` and add `__init__.py` files.
-2. **Move modules**: relocate current code into `src/chrome_update_digest/` (or alias via `__init__.py` if a gradual move is required).
-3. **Standardize imports**: convert remaining bare imports (`utils.*`, `processors.*`, etc.) to `from chrome_update_digest...` and remove `sys.path.insert` shims in both code and tests.
-4. **Regression tests**: run the pipeline command (`python -m chrome_update_digest.processors.clean_data_pipeline ...`) and full test suite to ensure import graph stability.
+## Remaining Workstreams
+1. **Retire compatibility layers**
+   - Update any remaining docs, automation, and notebooks to rely on
+     `uv run chrome-update-digest-cli …` or direct package imports.
+   - Drop the `src/processors/*.py` shims after confirming no callers depend on
+     them; remove the `sys.path` insert logic while cleaning up.
+   - Remove the root-level `fast_mcp_server.py` shim once external scripts are
+     migrated to `chrome-update-digest-mcp`.
+2. **Normalize imports and tests**
+   - Replace ad-hoc `sys.path.*` tweaks across `tests/` with proper package
+     imports (`from chrome_update_digest...`).
+   - Ensure `uv run pytest` succeeds without test-side path injection by
+     relying on the editable install produced by `uv sync`.
+3. **Distribution validation**
+   - Build a wheel via `uv build`, install it into a clean environment, and
+     smoke-test both CLI (`chrome-update-digest-cli process …`) and MCP server
+     (`chrome-update-digest-mcp --base-path …`).
+   - Capture the validation steps in `project_docs/runbooks` so release
+     sign-off includes packaging verification.
+4. **Documentation alignment**
+   - Consolidate the packaging narrative with
+     `project_docs/tech_docs/2.0-uv-packaging-plan.md` to avoid drift; treat
+     this file as the tactical checklist and the 2.0 plan as the architectural
+     overview.
+   - Refresh onboarding notes to highlight the new CLI subcommands and any
+     required environment variables (`CHROME_UPDATE_DIGEST_BASE_PATH`, data
+     locations, etc.).
+5. **Optional hardening**
+   - Add smoke tests that import `chrome_update_digest.mcp.server` and call
+     `create_app()` to guard against future refactors.
+   - Consider publishing prebuilt artefacts (wheel + lockfile) for downstream
+     automation once the cleanup above is complete.
 
-## Phase 2: UV Package Setup
-1. **Create `pyproject.toml`** with project metadata, `tool.uv` section, and dependencies (e.g., `pyyaml`).
-2. **Editable install**: use `uv pip install -e .` so local development mirrors package consumers; update docs to prefer `uv run` invocations.
-3. **Entry points (optional)**: define console scripts if you want `uv run clean-data-pipeline ...` shortcuts.
-4. **CI/automation update**: switch any automation to `uv run python -m chrome_update_digest.processors.clean_data_pipeline ...` (or the console script) and ensure virtualenv bootstrap uses `uv`.
-
-## Validation & Risk Mitigation
-- After each phase, rerun `python -m pytest` (or project test harness) to catch import regressions.
-- For the directory move, plan a short-lived branch to avoid long-lived drift—tests should run before merging.
-- Keep documentation (`CLAUDE.md`, internal runbooks) in sync with the new commands to avoid stale guidance.
-
-## Notes
-- The module-execution change is safe to deploy ahead of the packaging work and immediately resolves the current `ModuleNotFoundError`.
-- `uv` expects a real package namespace; finishing Phase 1 before `uv init` keeps the packaging step straightforward.
+## Validation Checklist
+- `uv run pytest` without compatibility shims or manual path patches.
+- `uv build` followed by install-and-run smoke tests in a clean directory.
+- Documentation diff reviewed alongside the code changes that remove the
+  compatibility layer.
