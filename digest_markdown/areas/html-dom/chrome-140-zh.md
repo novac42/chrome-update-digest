@@ -25,5 +25,5 @@ Chrome 140 中的单个 HTML-DOM 更改列在下方，并对上述摘要进行�
 - 通过在 `ToggleEvent` 上提供明确的触发信息，使事件处理程序更清晰且更不脆弱。
 
 #### 参考资料
-- https://chromestatus.com/feature/5165304401100800 (ChromeStatus.com 条目)  
-- https://html.spec.whatwg.org/multipage/interaction.html#the-toggleevent-interface (规范)
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/5165304401100800)
+- [规范](https://html.spec.whatwg.org/multipage/interaction.html#the-toggleevent-interface)

@@ -23,9 +23,9 @@ Chrome will stop sending the legacy Purpose: prefetch header for prefetch and pr
 - Improves clarity of fetch intent for prerender/prefetch handling and aligns with the navigation speculation spec.
 
 #### References
-- https://issues.chromium.org/issues/420724819
-- https://chromestatus.com/feature/5088012836536320
-- https://wicg.github.io/nav-speculation/prerendering.html#interaction-with-fetch
+- [Tracking bug](https://issues.chromium.org/issues/420724819)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5088012836536320)
+- [Spec](https://wicg.github.io/nav-speculation/prerendering.html#interaction-with-fetch)
 
 ### Remove support for macOS 11
 
@@ -41,7 +41,7 @@ Chrome 138 is the last release supporting macOS 11; starting in Chrome 139, macO
 - CI and automation that run browser tests on macOS should move to supported macOS versions to continue receiving Chrome updates.
 
 #### References
-- https://chromestatus.com/feature/4504090090143744
+- [ChromeStatus.com entry](https://chromestatus.com/feature/4504090090143744)
 
 ### Remove auto-detection of `ISO-2022-JP` charset in HTML
 
@@ -57,9 +57,9 @@ Chrome 139 removes auto-detection for the ISO-2022-JP charset in HTML due to kno
 - Security-sensitive applications should prefer explicit encodings to eliminate ambiguity.
 
 #### References
-- https://www.sonarsource.com/blog/encoding-differentials-why-charset-matters/
-- https://issues.chromium.org/issues/40089450
-- https://chromestatus.com/feature/6576566521561088
-- https://creativecommons.org/licenses/by/4.0/
-- https://www.apache.org/licenses/LICENSE-2.0
-- https://developers.google.com/site-policies
+- [Link](https://www.sonarsource.com/blog/encoding-differentials-why-charset-matters/)
+- [Tracking bug](https://issues.chromium.org/issues/40089450)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/6576566521561088)
+- [Link](https://creativecommons.org/licenses/by/4.0/)
+- [Link](https://www.apache.org/licenses/LICENSE-2.0)
+- [Link](https://developers.google.com/site-policies)

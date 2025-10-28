@@ -20,9 +20,9 @@ The platform has moved to the `Sec-Purpose` header as the standardized signal fo
 - QA should validate speculative navigations and prefetching flows against the spec.
 
 #### References
-- https://issues.chromium.org/issues/420724819
-- https://chromestatus.com/feature/5088012836536320
-- https://wicg.github.io/nav-speculation/prerendering.html#interaction-with-fetch
+- [Tracking bug](https://issues.chromium.org/issues/420724819)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5088012836536320)
+- [Spec](https://wicg.github.io/nav-speculation/prerendering.html#interaction-with-fetch)
 
 ### Remove support for macOS 11
 
@@ -37,7 +37,7 @@ On systems running macOS 11, Chrome will continue to run but will display a warn
 - Developers and QA should stop relying on macOS 11 for ongoing browser testing; move test coverage to supported macOS versions.
 
 #### References
-- https://chromestatus.com/feature/4504090090143744
+- [ChromeStatus.com entry](https://chromestatus.com/feature/4504090090143744)
 
 ### Remove auto-detection of `ISO-2022-JP` charset in HTML
 
@@ -53,11 +53,11 @@ Auto-detection for `ISO-2022-JP` is being dropped to mitigate encoding-different
 - Compatibility testing should verify behavior for legacy Japanese-encoded content in the absence of auto-detection.
 
 #### References
-- https://www.sonarsource.com/blog/encoding-differentials-why-charset-matters/
-- https://issues.chromium.org/issues/40089450
-- https://chromestatus.com/feature/6576566521561088
-- https://creativecommons.org/licenses/by/4.0/
-- https://www.apache.org/licenses/LICENSE-2.0
-- https://developers.google.com/site-policies
+- [Link](https://www.sonarsource.com/blog/encoding-differentials-why-charset-matters/)
+- [Tracking bug](https://issues.chromium.org/issues/40089450)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/6576566521561088)
+- [Link](https://creativecommons.org/licenses/by/4.0/)
+- [Link](https://www.apache.org/licenses/LICENSE-2.0)
+- [Link](https://developers.google.com/site-policies)
 
 File saved to: digest_markdown/webplatform/deprecation/chrome-139-stable-en.md

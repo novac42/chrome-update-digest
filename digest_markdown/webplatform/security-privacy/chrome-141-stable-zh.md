@@ -22,9 +22,9 @@ Storage Access API 现严格遵循同源策略语义：在框架中使用 docume
 - 站点可审计 iframe 的资源图，确保依赖 cookie 的请求与 origin 匹配。
 
 #### 参考资料
-- https://issues.chromium.org/issues/379030052
-- https://chromestatus.com/feature/5169937372676096
-- https://github.com/privacycg/storage-access/pull/213
+- [Tracking bug](https://issues.chromium.org/issues/379030052)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5169937372676096)
+- [GitHub](https://github.com/privacycg/storage-access/pull/213)
 
 ### Signature-based Integrity（基于签名的完整性）
 
@@ -42,6 +42,6 @@ Storage Access API 现严格遵循同源策略语义：在框架中使用 docume
 - 加强在资产穿越不受信中介时的部署流水线安全。
 
 #### 参考资料
-- https://issues.chromium.org/issues/375224898
-- https://chromestatus.com/feature/5032324620877824
-- https://wicg.github.io/signature-based-sri
+- [Tracking bug](https://issues.chromium.org/issues/375224898)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5032324620877824)
+- [Spec](https://wicg.github.io/signature-based-sri)

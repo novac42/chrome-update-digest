@@ -22,9 +22,9 @@ The Storage Access API now strictly follows Same Origin Policy semantics: using 
 - Sites can audit iframe resource graphs to ensure cookie-dependent requests are origin-matching.
 
 #### References
-- https://issues.chromium.org/issues/379030052
-- https://chromestatus.com/feature/5169937372676096
-- https://github.com/privacycg/storage-access/pull/213
+- [Tracking bug](https://issues.chromium.org/issues/379030052)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5169937372676096)
+- [GitHub](https://github.com/privacycg/storage-access/pull/213)
 
 ### Signature-based Integrity
 
@@ -42,6 +42,6 @@ Servers can sign responses with an Ed25519 key pair, and developers can require 
 - Strengthen deployment pipelines where assets traverse untrusted intermediaries.
 
 #### References
-- https://issues.chromium.org/issues/375224898
-- https://chromestatus.com/feature/5032324620877824
-- https://wicg.github.io/signature-based-sri
+- [Tracking bug](https://issues.chromium.org/issues/375224898)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5032324620877824)
+- [Spec](https://wicg.github.io/signature-based-sri)

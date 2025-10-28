@@ -18,10 +18,10 @@ Chrome 138 在 Web API 领域强调内置的语言和 AI 辅助能力（Translat
 在内置浏览器翻译不足或站点需要可控的翻译工作流时，对用户生成内容或 UI 文本进行按需翻译。
 
 #### 参考资料
-- https://developer.mozilla.org/docs/Web/API/Translator
-- https://bugs.chromium.org/p/chromium/issues/detail?id=322229993
-- https://chromestatus.com/feature/5652970345332736
-- https://wicg.github.io/translation-api/
+- [Link](https://developer.mozilla.org/docs/Web/API/Translator)
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=322229993)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5652970345332736)
+- [Spec](https://wicg.github.io/translation-api/)
 
 ### Language Detector API（语言检测器 API）
 
@@ -35,9 +35,9 @@ Chrome 138 在 Web API 领域强调内置的语言和 AI 辅助能力（Translat
 自动确定输入语言以用于自动翻译、路由或分析；在调用 Translator API 之前作为预检步骤。
 
 #### 参考资料
-- https://developer.mozilla.org/docs/Web/API/LanguageDetector
-- https://chromestatus.com/feature/5134901000871936
-- https://wicg.github.io/language-detection-api/
+- [Link](https://developer.mozilla.org/docs/Web/API/LanguageDetector)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5134901000871936)
+- [Spec](https://wicg.github.io/language-detection-api/)
 
 ### Summarizer API（摘要器 API）
 
@@ -51,10 +51,10 @@ Chrome 138 在 Web API 领域强调内置的语言和 AI 辅助能力（Translat
 在客户端对文章、消息或用户生成内容进行摘要，用于预览、无障碍或类似助手的功能，同时降低网络/模型加载成本。
 
 #### 参考资料
-- https://developer.mozilla.org/docs/Web/API/Summarizer
-- https://bugs.chromium.org/p/chromium/issues/detail?id=351744634
-- https://chromestatus.com/feature/5134971702001664
-- https://wicg.github.io/summarization-api/
+- [Link](https://developer.mozilla.org/docs/Web/API/Summarizer)
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=351744634)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5134971702001664)
+- [Spec](https://wicg.github.io/summarization-api/)
 
 ### Escape < and > in attributes on serialization（在序列化时转义属性中的 < 和 >）
 
@@ -68,8 +68,8 @@ Chrome 138 在 Web API 领域强调内置的语言和 AI 辅助能力（Translat
 在应用序列化 DOM 片段或设置可能被重新解析或注入的属性时，减少一类 mutation XSS 问题。
 
 #### 参考资料
-- https://chromestatus.com/feature/5125509031477248
-- https://html.spec.whatwg.org/multipage/parsing.html#serializing-html-fragments
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5125509031477248)
+- [Spec](https://html.spec.whatwg.org/multipage/parsing.html#serializing-html-fragments)
 
 ### Crash Reporting API: is_top_level and visibility_state（崩溃报告 API：is_top_level 与 visibility_state）
 
@@ -83,8 +83,8 @@ Chrome 138 在 Web API 领域强调内置的语言和 AI 辅助能力（Translat
 通过提供可见性上下文和顶层帧状态，改善服务器端崩溃分析和客户端分拣，有助于调试和优先级排序。
 
 #### 参考资料
-- https://chromestatus.com/feature/5112885175918592
-- https://w3c.github.io/reporting/#crash-report
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5112885175918592)
+- [Link](https://w3c.github.io/reporting/#crash-report)
 
 ### Fire the pushsubscriptionchange event upon resubscription（在重新订阅时触发 pushsubscriptionchange 事件）
 
@@ -98,6 +98,6 @@ Chrome 138 在 Web API 领域强调内置的语言和 AI 辅助能力（Translat
 当权限被重新授予时，允许 service worker 重新订阅或对齐推送状态，从而实现可靠的推送恢复并改进开发者对权限波动的处理。
 
 #### 参考资料
-- https://bugs.chromium.org/p/chromium/issues/detail?id=407523313
-- https://chromestatus.com/feature/5115983529336832
-- https://w3c.github.io/push-api/#the-pushsubscriptionchange-event
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=407523313)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5115983529336832)
+- [Link](https://w3c.github.io/push-api/#the-pushsubscriptionchange-event)

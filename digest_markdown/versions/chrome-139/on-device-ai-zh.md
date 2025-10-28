@@ -34,5 +34,5 @@ Chrome 139 为 Web Speech API 添加了设备端语音识别支持，允许网�
 - 在支持设备端识别时，为速记或命令控制提供降低延迟的语音交互。
 
 #### 参考资料
-- https://chromestatus.com/feature/6090916291674112
-- https://webaudio.github.io/web-speech-api
+- [ChromeStatus.com entry](https://chromestatus.com/feature/6090916291674112)
+- [Link](https://webaudio.github.io/web-speech-api)

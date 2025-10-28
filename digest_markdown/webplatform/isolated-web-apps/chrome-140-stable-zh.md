@@ -26,9 +26,9 @@ Chrome 140 稳定版引入了仅面向 Isolated Web Apps (IWAs) 的 Controlled F
 - 在 IWA 打包模型中，开发者需要对嵌入内容的运行时生命周期和集成点进行更细粒度控制的场景。
 
 #### 参考资料
-- https://github.com/WICG/isolated-web-apps/blob/main/README.md
-- https://issues.chromium.org/issues/40191772
-- https://chromestatus.com/feature/5199572022853632
-- https://wicg.github.io/controlled-frame
+- [GitHub](https://github.com/WICG/isolated-web-apps/blob/main/README.md)
+- [Tracking bug](https://issues.chromium.org/issues/40191772)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5199572022853632)
+- [Spec](https://wicg.github.io/controlled-frame)
 
 已保存至: digest_markdown/webplatform/Isolated Web Apps/chrome-140-stable-en.md

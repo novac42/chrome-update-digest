@@ -25,8 +25,8 @@ Chrome 136（stable）通过围绕设备自省、编译器性能、兼容性控�
 - 用于遥测和调试，将性能问题与适配器类型相关联。
 
 #### 参考资料
-- https://issues.chromium.org/issues/403172841
-- https://groups.google.com/a/chromium.org/g/blink-dev/c/VUkzIOWd2n0
+- [Tracking bug](https://issues.chromium.org/issues/403172841)
+- [Link](https://groups.google.com/a/chromium.org/g/blink-dev/c/VUkzIOWd2n0)
 
 ### Shader compilation time improvements on D3D12（在 D3D12 上的着色器编译时间改进）
 
@@ -42,7 +42,7 @@ Tint 为使用 D3D12 后端的设备新增了一个中间表示（IR），以加
 - 在 D3D12 设备上为 WebGPU 密集型应用降低延迟。
 
 #### 参考资料
-- https://issues.chromium.org/issues/42251045
+- [Tracking bug](https://issues.chromium.org/issues/42251045)
 
 ### Lift compatibility mode restrictions（解除兼容模式限制）
 
@@ -57,9 +57,9 @@ Tint 为使用 D3D12 后端的设备新增了一个中间表示（IR），以加
 - 调试功能门控行为并在受控环境中验证实现是否符合完整的 WebGPU 规范。
 
 #### 参考资料
-- https://issues.chromium.org/issues/395855517
-- https://github.com/gpuweb/gpuweb/blob/main/proposals/compatibility-mode.md
-- https://issues.chromium.org/issues/395855516
+- [Tracking bug](https://issues.chromium.org/issues/395855517)
+- [GitHub](https://github.com/gpuweb/gpuweb/blob/main/proposals/compatibility-mode.md)
+- [Tracking bug](https://issues.chromium.org/issues/395855516)
 
 ### Dawn updates（Dawn 更新）
 
@@ -74,9 +74,9 @@ Tint 为使用 D3D12 后端的设备新增了一个中间表示（IR），以加
 - 当调试或为编译任务进行埋点时，更清晰地将 JavaScript/WebGPU 错误与原生状态映射起来。
 
 #### 参考资料
-- https://webgpu-native.github.io/webgpu-headers/Asynchronous-Operations.html#CallbackStatuses
-- https://github.com/webgpu-native/webgpu-headers/issues/520
-- https://github.com/webgpu-native/webgpu-headers/issues/369
-- https://dawn.googlesource.com/dawn/+log/chromium/7049..chromium/7103?n=1000
+- [Link](https://webgpu-native.github.io/webgpu-headers/Asynchronous-Operations.html#CallbackStatuses)
+- [GitHub](https://github.com/webgpu-native/webgpu-headers/issues/520)
+- [GitHub](https://github.com/webgpu-native/webgpu-headers/issues/369)
+- [Link](https://dawn.googlesource.com/dawn/+log/chromium/7049..chromium/7103?n=1000)
 
 文件已保存到：digest_markdown/Graphics and WebGPU/chrome-136-stable-en.md

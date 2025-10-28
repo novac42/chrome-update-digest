@@ -26,9 +26,9 @@ Chrome 将停止在 prefetch 和 prerender 请求中发送遗留的 Purpose: pre
 - 提高清晰度以便处理 prerender/prefetch 的抓取意图，并与导航投机规范对齐。
 
 #### 参考资料
-- https://issues.chromium.org/issues/420724819
-- https://chromestatus.com/feature/5088012836536320
-- https://wicg.github.io/nav-speculation/prerendering.html#interaction-with-fetch
+- [Tracking bug](https://issues.chromium.org/issues/420724819)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5088012836536320)
+- [Spec](https://wicg.github.io/nav-speculation/prerendering.html#interaction-with-fetch)
 
 ### Remove support for macOS 11（移除对 macOS 11 的支持）
 
@@ -44,7 +44,7 @@ Chrome 138 是最后一个支持 macOS 11 的版本；从 Chrome 139 开始，�
 - 在 macOS 上运行浏览器测试的 CI 与自动化应切换到受支持的 macOS 版本，以继续接收 Chrome 更新。
 
 #### 参考资料
-- https://chromestatus.com/feature/4504090090143744
+- [ChromeStatus.com entry](https://chromestatus.com/feature/4504090090143744)
 
 ### Remove auto-detection of `ISO-2022-JP` charset in HTML（移除在 HTML 中对 `ISO-2022-JP` 字符集的自动检测）
 
@@ -60,9 +60,9 @@ Chrome 138 是最后一个支持 macOS 11 的版本；从 Chrome 139 开始，�
 - 对安全敏感的应用，应优先使用显式编码以消除歧义。
 
 #### 参考资料
-- https://www.sonarsource.com/blog/encoding-differentials-why-charset-matters/
-- https://issues.chromium.org/issues/40089450
-- https://chromestatus.com/feature/6576566521561088
-- https://creativecommons.org/licenses/by/4.0/
-- https://www.apache.org/licenses/LICENSE-2.0
-- https://developers.google.com/site-policies
+- [Link](https://www.sonarsource.com/blog/encoding-differentials-why-charset-matters/)
+- [Tracking bug](https://issues.chromium.org/issues/40089450)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/6576566521561088)
+- [Link](https://creativecommons.org/licenses/by/4.0/)
+- [Link](https://www.apache.org/licenses/LICENSE-2.0)
+- [Link](https://developers.google.com/site-policies)

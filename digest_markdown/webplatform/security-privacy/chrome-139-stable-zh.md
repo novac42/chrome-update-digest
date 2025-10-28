@@ -22,9 +22,9 @@ Chrome 139 将 worker 创建行为与 CSP3 的 fetch 集成规范对齐：在 fe
 - 渐进增强：单页应用和 PWA 可以避免因意外异常而中断初始化流程，而是动态处理 worker 的可用性。
 
 #### 参考资料
-- https://issues.chromium.org/issues/41285169
-- https://chromestatus.com/feature/5177205656911872
-- https://www.w3.org/TR/CSP3/#fetch-integration
+- [Tracking bug](https://issues.chromium.org/issues/41285169)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5177205656911872)
+- [Spec](https://www.w3.org/TR/CSP3/#fetch-integration)
 
 ## 面向领域的专长与开发者指南（Security-Privacy 焦点）
 

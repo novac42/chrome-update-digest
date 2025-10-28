@@ -25,9 +25,9 @@ Adds an "interrupted" value to the AudioContextState enum to represent temporary
 - Media players can preserve playback state and restore it after exclusive audio ends.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=374805121
-- https://chromestatus.com/feature/5087843301908480
-- https://webaudio.github.io/web-audio-api/#AudioContextState
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=374805121)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5087843301908480)
+- [Link](https://webaudio.github.io/web-audio-api/#AudioContextState)
 
 ### Captured surface control
 
@@ -43,9 +43,9 @@ Introduces a Web API that permits forwarding wheel events to a captured tab and 
 - Remote-control flows that need to adjust zoom to improve legibility or bandwidth usage.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=1466247
-- https://chromestatus.com/feature/5064816815276032
-- https://wicg.github.io/captured-surface-control/
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=1466247)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5064816815276032)
+- [Spec](https://wicg.github.io/captured-surface-control/)
 
 ### CapturedSurfaceResolution
 
@@ -61,9 +61,9 @@ Exposes the pixel ratio of the captured surface during screen sharing so apps ca
 - Recording and streaming apps can avoid unnecessary up/downscaling and conserve CPU/GPU resources.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=383946052
-- https://chromestatus.com/feature/5100866324422656
-- https://w3c.github.io/mediacapture-screen-share-extensions/#capturedsurfaceresolution
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=383946052)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5100866324422656)
+- [Link](https://w3c.github.io/mediacapture-screen-share-extensions/#capturedsurfaceresolution)
 
 ### H265 (HEVC) codec support in WebRTC
 
@@ -79,9 +79,9 @@ HEVC (H.265) is added to the set of codecs available for WebRTC; support is disc
 - MediaCapabilities queries enable adaptive UX: choose codecs based on hardware/software availability.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=391903235
-- https://chromestatus.com/feature/5104835309936640
-- https://www.w3.org/TR/webrtc/#dom-rtcrtpcodeccapability
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=391903235)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5104835309936640)
+- [Spec](https://www.w3.org/TR/webrtc/#dom-rtcrtpcodeccapability)
 
 ### H26x Codec support updates for MediaRecorder
 
@@ -97,7 +97,7 @@ MediaRecorder now supports HEVC encoding with the `hvc1.*` codec string and adds
 - Recording variable-resolution MP4 outputs that interoperate with downstream tools expecting `avc3`/`hev1`/`hvc1` tags.
 
 #### References
-- https://chromestatus.com/feature/5103892473503744
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5103892473503744)
 
 ### Use DOMPointInit for getCharNumAtPosition, isPointInFill, isPointInStroke
 
@@ -113,9 +113,9 @@ Chromium updated SVGGeometryElement and SVGPathElement APIs to use DOMPointInit 
 - Easier interop with other DOM APIs and less reliance on legacy SVG object creation.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=40572887
-- https://chromestatus.com/feature/5084627093929984
-- https://www.w3.org/TR/SVG2/types.html#InterfaceDOMPointInit
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=40572887)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5084627093929984)
+- [Spec](https://www.w3.org/TR/SVG2/types.html#InterfaceDOMPointInit)
 
 Saved file:
 digest_markdown/webplatform/Multimedia/chrome-136-stable-en.md

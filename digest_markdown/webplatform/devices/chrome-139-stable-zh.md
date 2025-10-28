@@ -20,8 +20,8 @@ The following update expands on the summary above and highlights practical impli
 - 设备团队和引擎集成者可以调优深度生成以匹配受限设备上的 GPU/CPU 预算，从而提升帧率和能耗表现。
 
 #### 参考资料
-- https://issues.chromium.org/issues/410607163
-- https://chromestatus.com/feature/5074096916004864
-- https://immersive-web.github.io/depth-sensing
+- [Tracking bug](https://issues.chromium.org/issues/410607163)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5074096916004864)
+- [Link](https://immersive-web.github.io/depth-sensing)
 
 已保存文件：digest_markdown/webplatform/Devices/chrome-139-stable-en.md

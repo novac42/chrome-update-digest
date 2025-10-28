@@ -26,6 +26,6 @@ Chrome 141（稳定版）针对可通过 JavaScript 访问的 WebRTC 统计数�
 - 改进依赖 RTP 统计对象的工具的互操作性。
 
 #### 参考资料
-- https://issues.chromium.org/issues/406585888
-- https://chromestatus.com/feature/4580748730040320
-- https://w3c.github.io/webrtc-stats/#the-rtp-statistics-hierarchy
+- [Tracking bug](https://issues.chromium.org/issues/406585888)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/4580748730040320)
+- [Link](https://w3c.github.io/webrtc-stats/#the-rtp-statistics-hierarchy)

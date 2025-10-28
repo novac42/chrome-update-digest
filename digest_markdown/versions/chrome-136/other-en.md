@@ -27,6 +27,6 @@ Relevance to area-specific concerns:
 - multimedia & developer tooling: Facilitates asset extraction for documentation and testing.
 
 #### References
-- https://issues.chromium.org/issues/40902474
+- [Tracking bug](https://issues.chromium.org/issues/40902474)
 
 Saved to: digest_markdown/webplatform/other/chrome-136-stable-en.md

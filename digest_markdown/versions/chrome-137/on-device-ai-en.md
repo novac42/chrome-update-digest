@@ -23,10 +23,10 @@ The Rewriter API provides an interface to transform and rephrase input text in r
 - Make messages more constructive or adjust tone.
 
 #### References
-- https://developer.chrome.com/origintrials/#/trials/active
-- https://bugs.chromium.org/p/chromium/issues/detail?id=358214322
-- https://chromestatus.com/feature/5089854436556800
-- https://wicg.github.io/rewriter-api/
+- [Origin Trial](https://developer.chrome.com/origintrials/#/trials/active)
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=358214322)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5089854436556800)
+- [Spec](https://wicg.github.io/rewriter-api/)
 
 ### Writer API
 
@@ -45,13 +45,13 @@ The Writer API enables generation of new text given a writing task prompt, using
 - Programmatically produce writing based on developer-provided prompts.
 
 #### References
-- https://developer.chrome.com/origintrials/#/trials/active
-- https://bugs.chromium.org/p/chromium/issues/detail?id=357967382
-- https://chromestatus.com/feature/5089855470993408
-- https://wicg.github.io/writer-api/
-- https://creativecommons.org/licenses/by/4.0/
-- https://www.apache.org/licenses/LICENSE-2.0
-- https://developers.google.com/site-policies
+- [Origin Trial](https://developer.chrome.com/origintrials/#/trials/active)
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=357967382)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5089855470993408)
+- [Spec](https://wicg.github.io/writer-api/)
+- [Link](https://creativecommons.org/licenses/by/4.0/)
+- [Link](https://www.apache.org/licenses/LICENSE-2.0)
+- [Link](https://developers.google.com/site-policies)
 
 Area-Specific Expertise (On-device AI implications)
 

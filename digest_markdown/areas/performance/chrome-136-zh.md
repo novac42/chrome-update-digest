@@ -26,9 +26,9 @@ Chrome 136 的一个 origin trial 提供了一种方法，允许 Web 应用检�
 - 通过将平台引起的方差与应用回归分离来改进 CI/性能仪表板。
 
 #### 参考资料
-- https://developer.chrome.com/origintrials/#/trials/active
-- https://bugs.chromium.org/p/chromium/issues/detail?id=1413848
-- https://chromestatus.com/feature/5037395062800384
-- https://w3c.github.io/navigation-timing/
+- [Origin Trial](https://developer.chrome.com/origintrials/#/trials/active)
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=1413848)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5037395062800384)
+- [Link](https://w3c.github.io/navigation-timing/)
 
 Output file: digest_markdown/webplatform/Performance/chrome-136-stable-en.md

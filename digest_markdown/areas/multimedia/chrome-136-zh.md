@@ -25,9 +25,9 @@ Chrome 136 引入了多媒体功能，重点在于提升编码器平台一致性
 - 媒体播放器可以保留播放状态，并在独占音频结束后恢复。
 
 #### 参考资料
-- https://bugs.chromium.org/p/chromium/issues/detail?id=374805121
-- https://chromestatus.com/feature/5087843301908480
-- https://webaudio.github.io/web-audio-api/#AudioContextState
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=374805121)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5087843301908480)
+- [Link](https://webaudio.github.io/web-audio-api/#AudioContextState)
 
 ### Captured surface control（捕获表面控制）
 
@@ -43,9 +43,9 @@ Chrome 136 引入了多媒体功能，重点在于提升编码器平台一致性
 - 需要调整缩放以提高可读性或减少带宽使用的远程控制流程。
 
 #### 参考资料
-- https://bugs.chromium.org/p/chromium/issues/detail?id=1466247
-- https://chromestatus.com/feature/5064816815276032
-- https://wicg.github.io/captured-surface-control/
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=1466247)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5064816815276032)
+- [Spec](https://wicg.github.io/captured-surface-control/)
 
 ### CapturedSurfaceResolution（捕获表面分辨率）
 
@@ -61,9 +61,9 @@ Chrome 136 引入了多媒体功能，重点在于提升编码器平台一致性
 - 录制和流媒体应用可以避免不必要的上/下采样，从而节省 CPU/GPU 资源。
 
 #### 参考资料
-- https://bugs.chromium.org/p/chromium/issues/detail?id=383946052
-- https://chromestatus.com/feature/5100866324422656
-- https://w3c.github.io/mediacapture-screen-share-extensions/#capturedsurfaceresolution
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=383946052)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5100866324422656)
+- [Link](https://w3c.github.io/mediacapture-screen-share-extensions/#capturedsurfaceresolution)
 
 ### H265 (HEVC) codec support in WebRTC（在 WebRTC 中支持 HEVC）
 
@@ -79,9 +79,9 @@ HEVC (H.265) 被加入到可用于 WebRTC 的编码器集合中；支持可通�
 - 通过 MediaCapabilities 查询实现自适应 UX：根据硬件/软件可用性选择编码器。
 
 #### 参考资料
-- https://bugs.chromium.org/p/chromium/issues/detail?id=391903235
-- https://chromestatus.com/feature/5104835309936640
-- https://www.w3.org/TR/webrtc/#dom-rtcrtpcodeccapability
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=391903235)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5104835309936640)
+- [Spec](https://www.w3.org/TR/webrtc/#dom-rtcrtpcodeccapability)
 
 ### H26x Codec support updates for MediaRecorder（MediaRecorder 的 H26x 编解码器支持更新）
 
@@ -97,7 +97,7 @@ MediaRecorder 现在支持使用 `hvc1.*` 编解码器字符串进行 HEVC 编�
 - 录制可变分辨率的 MP4 输出，以便与下游工具（期望 `avc3`/`hev1`/`hvc1` 标签）互操作。
 
 #### 参考资料
-- https://chromestatus.com/feature/5103892473503744
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5103892473503744)
 
 ### Use DOMPointInit for getCharNumAtPosition, isPointInFill, isPointInStroke（在 getCharNumAtPosition、isPointInFill、isPointInStroke 中使用 DOMPointInit）
 
@@ -113,9 +113,9 @@ Chromium 更新了 SVGGeometryElement 和 SVGPathElement API，使 getCharNumAtP
 - 更容易与其他 DOM API 互操作，减少对创建遗留 SVG 对象的依赖。
 
 #### 参考资料
-- https://bugs.chromium.org/p/chromium/issues/detail?id=40572887
-- https://chromestatus.com/feature/5084627093929984
-- https://www.w3.org/TR/SVG2/types.html#InterfaceDOMPointInit
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=40572887)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5084627093929984)
+- [Spec](https://www.w3.org/TR/SVG2/types.html#InterfaceDOMPointInit)
 
 Saved file:
 digest_markdown/webplatform/Multimedia/chrome-136-stable-en.md

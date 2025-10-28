@@ -26,5 +26,5 @@ Chrome 141 的性能更新聚焦于调优桌面端的导航推测行为，使 pr
 - 为通过鼠标悬停交互的桌面用户提供 prefetch/prerender 启动时机的更精细控制。
 
 #### 参考资料
-- https://chromestatus.com/feature/5113430155591680
-- https://wicg.github.io/nav-speculation/speculation-rules.html#:~:text=early%20as%20possible.-,%22moderate%22,balance%20between%20%22eager%22%20and%20%22conservative%22.,-%22conservative%22
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5113430155591680)
+- [Spec](https://wicg.github.io/nav-speculation/speculation-rules.html#:~:text=early%20as%20possible.-,%22moderate%22,balance%20between%20%22eager%22%20and%20%22conservative%22.,-%22conservative%22)

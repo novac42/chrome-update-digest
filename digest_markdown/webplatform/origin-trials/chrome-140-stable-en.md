@@ -18,10 +18,10 @@ This is an Origin Trial exposing call-like notification affordances via the Noti
 VoIP and video-call web apps can present recognizable incoming-call UIs, improving user responsiveness and parity with native call notifications.
 
 #### References
-- https://developer.chrome.com/origintrials/#/register_trial/2876111312029483009
-- https://issues.chromium.org/issues/detail?id=1383570
-- https://chromestatus.com/feature/5110990717321216
-- https://notifications.spec.whatwg.org
+- [Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/2876111312029483009)
+- [Tracking bug](https://issues.chromium.org/issues/detail?id=1383570)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5110990717321216)
+- [Spec](https://notifications.spec.whatwg.org)
 
 ### Crash Reporting key-value API
 
@@ -35,10 +35,10 @@ The API provides a document-scoped backing map whose entries are serialized into
 Improve crash triage by annotating renderer crashes with contextual state (feature flags, last actions). Useful for complex single-page apps, PWAs, and debugging production stability regressions.
 
 #### References
-- https://developer.chrome.com/origintrials/#/register_trial/1304355042077179905
-- https://issues.chromium.org/issues/400432195
-- https://chromestatus.com/feature/6228675846209536
-- https://github.com/WICG/crash-reporting/pull/37
+- [Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/1304355042077179905)
+- [Tracking bug](https://issues.chromium.org/issues/400432195)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/6228675846209536)
+- [GitHub](https://github.com/WICG/crash-reporting/pull/37)
 
 ### Add the `clipboardchange` event
 
@@ -52,10 +52,10 @@ This Origin Trial surfaces a DOM event signifying system clipboard mutations. Im
 Remote desktop clients and productivity web apps can keep in-page clipboard state synchronized with the system clipboard, improving user experience for copy/paste workflows.
 
 #### References
-- https://developer.chrome.com/origintrials/#/register_trial/137922738588221441
-- https://issues.chromium.org/issues/41442253
-- https://chromestatus.com/feature/5085102657503232
-- https://github.com/w3c/clipboard-apis/pull/239
+- [Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/137922738588221441)
+- [Tracking bug](https://issues.chromium.org/issues/41442253)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5085102657503232)
+- [GitHub](https://github.com/w3c/clipboard-apis/pull/239)
 
 ### Enable `SharedWorker` on Android
 
@@ -69,8 +69,8 @@ This Origin Trial enables the SharedWorker interface on Android platforms. Share
 Conserve resources by sharing a single WebSocket or SSE across tabs; coordinate background tasks or centralized caching across multiple tabs of the same origin on Android.
 
 #### References
-- https://developer.chrome.com/origintrials/#/register_trial/4101090410674257921
-- https://chromestatus.com/feature/6265472244514816
-- https://html.spec.whatwg.org/multipage/workers.html#shared-workers-and-the-sharedworker-interface
+- [Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/4101090410674257921)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/6265472244514816)
+- [Spec](https://html.spec.whatwg.org/multipage/workers.html#shared-workers-and-the-sharedworker-interface)
 
 Saved file: digest_markdown/webplatform/Origin trials/chrome-140-stable-en.md

@@ -20,9 +20,9 @@ Chrome 136 Stable 在 Security-Privacy 领域引入了针对性的隐私和报�
 - 在部署 report-only policies 以测试策略更改时，帮助合规和调试。
 
 #### 参考资料
-- https://bugs.chromium.org/p/chromium/issues/detail?id=40941424
-- https://chromestatus.com/feature/5061997434142720
-- https://w3c.github.io/webappsec-permissions-policy/#reporting
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=40941424)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5061997434142720)
+- [Link](https://w3c.github.io/webappsec-permissions-policy/#reporting)
 
 ### Reduce fingerprinting in Accept-Language header information（减少 Accept-Language 头的信息指纹识别）
 
@@ -38,5 +38,5 @@ Chrome 在发出 HTTP 请求时将 Accept-Language header 限制为单一的首�
 - 对注重隐私的功能和威胁模型有用，在这些场景需要尽量减少每次请求的信息熵。
 
 #### 参考资料
-- https://bugs.chromium.org/p/chromium/issues/detail?id=1306905
-- https://chromestatus.com/feature/5042348942655488
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=1306905)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5042348942655488)

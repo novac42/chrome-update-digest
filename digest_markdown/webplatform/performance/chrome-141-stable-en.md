@@ -21,5 +21,5 @@ This release refines how speculation rules translate user hover intent into acti
 - Provide developers finer control over when prefetch/prerender begins for desktop users interacting via mouse hover.
 
 #### References
-- https://chromestatus.com/feature/5113430155591680
-- https://wicg.github.io/nav-speculation/speculation-rules.html#:~:text=early%20as%20possible.-,%22moderate%22,balance%20between%20%22eager%22%20and%20%22conservative%22.,-%22conservative%22
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5113430155591680)
+- [Spec](https://wicg.github.io/nav-speculation/speculation-rules.html#:~:text=early%20as%20possible.-,%22moderate%22,balance%20between%20%22eager%22%20and%20%22conservative%22.,-%22conservative%22)

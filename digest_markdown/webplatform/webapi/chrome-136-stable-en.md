@@ -18,9 +18,9 @@ Behavior is changed to follow the UI Events spec’s semantics for click target 
 More predictable interaction handling for components that use pointer capture (custom drag/drop, drawing tools), avoiding surprising click routing during capture.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=40851596
-- https://chromestatus.com/feature/5045063816396800
-- https://w3c.github.io/uievents/#event-type-click
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=40851596)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5045063816396800)
+- [Link](https://w3c.github.io/uievents/#event-type-click)
 
 ### Explicit compile hints with magic comments
 
@@ -34,9 +34,9 @@ The feature provides an in-band way to attach compile hints to source, enabling 
 Large JS codebases and libraries can guide eager compilation for performance-critical functions without changing runtime code; helpful for startup performance tuning.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=13917
-- https://chromestatus.com/feature/5047772830048256
-- https://github.com/v8/v8/wiki/Design-Elements#compile-hints
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=13917)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5047772830048256)
+- [GitHub](https://github.com/v8/v8/wiki/Design-Elements#compile-hints)
 
 ### Incorporate navigation initiator into the HTTP cache partition key
 
@@ -50,9 +50,9 @@ The cache key change differentiates responses based on whether the navigation wa
 Improves privacy and security for sites relying on cache semantics; developers should be aware that cache behavior may vary based on navigation initiator and plan cache expectations accordingly.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=398784714
-- https://chromestatus.com/feature/5108419906535424
-- https://httpwg.org/specs/rfc9110.html#caching
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=398784714)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5108419906535424)
+- [Link](https://httpwg.org/specs/rfc9110.html#caching)
 
 ### Protected audience: text conversion helpers
 
@@ -66,7 +66,7 @@ These standalone functions are intended to avoid ad-hoc conversions and provide 
 Advertising and privacy-preserving bidding/scoring flows that run code in WebAssembly and must exchange string-typed data with JS without expensive manual encoding/decoding.
 
 #### References
-- https://chromestatus.com/feature/5099738574602240
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5099738574602240)
 
 ### RegExp.escape
 
@@ -80,8 +80,8 @@ The method performs escaping of regex metacharacters so untrusted or user-provid
 Safely building dynamic regular expressions from user input (search boxes, pattern builders) without manual escaping; reduces risk of accidental regex syntax injection.
 
 #### References
-- https://chromestatus.com/feature/5074350768316416
-- https://tc39.es/proposal-regex-escaping/
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5074350768316416)
+- [Link](https://tc39.es/proposal-regex-escaping/)
 
 ### Speculation rules: tag field
 
@@ -95,9 +95,9 @@ Tags attached to speculation rules are transmitted via the `Sec-Speculation-Tags
 Better observability and routing of prerender/prefetch speculation traffic, allowing intermediaries and servers to apply policy or logging per-tag.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=381687257
-- https://chromestatus.com/feature/5100969695576064
-- https://wicg.github.io/nav-speculation/speculation-rules.html#speculation-rule-tag
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=381687257)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5100969695576064)
+- [Spec](https://wicg.github.io/nav-speculation/speculation-rules.html#speculation-rule-tag)
 
 ### Update ProgressEvent to use double type for loaded and total
 
@@ -111,7 +111,7 @@ Using `double` permits fractional and very large values with floating semantics,
 Enables more precise progress reporting (fractions, partial units) in XHR/Fetch progress handlers and aligns implementations for long-running transfers or aggregated progress computations.
 
 #### References
-- https://chromestatus.com/feature/5084700244254720
-- https://xhr.spec.whatwg.org/#interface-progressevent
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5084700244254720)
+- [Spec](https://xhr.spec.whatwg.org/#interface-progressevent)
 
 File location to be saved (per spec): digest_markdown/webplatform/Web API/chrome-136-stable-en.md

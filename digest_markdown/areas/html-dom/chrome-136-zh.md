@@ -27,9 +27,9 @@ canvas 文本绘制行为现在在此前不可用的上下文（尤其是 Offscr
 - 在后台线程绘制时，提高对具有区域设置特定字形变体语言（例如 CJK、Arabic、Indic 脚本）的渲染保真度。
 
 #### 参考资料
-- https://bugs.chromium.org/p/chromium/issues/detail?id=385006131
-- https://chromestatus.com/feature/5101829618114560
-- https://html.spec.whatwg.org/multipage/canvas.html#canvastextdrawingstyles
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=385006131)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5101829618114560)
+- [Spec](https://html.spec.whatwg.org/multipage/canvas.html#canvastextdrawingstyles)
 
 ## 领域专长（HTML-DOM 焦点）
 

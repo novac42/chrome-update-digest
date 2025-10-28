@@ -26,9 +26,9 @@ A small JavaScript API to check whether Secure Payment Confirmation (SPC) is ava
 - Cleaner feature-detection logic in payment flows and integrations.
 
 #### References
-- https://issues.chromium.org/issues/40258712
-- https://chromestatus.com/feature/5165040614768640
-- https://github.com/w3c/secure-payment-confirmation/pull/285
+- [Tracking bug](https://issues.chromium.org/issues/40258712)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5165040614768640)
+- [GitHub](https://github.com/w3c/secure-payment-confirmation/pull/285)
 
 ### Secure Payment Confirmation: Browser Bound Keys
 
@@ -45,8 +45,8 @@ Adds an additional cryptographic signature over SPC assertions and credential cr
 - Developers can rely on enhanced attestation semantics from the browser without implementing custom device-binding logic.
 
 #### References
-- https://issues.chromium.org/issues/377278827
-- https://chromestatus.com/feature/5106102997614592
-- https://w3c.github.io/secure-payment-confirmation/#sctn-browser-bound-key-store
+- [Tracking bug](https://issues.chromium.org/issues/377278827)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5106102997614592)
+- [Link](https://w3c.github.io/secure-payment-confirmation/#sctn-browser-bound-key-store)
 
 Output file: digest_markdown/webplatform/Payment/chrome-139-stable-en.md

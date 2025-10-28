@@ -22,9 +22,9 @@ Chrome 的 HTTP 缓存键控方案更新为包含一个 `is-cross-site-main-fram
 - 影响导航密集型应用（包括 PWAs 和具有跨源重定向的网站）的缓存分析、自动化测试和安全评审。
 
 #### 参考资料
-- https://bugs.chromium.org/p/chromium/issues/detail?id=398784714 (Tracking bug #398784714)
-- https://chromestatus.com/feature/5108419906535424 (ChromeStatus.com entry)
-- https://httpwg.org/specs/rfc9110.html#caching (Spec)
+- [Tracking bug #398784714](https://bugs.chromium.org/p/chromium/issues/detail?id=398784714)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5108419906535424)
+- [Spec](https://httpwg.org/specs/rfc9110.html#caching)
 
 ## 领域专门知识（Navigation-Loading 聚焦）
 

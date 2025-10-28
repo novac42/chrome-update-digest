@@ -20,9 +20,9 @@ Chrome 138 引入了对 speculation-rules prefetch 的 ServiceWorker 支持，�
 - 开发者可以将 speculation-rules 作为端到端性能策略的一部分，结合 SW 路由和缓存共同使用。
 
 #### 参考资料
-- https://bugs.chromium.org/p/chromium/issues/detail?id=40947546 (跟踪 bug #40947546)  
-- https://chromestatus.com/feature/5121066433150976 (ChromeStatus.com 条目)  
-- https://wicg.github.io/nav-speculation/speculation-rules.html#speculation-rule-sw-integration (规范)
+- [跟踪 bug #40947546](https://bugs.chromium.org/p/chromium/issues/detail?id=40947546)
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/5121066433150976)
+- [规范](https://wicg.github.io/nav-speculation/speculation-rules.html#speculation-rule-sw-integration)
 
 # 领域专门知识（PWA 与 ServiceWorker 关注点）
 

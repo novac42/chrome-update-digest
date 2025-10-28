@@ -20,8 +20,8 @@ The feature surfaces options that change what form of depth data is produced or 
 - Device teams and engine integrators can tune depth production to match GPU/CPU budgets on constrained devices, improving frame rates and power usage.
 
 #### References
-- https://issues.chromium.org/issues/410607163
-- https://chromestatus.com/feature/5074096916004864
-- https://immersive-web.github.io/depth-sensing
+- [Tracking bug](https://issues.chromium.org/issues/410607163)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5074096916004864)
+- [Link](https://immersive-web.github.io/depth-sensing)
 
 Saved file: digest_markdown/webplatform/Devices/chrome-139-stable-en.md

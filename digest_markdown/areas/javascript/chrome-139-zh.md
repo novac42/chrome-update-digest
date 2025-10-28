@@ -25,8 +25,8 @@ Chromium 的 networking/content-sniffing 层中的检测逻辑已与 WHATWG mime
 - 此前对 `application/json` 进行手动匹配的库应更新以接受 `+json`，或依赖于 response.json() 的行为。
 
 #### 参考资料
-- https://chromestatus.com/feature/5470594816278528
-- https://mimesniff.spec.whatwg.org/#json-mime-type
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5470594816278528)
+- [Spec](https://mimesniff.spec.whatwg.org/#json-mime-type)
 
 保存此摘要的文件：
 ```text

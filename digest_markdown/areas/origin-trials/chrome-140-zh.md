@@ -19,10 +19,10 @@ title: chrome-140-zh
 VoIP 和视频通话 Web 应用可以展示可识别的来电界面，提高用户响应性并与原生来电通知达到接近的一致性。
 
 #### 参考资料
-- https://developer.chrome.com/origintrials/#/register_trial/2876111312029483009
-- https://issues.chromium.org/issues/detail?id=1383570
-- https://chromestatus.com/feature/5110990717321216
-- https://notifications.spec.whatwg.org
+- [Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/2876111312029483009)
+- [Tracking bug](https://issues.chromium.org/issues/detail?id=1383570)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5110990717321216)
+- [Spec](https://notifications.spec.whatwg.org)
 
 ### Crash Reporting key-value API（崩溃报告键值 API）
 
@@ -36,10 +36,10 @@ VoIP 和视频通话 Web 应用可以展示可识别的来电界面，提高用�
 通过为渲染器崩溃添加上下文状态注释（功能标志、最近操作）来改进崩溃分诊。对复杂的单页应用、PWA 以及调试生产环境的稳定性回归特别有用。
 
 #### 参考资料
-- https://developer.chrome.com/origintrials/#/register_trial/1304355042077179905
-- https://issues.chromium.org/issues/400432195
-- https://chromestatus.com/feature/6228675846209536
-- https://github.com/WICG/crash-reporting/pull/37
+- [Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/1304355042077179905)
+- [Tracking bug](https://issues.chromium.org/issues/400432195)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/6228675846209536)
+- [GitHub](https://github.com/WICG/crash-reporting/pull/37)
 
 ### Add the `clipboardchange` event（添加 `clipboardchange` 事件）
 
@@ -53,10 +53,10 @@ VoIP 和视频通话 Web 应用可以展示可识别的来电界面，提高用�
 远程桌面客户端和生产力类 Web 应用可以将页面内剪贴板状态与系统剪贴板保持同步，提升复制/粘贴工作流的用户体验。
 
 #### 参考资料
-- https://developer.chrome.com/origintrials/#/register_trial/137922738588221441
-- https://issues.chromium.org/issues/41442253
-- https://chromestatus.com/feature/5085102657503232
-- https://github.com/w3c/clipboard-apis/pull/239
+- [Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/137922738588221441)
+- [Tracking bug](https://issues.chromium.org/issues/41442253)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5085102657503232)
+- [GitHub](https://github.com/w3c/clipboard-apis/pull/239)
 
 ### Enable `SharedWorker` on Android（在 Android 上启用 `SharedWorker`）
 
@@ -70,8 +70,8 @@ VoIP 和视频通话 Web 应用可以展示可识别的来电界面，提高用�
 通过在标签间共享单个 WebSocket 或 SSE 来节省资源；在 Android 上同一源的多个标签间协调后台任务或集中缓存。
 
 #### 参考资料
-- https://developer.chrome.com/origintrials/#/register_trial/4101090410674257921
-- https://chromestatus.com/feature/6265472244514816
-- https://html.spec.whatwg.org/multipage/workers.html#shared-workers-and-the-sharedworker-interface
+- [Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/4101090410674257921)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/6265472244514816)
+- [Spec](https://html.spec.whatwg.org/multipage/workers.html#shared-workers-and-the-sharedworker-interface)
 
 已保存文件：digest_markdown/webplatform/Origin trials/chrome-140-stable-en.md

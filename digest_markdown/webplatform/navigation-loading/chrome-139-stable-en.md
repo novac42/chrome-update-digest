@@ -21,6 +21,6 @@ This behavior enforces a reset of `window.name` on navigations that change the b
 - Developers should not rely on `window.name` to persist data across navigations that may switch browsing context groups; use explicit storage or messaging patterns instead.
 
 #### References
-- https://issues.chromium.org/issues/1090128
-- https://chromestatus.com/feature/5962406356320256
-- https://html.spec.whatwg.org/multipage/browsing-the-web.html#resetBCName
+- [Tracking bug](https://issues.chromium.org/issues/1090128)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5962406356320256)
+- [Spec](https://html.spec.whatwg.org/multipage/browsing-the-web.html#resetBCName)

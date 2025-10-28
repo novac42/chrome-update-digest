@@ -31,9 +31,9 @@ Adds a Controlled Frame API that is available only to Isolated Web Apps. It enab
 - Scenarios where developers need finer runtime control over embedded content lifecycle and integration points within an IWA packaging model.
 
 #### References
-- https://github.com/WICG/isolated-web-apps/blob/main/README.md
-- https://issues.chromium.org/issues/40191772
-- https://chromestatus.com/feature/5199572022853632
-- https://wicg.github.io/controlled-frame
+- [GitHub](https://github.com/WICG/isolated-web-apps/blob/main/README.md)
+- [Tracking bug](https://issues.chromium.org/issues/40191772)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5199572022853632)
+- [Spec](https://wicg.github.io/controlled-frame)
 
 Saved to: digest_markdown/webplatform/Isolated Web Apps/chrome-140-stable-en.md

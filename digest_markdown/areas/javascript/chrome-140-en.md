@@ -27,8 +27,8 @@ Built-in ability to convert between Uint8Array (binary data) and base64/hex stri
 - Beneficial for performance-sensitive code paths that previously used nonstandard helpers or intermediate strings.
 
 #### References
-- https://chromestatus.com/feature/6281131254874112
-- https://tc39.es/proposal-arraybuffer-base64/spec
+- [ChromeStatus.com entry](https://chromestatus.com/feature/6281131254874112)
+- [Link](https://tc39.es/proposal-arraybuffer-base64/spec)
 
 ### View transition finished promise timing change
 
@@ -46,5 +46,5 @@ The timing of the view transition finished promise has been changed so promise r
 - Useful for performance-sensitive pages where minimizing late-frame script work preserves smoothness.
 
 #### References
-- https://issues.chromium.org/issues/430018991
-- https://chromestatus.com/feature/5143135809961984
+- [Tracking bug](https://issues.chromium.org/issues/430018991)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5143135809961984)

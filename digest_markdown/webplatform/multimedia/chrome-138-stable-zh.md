@@ -23,9 +23,9 @@ Chrome 138（stable）在 WebCodecs 中引入了对多媒体帧方向元数据�
 - 通过避免手动元数据 hack 简化媒体编辑和播放器逻辑。
 
 #### 参考资料
-- https://bugs.chromium.org/p/chromium/issues/detail?id=40243431
-- https://chromestatus.com/feature/5098495055380480
-- https://w3c.github.io/webcodecs/#videoframe-interface
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=40243431)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5098495055380480)
+- [Link](https://w3c.github.io/webcodecs/#videoframe-interface)
 
 Developer implications by domain (concise):
 - webapi: New WebCodecs fields expand the VideoFrame contract; update code that constructs/consumes VideoFrames.

@@ -25,8 +25,8 @@ Detection logic in Chromium's networking/content-sniffing layer was aligned with
 - Libraries that previously performed manual matching of `application/json` should update to accept `+json` or rely on response.json() behavior.
 
 #### References
-- https://chromestatus.com/feature/5470594816278528
-- https://mimesniff.spec.whatwg.org/#json-mime-type
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5470594816278528)
+- [Spec](https://mimesniff.spec.whatwg.org/#json-mime-type)
 
 File to save this digest:
 ```text

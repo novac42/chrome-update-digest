@@ -20,9 +20,9 @@ This change affects speculation rules `prefetch` and `prerender`, `<link rel=pre
 - Feature detection or heuristics based on the old header should be revised to use standard signals.
 
 #### References
-- https://issues.chromium.org/issues/420724819 (Tracking bug #420724819)
-- https://chromestatus.com/feature/5088012836536320 (ChromeStatus.com entry)
-- https://wicg.github.io/nav-speculation/prerendering.html#interaction-with-fetch (Spec)
+- [Tracking bug #420724819](https://issues.chromium.org/issues/420724819)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5088012836536320)
+- [Spec](https://wicg.github.io/nav-speculation/prerendering.html#interaction-with-fetch)
 
 ### Deprecate special font size rules for H1 within some elements
 
@@ -38,13 +38,13 @@ The deprecated rules are those listed in the HTML rendering section for sections
 - Component libraries and themes must ensure consistent heading styles across contexts by setting explicit CSS rules.
 
 #### References
-- https://html.spec.whatwg.org/multipage/rendering.html#sections-and-headings (a list of special rules)
-- https://issues.chromium.org/issues/394111284 (Tracking bug #394111284)
-- https://chromestatus.com/feature/6192419898654720 (ChromeStatus.com entry)
-- https://github.com/whatwg/html/pull/11102 (Spec)
-- https://creativecommons.org/licenses/by/4.0/ (Creative Commons Attribution 4.0 License)
-- https://www.apache.org/licenses/LICENSE-2.0 (Apache 2.0 License)
-- https://developers.google.com/site-policies (Google Developers Site Policies)
+- [a list of special rules](https://html.spec.whatwg.org/multipage/rendering.html#sections-and-headings)
+- [Tracking bug #394111284](https://issues.chromium.org/issues/394111284)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/6192419898654720)
+- [Spec](https://github.com/whatwg/html/pull/11102)
+- [Creative Commons Attribution 4.0 License](https://creativecommons.org/licenses/by/4.0/)
+- [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0)
+- [Google Developers Site Policies](https://developers.google.com/site-policies)
 
 ## Area-Specific Expertise (Deprecations)
 

@@ -26,6 +26,6 @@ The boolean attribute `GPUAdapter.isFallbackAdapter` on `GPUAdapter` is deprecat
 - Tests & Feature Detection: Update unit and integration tests that assert adapter properties; ensure tools that serialize adapter info use the `GPUAdapterInfo` field.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=409259074
-- https://chromestatus.com/feature/5125671816847360
-- https://gpuweb.github.io/gpuweb/#gpu-adapter
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=409259074)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5125671816847360)
+- [Link](https://gpuweb.github.io/gpuweb/#gpu-adapter)

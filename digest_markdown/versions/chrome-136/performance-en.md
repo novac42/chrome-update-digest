@@ -26,9 +26,9 @@ This capability is exposed via an origin trial (see Origin Trial link). Conceptu
 - Improve CI/perf dashboards by separating platform-induced variance from application regressions.
 
 #### References
-- https://developer.chrome.com/origintrials/#/trials/active
-- https://bugs.chromium.org/p/chromium/issues/detail?id=1413848
-- https://chromestatus.com/feature/5037395062800384
-- https://w3c.github.io/navigation-timing/
+- [Origin Trial](https://developer.chrome.com/origintrials/#/trials/active)
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=1413848)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5037395062800384)
+- [Link](https://w3c.github.io/navigation-timing/)
 
 Output file: digest_markdown/webplatform/Performance/chrome-136-stable-en.md

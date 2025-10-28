@@ -25,8 +25,8 @@ Chrome 138 (stable) 在 HTML-DOM 领域引入了一个针对错误建模的 DOM 
 - 需要指示配额限制的 API 将获得可扩展的错误类型，从而实现更清晰且更易维护的错误处理代码路径。
 
 #### 参考资料
-- https://chromestatus.com/feature/5647993867927552
-- https://whatpr.org/dom/1245.html
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5647993867927552)
+- [Link](https://whatpr.org/dom/1245.html)
 
 File path to save this digest:
 ```text

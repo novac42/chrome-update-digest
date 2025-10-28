@@ -25,9 +25,9 @@ Chromium 将停止为预获取（prefetch）和预渲染（prerender）预测性
 - 与旧头绑定的功能开关或服务器端优化必须迁移。
 
 #### 参考资料
-- https://issues.chromium.org/issues/420724819
-- https://chromestatus.com/feature/5088012836536320
-- https://wicg.github.io/nav-speculation/prerendering.html#interaction-with-fetch
+- [Tracking bug](https://issues.chromium.org/issues/420724819)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5088012836536320)
+- [Spec](https://wicg.github.io/nav-speculation/prerendering.html#interaction-with-fetch)
 
 ### Deprecate special font size rules for H1 within some elements（弃用某些元素内 H1 的特殊字体大小规则）
 
@@ -43,12 +43,12 @@ Chromium 将停止为预获取（prefetch）和预渲染（prerender）预测性
 - 迁移：为文档结构中的标题添加显式 CSS 规则，而不要依赖已弃用的用户代理默认值。
 
 #### 参考资料
-- https://html.spec.whatwg.org/multipage/rendering.html#sections-and-headings
-- https://issues.chromium.org/issues/394111284
-- https://chromestatus.com/feature/6192419898654720
-- https://github.com/whatwg/html/pull/11102
-- https://creativecommons.org/licenses/by/4.0/
-- https://www.apache.org/licenses/LICENSE-2.0
-- https://developers.google.com/site-policies
+- [Spec](https://html.spec.whatwg.org/multipage/rendering.html#sections-and-headings)
+- [Tracking bug](https://issues.chromium.org/issues/394111284)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/6192419898654720)
+- [GitHub](https://github.com/whatwg/html/pull/11102)
+- [Link](https://creativecommons.org/licenses/by/4.0/)
+- [Link](https://www.apache.org/licenses/LICENSE-2.0)
+- [Link](https://developers.google.com/site-policies)
 
 要保存的文件： digest_markdown/webplatform/deprecation/chrome-140-stable-en.md

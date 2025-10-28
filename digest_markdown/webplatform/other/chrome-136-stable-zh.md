@@ -26,6 +26,6 @@ Chrome 用户现在可以在 WebGPU 画布上右键单击，并在上下文菜�
 - multimedia & developer tooling: 便于为文档和测试提取资源。
 
 #### 参考资料
-- https://issues.chromium.org/issues/40902474
+- [Tracking bug](https://issues.chromium.org/issues/40902474)
 
 已保存到： digest_markdown/webplatform/other/chrome-136-stable-en.md

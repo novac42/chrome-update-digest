@@ -27,8 +27,8 @@ Chrome 140 继续增强 JavaScript 的易用性和动画时序。此版本新增
 - 对此前使用非标准辅助函数或中间字符串的性能敏感代码路径有利。
 
 #### 参考资料
-- https://chromestatus.com/feature/6281131254874112
-- https://tc39.es/proposal-arraybuffer-base64/spec
+- [ChromeStatus.com entry](https://chromestatus.com/feature/6281131254874112)
+- [Link](https://tc39.es/proposal-arraybuffer-base64/spec)
 
 ### View transition finished promise timing change（finished promise 时序更改）
 
@@ -46,5 +46,5 @@ Chrome 140 继续增强 JavaScript 的易用性和动画时序。此版本新增
 - 对于需要尽量减少末帧脚本工作的性能敏感页面有帮助，从而保持流畅性。
 
 #### 参考资料
-- https://issues.chromium.org/issues/430018991
-- https://chromestatus.com/feature/5143135809961984
+- [Tracking bug](https://issues.chromium.org/issues/430018991)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5143135809961984)

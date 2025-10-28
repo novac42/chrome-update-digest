@@ -25,9 +25,9 @@ The change extends the BYOB read semantics defined in the Streams spec to accept
 - Improved performance for streaming parsers that prefer full records over incremental fragments.
 
 #### References
-- https://issues.chromium.org/issues/40942083 (Tracking bug #40942083)
-- https://chromestatus.com/feature/6396991665602560 (ChromeStatus.com entry)
-- https://streams.spec.whatwg.org/#byob-reader-read (Spec)
+- [Tracking bug #40942083](https://issues.chromium.org/issues/40942083)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/6396991665602560)
+- [Spec](https://streams.spec.whatwg.org/#byob-reader-read)
 
 ### Get Installed Related Apps API on desktop
 
@@ -43,9 +43,9 @@ The API returns information only when the native application has an established 
 - Progressive enhancement for PWAs and installable experiences across desktop platforms.
 
 #### References
-- https://issues.chromium.org/issues/895854 (Tracking bug #895854)
-- https://chromestatus.com/feature/5695378309513216 (ChromeStatus.com entry)
-- https://wicg.github.io/get-installed-related-apps/spec (Spec)
+- [Tracking bug #895854](https://issues.chromium.org/issues/895854)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5695378309513216)
+- [Spec](https://wicg.github.io/get-installed-related-apps/spec)
 
 ### Http cookie prefix
 
@@ -61,6 +61,6 @@ This feature provides a mechanism to mark or recognize cookies that should be tr
 - Aid incident response by making unexpected client-set cookies easier to flag and remediate.
 
 #### References
-- https://issues.chromium.org/issues/426096760 (Tracking bug #426096760)
-- https://chromestatus.com/feature/5170139586363392 (ChromeStatus.com entry)
-- https://github.com/httpwg/http-extensions/pull/3110 (Spec)
+- [Tracking bug #426096760](https://issues.chromium.org/issues/426096760)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5170139586363392)
+- [Spec](https://github.com/httpwg/http-extensions/pull/3110)

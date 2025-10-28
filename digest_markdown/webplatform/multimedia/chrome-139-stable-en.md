@@ -27,9 +27,9 @@ Exposes an audio level value for an encoded audio frame transmitted over RTCPeer
 - Consider CSP/CORS and application-level handling when sending audio-level telemetry to remote servers; ensure appropriate user disclosure.
 
 #### References
-- https://issues.chromium.org/issues/418116079
-- https://chromestatus.com/feature/5206106602995712
-- https://w3c.github.io/webrtc-encoded-transform/#dom-rtcencodedaudioframemetadata-audiolevel
+- [Tracking bug](https://issues.chromium.org/issues/418116079)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5206106602995712)
+- [Link](https://w3c.github.io/webrtc-encoded-transform/#dom-rtcencodedaudioframemetadata-audiolevel)
 
 Save to:
 ```text

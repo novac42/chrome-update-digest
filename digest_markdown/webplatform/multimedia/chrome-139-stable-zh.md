@@ -27,9 +27,9 @@ Chrome 139 为已编码的 WebRTC 音频帧添加了音量元数据暴露，允�
 - 在将音量遥测发送到远程服务器时，请考虑 CSP/CORS 及应用层处理；确保适当的用户披露。
 
 #### 参考资料
-- https://issues.chromium.org/issues/418116079
-- https://chromestatus.com/feature/5206106602995712
-- https://w3c.github.io/webrtc-encoded-transform/#dom-rtcencodedaudioframemetadata-audiolevel
+- [Tracking bug](https://issues.chromium.org/issues/418116079)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5206106602995712)
+- [Link](https://w3c.github.io/webrtc-encoded-transform/#dom-rtcencodedaudioframemetadata-audiolevel)
 
 Save to:
 ```text

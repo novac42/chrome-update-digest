@@ -41,7 +41,7 @@ Chrome is progressively rolling out integer range analysis in Tint to estimate t
 - Potential for reduced conservatism in generated code where value ranges are proven.
 
 #### References
-- https://issuetracker.google.com/348701956 (issue 348701956)
+- [issue 348701956](https://issuetracker.google.com/348701956)
 
 ### SPIR-V 1.4 update for Vulkan backend
 
@@ -57,7 +57,7 @@ SPIR-V 1.4 support is rolled out where available on Android and ChromeOS devices
 - Potential performance and efficiency gains in shaders benefiting from 1.4 features.
 
 #### References
-- https://issuetracker.google.com/427717267 (issue 427717267)
+- [issue 427717267](https://issuetracker.google.com/427717267)
 
 ### Dawn updates
 
@@ -73,9 +73,9 @@ The standardized webgpu.h header that defines the core WebGPU C API is considere
 - Easier maintenance and compatibility for projects binding to Dawn via webgpu.h.
 
 #### References
-- https://github.com/webgpu-native/webgpu-headers/blob/main/webgpu.h (`webgpu.h`)
-- https://crbug.com/dawn/new (file a bug)
-- https://github.com/wcandillon (William Candillon)
-- https://github.com/google/dawn/pull/39 (Dawn PR #39)
-- https://github.com/google/dawn/actions/runs/17429395587#artifacts (example)
-- https://dawn.googlesource.com/dawn/+log/chromium/7339..chromium/7390?n=1000 (list of commits)
+- [`webgpu.h`](https://github.com/webgpu-native/webgpu-headers/blob/main/webgpu.h)
+- [file a bug](https://crbug.com/dawn/new)
+- [William Candillon](https://github.com/wcandillon)
+- [Dawn PR #39](https://github.com/google/dawn/pull/39)
+- [example](https://github.com/google/dawn/actions/runs/17429395587#artifacts)
+- [list of commits](https://dawn.googlesource.com/dawn/+log/chromium/7339..chromium/7390?n=1000)

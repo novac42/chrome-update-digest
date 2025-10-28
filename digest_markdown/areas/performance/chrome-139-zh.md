@@ -25,7 +25,7 @@ Chrome 现在将 Android 上冻结非活动后台上下文的阈值降至一分�
 - 总体好处是降低 Android 设备的 CPU 和电池消耗，提升感知性能和设备寿命。
 
 #### 参考资料
-- https://issues.chromium.org/issues/435623337
-- https://chromestatus.com/feature/5386725031149568
+- [Tracking bug](https://issues.chromium.org/issues/435623337)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5386725031149568)
 
 保存路径：`digest_markdown/webplatform/Performance/chrome-139-stable-en.md`

@@ -22,9 +22,9 @@ The canvas text drawing behavior now respects language/locale information for Ca
 - Improved rendering fidelity for languages with locale-specific glyph variants (e.g., CJK, Arabic, Indic scripts) when drawing in background threads.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=385006131
-- https://chromestatus.com/feature/5101829618114560
-- https://html.spec.whatwg.org/multipage/canvas.html#canvastextdrawingstyles
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=385006131)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5101829618114560)
+- [Spec](https://html.spec.whatwg.org/multipage/canvas.html#canvastextdrawingstyles)
 
 ## Area-Specific Expertise (HTML-DOM focus)
 

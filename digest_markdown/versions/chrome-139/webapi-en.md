@@ -23,9 +23,9 @@ This is a manifest-level extension that requires origin verification via the ind
 Unify multi-origin properties (subdomains, related top-level domains) into a single PWA install/launch experience; simplify navigation, sharing, and service worker expectations across related origins.
 
 #### References
-- https://issues.chromium.org/issues/detail?id=1250011 (Tracking bug #detail?id=1250011)  
-- https://chromestatus.com/feature/5746537956114432 (ChromeStatus.com entry)  
-- https://github.com/WICG/manifest-incubations/pull/113 (Spec)
+- [Tracking bug #detail?id=1250011](https://issues.chromium.org/issues/detail?id=1250011)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5746537956114432)
+- [Spec](https://github.com/WICG/manifest-incubations/pull/113)
 
 ### Specification-compliant JSON MIME type detection
 
@@ -39,8 +39,8 @@ MIME type recognition logic was updated to follow the WHATWG mimesniff rules for
 APIs and client-side code that rely on content-type checks will see more consistent parsing/handling of JSON payloads when servers use `+json` vendor or vendor-tree subtypes; reduces surprises when interoperating with APIs using custom JSON-like MIME types.
 
 #### References
-- https://chromestatus.com/feature/5470594816278528 (ChromeStatus.com entry)  
-- https://mimesniff.spec.whatwg.org/#json-mime-type (Spec)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5470594816278528)
+- [Spec](https://mimesniff.spec.whatwg.org/#json-mime-type)
 
 ### WebGPU `core-features-and-limits`
 
@@ -54,9 +54,9 @@ Adapters/devices that advertise this feature meet the spec's baseline features a
 Graphics and compute applications can query for and rely on a well-defined baseline of WebGPU capabilities, simplifying capability negotiation and fallback strategies in high-performance rendering and GPU compute scenarios.
 
 #### References
-- https://issues.chromium.org/issues/418025721 (Tracking bug #418025721)  
-- https://chromestatus.com/feature/4744775089258496 (ChromeStatus.com entry)  
-- https://gpuweb.github.io/gpuweb/#core-features-and-limits (Spec)
+- [Tracking bug #418025721](https://issues.chromium.org/issues/418025721)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/4744775089258496)
+- [Spec](https://gpuweb.github.io/gpuweb/#core-features-and-limits)
 
 ### Crash Reporting API: Specify `crash-reporting` to receive only crash reports
 
@@ -70,6 +70,6 @@ The crash-reporting endpoint is configured via the well-known endpoint name in t
 Teams that want crash-only telemetry to go to a dedicated ingestion pipeline (for storage, alerting, or privacy separation) can configure the `crash-reporting` endpoint to avoid noise from other report types and minimize downstream filtering.
 
 #### References
-- https://issues.chromium.org/issues/414723480 (Tracking bug #414723480)  
-- https://chromestatus.com/feature/5129218731802624 (ChromeStatus.com entry)  
-- https://wicg.github.io/crash-reporting/#crash-reports-delivery-priority (Spec)
+- [Tracking bug #414723480](https://issues.chromium.org/issues/414723480)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5129218731802624)
+- [Spec](https://wicg.github.io/crash-reporting/#crash-reports-delivery-priority)

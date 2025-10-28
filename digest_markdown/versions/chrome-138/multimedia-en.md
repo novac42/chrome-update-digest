@@ -28,9 +28,9 @@ Introduces `rotation: int` and `flip: bool` values to various video-related inte
 - Simplifying media editing and player logic by avoiding manual metadata hacks.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=40243431
-- https://chromestatus.com/feature/5098495055380480
-- https://w3c.github.io/webcodecs/#videoframe-interface
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=40243431)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5098495055380480)
+- [Link](https://w3c.github.io/webcodecs/#videoframe-interface)
 
 Developer implications by domain (concise):
 - webapi: New WebCodecs fields expand the VideoFrame contract; update code that constructs/consumes VideoFrames.

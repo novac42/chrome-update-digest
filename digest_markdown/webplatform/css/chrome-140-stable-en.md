@@ -18,9 +18,9 @@ Expressions perform type-checked arithmetic per the CSS Values Level 4 spec, let
 Useful for typography and any layout that needs unit conversions or reuse of typed values in number-accepting properties.
 
 #### References
-- https://issues.chromium.org/issues/40768696 (Tracking bug #40768696)  
-- https://chromestatus.com/feature/4740780497043456 (ChromeStatus.com entry)  
-- https://www.w3.org/TR/css-values-4/#calc-type-checking (Spec)
+- [Tracking bug #40768696](https://issues.chromium.org/issues/40768696)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/4740780497043456)
+- [Spec](https://www.w3.org/TR/css-values-4/#calc-type-checking)
 
 ### CSS `caret-animation` property
 
@@ -34,9 +34,9 @@ Introduces the `caret-animation` property with values `auto` and `manual` to pre
 Animate caret color reliably during custom input animations or editor UIs.
 
 #### References
-- https://issues.chromium.org/issues/329301988 (Tracking bug #329301988)  
-- https://chromestatus.com/feature/5082469066604544 (ChromeStatus.com entry)  
-- https://drafts.csswg.org/css-ui/#caret-animation (Spec)
+- [Tracking bug #329301988](https://issues.chromium.org/issues/329301988)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5082469066604544)
+- [Spec](https://drafts.csswg.org/css-ui/#caret-animation)
 
 ### highlightsFromPoint API
 
@@ -50,9 +50,9 @@ The API returns highlights intersecting a point, enabling programmatic interacti
 Tooling and editors that need to resolve which semantic highlights are present at a pointer location or build precise highlight interactions.
 
 #### References
-- https://issues.chromium.org/issues/365046212 (Tracking bug #365046212)  
-- https://chromestatus.com/feature/4552801607483392 (ChromeStatus.com entry)  
-- https://drafts.csswg.org/css-highlight-api-1/#interactions (Spec)
+- [Tracking bug #365046212](https://issues.chromium.org/issues/365046212)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/4552801607483392)
+- [Spec](https://drafts.csswg.org/css-highlight-api-1/#interactions)
 
 ### `ScrollIntoView` container option
 
@@ -66,8 +66,8 @@ When `container` is used, only the nearest scroll container is scrolled to bring
 Component-scoped scrolling (e.g., virtualized lists or nested scroll containers) where authors want to avoid scrolling the entire viewport.
 
 #### References
-- https://chromestatus.com/feature/5100036528275456 (ChromeStatus.com entry)  
-- https://drafts.csswg.org/cssom-view/#dom-scrollintoviewoptions-container (Spec)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5100036528275456)
+- [Spec](https://drafts.csswg.org/cssom-view/#dom-scrollintoviewoptions-container)
 
 ### View transitions: Inherit more animation properties
 
@@ -81,9 +81,9 @@ These properties propagate to transition pseudo-elements to better match the ori
 Creates more consistent cross-fade and motion effects when using the View Transitions API, preserving animation behavior.
 
 #### References
-- https://issues.chromium.org/issues/427741151 (Tracking bug #427741151)  
-- https://chromestatus.com/feature/5154752085884928 (ChromeStatus.com entry)  
-- https://www.w3.org/TR/css-view-transitions-2 (Spec)
+- [Tracking bug #427741151](https://issues.chromium.org/issues/427741151)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5154752085884928)
+- [Spec](https://www.w3.org/TR/css-view-transitions-2)
 
 ### View transition pseudos inherit animation-delay.
 
@@ -97,8 +97,8 @@ Propagation of `animation-delay` aligns timing of pseudo-elements with source an
 Preserves intended animation timing when using view transitions that depend on delays.
 
 #### References
-- https://chromestatus.com/feature/5424291457531904 (ChromeStatus.com entry)  
-- https://www.w3.org/TR/css-view-transitions-2 (Spec)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5424291457531904)
+- [Spec](https://www.w3.org/TR/css-view-transitions-2)
 
 ### Nested view transitions groups
 
@@ -112,9 +112,9 @@ Nested pseudo trees allow nested clipping, 3D transforms, and correct applicatio
 Complex UI transitions that rely on nested transforms, clipping, or stacking contexts benefit from more accurate visual fidelity.
 
 #### References
-- https://issues.chromium.org/issues/399431227 (Tracking bug #399431227)  
-- https://chromestatus.com/feature/5162799714795520 (ChromeStatus.com entry)  
-- https://www.w3.org/TR/css-view-transitions-2/#view-transition-group-prop (Spec)
+- [Tracking bug #399431227](https://issues.chromium.org/issues/399431227)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5162799714795520)
+- [Spec](https://www.w3.org/TR/css-view-transitions-2/#view-transition-group-prop)
 
 ### Propagate viewport `overscroll-behavior` from root
 
@@ -128,9 +128,9 @@ This change stops relying on `<body>` for viewport propagation and instead uses 
 More predictable overscroll behavior across pages and components; authors should apply viewport-level controls on `:root`/`<html>`.
 
 #### References
-- https://issues.chromium.org/issues/41453796 (Tracking bug #41453796)  
-- https://chromestatus.com/feature/6210047134400512 (ChromeStatus.com entry)  
-- https://drafts.csswg.org/css-overscroll-behavior-1 (Spec)
+- [Tracking bug #41453796](https://issues.chromium.org/issues/41453796)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/6210047134400512)
+- [Spec](https://drafts.csswg.org/css-overscroll-behavior-1)
 
 ### CSS `counter()` and `counters()` in alt text of `content` property
 
@@ -144,9 +144,9 @@ The `content` property's alt text subsystem accepts counter functions, allowing 
 Improves accessibility for generated content like lists or annotated items where counters convey semantic order or numbering.
 
 #### References
-- https://issues.chromium.org/issues/417488055 (Tracking bug #417488055)  
-- https://chromestatus.com/feature/5185442420621312 (ChromeStatus.com entry)  
-- https://drafts.csswg.org/css-content/#content-property (Spec)
+- [Tracking bug #417488055](https://issues.chromium.org/issues/417488055)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5185442420621312)
+- [Spec](https://drafts.csswg.org/css-content/#content-property)
 
 ### CSS `scroll-target-group` property
 
@@ -160,9 +160,9 @@ The property controls group formation for scroll markers per the CSS Overflow Mo
 Authors can control scroll marker grouping to influence scroll-snapping, markers, or related scrolling behavior across container groups.
 
 #### References
-- https://issues.chromium.org/issues/6607668 (Tracking bug #6607668)  
-- https://chromestatus.com/feature/5189126177161216 (ChromeStatus.com entry)  
-- https://drafts.csswg.org/css-overflow-5/#scroll-target-group (Spec)
+- [Tracking bug #6607668](https://issues.chromium.org/issues/6607668)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5189126177161216)
+- [Spec](https://drafts.csswg.org/css-overflow-5/#scroll-target-group)
 
 ### Support `font-variation-settings` descriptor in `@font-face` rule
 
@@ -176,8 +176,8 @@ The descriptor allows authors to specify default variable font axis settings at 
 Improves typographic control by enabling authors to register @font-face variants with specific variation axis defaults for consistent rendering.
 
 #### References
-- https://issues.chromium.org/issues/40398871 (Tracking bug #40398871)  
-- https://chromestatus.com/feature/5221379619946496 (ChromeStatus.com entry)  
-- https://www.w3.org/TR/css-fonts-4/#font-rend-desc (Spec)
+- [Tracking bug #40398871](https://issues.chromium.org/issues/40398871)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5221379619946496)
+- [Spec](https://www.w3.org/TR/css-fonts-4/#font-rend-desc)
 
 Saved to: digest_markdown/webplatform/CSS/chrome-140-stable-en.md

@@ -26,10 +26,10 @@ The API surfaces model-backed summarization functionality to web pages via JavaS
 - Enabling progressive enhancement: sites can call the API when available, falling back otherwise.
 
 #### References
-- https://developer.mozilla.org/docs/Web/API/Summarizer
-- https://bugs.chromium.org/p/chromium/issues/detail?id=351744634
-- https://chromestatus.com/feature/5134971702001664
-- https://wicg.github.io/summarization-api/
+- [Link](https://developer.mozilla.org/docs/Web/API/Summarizer)
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=351744634)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5134971702001664)
+- [Spec](https://wicg.github.io/summarization-api/)
 
 ## Area-Specific Expertise Notes
 

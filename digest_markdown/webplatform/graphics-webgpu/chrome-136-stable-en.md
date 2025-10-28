@@ -20,8 +20,8 @@ This attribute surfaces adapter-level metadata to WebGPU consumers so applicatio
 - Telemetry and debugging to correlate performance issues with adapter types.
 
 #### References
-- https://issues.chromium.org/issues/403172841
-- https://groups.google.com/a/chromium.org/g/blink-dev/c/VUkzIOWd2n0
+- [Tracking bug](https://issues.chromium.org/issues/403172841)
+- [Link](https://groups.google.com/a/chromium.org/g/blink-dev/c/VUkzIOWd2n0)
 
 ### Shader compilation time improvements on D3D12
 
@@ -37,7 +37,7 @@ The new IR sits between Tint's AST and the HLSL backend writer, enabling more ef
 - Lower latency for WebGPU-heavy applications on D3D12 devices.
 
 #### References
-- https://issues.chromium.org/issues/42251045
+- [Tracking bug](https://issues.chromium.org/issues/42251045)
 
 ### Lift compatibility mode restrictions
 
@@ -52,9 +52,9 @@ This toggle exposes a device-level override to bypass compatibility-mode feature
 - Debugging feature-gating behavior and validating implementations against the full WebGPU spec in controlled environments.
 
 #### References
-- https://issues.chromium.org/issues/395855517
-- https://github.com/gpuweb/gpuweb/blob/main/proposals/compatibility-mode.md
-- https://issues.chromium.org/issues/395855516
+- [Tracking bug](https://issues.chromium.org/issues/395855517)
+- [GitHub](https://github.com/gpuweb/gpuweb/blob/main/proposals/compatibility-mode.md)
+- [Tracking bug](https://issues.chromium.org/issues/395855516)
 
 ### Dawn updates
 
@@ -69,9 +69,9 @@ This is a naming clarification in the Dawn/webgpu-native callback status enum to
 - Clearer mapping between JavaScript/WebGPU errors and native statuses when debugging or instrumenting compile tasks.
 
 #### References
-- https://webgpu-native.github.io/webgpu-headers/Asynchronous-Operations.html#CallbackStatuses
-- https://github.com/webgpu-native/webgpu-headers/issues/520
-- https://github.com/webgpu-native/webgpu-headers/issues/369
-- https://dawn.googlesource.com/dawn/+log/chromium/7049..chromium/7103?n=1000
+- [Link](https://webgpu-native.github.io/webgpu-headers/Asynchronous-Operations.html#CallbackStatuses)
+- [GitHub](https://github.com/webgpu-native/webgpu-headers/issues/520)
+- [GitHub](https://github.com/webgpu-native/webgpu-headers/issues/369)
+- [Link](https://dawn.googlesource.com/dawn/+log/chromium/7049..chromium/7103?n=1000)
 
 File saved to: digest_markdown/webplatform/Graphics and WebGPU/chrome-136-stable-en.md

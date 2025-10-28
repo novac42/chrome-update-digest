@@ -20,9 +20,9 @@ Implementation enables Web Serial API transport over Bluetooth RFCOMM on Chromiu
 - Enterprise and managed-device scenarios where policies govern serial-port access from web apps.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=375245353
-- https://chromestatus.com/feature/5085754267189248
-- https://wicg.github.io/serial/
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=375245353)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5085754267189248)
+- [Spec](https://wicg.github.io/serial/)
 
 ### Viewport Segments Enumeration API
 
@@ -38,6 +38,6 @@ The API provides enumeration of viewport segments produced by hardware-driven sp
 - Improved media and content layout strategies on split viewports.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=1039050
-- https://chromestatus.com/feature/5131631321964544
-- https://wicg.github.io/visual-viewport/
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=1039050)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5131631321964544)
+- [Spec](https://wicg.github.io/visual-viewport/)

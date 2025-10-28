@@ -24,8 +24,8 @@ This change restricts the Accept-Language header value string and navigator.lang
 - Reduces passive fingerprinting vectors used by analytics or anti-fraud heuristics.
 
 #### References
-- https://issues.chromium.org/issues/1306905
-- https://chromestatus.com/feature/5188040623390720
+- [Tracking bug](https://issues.chromium.org/issues/1306905)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5188040623390720)
 
 ### Randomize TCP port allocation on Windows
 
@@ -40,8 +40,8 @@ The rollout randomizes ephemeral TCP ports to avoid collision patterns that can 
 - May alter connection reuse characteristics observed during diagnostics; network tooling and tests that assume deterministic port sequences should be reviewed.
 
 #### References
-- https://issues.chromium.org/issues/40744069
-- https://chromestatus.com/feature/5106900286570496
+- [Tracking bug](https://issues.chromium.org/issues/40744069)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5106900286570496)
 
 Area-specific notes (Network perspective)
 - security-privacy: Both features reduce fingerprinting surface and increase unpredictability in network identifiers.

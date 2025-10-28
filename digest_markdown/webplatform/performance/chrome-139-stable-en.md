@@ -20,7 +20,7 @@ Chrome now reduces the threshold for freezing inactive background contexts on An
 - Overall benefit is reduced CPU and battery consumption on Android devices, improving perceived performance and device longevity.
 
 #### References
-- https://issues.chromium.org/issues/435623337
-- https://chromestatus.com/feature/5386725031149568
+- [Tracking bug](https://issues.chromium.org/issues/435623337)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5386725031149568)
 
 Save path: `digest_markdown/webplatform/Performance/chrome-139-stable-en.md`

@@ -25,9 +25,9 @@ Chrome 140 的 Web API 更新侧重于提高健壮性、本地集成和服务器
 - 对偏好完整记录而非增量片段的流式解析器提高性能。
 
 #### 参考资料
-- https://issues.chromium.org/issues/40942083 （跟踪 bug #40942083）  
-- https://chromestatus.com/feature/6396991665602560 （ChromeStatus.com 条目）  
-- https://streams.spec.whatwg.org/#byob-reader-read （规范）
+- [跟踪 bug #40942083](https://issues.chromium.org/issues/40942083)
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/6396991665602560)
+- [规范](https://streams.spec.whatwg.org/#byob-reader-read)
 
 ### Get Installed Related Apps API on desktop（桌面端可用）
 
@@ -43,9 +43,9 @@ Get Installed Related Apps API（`navigator.getInstalledRelatedApps`）在桌面
 - 为 PWAs 和跨桌面平台的可安装体验提供渐进式增强。
 
 #### 参考资料
-- https://issues.chromium.org/issues/895854 （跟踪 bug #895854）  
-- https://chromestatus.com/feature/5695378309513216 （ChromeStatus.com 条目）  
-- https://wicg.github.io/get-installed-related-apps/spec （规范）
+- [跟踪 bug #895854](https://issues.chromium.org/issues/895854)
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/5695378309513216)
+- [规范](https://wicg.github.io/get-installed-related-apps/spec)
 
 ### Http cookie prefix（服务器端 cookie 归属语义）
 
@@ -61,6 +61,6 @@ Get Installed Related Apps API（`navigator.getInstalledRelatedApps`）在桌面
 - 通过使意外的客户端设置 cookie 更易标记和修复，帮助事件响应。
 
 #### 参考资料
-- https://issues.chromium.org/issues/426096760 （跟踪 bug #426096760）  
-- https://chromestatus.com/feature/5170139586363392 （ChromeStatus.com 条目）  
-- https://github.com/httpwg/http-extensions/pull/3110 （规范）
+- [跟踪 bug #426096760](https://issues.chromium.org/issues/426096760)
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/5170139586363392)
+- [规范](https://github.com/httpwg/http-extensions/pull/3110)

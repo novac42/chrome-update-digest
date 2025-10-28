@@ -24,6 +24,6 @@ Chrome 139（stable）引入了一项以隐私为中心的 Navigation-Loading �
 - 开发者不应依赖 `window.name` 在可能切换浏览上下文组的导航间持久化数据；应改用显式存储或消息传递模式。
 
 #### 参考资料
-- https://issues.chromium.org/issues/1090128
-- https://chromestatus.com/feature/5962406356320256
-- https://html.spec.whatwg.org/multipage/browsing-the-web.html#resetBCName
+- [Tracking bug](https://issues.chromium.org/issues/1090128)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5962406356320256)
+- [Spec](https://html.spec.whatwg.org/multipage/browsing-the-web.html#resetBCName)

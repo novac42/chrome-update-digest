@@ -25,9 +25,9 @@ This change applies to speculation rules `prefetch` and `prerender`, `<link rel=
 - Feature gating or server-side optimizations tied to the old header must be migrated.
 
 #### References
-- https://issues.chromium.org/issues/420724819
-- https://chromestatus.com/feature/5088012836536320
-- https://wicg.github.io/nav-speculation/prerendering.html#interaction-with-fetch
+- [Tracking bug](https://issues.chromium.org/issues/420724819)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5088012836536320)
+- [Spec](https://wicg.github.io/nav-speculation/prerendering.html#interaction-with-fetch)
 
 ### Deprecate special font size rules for H1 within some elements
 
@@ -43,12 +43,12 @@ The deprecation removes author-agent special rules that altered H1 presentation 
 - Migration: add explicit CSS rules targeting headings in your document structure rather than relying on deprecated UA defaults.
 
 #### References
-- https://html.spec.whatwg.org/multipage/rendering.html#sections-and-headings
-- https://issues.chromium.org/issues/394111284
-- https://chromestatus.com/feature/6192419898654720
-- https://github.com/whatwg/html/pull/11102
-- https://creativecommons.org/licenses/by/4.0/
-- https://www.apache.org/licenses/LICENSE-2.0
-- https://developers.google.com/site-policies
+- [Spec](https://html.spec.whatwg.org/multipage/rendering.html#sections-and-headings)
+- [Tracking bug](https://issues.chromium.org/issues/394111284)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/6192419898654720)
+- [GitHub](https://github.com/whatwg/html/pull/11102)
+- [Link](https://creativecommons.org/licenses/by/4.0/)
+- [Link](https://www.apache.org/licenses/LICENSE-2.0)
+- [Link](https://developers.google.com/site-policies)
 
 File to save: digest_markdown/webplatform/deprecation/chrome-140-stable-en.md

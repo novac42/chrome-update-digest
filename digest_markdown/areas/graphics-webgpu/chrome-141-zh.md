@@ -41,7 +41,7 @@ Chrome 正在逐步在 Tint 中推出整数范围分析，以在不执行程序�
 - 在已证明取值范围的情况下，生成代码有望减少保守性。
 
 #### 参考资料
-- https://issuetracker.google.com/348701956 (问题 348701956)
+- [问题 348701956](https://issuetracker.google.com/348701956)
 
 ### SPIR-V 1.4 update for Vulkan backend（Vulkan 后端的 SPIR-V 1.4 更新）
 
@@ -57,7 +57,7 @@ Chrome 正在逐步在 Tint 中推出整数范围分析，以在不执行程序�
 - 对可受益于 1.4 特性的着色器，可能获得性能与效率提升。
 
 #### 参考资料
-- https://issuetracker.google.com/427717267 (问题 427717267)
+- [问题 427717267](https://issuetracker.google.com/427717267)
 
 ### Dawn updates（Dawn 更新）
 
@@ -73,9 +73,9 @@ Chrome 正在逐步在 Tint 中推出整数范围分析，以在不执行程序�
 - 通过 `webgpu.h` 绑定 Dawn 的项目将更易维护并提升兼容性。
 
 #### 参考资料
-- https://github.com/webgpu-native/webgpu-headers/blob/main/webgpu.h (`webgpu.h`)
-- https://crbug.com/dawn/new (file a bug)
-- https://github.com/wcandillon (William Candillon)
-- https://github.com/google/dawn/pull/39 (Dawn PR #39)
-- https://github.com/google/dawn/actions/runs/17429395587#artifacts (示例)
-- https://dawn.googlesource.com/dawn/+log/chromium/7339..chromium/7390?n=1000 (提交列表)
+- [`webgpu.h`](https://github.com/webgpu-native/webgpu-headers/blob/main/webgpu.h)
+- [file a bug](https://crbug.com/dawn/new)
+- [William Candillon](https://github.com/wcandillon)
+- [Dawn PR #39](https://github.com/google/dawn/pull/39)
+- [示例](https://github.com/google/dawn/actions/runs/17429395587#artifacts)
+- [提交列表](https://dawn.googlesource.com/dawn/+log/chromium/7339..chromium/7390?n=1000)

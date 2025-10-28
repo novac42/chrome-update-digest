@@ -18,9 +18,9 @@ Typed arithmetic 允许在 CSS 中编写具单位意识的表达式（例如 `ca
 适用于排版以及任何需要单位转换或在接受数字的属性中重用类型化值的布局。
 
 #### 参考资料
-- https://issues.chromium.org/issues/40768696 （跟踪 bug #40768696）  
-- https://chromestatus.com/feature/4740780497043456 （ChromeStatus.com 条目）  
-- https://www.w3.org/TR/css-values-4/#calc-type-checking （规范）
+- [跟踪 bug #40768696](https://issues.chromium.org/issues/40768696)
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/4740780497043456)
+- [规范](https://www.w3.org/TR/css-values-4/#calc-type-checking)
 
 ### CSS `caret-animation` property (插入点动画属性)
 
@@ -34,9 +34,9 @@ Typed arithmetic 允许在 CSS 中编写具单位意识的表达式（例如 `ca
 在自定义输入动画或编辑器 UI 中可靠地对插入点颜色进行动画处理。
 
 #### 参考资料
-- https://issues.chromium.org/issues/329301988 （跟踪 bug #329301988）  
-- https://chromestatus.com/feature/5082469066604544 （ChromeStatus.com 条目）  
-- https://drafts.csswg.org/css-ui/#caret-animation （规范）
+- [跟踪 bug #329301988](https://issues.chromium.org/issues/329301988)
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/5082469066604544)
+- [规范](https://drafts.csswg.org/css-ui/#caret-animation)
 
 ### highlightsFromPoint API (高亮点检测 API)
 
@@ -50,9 +50,9 @@ Typed arithmetic 允许在 CSS 中编写具单位意识的表达式（例如 `ca
 需要解析指针位置上存在哪些语义高亮或构建精确高亮交互的工具和编辑器。
 
 #### 参考资料
-- https://issues.chromium.org/issues/365046212 （跟踪 bug #365046212）  
-- https://chromestatus.com/feature/4552801607483392 （ChromeStatus.com 条目）  
-- https://drafts.csswg.org/css-highlight-api-1/#interactions （规范）
+- [跟踪 bug #365046212](https://issues.chromium.org/issues/365046212)
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/4552801607483392)
+- [规范](https://drafts.csswg.org/css-highlight-api-1/#interactions)
 
 ### `ScrollIntoView` container option (ScrollIntoView 的容器选项)
 
@@ -66,8 +66,8 @@ Typed arithmetic 允许在 CSS 中编写具单位意识的表达式（例如 `ca
 组件范围内的滚动（例如虚拟化列表或嵌套滚动容器），作者希望避免滚动整个视口时适用。
 
 #### 参考资料
-- https://chromestatus.com/feature/5100036528275456 （ChromeStatus.com 条目）  
-- https://drafts.csswg.org/cssom-view/#dom-scrollintoviewoptions-container （规范）
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/5100036528275456)
+- [规范](https://drafts.csswg.org/cssom-view/#dom-scrollintoviewoptions-container)
 
 ### View transitions: Inherit more animation properties (视图过渡：继承更多动画属性)
 
@@ -81,9 +81,9 @@ Typed arithmetic 允许在 CSS 中编写具单位意识的表达式（例如 `ca
 在使用 View Transitions API 时，可创建更一致的交叉淡入/淡出和运动效果，保留动画行为。
 
 #### 参考资料
-- https://issues.chromium.org/issues/427741151 （跟踪 bug #427741151）  
-- https://chromestatus.com/feature/5154752085884928 （ChromeStatus.com 条目）  
-- https://www.w3.org/TR/css-view-transitions-2 （规范）
+- [跟踪 bug #427741151](https://issues.chromium.org/issues/427741151)
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/5154752085884928)
+- [规范](https://www.w3.org/TR/css-view-transitions-2)
 
 ### View transition pseudos inherit animation-delay. (视图过渡伪元素继承 animation-delay)
 
@@ -97,8 +97,8 @@ Typed arithmetic 允许在 CSS 中编写具单位意识的表达式（例如 `ca
 在依赖延迟的视图过渡中，可保留预期的动画定时。
 
 #### 参考资料
-- https://chromestatus.com/feature/5424291457531904 （ChromeStatus.com 条目）  
-- https://www.w3.org/TR/css-view-transitions-2 （规范）
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/5424291457531904)
+- [规范](https://www.w3.org/TR/css-view-transitions-2)
 
 ### Nested view transitions groups (嵌套视图过渡组)
 
@@ -112,9 +112,9 @@ Typed arithmetic 允许在 CSS 中编写具单位意识的表达式（例如 `ca
 依赖嵌套变换、裁剪或堆叠上下文的复杂 UI 过渡，可以从更准确的视觉保真中受益。
 
 #### 参考资料
-- https://issues.chromium.org/issues/399431227 （跟踪 bug #399431227）  
-- https://chromestatus.com/feature/5162799714795520 （ChromeStatus.com 条目）  
-- https://www.w3.org/TR/css-view-transitions-2/#view-transition-group-prop （规范）
+- [跟踪 bug #399431227](https://issues.chromium.org/issues/399431227)
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/5162799714795520)
+- [规范](https://www.w3.org/TR/css-view-transitions-2/#view-transition-group-prop)
 
 ### Propagate viewport `overscroll-behavior` from root (将视口的 overscroll-behavior 从根元素传播)
 
@@ -128,9 +128,9 @@ Typed arithmetic 允许在 CSS 中编写具单位意识的表达式（例如 `ca
 在页面和组件间提供更可预测的超滚动行为；作者应在 `:root`/`<html>` 上应用视口级控制。
 
 #### 参考资料
-- https://issues.chromium.org/issues/41453796 （跟踪 bug #41453796）  
-- https://chromestatus.com/feature/6210047134400512 （ChromeStatus.com 条目）  
-- https://drafts.csswg.org/css-overscroll-behavior-1 （规范）
+- [跟踪 bug #41453796](https://issues.chromium.org/issues/41453796)
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/6210047134400512)
+- [规范](https://drafts.csswg.org/css-overscroll-behavior-1)
 
 ### CSS `counter()` and `counters()` in alt text of `content` property (在 `content` 属性的替代文本中支持 `counter()` 与 `counters()`)
 
@@ -144,9 +144,9 @@ Typed arithmetic 允许在 CSS 中编写具单位意识的表达式（例如 `ca
 改善生成内容（如列表或带注释的项）的可访问性，其中计数器用于传达语义顺序或编号。
 
 #### 参考资料
-- https://issues.chromium.org/issues/417488055 （跟踪 bug #417488055）  
-- https://chromestatus.com/feature/5185442420621312 （ChromeStatus.com 条目）  
-- https://drafts.csswg.org/css-content/#content-property （规范）
+- [跟踪 bug #417488055](https://issues.chromium.org/issues/417488055)
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/5185442420621312)
+- [规范](https://drafts.csswg.org/css-content/#content-property)
 
 ### CSS `scroll-target-group` property (滚动目标分组属性)
 
@@ -160,9 +160,9 @@ Typed arithmetic 允许在 CSS 中编写具单位意识的表达式（例如 `ca
 作者可以控制滚动标记分组，以影响滚动捕捉、标记或容器组之间的相关滚动行为。
 
 #### 参考资料
-- https://issues.chromium.org/issues/6607668 （跟踪 bug #6607668）  
-- https://chromestatus.com/feature/5189126177161216 （ChromeStatus.com 条目）  
-- https://drafts.csswg.org/css-overflow-5/#scroll-target-group （规范）
+- [跟踪 bug #6607668](https://issues.chromium.org/issues/6607668)
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/5189126177161216)
+- [规范](https://drafts.csswg.org/css-overflow-5/#scroll-target-group)
 
 ### Support `font-variation-settings` descriptor in `@font-face` rule (在 `@font-face` 规则中支持 `font-variation-settings` 描述符)
 
@@ -176,8 +176,8 @@ Typed arithmetic 允许在 CSS 中编写具单位意识的表达式（例如 `ca
 通过使作者能够注册具有特定变体轴默认值的 @font-face 变体，提高排版控制与渲染一致性。
 
 #### 参考资料
-- https://issues.chromium.org/issues/40398871 （跟踪 bug #40398871）  
-- https://chromestatus.com/feature/5221379619946496 （ChromeStatus.com 条目）  
-- https://www.w3.org/TR/css-fonts-4/#font-rend-desc （规范）
+- [跟踪 bug #40398871](https://issues.chromium.org/issues/40398871)
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/5221379619946496)
+- [规范](https://www.w3.org/TR/css-fonts-4/#font-rend-desc)
 
 已保存到：digest_markdown/webplatform/CSS/chrome-140-stable-en.md

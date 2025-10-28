@@ -23,9 +23,9 @@ Chrome 139 的 origin trials 侧重于扩展平台在 AI 交互、后台工作�
 图像字幕、页面内视觉搜索、客户端音频转录、嵌入网页应用的多模态助手，以及接收用户提供的图像/音频的自动化工作流。
 
 #### 参考资料
-- https://developer.chrome.com/origintrials/#/register_trial/2533837740349325313
-- https://issues.chromium.org/issues/417530643
-- https://chromestatus.com/feature/5134603979063296
+- [Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/2533837740349325313)
+- [Tracking bug](https://issues.chromium.org/issues/417530643)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5134603979063296)
 
 ### Extended lifetime shared workers（延长生命周期的 shared workers）
 
@@ -39,9 +39,9 @@ Chrome 139 的 origin trials 侧重于扩展平台在 AI 交互、后台工作�
 在导航后进行的延迟上传或分析数据刷新，多页面之间的协调任务，以及避免在客户端卸载时立即终止的后台处理。
 
 #### 参考资料
-- https://developer.chrome.com/origintrials/#/register_trial/3056255297124302849
-- https://issues.chromium.org/issues/400473072
-- https://chromestatus.com/feature/5138641357373440
+- [Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/3056255297124302849)
+- [Tracking bug](https://issues.chromium.org/issues/400473072)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5138641357373440)
 
 ### `SoftNavigation` performance entry（SoftNavigation 性能条目）
 
@@ -55,10 +55,10 @@ Chrome 139 的 origin trials 侧重于扩展平台在 AI 交互、后台工作�
 测量和优化单页应用导航，量化路由过渡的交互延迟，以及通过识别代价高的软导航路径来改进 UX。
 
 #### 参考资料
-- https://developer.chrome.com/origintrials#/view_trial/21392098230009857
-- https://issues.chromium.org/issues/1338390
-- https://chromestatus.com/feature/5144837209194496
-- https://wicg.github.io/soft-navigations
+- [Origin Trial](https://developer.chrome.com/origintrials#/view_trial/21392098230009857)
+- [Tracking bug](https://issues.chromium.org/issues/1338390)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5144837209194496)
+- [Spec](https://wicg.github.io/soft-navigations)
 
 ### Web Authentication immediate mediation（Web Authentication 即时调解）
 
@@ -72,9 +72,9 @@ Chrome 139 的 origin trials 侧重于扩展平台在 AI 交互、后台工作�
 当凭证已存在时提供简化的登录体验、有条件的凭证提示流程，以及为希望在可用时提供即时低摩擦认证的网站改进新用户体验。
 
 #### 参考资料
-- https://issues.chromium.org/issues/408002783
-- https://chromestatus.com/feature/5164322780872704
-- https://github.com/w3c/webauthn/pull/2291
+- [Tracking bug](https://issues.chromium.org/issues/408002783)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5164322780872704)
+- [GitHub](https://github.com/w3c/webauthn/pull/2291)
 
 ### Full frame rate render blocking attribute（全帧率渲染阻塞属性）
 
@@ -88,9 +88,9 @@ Chrome 139 的 origin trials 侧重于扩展平台在 AI 交互、后台工作�
 在资源密集的页面上优化关键路径资源加载，降低高帧率渲染与加载同时发生时引起的卡顿，并在页面过渡期间调整渲染器行为。
 
 #### 参考资料
-- https://developer.chrome.com/origintrials/#/register_trial/3578672853899280385
-- https://issues.chromium.org/issues/397832388
-- https://chromestatus.com/feature/5207202081800192
+- [Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/3578672853899280385)
+- [Tracking bug](https://issues.chromium.org/issues/397832388)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5207202081800192)
 
 ### WebGPU compatibility mode（WebGPU 兼容模式）
 
@@ -104,9 +104,9 @@ Chrome 139 的 origin trials 侧重于扩展平台在 AI 交互、后台工作�
 为 WebGPU 应用提供更广的设备支持、在高端特性为条件的渐进增强路径，以及简化将 WebGL/OpenGL 代码路径迁移到 WebGPU 的工作量。
 
 #### 参考资料
-- https://developer.chrome.com/origintrials/#/register_trial/1489002626799370241
-- https://issues.chromium.org/issues/40266903
-- https://chromestatus.com/feature/6436406437871616
-- https://github.com/gpuweb/gpuweb/blob/main/proposals/compatibility-mode.md
+- [Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/1489002626799370241)
+- [Tracking bug](https://issues.chromium.org/issues/40266903)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/6436406437871616)
+- [GitHub](https://github.com/gpuweb/gpuweb/blob/main/proposals/compatibility-mode.md)
 
 File: digest_markdown/webplatform/Origin trials/chrome-139-stable-en.md

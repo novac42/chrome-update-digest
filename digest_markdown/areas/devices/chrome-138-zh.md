@@ -20,9 +20,9 @@ Chrome 在 Android 上支持通过蓝牙 RFCOMM 的 Web Serial API，使网页�
 - 在企业或受管理设备场景中，由策略管理 Web 应用对串口访问的情况。
 
 #### 参考资料
-- https://bugs.chromium.org/p/chromium/issues/detail?id=375245353
-- https://chromestatus.com/feature/5085754267189248
-- https://wicg.github.io/serial/
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=375245353)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5085754267189248)
+- [Spec](https://wicg.github.io/serial/)
 
 ### Viewport Segments Enumeration API（视口段枚举 API）
 
@@ -38,6 +38,6 @@ The Viewport Segments API enables developers to adapt layouts for foldable and m
 - 在分割视口上改进媒体和内容布局策略。
 
 #### 参考资料
-- https://bugs.chromium.org/p/chromium/issues/detail?id=1039050
-- https://chromestatus.com/feature/5131631321964544
-- https://wicg.github.io/visual-viewport/
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=1039050)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5131631321964544)
+- [Spec](https://wicg.github.io/visual-viewport/)

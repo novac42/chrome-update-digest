@@ -27,9 +27,9 @@ Chrome now checks Content Security Policy during the fetch used to create Worker
 - Progressive enhancement: Single-page apps and PWAs can avoid tearing down initialization flows due to unexpected exceptions and instead handle worker availability dynamically.
 
 #### References
-- https://issues.chromium.org/issues/41285169
-- https://chromestatus.com/feature/5177205656911872
-- https://www.w3.org/TR/CSP3/#fetch-integration
+- [Tracking bug](https://issues.chromium.org/issues/41285169)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5177205656911872)
+- [Spec](https://www.w3.org/TR/CSP3/#fetch-integration)
 
 ## Area-Specific Expertise and Developer Guidance (Security-Privacy focus)
 

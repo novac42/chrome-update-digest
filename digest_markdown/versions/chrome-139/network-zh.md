@@ -24,8 +24,8 @@ Chrome 减少了 `Accept-Language` 头和 `navigator.languages` 暴露的信息�
 - 减少分析或反欺诈启发式中被动指纹识别的向量。
 
 #### 参考资料
-- https://issues.chromium.org/issues/1306905
-- https://chromestatus.com/feature/5188040623390720
+- [Tracking bug](https://issues.chromium.org/issues/1306905)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5188040623390720)
 
 ### Randomize TCP port allocation on Windows（在 Windows 上随机化 TCP 端口分配）
 
@@ -40,8 +40,8 @@ Chrome 在大约 2020 年及以后的 Windows 版本上启用了随机化的 TCP
 - 可能改变诊断时观察到的连接重用特性；假定端口序列确定性的网络工具和测试应予以审查。
 
 #### 参考资料
-- https://issues.chromium.org/issues/40744069
-- https://chromestatus.com/feature/5106900286570496
+- [Tracking bug](https://issues.chromium.org/issues/40744069)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5106900286570496)
 
 领域特定说明（网络视角）
 - 安全-隐私：两个功能都减少了指纹识别表面并增加网络标识符的不可预测性。

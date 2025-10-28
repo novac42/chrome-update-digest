@@ -25,9 +25,9 @@ ServiceWorker-controlled prefetches are now allowed by the integration between t
 - Developers can rely on speculation-rules as part of an end-to-end performance strategy that includes SW routing and caching.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=40947546 (Tracking bug #40947546)  
-- https://chromestatus.com/feature/5121066433150976 (ChromeStatus.com entry)  
-- https://wicg.github.io/nav-speculation/speculation-rules.html#speculation-rule-sw-integration (Spec)
+- [Tracking bug #40947546](https://bugs.chromium.org/p/chromium/issues/detail?id=40947546)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5121066433150976)
+- [Spec](https://wicg.github.io/nav-speculation/speculation-rules.html#speculation-rule-sw-integration)
 
 # Area-Specific Expertise (PWA and service worker focus)
 

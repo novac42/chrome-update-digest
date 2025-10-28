@@ -22,7 +22,7 @@ Chromium 的滚动条（覆盖和非覆盖）在 Windows 和 Linux 上已现代�
 - 测试与可访问性：在刷新后验证键盘和辅助技术的交互以及视觉对比；当滚动条视觉影响快照时，也请重新运行视觉回归测试。
 
 #### 参考资料
-- https://bugs.chromium.org/p/chromium/issues/detail?id=1292117 (跟踪 bug #1292117)  
-- https://chromestatus.com/feature/5023688844812288 (ChromeStatus.com 条目)
+- [跟踪 bug #1292117](https://bugs.chromium.org/p/chromium/issues/detail?id=1292117)
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/5023688844812288)
 
 已保存到： digest_markdown/webplatform/Browser changes/chrome-136-stable-en.md

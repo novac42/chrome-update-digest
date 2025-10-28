@@ -23,10 +23,10 @@ Exposes translation functionality via a web API so pages can request translation
 On-demand translation of user-generated content or UI text when built-in browser translation is insufficient or when site-controlled translation workflows are needed.
 
 #### References
-- https://developer.mozilla.org/docs/Web/API/Translator
-- https://bugs.chromium.org/p/chromium/issues/detail?id=322229993
-- https://chromestatus.com/feature/5652970345332736
-- https://wicg.github.io/translation-api/
+- [Link](https://developer.mozilla.org/docs/Web/API/Translator)
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=322229993)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5652970345332736)
+- [Spec](https://wicg.github.io/translation-api/)
 
 ### Language Detector API
 
@@ -40,9 +40,9 @@ Provides language-detection functionality separate from translation; intended to
 Automatically determine input language for auto-translation, routing, or analytics; precondition step before calling Translator API.
 
 #### References
-- https://developer.mozilla.org/docs/Web/API/LanguageDetector
-- https://chromestatus.com/feature/5134901000871936
-- https://wicg.github.io/language-detection-api/
+- [Link](https://developer.mozilla.org/docs/Web/API/LanguageDetector)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5134901000871936)
+- [Spec](https://wicg.github.io/language-detection-api/)
 
 ### Summarizer API
 
@@ -56,10 +56,10 @@ Browsers expose an on-device/OS-provided language model via a Summarizer API so 
 Client-side summarization of articles, messages, or user-generated content for previews, accessibility, or assistant-like features while reducing network/model-loading costs.
 
 #### References
-- https://developer.mozilla.org/docs/Web/API/Summarizer
-- https://bugs.chromium.org/p/chromium/issues/detail?id=351744634
-- https://chromestatus.com/feature/5134971702001664
-- https://wicg.github.io/summarization-api/
+- [Link](https://developer.mozilla.org/docs/Web/API/Summarizer)
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=351744634)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5134971702001664)
+- [Spec](https://wicg.github.io/summarization-api/)
 
 ### Escape < and > in attributes on serialization
 
@@ -73,8 +73,8 @@ Serialization now ensures `<` and `>` characters in attribute values are escaped
 Reduces the class of mutation XSS issues when applications serialize DOM fragments or set attributes that may later be reparsed or injected.
 
 #### References
-- https://chromestatus.com/feature/5125509031477248
-- https://html.spec.whatwg.org/multipage/parsing.html#serializing-html-fragments
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5125509031477248)
+- [Spec](https://html.spec.whatwg.org/multipage/parsing.html#serializing-html-fragments)
 
 ### Crash Reporting API: is_top_level and visibility_state
 
@@ -88,8 +88,8 @@ Crash report bodies now include these additional context fields to improve under
 Improves server-side crash analytics and client-side triage by providing visibility context and top-level frame status, aiding debugging and prioritization.
 
 #### References
-- https://chromestatus.com/feature/5112885175918592
-- https://w3c.github.io/reporting/#crash-report
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5112885175918592)
+- [Link](https://w3c.github.io/reporting/#crash-report)
 
 ### Fire the pushsubscriptionchange event upon resubscription
 
@@ -103,6 +103,6 @@ This behavior change makes push subscription lifecycle more explicit when permis
 Allows service workers to re-subscribe or reconcile push state when permissions are re-granted, enabling reliable push delivery recovery and improved developer handling of permission churn.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=407523313
-- https://chromestatus.com/feature/5115983529336832
-- https://w3c.github.io/push-api/#the-pushsubscriptionchange-event
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=407523313)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5115983529336832)
+- [Link](https://w3c.github.io/push-api/#the-pushsubscriptionchange-event)

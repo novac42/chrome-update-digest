@@ -24,9 +24,9 @@ Chrome's previous implementation limited controller inheritance to dedicated wor
 - Improves predictability for apps relying on service worker-controlled network behavior in multi-page or multi-context architectures.
 
 #### References
-- https://issues.chromium.org/issues/324939068
-- https://chromestatus.com/feature/5137897664806912
-- https://w3c.github.io/ServiceWorker/#control-and-use-worker-client
+- [Tracking bug](https://issues.chromium.org/issues/324939068)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5137897664806912)
+- [Link](https://w3c.github.io/ServiceWorker/#control-and-use-worker-client)
 
 ### Add `ServiceWorkerStaticRouterTimingInfo`
 
@@ -42,8 +42,8 @@ The change exposes two static routing API-relevant timing points through the sta
 - Use timing data in performance monitoring and synthetic tests to validate routing improvements across releases.
 
 #### References
-- https://issues.chromium.org/issues/41496865
-- https://chromestatus.com/feature/6309742380318720
-- https://github.com/w3c/ServiceWorker
+- [Tracking bug](https://issues.chromium.org/issues/41496865)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/6309742380318720)
+- [GitHub](https://github.com/w3c/ServiceWorker)
 
 File saved to: digest_markdown/webplatform/PWA and service worker/chrome-140-stable-en.md

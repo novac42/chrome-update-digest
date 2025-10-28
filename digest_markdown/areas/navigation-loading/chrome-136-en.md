@@ -27,9 +27,9 @@ Chrome's HTTP cache keying scheme is updated to include an `is-cross-site-main-f
 - Impacts cache analysis, automated tests, and security reviews for navigation-heavy apps (including PWAs and sites with cross-origin redirects).
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=398784714 (Tracking bug #398784714)
-- https://chromestatus.com/feature/5108419906535424 (ChromeStatus.com entry)
-- https://httpwg.org/specs/rfc9110.html#caching (Spec)
+- [Tracking bug #398784714](https://bugs.chromium.org/p/chromium/issues/detail?id=398784714)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5108419906535424)
+- [Spec](https://httpwg.org/specs/rfc9110.html#caching)
 
 ## Area-Specific Expertise (Navigation-Loading focused)
 

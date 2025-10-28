@@ -24,9 +24,9 @@ Chrome 之前的实现将 controller 继承限制为 dedicated workers；此更�
 - 改善了依赖 service worker 控制网络行为的多页面或多上下文架构应用的可预测性。
 
 #### 参考资料
-- https://issues.chromium.org/issues/324939068
-- https://chromestatus.com/feature/5137897664806912
-- https://w3c.github.io/ServiceWorker/#control-and-use-worker-client
+- [Tracking bug](https://issues.chromium.org/issues/324939068)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5137897664806912)
+- [Link](https://w3c.github.io/ServiceWorker/#control-and-use-worker-client)
 
 ### Add `ServiceWorkerStaticRouterTimingInfo`（添加 ServiceWorkerStaticRouterTimingInfo）
 
@@ -42,8 +42,8 @@ Chrome 之前的实现将 controller 继承限制为 dedicated workers；此更�
 - 在性能监控和合成测试中使用时间数据以验证跨版本的路由改进。
 
 #### 参考资料
-- https://issues.chromium.org/issues/41496865
-- https://chromestatus.com/feature/6309742380318720
-- https://github.com/w3c/ServiceWorker
+- [Tracking bug](https://issues.chromium.org/issues/41496865)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/6309742380318720)
+- [GitHub](https://github.com/w3c/ServiceWorker)
 
 文件已保存到：digest_markdown/webplatform/PWA and service worker/chrome-140-stable-en.md

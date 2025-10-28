@@ -26,6 +26,6 @@ Chrome 138（stable）在 WebGPU 方面包含一项重点弃用：移除冗余�
 - 测试与特性检测：更新断言适配器属性的单元和集成测试；确保序列化适配器信息的工具使用 `GPUAdapterInfo` 字段。
 
 #### 参考资料
-- https://bugs.chromium.org/p/chromium/issues/detail?id=409259074
-- https://chromestatus.com/feature/5125671816847360
-- https://gpuweb.github.io/gpuweb/#gpu-adapter
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=409259074)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5125671816847360)
+- [Link](https://gpuweb.github.io/gpuweb/#gpu-adapter)

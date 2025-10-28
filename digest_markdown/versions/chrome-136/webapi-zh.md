@@ -19,9 +19,9 @@ title: webapi-zh
 对使用指针捕获的组件（自定义拖放、绘图工具）提供更可预测的交互处理，避免在捕获期间出现令人惊讶的 click 路由。
 
 #### 参考资料
-- https://bugs.chromium.org/p/chromium/issues/detail?id=40851596
-- https://chromestatus.com/feature/5045063816396800
-- https://w3c.github.io/uievents/#event-type-click
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=40851596)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5045063816396800)
+- [Link](https://w3c.github.io/uievents/#event-type-click)
 
 ### Explicit compile hints with magic comments（通过魔法注释提供显式编译提示）
 
@@ -35,9 +35,9 @@ JavaScript 文件可以包含编码了应当被 eager-parse 或 eager-compile �
 大型 JS 代码库和库可以在不更改运行时代码的情况下引导对性能关键函数进行 eager 编译；有助于启动性能调优。
 
 #### 参考资料
-- https://bugs.chromium.org/p/chromium/issues/detail?id=13917
-- https://chromestatus.com/feature/5047772830048256
-- https://github.com/v8/v8/wiki/Design-Elements#compile-hints
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=13917)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5047772830048256)
+- [GitHub](https://github.com/v8/v8/wiki/Design-Elements#compile-hints)
 
 ### Incorporate navigation initiator into the HTTP cache partition key（将导航发起者并入 HTTP 缓存分区键）
 
@@ -51,9 +51,9 @@ Chrome 的 HTTP 缓存键现在在分区键中包含一个 `is-cross-site-main-f
 改进依赖缓存语义的网站的隐私和安全；开发者应注意缓存行为可能根据导航发起者而变化，并据此规划缓存预期。
 
 #### 参考资料
-- https://bugs.chromium.org/p/chromium/issues/detail?id=398784714
-- https://chromestatus.com/feature/5108419906535424
-- https://httpwg.org/specs/rfc9110.html#caching
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=398784714)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5108419906535424)
+- [Link](https://httpwg.org/specs/rfc9110.html#caching)
 
 ### Protected audience: text conversion helpers（受保护受众：文本转换辅助函数）
 
@@ -67,7 +67,7 @@ Chrome 的 HTTP 缓存键现在在分区键中包含一个 `is-cross-site-main-f
 在 WebAssembly 中运行并必须与 JS 交换字符串类型数据的广告与隐私保护出价/评分流程，可避免昂贵的手动编码/解码。
 
 #### 参考资料
-- https://chromestatus.com/feature/5099738574602240
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5099738574602240)
 
 ### RegExp.escape
 
@@ -81,8 +81,8 @@ Chrome 的 HTTP 缓存键现在在分区键中包含一个 `is-cross-site-main-f
 从用户输入（搜索框、模式构建器）安全构建动态正则表达式而无需手动转义；降低意外的正则语法注入风险。
 
 #### 参考资料
-- https://chromestatus.com/feature/5074350768316416
-- https://tc39.es/proposal-regex-escaping/
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5074350768316416)
+- [Link](https://tc39.es/proposal-regex-escaping/)
 
 ### Speculation rules: tag field（Speculation rules：tag 字段）
 
@@ -96,9 +96,9 @@ Speculation rules 现在可以包含可选的 `tag` 字段，用以标记推测�
 更好地观测和路由 prerender/prefetch 推测流量，允许中间件和服务器按标签应用策略或日志记录。
 
 #### 参考资料
-- https://bugs.chromium.org/p/chromium/issues/detail?id=381687257
-- https://chromestatus.com/feature/5100969695576064
-- https://wicg.github.io/nav-speculation/speculation-rules.html#speculation-rule-tag
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=381687257)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5100969695576064)
+- [Spec](https://wicg.github.io/nav-speculation/speculation-rules.html#speculation-rule-tag)
 
 ### Update ProgressEvent to use double type for loaded and total（将 ProgressEvent 的 loaded 与 total 更新为 double 类型）
 
@@ -112,7 +112,7 @@ Speculation rules 现在可以包含可选的 `tag` 字段，用以标记推测�
 在 XHR/Fetch 进度处理器中支持更精确的进度报告（小数、部分单位），并使实现能够适应长时间传输或聚合进度计算。
 
 #### 参考资料
-- https://chromestatus.com/feature/5084700244254720
-- https://xhr.spec.whatwg.org/#interface-progressevent
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5084700244254720)
+- [Spec](https://xhr.spec.whatwg.org/#interface-progressevent)
 
 文件保存位置（按规范）： digest_markdown/webplatform/Web API/chrome-136-stable-en.md

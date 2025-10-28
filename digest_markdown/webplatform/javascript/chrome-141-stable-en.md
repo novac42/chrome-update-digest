@@ -21,6 +21,6 @@ RTP stats objects of type "outbound-rtp" or "inbound-rtp" represent a WebRTC str
 - Improved interoperability for tools that rely on RTP statistics objects.
 
 #### References
-- https://issues.chromium.org/issues/406585888
-- https://chromestatus.com/feature/4580748730040320
-- https://w3c.github.io/webrtc-stats/#the-rtp-statistics-hierarchy
+- [Tracking bug](https://issues.chromium.org/issues/406585888)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/4580748730040320)
+- [Link](https://w3c.github.io/webrtc-stats/#the-rtp-statistics-hierarchy)

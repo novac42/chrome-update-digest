@@ -25,5 +25,5 @@ This is an event-level attribute on `ToggleEvent` that carries a reference to th
 - Making event handlers clearer and less brittle by providing explicit trigger information on the `ToggleEvent`.
 
 #### References
-- https://chromestatus.com/feature/5165304401100800 (ChromeStatus.com entry)  
-- https://html.spec.whatwg.org/multipage/interaction.html#the-toggleevent-interface (Spec)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5165304401100800)
+- [Spec](https://html.spec.whatwg.org/multipage/interaction.html#the-toggleevent-interface)

@@ -18,9 +18,9 @@ Exposes a web-facing input/output model that accepts multimodal inputs; integrat
 Image captioning, visual search on-page, client-side audio transcription, multimodal assistants embedded in web apps, and automation workflows that accept user-provided images/audio.
 
 #### References
-- https://developer.chrome.com/origintrials/#/register_trial/2533837740349325313
-- https://issues.chromium.org/issues/417530643
-- https://chromestatus.com/feature/5134603979063296
+- [Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/2533837740349325313)
+- [Tracking bug](https://issues.chromium.org/issues/417530643)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5134603979063296)
 
 ### Extended lifetime shared workers
 
@@ -34,9 +34,9 @@ This origin-trial option changes lifetime semantics of shared workers, allowing 
 Deferred uploads or analytics flushes after navigation, coordination tasks across multiple pages, and background processing that avoids immediate termination on client unload.
 
 #### References
-- https://developer.chrome.com/origintrials/#/register_trial/3056255297124302849
-- https://issues.chromium.org/issues/400473072
-- https://chromestatus.com/feature/5138641357373440
+- [Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/3056255297124302849)
+- [Tracking bug](https://issues.chromium.org/issues/400473072)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5138641357373440)
 
 ### `SoftNavigation` performance entry
 
@@ -50,10 +50,10 @@ Adds performance timeline entry types for soft navigations (user interactions th
 Measuring and optimizing single-page app navigations, quantifying interaction latency for routing transitions, and improving UX by identifying costly soft navigation paths.
 
 #### References
-- https://developer.chrome.com/origintrials#/view_trial/21392098230009857
-- https://issues.chromium.org/issues/1338390
-- https://chromestatus.com/feature/5144837209194496
-- https://wicg.github.io/soft-navigations
+- [Origin Trial](https://developer.chrome.com/origintrials#/view_trial/21392098230009857)
+- [Tracking bug](https://issues.chromium.org/issues/1338390)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5144837209194496)
+- [Spec](https://wicg.github.io/soft-navigations)
 
 ### Web Authentication immediate mediation
 
@@ -67,9 +67,9 @@ Adds an immediate mediation mode influencing credential mediation behavior on th
 Streamlined sign-in UX when credentials are already present, conditional credential prompt flows, and improved NUX for sites that want immediate, low-friction authentication when available.
 
 #### References
-- https://issues.chromium.org/issues/408002783
-- https://chromestatus.com/feature/5164322780872704
-- https://github.com/w3c/webauthn/pull/2291
+- [Tracking bug](https://issues.chromium.org/issues/408002783)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5164322780872704)
+- [GitHub](https://github.com/w3c/webauthn/pull/2291)
 
 ### Full frame rate render blocking attribute
 
@@ -83,9 +83,9 @@ Provides a renderer-level token that influences frame-rate budgeting and schedul
 Optimizing critical-path resource loading on heavy pages, reducing jank caused by simultaneous high-frame-rate rendering and loading, and tuning renderer behavior during page transitions.
 
 #### References
-- https://developer.chrome.com/origintrials/#/register_trial/3578672853899280385
-- https://issues.chromium.org/issues/397832388
-- https://chromestatus.com/feature/5207202081800192
+- [Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/3578672853899280385)
+- [Tracking bug](https://issues.chromium.org/issues/397832388)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5207202081800192)
 
 ### WebGPU compatibility mode
 
@@ -99,9 +99,9 @@ Compatibility mode restricts or alters certain WebGPU capabilities so implementa
 Broader device support for WebGPU apps, progressive enhancement paths where high-end features are conditional, and easing migration of WebGL/OpenGL code paths to WebGPU.
 
 #### References
-- https://developer.chrome.com/origintrials/#/register_trial/1489002626799370241
-- https://issues.chromium.org/issues/40266903
-- https://chromestatus.com/feature/6436406437871616
-- https://github.com/gpuweb/gpuweb/blob/main/proposals/compatibility-mode.md
+- [Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/1489002626799370241)
+- [Tracking bug](https://issues.chromium.org/issues/40266903)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/6436406437871616)
+- [GitHub](https://github.com/gpuweb/gpuweb/blob/main/proposals/compatibility-mode.md)
 
 File: digest_markdown/webplatform/Origin trials/chrome-139-stable-en.md

@@ -21,10 +21,10 @@ Summarizer API 是一个 JavaScript API，使用可供浏览器/OS 访问的内�
 - 支持渐进增强：站点在可用时可以调用该 API，否则回退。
 
 #### 参考资料
-- https://developer.mozilla.org/docs/Web/API/Summarizer
-- https://bugs.chromium.org/p/chromium/issues/detail?id=351744634
-- https://chromestatus.com/feature/5134971702001664
-- https://wicg.github.io/summarization-api/
+- [Link](https://developer.mozilla.org/docs/Web/API/Summarizer)
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=351744634)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5134971702001664)
+- [Spec](https://wicg.github.io/summarization-api/)
 
 ## 领域相关专业说明
 

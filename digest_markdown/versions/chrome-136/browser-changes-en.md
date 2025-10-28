@@ -27,7 +27,7 @@ Chromium scrollbars (both overlay and non-overlay) have been modernized on Windo
 - Testing & accessibility: Validate keyboard and assistive technology interactions and visual contrast after the refresh; also re-run visual regression tests where scrollbar visuals affect snapshots.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=1292117 (Tracking bug #1292117)  
-- https://chromestatus.com/feature/5023688844812288 (ChromeStatus.com entry)
+- [Tracking bug #1292117](https://bugs.chromium.org/p/chromium/issues/detail?id=1292117)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5023688844812288)
 
 Saved to: digest_markdown/webplatform/Browser changes/chrome-136-stable-en.md

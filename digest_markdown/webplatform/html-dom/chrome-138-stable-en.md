@@ -20,8 +20,8 @@ Previously quota-exceeded conditions were reported using a generic `DOMException
 - APIs that need to signal quota limits gain an extensible error type, enabling clearer and more maintainable error-handling code paths.
 
 #### References
-- https://chromestatus.com/feature/5647993867927552
-- https://whatpr.org/dom/1245.html
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5647993867927552)
+- [Link](https://whatpr.org/dom/1245.html)
 
 File path to save this digest:
 ```text

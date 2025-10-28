@@ -25,9 +25,9 @@ The new violation type evaluates the effective Permissions Policy and the iframe
 - Aid compliance and debugging where report-only policies are deployed to test policy changes.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=40941424
-- https://chromestatus.com/feature/5061997434142720
-- https://w3c.github.io/webappsec-permissions-policy/#reporting
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=40941424)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5061997434142720)
+- [Link](https://w3c.github.io/webappsec-permissions-policy/#reporting)
 
 ### Reduce fingerprinting in Accept-Language header information
 
@@ -43,5 +43,5 @@ Chrome limits the Accept-Language header to the single top-preference language w
 - Useful for privacy-focused features and threat models where minimizing per-request entropy is required.
 
 #### References
-- https://bugs.chromium.org/p/chromium/issues/detail?id=1306905
-- https://chromestatus.com/feature/5042348942655488
+- [Tracking bug](https://bugs.chromium.org/p/chromium/issues/detail?id=1306905)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5042348942655488)

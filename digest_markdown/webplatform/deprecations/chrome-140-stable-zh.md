@@ -20,9 +20,9 @@ Prefetch 和 prerender 不再发送旧的请求头 `Purpose: prefetch`；取而�
 - 基于旧头的功能检测或启发式应改为使用标准信号。
 
 #### 参考资料
-- https://issues.chromium.org/issues/420724819（跟踪错误 #420724819）
-- https://chromestatus.com/feature/5088012836536320（ChromeStatus.com 条目）
-- https://wicg.github.io/nav-speculation/prerendering.html#interaction-with-fetch（规范）
+- [跟踪错误 #420724819](https://issues.chromium.org/issues/420724819)
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/5088012836536320)
+- [规范](https://wicg.github.io/nav-speculation/prerendering.html#interaction-with-fetch)
 
 ### Deprecate special font size rules for H1 within some elements（弃用某些元素内对 H1 的特殊字体大小规则）
 
@@ -38,13 +38,13 @@ HTML 规范中对在 `<article>`、`<aside>`、`<nav>` 或 `<section>` 内嵌套
 - 组件库和主题必须通过设置显式 CSS 规则，确保在各上下文中标题样式一致。
 
 #### 参考资料
-- https://html.spec.whatwg.org/multipage/rendering.html#sections-and-headings（一份特殊规则清单）
-- https://issues.chromium.org/issues/394111284（跟踪错误 #394111284）
-- https://chromestatus.com/feature/6192419898654720（ChromeStatus.com 条目）
-- https://github.com/whatwg/html/pull/11102（规范）
-- https://creativecommons.org/licenses/by/4.0/（知识共享署名 4.0 许可）
-- https://www.apache.org/licenses/LICENSE-2.0（Apache 2.0 许可）
-- https://developers.google.com/site-policies（Google 开发者站点政策）
+- [一份特殊规则清单](https://html.spec.whatwg.org/multipage/rendering.html#sections-and-headings)
+- [跟踪错误 #394111284](https://issues.chromium.org/issues/394111284)
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/6192419898654720)
+- [规范](https://github.com/whatwg/html/pull/11102)
+- [知识共享署名 4.0 许可](https://creativecommons.org/licenses/by/4.0/)
+- [Apache 2.0 许可](https://www.apache.org/licenses/LICENSE-2.0)
+- [Google 开发者站点政策](https://developers.google.com/site-policies)
 
 ## 领域专门知识（弃用）
 

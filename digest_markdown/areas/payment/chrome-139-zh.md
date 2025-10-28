@@ -26,9 +26,9 @@ Chrome 139 对 Secure Payment Confirmation (SPC) 进行了有针对性的改进�
 - 在支付流程和集成中实现更干净的功能检测逻辑。
 
 #### 参考资料
-- https://issues.chromium.org/issues/40258712
-- https://chromestatus.com/feature/5165040614768640
-- https://github.com/w3c/secure-payment-confirmation/pull/285
+- [Tracking bug](https://issues.chromium.org/issues/40258712)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5165040614768640)
+- [GitHub](https://github.com/w3c/secure-payment-confirmation/pull/285)
 
 ### Secure Payment Confirmation: Browser Bound Keys（浏览器绑定密钥）
 
@@ -45,8 +45,8 @@ Chrome 139 对 Secure Payment Confirmation (SPC) 进行了有针对性的改进�
 - 开发者可以依赖浏览器提供的增强证明语义，而无需实现自定义的设备绑定逻辑。
 
 #### 参考资料
-- https://issues.chromium.org/issues/377278827
-- https://chromestatus.com/feature/5106102997614592
-- https://w3c.github.io/secure-payment-confirmation/#sctn-browser-bound-key-store
+- [Tracking bug](https://issues.chromium.org/issues/377278827)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5106102997614592)
+- [Link](https://w3c.github.io/secure-payment-confirmation/#sctn-browser-bound-key-store)
 
 输出文件：digest_markdown/webplatform/Payment/chrome-139-stable-en.md

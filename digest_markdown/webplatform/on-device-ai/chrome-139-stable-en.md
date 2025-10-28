@@ -29,5 +29,5 @@ This feature adds on-device speech recognition support to the Web Speech API, al
 - Reduced-latency voice interactions for dictation or command-and-control when on-device recognition is supported.
 
 #### References
-- https://chromestatus.com/feature/6090916291674112
-- https://webaudio.github.io/web-speech-api
+- [ChromeStatus.com entry](https://chromestatus.com/feature/6090916291674112)
+- [Link](https://webaudio.github.io/web-speech-api)

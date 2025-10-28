@@ -23,9 +23,9 @@ Chrome 139 的 Web API 更新侧重于标准化、跨源应用边界、可预测
 将多来源属性（子域、相关顶级域）统一为单一 PWA 安装/启动体验；简化相关来源间的导航、共享和 service worker 预期行为。
 
 #### 参考资料
-- https://issues.chromium.org/issues/detail?id=1250011 (跟踪问题 #detail?id=1250011)  
-- https://chromestatus.com/feature/5746537956114432 (ChromeStatus.com 条目)  
-- https://github.com/WICG/manifest-incubations/pull/113 (规范)
+- [跟踪问题 #detail?id=1250011](https://issues.chromium.org/issues/detail?id=1250011)
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/5746537956114432)
+- [规范](https://github.com/WICG/manifest-incubations/pull/113)
 
 ### Specification-compliant JSON MIME type detection (符合规范的 JSON MIME 类型检测)
 
@@ -39,8 +39,8 @@ MIME 类型识别逻辑已更新为遵循 WHATWG mimesniff 的 JSON 规则。这
 依赖 content-type 检查的 API 和客户端代码在服务器使用 `+json` 厂商或厂商树子类型时，将会看到更一致的 JSON 解析/处理；在与使用自定义 JSON 类 MIME 类型的 API 互操作时可减少意外情况。
 
 #### 参考资料
-- https://chromestatus.com/feature/5470594816278528 (ChromeStatus.com 条目)  
-- https://mimesniff.spec.whatwg.org/#json-mime-type (规范)
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/5470594816278528)
+- [规范](https://mimesniff.spec.whatwg.org/#json-mime-type)
 
 ### WebGPU `core-features-and-limits` (WebGPU 核心特性与限制)
 
@@ -54,9 +54,9 @@ MIME 类型识别逻辑已更新为遵循 WHATWG mimesniff 的 JSON 规则。这
 图形和计算应用可以查询并依赖已定义良好的 WebGPU 能力基线，从而在高性能渲染和 GPU 计算场景中简化能力协商和回退策略。
 
 #### 参考资料
-- https://issues.chromium.org/issues/418025721 (跟踪问题 #418025721)  
-- https://chromestatus.com/feature/4744775089258496 (ChromeStatus.com 条目)  
-- https://gpuweb.github.io/gpuweb/#core-features-and-limits (规范)
+- [跟踪问题 #418025721](https://issues.chromium.org/issues/418025721)
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/4744775089258496)
+- [规范](https://gpuweb.github.io/gpuweb/#core-features-and-limits)
 
 ### Crash Reporting API: Specify `crash-reporting` to receive only crash reports (崩溃报告 API：指定 `crash-reporting` 以仅接收崩溃报告)
 
@@ -70,6 +70,6 @@ crash-reporting 端点通过 Crash Reporting API 中的 well-known 端点名称�
 希望将仅崩溃的遥测发送到专门摄取管道（用于存储、告警或隐私隔离）的团队可以配置 `crash-reporting` 端点，以避免其他报告类型的噪声并减少下游过滤工作量。
 
 #### 参考资料
-- https://issues.chromium.org/issues/414723480 (跟踪问题 #414723480)  
-- https://chromestatus.com/feature/5129218731802624 (ChromeStatus.com 条目)  
-- https://wicg.github.io/crash-reporting/#crash-reports-delivery-priority (规范)
+- [跟踪问题 #414723480](https://issues.chromium.org/issues/414723480)
+- [ChromeStatus.com 条目](https://chromestatus.com/feature/5129218731802624)
+- [规范](https://wicg.github.io/crash-reporting/#crash-reports-delivery-priority)
