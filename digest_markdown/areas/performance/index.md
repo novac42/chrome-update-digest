@@ -20,6 +20,7 @@ Performance optimizations and improvements
 - Chrome 138: [English](./chrome-138-en.html) / [Chinese](./chrome-138-zh.html)
 - Chrome 136: [English](./chrome-136-en.html) / [Chinese](./chrome-136-zh.html)
 - Chrome 134: [English](./chrome-134-en.html) / [Chinese](./chrome-134-zh.html)
+- Chrome 133: [English](./chrome-133-en.html) / [Chinese](./chrome-133-zh.html)
 
 ## Navigation
 

@@ -27,5 +27,6 @@ Chrome 141 fixes a bug where iterating over window.getComputedStyle(element) did
 - Telemetry, serialization, or debugging workflows that iterate computed styles produce complete datasets.
 
 #### References
-- ChromeStatus.com entry: https://chromestatus.com/feature/5070655645155328
-- Spec: https://drafts.csswg.org/cssom/#dom-window-getcomputedstyle
+
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5070655645155328)
+- [Spec](https://drafts.csswg.org/cssom/#dom-window-getcomputedstyle)

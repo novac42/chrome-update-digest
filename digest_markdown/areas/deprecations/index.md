@@ -19,6 +19,7 @@ Deprecated and removed features
 - Chrome 139: [English](./chrome-139-en.html) / [Chinese](./chrome-139-zh.html)
 - Chrome 138: [English](./chrome-138-en.html) / [Chinese](./chrome-138-zh.html)
 - Chrome 134: [English](./chrome-134-en.html) / [Chinese](./chrome-134-zh.html)
+- Chrome 133: [English](./chrome-133-en.html) / [Chinese](./chrome-133-zh.html)
 
 ## Navigation
 

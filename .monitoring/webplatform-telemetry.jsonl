@@ -1496,3 +1496,4 @@
 {"timestamp": "2025-10-28T06:30:14.911236+00:00", "event": "area_completed", "area": "webassembly", "status": "success", "duration_ms": 39562.8, "features": 1, "english_retried": false, "english_fallback": false, "translation_retried": false, "translation_fallback": false, "error": null}
 {"timestamp": "2025-10-28T06:30:14.927198+00:00", "event": "per_area_run_completed", "version": "133", "channel": "stable", "languages": ["en", "zh"], "area_count": 8, "duration_ms": 403944.92}
 {"timestamp": "2025-10-28T06:30:14.934615+00:00", "event": "mcp_tool_operation", "tool": "webplatform_digest", "status": "success", "duration_ms": 404217.76, "wait_ms": 0.01, "queue_depth": 0}
+{"timestamp": "2025-10-28T07:48:38.571016+00:00", "event": "mcp_tool_operation", "tool": "generate_github_pages", "status": "success", "duration_ms": 2671.52, "wait_ms": 0.31, "queue_depth": 0}

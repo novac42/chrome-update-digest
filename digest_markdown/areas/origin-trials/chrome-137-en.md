@@ -23,8 +23,8 @@ The feature introduces a `full-frame-rate` token for render blocking attributes;
 Use this token when you want the browser to reduce animation/paint frequency during heavy loading to improve perceived load performance and resource allocation.
 
 #### References
-- Tracking bug #397832388: https://bugs.chromium.org/p/chromium/issues/detail?id=397832388  
-- ChromeStatus.com entry: https://chromestatus.com/feature/5109023781429248
+- [Tracking bug #397832388](https://bugs.chromium.org/p/chromium/issues/detail?id=397832388)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5109023781429248)
 
 ### Pause media playback on not-rendered iframes
 
@@ -38,9 +38,9 @@ The permission policy provides an embedder-controlled switch to stop media playb
 Embedders can reduce unnecessary media decoding and network usage for hidden iframes, improving power and network efficiency and creating more user-friendly embedding behaviors.
 
 #### References
-- Origin Trial: https://developer.chrome.com/origintrials/#/trials/active  
-- Tracking bug #351354996: https://bugs.chromium.org/p/chromium/issues/detail?id=351354996  
-- ChromeStatus.com entry: https://chromestatus.com/feature/5082854470868992
+- [Origin Trial](https://developer.chrome.com/origintrials/#/trials/active)
+- [Tracking bug #351354996](https://bugs.chromium.org/p/chromium/issues/detail?id=351354996)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5082854470868992)
 
 ### Rewriter API
 
@@ -54,10 +54,10 @@ The Rewriter API is exposed as an origin trial. It runs transformations locally 
 Developers can implement client-side text trimming, tone adjustments, or audience-specific rewrites without server-side roundtrips, reducing latency and keeping text processing local to the device.
 
 #### References
-- Origin Trial: https://developer.chrome.com/origintrials/#/trials/active  
-- Tracking bug #358214322: https://bugs.chromium.org/p/chromium/issues/detail?id=358214322  
-- ChromeStatus.com entry: https://chromestatus.com/feature/5089854436556800  
-- Spec: https://wicg.github.io/rewriter-api/
+- [Origin Trial](https://developer.chrome.com/origintrials/#/trials/active)
+- [Tracking bug #358214322](https://bugs.chromium.org/p/chromium/issues/detail?id=358214322)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5089854436556800)
+- [Spec](https://wicg.github.io/rewriter-api/)
 
 ### Writer API
 
@@ -71,12 +71,12 @@ The Writer API is available via origin trial. It exposes on-device generation ca
 Use the Writer API for client-side content generation such as creating product summaries, expanding structured data into text, or drafting UI-facing copy—keeping generation local for latency and privacy considerations.
 
 #### References
-- Origin Trial: https://developer.chrome.com/origintrials/#/trials/active  
-- Tracking bug #357967382: https://bugs.chromium.org/p/chromium/issues/detail?id=357967382  
-- ChromeStatus.com entry: https://chromestatus.com/feature/5089855470993408  
-- Spec: https://wicg.github.io/writer-api/  
-- Creative Commons Attribution 4.0 License: https://creativecommons.org/licenses/by/4.0/  
-- Apache 2.0 License: https://www.apache.org/licenses/LICENSE-2.0  
-- Google Developers Site Policies: https://developers.google.com/site-policies
+- [Origin Trial](https://developer.chrome.com/origintrials/#/trials/active)
+- [Tracking bug #357967382](https://bugs.chromium.org/p/chromium/issues/detail?id=357967382)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/5089855470993408)
+- [Spec](https://wicg.github.io/writer-api/)
+- [Creative Commons Attribution 4.0 License](https://creativecommons.org/licenses/by/4.0/)
+- [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0)
+- [Google Developers Site Policies](https://developers.google.com/site-policies)
 
 Saved to: digest_markdown/webplatform/Origin trials/chrome-137-stable-en.md
