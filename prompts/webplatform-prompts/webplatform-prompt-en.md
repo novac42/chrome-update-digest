@@ -43,7 +43,12 @@ Introduce this section with a brief transition from the summary, then list each 
 [Practical applications and developer benefits]
 
 #### References
-[All provided links - keep as-is]
+[All provided links formatted as clickable Markdown links: [Link Text](URL)]
+
+Example:
+- [Tracking bug #123456](https://issues.chromium.org/issues/123456)
+- [ChromeStatus.com entry](https://chromestatus.com/feature/1234567890123456)
+- [Spec](https://www.w3.org/TR/some-spec/)
 ```
 
 ## Area-Specific Expertise
@@ -67,10 +72,11 @@ Based on **[AREA]**, demonstrate expertise in:
 1. **Accuracy**: Use only provided YAML data
 2. **Language Consistency**: All content in English
 3. **Area Focus**: Keep all content relevant to **[AREA]**
-4. **Link Preservation**: Never modify provided URLs
-5. **Structure**: Always include both Area Summary and Detailed Updates sections
-6. **Coherence**: Ensure the Area Summary connects logically to Detailed Updates
-7. **Developer Focus**: Frame features in terms of practical developer value
+4. **Link Formatting**: Format all URLs as clickable Markdown links using `[Link Text](URL)` format. Never output bare URLs.
+5. **Link Preservation**: Never modify provided URLs - only format them as proper Markdown links
+6. **Structure**: Always include both Area Summary and Detailed Updates sections
+7. **Coherence**: Ensure the Area Summary connects logically to Detailed Updates
+8. **Developer Focus**: Frame features in terms of practical developer value
 
 ## Output File Storage
 

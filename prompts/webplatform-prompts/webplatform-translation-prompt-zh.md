@@ -20,7 +20,13 @@ Your job: translate the provided English area digest Markdown into Simplified Ch
    - `#### Technical Details` → `#### 技术细节`
    - `#### Use Cases` → `#### 适用场景`
    - `#### References` → `#### 参考资料`
-5. Links: keep every URL exactly; translate human‑readable link TEXT unless it is a pure identifier (API/class/property name). Do NOT add new URLs.
+5. Links: Maintain proper Markdown link format `[Link Text](URL)`. Keep every URL exactly; translate human‑readable link TEXT unless it is a pure identifier (API/class/property name). Do NOT add new URLs. Never output bare URLs - always use clickable Markdown format.
+   
+   Link formatting examples:
+   - English: `[Tracking bug #123456](https://issues.chromium.org/issues/123456)`
+   - Chinese: `[跟踪错误 #123456](https://issues.chromium.org/issues/123456)`
+   - English: `[ChromeStatus.com entry](https://chromestatus.com/feature/1234567890123456)`
+   - Chinese: `[ChromeStatus.com 条目](https://chromestatus.com/feature/1234567890123456)`
 6. Emojis / impact indicators (🔴 / 🟡 / 🟢) must remain unchanged.
 7. Technical identifiers (API names, DOM interfaces, CSS properties, HTML/SVG element/attribute names, method/property/event names, enums, flags, code keywords, spec IDs, issue numbers) stay in English.
 8. Numbers, version strings, issue IDs unchanged.
@@ -53,9 +59,9 @@ Before final output ensure:
 - Heading LEVELS and COUNTS (H2/H3/H4…) identical to source; order preserved.
 - Feature H3 headings keep the original English title verbatim; optional Chinese may be appended in parentheses.
 - Non-feature headings are translated to Chinese, but their levels and positions match the source.
-- URL set identical (no extras, no omissions); link TEXT translated when it’s natural language.
+- URL set identical (no extras, no omissions); all links properly formatted as `[Link Text](URL)` with translated link TEXT when it's natural language.
 - All emojis preserved.
-- No unapproved new http/https links.
+- No bare URLs - all links must use proper Markdown format.
 If any structural check fails → output `ERROR_TRANSLATION_STRUCTURE_MISMATCH`.
 
 ## Output
