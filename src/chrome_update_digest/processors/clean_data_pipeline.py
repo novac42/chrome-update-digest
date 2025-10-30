@@ -675,8 +675,12 @@ class CleanDataPipeline:
         # Step 2: Convert to YAML
         print("\n  Step 2: Converting to YAML...")
         from chrome_update_digest.utils.yaml_pipeline import YAMLPipeline
-        
-        yaml_pipeline = YAMLPipeline()
+
+        # Determine base directory for YAML output. Default structure expects
+        # processed_yaml to live under processed_forwebplatform.
+        yaml_base_dir = yaml_output_dir.parent if yaml_output_dir.name == "processed_yaml" else yaml_output_dir
+        yaml_base_dir.mkdir(parents=True, exist_ok=True)
+        yaml_pipeline = YAMLPipeline(output_dir=yaml_base_dir)
         yaml_files = {}
         
         for area, markdown_file in markdown_files.items():
@@ -693,6 +697,14 @@ class CleanDataPipeline:
                     split_by_area=True,   # Use area-specific processing
                     merge_webgpu=False    # Already merged in our pipeline
                 )
+                
+                # Track generated YAML files. The pipeline reports which areas were written.
+                areas_written = result.get('areas') or [area]
+                channel_slug = channel or "stable"
+                for written_area in areas_written:
+                    yaml_path = yaml_base_dir / "areas" / written_area / f"chrome-{version}-{channel_slug}.yml"
+                    if yaml_path.exists():
+                        yaml_files[written_area] = yaml_path
                 
                 # Check if we have features 
                 features = result.get('features', [])

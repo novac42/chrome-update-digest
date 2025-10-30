@@ -101,6 +101,9 @@ async def test_run_pipeline_with_yaml(mock_base_path):
     assert result["success"] is True
     assert "yaml_files" in result
     assert "yaml_files_count" in result
+    assert result["yaml_files_count"] > 0
+    for yaml_path in result["yaml_files"].values():
+        assert Path(yaml_path).exists()
 
 
 @pytest.mark.asyncio
