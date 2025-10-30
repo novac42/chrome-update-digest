@@ -46,12 +46,13 @@ This MCP server calls the connected MCP client's LLM using sampling to build its
 
 When VS Code first loads the `chrome-digest` MCP server, it prompts to allow the tool to use the VS Code model. Click **Allow** so the server can make sampling calls through the client.
 
-In VS Code, open `List Servers -> Configure Model Access (Sampling)` for `chrome-digest` and set the **Preferred model** to a sampling-capable option. `gpt-5-mini` offers a good balance between speed and quality, but you can choose any model your workspace prefers.
+In VS Code, open `List Servers -> Configure Model Access (Sampling)` for `chrome-digest` and allow the client to pick an appropriate sampling-capable option. The server now defaults to **legacy-safe sampling**, which lets the client decide which model to use. This avoids payload compatibility issues we hit with stricter schemas late in 2024.
 
-Environment overrides (optional):
-- `WEBPLATFORM_MODEL_PREFERENCES`: JSON or shorthand to pass through to the client (e.g. `{ "model": "gpt-5-mini" }` or `gpt-5-mini`).
-- `WEBPLATFORM_MODEL`: Shorthand model string used when preferences JSON is not provided (e.g. `gpt-5-mini`).
-- `WEBPLATFORM_DEFAULT_MODEL`: Fallback when neither of the above is set. Defaults to `gpt-5-mini`.
+Sampling feature flags:
+- `USE_LEGACY_SAMPLING` (default `true`): When `true`, the server sends your raw prompt to the client and does **not** specify a model. Set to `false` only after validating that your MCP client accepts `SamplingMessage` payloads and respects model preferences.
+- `WEBPLATFORM_MODEL_PREFERENCES`: JSON or shorthand passed through *only when* `USE_LEGACY_SAMPLING=false` (e.g. `{ "model": "gpt-5-mini" }` or `gpt-5-mini`).
+- `WEBPLATFORM_MODEL`: Shorthand model string used when preferences JSON is not provided (`USE_LEGACY_SAMPLING=false` required).
+- `WEBPLATFORM_DEFAULT_MODEL`: Fallback when neither of the above is set (`USE_LEGACY_SAMPLING=false` required). Defaults to `gpt-5-mini`.
 - `WEBPLATFORM_SAMPLING_TIMEOUT`: Per-attempt timeout in seconds (default 120).
 
 #### Configure Your MCP Client
