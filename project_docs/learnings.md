@@ -117,6 +117,12 @@ This project underwent multiple iterations and debugging cycles to solve a funda
 - **Module Execution**: Prefer `python -m ...` and prepare for `uv` packaging with console entry points
 - **Lesson**: Clean import graphs and packaging-ready layout reduce friction for both CLI and MCP usage
 
+### 20. Sampling Workflow Detours
+- **Implicit Schema Changes Hurt Compatibility**: Converting plain message payloads into `SamplingMessage` objects (`enhanced_webplatform_digest.py:632`) broke FastMCP's validation path; we now gate that normalization behind `USE_LEGACY_SAMPLING` and default it on to keep runs unblocked.
+- **Over-Coercing Model Preferences Loses Signal**: The new coercion helper (`enhanced_webplatform_digest.py:86`) trims unsupported dict shapes, so valid preferences coming from callers vanished; in legacy mode we intentionally skip passing any model hints to let the client decide.
+- **Feature Flags Need Real Coverage**: The retry, rate-limiting, and telemetry stack that sits behind the legacy toggle has little end-to-end coverage, so we cannot safely flip the flag without client-integrated tests; every sampling refactor has to ship with regression checks against VS Code's FastMCP client.
+- **Default-On Fallbacks Hide Regressions**: Leaving `USE_LEGACY_SAMPLING` set to `true` in code means future regressions can lurk unnoticed; we need explicit roll-out plans before removing the guard.
+
 ## Technical Debt and Future Considerations
 
 ### Architecture Refactoring Needs
