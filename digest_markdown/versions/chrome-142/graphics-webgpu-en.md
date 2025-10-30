@@ -11,21 +11,6 @@ Chrome 142 continues to expand WebGPU and graphics platform capabilities, focusi
 
 The items below expand on the summary above and list each Graphics and WebGPU-related feature in Chrome 142 with concise technical notes, developer use cases, and references.
 
-### Graphics
-
-#### What's New
-This entry groups the WebGPU highlights and detailed release notes for graphics in Chrome 142.
-
-#### Technical Details
-Summary grouping that points to the WebGPU release coverage in Chrome 142.
-
-#### Use Cases
-General pointer for developers to review WebGPU changes in this release.
-
-#### References
-- [Chrome for Developers](https://developer.chrome.com/)
-- [Blog](https://developer.chrome.com/blog)
-
 ### WebGPU: `primitive_index` feature
 
 #### What's New
@@ -57,21 +42,6 @@ Porting existing assets and engines that rely on more advanced texture formats a
 - [Tracking bug #445725447](https://issues.chromium.org/issues/445725447)
 - [ChromeStatus.com entry](https://chromestatus.com/feature/5116926821007360)
 - [Spec](https://www.w3.org/TR/webgpu/#texture-formats-tier1)
-
-### Detailed WebGPU Updates
-
-#### What's New
-Pointer to the Chrome developer blog coverage of what's new in WebGPU for this release.
-
-#### Technical Details
-Aggregated release notes and examples on developer.chrome.com and the Chrome blog.
-
-#### Use Cases
-Developers should consult the linked resources for migration notes, samples, and full release details.
-
-#### References
-- [Chrome for Developers](https://developer.chrome.com/)
-- [Blog](https://developer.chrome.com/blog)
 
 ### Texture format support capabilities extended
 
