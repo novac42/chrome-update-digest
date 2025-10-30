@@ -1571,3 +1571,4 @@
 {"timestamp": "2025-10-30T02:43:13.577634+00:00", "event": "area_completed", "area": "webapi", "status": "success", "duration_ms": 29110.16, "features": 4, "english_retried": false, "english_fallback": false, "translation_retried": false, "translation_fallback": false, "error": null}
 {"timestamp": "2025-10-30T02:43:13.591438+00:00", "event": "per_area_run_completed", "version": "142", "channel": "stable", "languages": ["en", "zh"], "area_count": 10, "duration_ms": 354901.33}
 {"timestamp": "2025-10-30T02:43:13.603272+00:00", "event": "mcp_tool_operation", "tool": "webplatform_digest", "status": "success", "duration_ms": 355043.95, "wait_ms": 0.02, "queue_depth": 0}
+{"timestamp": "2025-10-30T03:05:34.225539+00:00", "event": "mcp_tool_operation", "tool": "generate_github_pages", "status": "success", "duration_ms": 2500.89, "wait_ms": 0.03, "queue_depth": 0}

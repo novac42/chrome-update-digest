@@ -9,7 +9,8 @@ Browse Chrome release notes organized by version number.
 
 ## Available Versions
 
-- [Chrome 141 **(Latest Stable)**](./chrome-141/index.html) - 12 areas with updates
+- [Chrome 142 **(Latest Stable)**](./chrome-142/index.html) - 10 areas with updates
+- [Chrome 141](./chrome-141/index.html) - 12 areas with updates
 - [Chrome 140](./chrome-140/index.html) - 12 areas with updates
 - [Chrome 139](./chrome-139/index.html) - 17 areas with updates
 - [Chrome 138](./chrome-138/index.html) - 13 areas with updates
