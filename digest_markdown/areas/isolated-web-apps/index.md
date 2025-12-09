@@ -15,7 +15,8 @@ Isolated Web Apps (IWAs) and related features
 
 ### Available Versions
 
-- Chrome 140 **(Latest)**: [English](./chrome-140-en.html) / [Chinese](./chrome-140-zh.html)
+- Chrome 143 **(Latest)**: [English](./chrome-143-en.html) / [Chinese](./chrome-143-zh.html)
+- Chrome 140: [English](./chrome-140-en.html) / [Chinese](./chrome-140-zh.html)
 
 ## Navigation
 

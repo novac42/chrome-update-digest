@@ -15,7 +15,8 @@ Networking and connectivity features
 
 ### Available Versions
 
-- Chrome 142 **(Latest)**: [English](./chrome-142-en.html) / [Chinese](./chrome-142-zh.html)
+- Chrome 143 **(Latest)**: [English](./chrome-143-en.html) / [Chinese](./chrome-143-zh.html)
+- Chrome 142: [English](./chrome-142-en.html) / [Chinese](./chrome-142-zh.html)
 - Chrome 141: [English](./chrome-141-en.html) / [Chinese](./chrome-141-zh.html)
 - Chrome 139: [English](./chrome-139-en.html) / [Chinese](./chrome-139-zh.html)
 
