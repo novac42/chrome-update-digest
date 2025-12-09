@@ -1,0 +1,137 @@
+version: '143'
+channel: stable
+area: css
+extraction_timestamp: '2025-12-09T22:36:08.293494'
+extraction_method: deterministic
+statistics:
+  total_features: 4
+  total_links: 11
+  primary_tags:
+    css: 4
+  cross_cutting:
+    privacy: 4
+features:
+- title: CSS anchored fallback container queries
+  content: 'Introduces `@container anchored(fallback)` to style descendants of anchor positioned elements based on which of
+    `position-try-fallbacks` is applied.
+
+
+    Such queries can be used to style an anchored element''s tether or its animations, based on how the anchor and the anchored
+    element are positioned relative to each other.
+
+
+    [Tracking bug #417621241](https://issues.chromium.org/issues/417621241) | [ChromeStatus.com entry](https://chromestatus.com/feature/5177580990496768)
+    | [Spec](https://drafts.csswg.org/css-anchor-position-2/#anchored-container-queries)'
+  heading_path:
+  - CSS and UI
+  - CSS anchored fallback container queries
+  links:
+  - url: https://issues.chromium.org/issues/417621241
+    link_type: other
+    title: 'Tracking bug #417621241'
+  - url: https://chromestatus.com/feature/5177580990496768
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://drafts.csswg.org/css-anchor-position-2/#anchored-container-queries
+    link_type: other
+    title: Spec
+  line_number: 3
+  primary_tags:
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Side-relative syntax for `background-position-x/y` longhands
+  content: 'Defines the background image''s position relative to one of its edges.
+
+
+    This syntax provides a more flexible and responsive mechanism to define the background image position, instead of using
+    fixed values that need to be adapted to the window or frame size.
+
+
+    This feature is applied also to the `-webkit-mask-position` property to ensure webcompat levels are the same.
+
+
+    [Tracking bug #40468636](https://issues.chromium.org/issues/40468636) | [ChromeStatus.com entry](https://chromestatus.com/feature/5073321259565056)
+    | [Spec](https://drafts.csswg.org/css-backgrounds-4/#background-position-longhands)'
+  heading_path:
+  - CSS and UI
+  - Side-relative syntax for `background-position-x/y` longhands
+  links:
+  - url: https://issues.chromium.org/issues/40468636
+    link_type: other
+    title: 'Tracking bug #40468636'
+  - url: https://chromestatus.com/feature/5073321259565056
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://drafts.csswg.org/css-backgrounds-4/#background-position-longhands
+    link_type: other
+    title: Spec
+  line_number: 11
+  primary_tags:
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Implement CSS property `font-language-override`
+  content: 'Introduces support for `font-language-override` CSS property. The property allows developers to override the system
+    language used for OpenType glyph substitution by specifying a four-character language tag directly in CSS.
+
+
+    This enables fine-grained typographic control, particularly useful for multilingual content or fonts with language-specific
+    glyph variants.
+
+
+    [Tracking bug #41170551](https://issues.chromium.org/issues/41170551) | [ChromeStatus.com entry](https://chromestatus.com/feature/5149766073843712)
+    | [Spec](https://www.w3.org/TR/css-fonts-4/#font-language-override-prop)'
+  heading_path:
+  - CSS and UI
+  - Implement CSS property `font-language-override`
+  links:
+  - url: https://issues.chromium.org/issues/41170551
+    link_type: other
+    title: 'Tracking bug #41170551'
+  - url: https://chromestatus.com/feature/5149766073843712
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://www.w3.org/TR/css-fonts-4/#font-language-override-prop
+    link_type: spec
+    title: Spec
+  line_number: 21
+  primary_tags:
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: 'Web App Manifest: specify update eligibility'
+  content: 'Specify an update eligibility algorithm in the manifest specification. This makes the update process more deterministic
+    and predictable, giving the dev more control over whether (and when) updates should apply to existing installations, and
+    allowing removal of the _update check throttle_ that user agents currently need to implement to avoid wasting network
+    resources.
+
+
+    [Tracking bug #403253129](https://issues.chromium.org/issues/403253129) | [ChromeStatus.com entry](https://chromestatus.com/feature/5148463647686656)'
+  heading_path:
+  - CSS and UI
+  - 'Web App Manifest: specify update eligibility'
+  links:
+  - url: https://issues.chromium.org/issues/403253129
+    link_type: other
+    title: 'Tracking bug #403253129'
+  - url: https://chromestatus.com/feature/5148463647686656
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  line_number: 29
+  primary_tags:
+  - name: css
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy

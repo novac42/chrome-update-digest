@@ -1,0 +1,34 @@
+version: '143'
+channel: stable
+area: devices
+extraction_timestamp: '2025-12-09T22:36:08.306541'
+extraction_method: deterministic
+statistics:
+  total_features: 1
+  total_links: 3
+  primary_tags: {}
+  cross_cutting:
+    privacy: 1
+features:
+- title: Gamepad `ongamepadconnected` and `ongamepaddisconnected` event handler attributes
+  content: "Adds `ongamepadconnected` and `ongamepaddisconnected` event handlers to the `WindowEventHandlers` interface mixin.\n\
+    \nThis enables support for the following event handler attributes:\n\n  * `window.ongamepadconnected`\n  * `document.body.ongamepadconnected`\n\
+    \  * `window.ongamepaddisconnected`\n  * `document.body.ongamepaddisconnected`\n\n[Tracking bug #40175074](https://issues.chromium.org/issues/40175074)\
+    \ | [ChromeStatus.com entry](https://chromestatus.com/feature/5109540852989952) | [Spec](https://w3c.github.io/gamepad/#extensions-to-the-windoweventhandlers-interface-mixin)"
+  heading_path:
+  - Device
+  - Gamepad `ongamepadconnected` and `ongamepaddisconnected` event handler attributes
+  links:
+  - url: https://issues.chromium.org/issues/40175074
+    link_type: other
+    title: 'Tracking bug #40175074'
+  - url: https://chromestatus.com/feature/5109540852989952
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://w3c.github.io/gamepad/#extensions-to-the-windoweventhandlers-interface-mixin
+    link_type: spec
+    title: Spec
+  line_number: 3
+  primary_tags: []
+  cross_cutting_concerns:
+  - privacy

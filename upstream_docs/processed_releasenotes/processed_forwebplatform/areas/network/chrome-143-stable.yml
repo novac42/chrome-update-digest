@@ -1,0 +1,46 @@
+version: '143'
+channel: stable
+area: network
+extraction_timestamp: '2025-12-09T22:36:08.316862'
+extraction_method: deterministic
+statistics:
+  total_features: 1
+  total_links: 3
+  primary_tags:
+    network: 1
+  cross_cutting:
+    privacy: 1
+features:
+- title: WebTransport Application Protocol Negotiation
+  content: 'WebTransport Application Protocol Negotiation allows negotiation of the protocol used by the web application within
+    the WebTransport handshake.
+
+
+    A web application can specify a list of application protocols offered when constructing a `WebTransport` object, which
+    are then conveyed to the server using HTTP headers; if the server picks one of those protocols, it can indicate that within
+    response headers, and that reply is available within the WebTransport object.
+
+
+    [Tracking bug #416080492](https://issues.chromium.org/issues/416080492) | [ChromeStatus.com entry](https://chromestatus.com/feature/6521719678042112)
+    | [Spec](https://w3c.github.io/webtransport/#dom-webtransportoptions-protocols)'
+  heading_path:
+  - Network
+  - WebTransport Application Protocol Negotiation
+  links:
+  - url: https://issues.chromium.org/issues/416080492
+    link_type: other
+    title: 'Tracking bug #416080492'
+  - url: https://chromestatus.com/feature/6521719678042112
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://w3c.github.io/webtransport/#dom-webtransportoptions-protocols
+    link_type: spec
+    title: Spec
+  line_number: 3
+  primary_tags:
+  - name: network
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy

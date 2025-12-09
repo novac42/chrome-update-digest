@@ -1,0 +1,41 @@
+version: '143'
+channel: stable
+area: performance
+extraction_timestamp: '2025-12-09T22:36:08.304981'
+extraction_method: deterministic
+statistics:
+  total_features: 1
+  total_links: 3
+  primary_tags:
+    performance: 1
+  cross_cutting:
+    privacy: 1
+features:
+- title: 'Speculation rules: mobile `eager` eagerness improvements'
+  content: 'On mobile, `eager` eagerness speculation rules prefetches and prerenders now trigger when HTML anchor elements
+    are in the viewport for a short time.
+
+
+    [Tracking bug #436705485](https://issues.chromium.org/issues/436705485) | [ChromeStatus.com entry](https://chromestatus.com/feature/5086053979521024)
+    | [Spec](https://html.spec.whatwg.org/multipage/speculative-loading.html#speculative-loading)'
+  heading_path:
+  - Performance
+  - 'Speculation rules: mobile `eager` eagerness improvements'
+  links:
+  - url: https://issues.chromium.org/issues/436705485
+    link_type: other
+    title: 'Tracking bug #436705485'
+  - url: https://chromestatus.com/feature/5086053979521024
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://html.spec.whatwg.org/multipage/speculative-loading.html#speculative-loading
+    link_type: spec
+    title: Spec
+  line_number: 3
+  primary_tags:
+  - name: performance
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy

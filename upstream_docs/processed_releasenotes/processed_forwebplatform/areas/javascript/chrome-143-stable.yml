@@ -1,0 +1,156 @@
+version: '143'
+channel: stable
+area: javascript
+extraction_timestamp: '2025-12-09T22:36:08.311208'
+extraction_method: deterministic
+statistics:
+  total_features: 4
+  total_links: 15
+  primary_tags:
+    javascript: 4
+  cross_cutting:
+    privacy: 4
+features:
+- title: ICU 77 (supporting Unicode 16)
+  content: "The Unicode support library ICU (International Components for Unicode) is upgraded from version 74.2 to 77.1,\
+    \ adding support for Unicode 16 and updating locale data. Two changes could pose some risk for web applications that assume\
+    \ a specific format from the Intl JS APIs:\n\n  1. The default Italian number formatting changed to omit the thousand\
+    \ separator for 4-digit numbers. For example `new Intl.NumberFormat(\"it\").format(1234)` will return 1234 instead of\
+    \ 1.234. The old behavior can be achieved with the `useGrouping` parameter for the `Intl.NumberFormat` constructor.\n\
+    \  2. In some English locales (`en-AU`, `en-GB`, and `en-IN`), a comma was added after full-length weekdays, for example,\
+    \ changing Saturday 30 April 2011 to Saturday, 30 April 2011. Web applications should avoid relying on the precise formatting\
+    \ of dates and they may change again in future.\n\n[Tracking bug #421834885](https://issues.chromium.org/issues/421834885)\
+    \ | [ChromeStatus.com entry](https://chromestatus.com/feature/5143313833000960) | [Spec](https://tc39.es/ecma402)"
+  heading_path:
+  - JavaScript
+  - ICU 77 (supporting Unicode 16)
+  links:
+  - url: https://issues.chromium.org/issues/421834885
+    link_type: other
+    title: 'Tracking bug #421834885'
+  - url: https://chromestatus.com/feature/5143313833000960
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://tc39.es/ecma402
+    link_type: other
+    title: Spec
+  line_number: 3
+  primary_tags:
+  - name: javascript
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: 'EditContext: TextFormat underlineStyle and underlineThickness'
+  content: 'The [EditContext API](https://developer.mozilla.org/docs/Web/API/EditContext) shipped with a bug in Chrome where
+    the [`TextFormat`](https://developer.mozilla.org/docs/Web/API/TextFormat) object supplied by the [textformatupdate event](https://developer.mozilla.org/docs/Web/API/EditContext/textformatupdate_event)
+    provides incorrect values for the `underlineStyle` and `underlineThickness` properties. Before Chrome 143 the possible
+    values are `None`, `Solid`, `Dotted`, `Dashed`, `Squiggle` and `None`, `Thin`, `Thick`. However the specification lists
+    `none`, `solid`, `dotted`, `dashed`, `wavy` and `none`, `thin`, `thick`.
+
+
+    The correct values as specified are now implemented from Chrome 143.
+
+
+    [Tracking bug #354497121](https://issues.chromium.org/issues/354497121) | [ChromeStatus.com entry](https://chromestatus.com/feature/6229300214890496)
+    | [Spec](https://w3c.github.io/edit-context/#textformatupdateevent)'
+  heading_path:
+  - JavaScript
+  - 'EditContext: TextFormat underlineStyle and underlineThickness'
+  links:
+  - url: https://developer.mozilla.org/docs/Web/API/EditContext
+    link_type: mdn
+    title: EditContext API
+  - url: https://developer.mozilla.org/docs/Web/API/TextFormat
+    link_type: mdn
+    title: '`TextFormat`'
+  - url: https://developer.mozilla.org/docs/Web/API/EditContext/textformatupdate_event
+    link_type: mdn
+    title: textformatupdate event
+  - url: https://issues.chromium.org/issues/354497121
+    link_type: other
+    title: 'Tracking bug #354497121'
+  - url: https://chromestatus.com/feature/6229300214890496
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://w3c.github.io/edit-context/#textformatupdateevent
+    link_type: spec
+    title: Spec
+  line_number: 12
+  primary_tags:
+  - name: javascript
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: '`DataTransfer` property for `insertFromPaste`, `insertFromDrop` and `insertReplacementText` input events'
+  content: 'Populate the `dataTransfer` property on input events with an `inputType` of `insertFromPaste`, `insertFromDrop`,
+    and `insertReplacementText` to provide access to clipboard and drag-drop data during editing operations in contenteditable
+    elements.
+
+
+    The `dataTransfer` object contains the same data that was available during the `beforeinput` event.
+
+
+    This feature only applies to contenteditable elements. For form controls (textarea, input), the behavior remains unchanged—the
+    data property contains the inserted text and `dataTransfer` remains null.
+
+
+    [Tracking bug #401593412](https://issues.chromium.org/issues/401593412) | [ChromeStatus.com entry](https://chromestatus.com/feature/6715253274181632)
+    | [Spec](https://w3c.github.io/input-events/#dom-inputevent-datatransfer)'
+  heading_path:
+  - JavaScript
+  - '`DataTransfer` property for `insertFromPaste`, `insertFromDrop` and `insertReplacementText` input events'
+  links:
+  - url: https://issues.chromium.org/issues/401593412
+    link_type: other
+    title: 'Tracking bug #401593412'
+  - url: https://chromestatus.com/feature/6715253274181632
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://w3c.github.io/input-events/#dom-inputevent-datatransfer
+    link_type: spec
+    title: Spec
+  line_number: 20
+  primary_tags:
+  - name: javascript
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: 'FedCM: Support structured JSON responses from IdPs'
+  content: 'Allows Identity Providers (IdPs) to return structured JSON objects instead of plain strings to Relying Parties
+    (RPs) using the `id_assertion_endpoint`.
+
+
+    This change simplifies integration for developers by eliminating the need to manually serialize and parse JSON strings.
+    It enables more dynamic and flexible authentication flows, allowing RPs to interpret complex responses directly and support
+    varied protocols like OAuth2, OIDC, or IndieAuth without out-of-band agreements.
+
+
+    [Tracking bug #346567168](https://issues.chromium.org/issues/346567168) | [ChromeStatus.com entry](https://chromestatus.com/feature/5153509557272576)
+    | [Spec](https://github.com/w3c-fedid/FedCM/pull/771)'
+  heading_path:
+  - JavaScript
+  - 'FedCM: Support structured JSON responses from IdPs'
+  links:
+  - url: https://issues.chromium.org/issues/346567168
+    link_type: other
+    title: 'Tracking bug #346567168'
+  - url: https://chromestatus.com/feature/5153509557272576
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/w3c-fedid/FedCM/pull/771
+    link_type: github
+    title: Spec
+  line_number: 30
+  primary_tags:
+  - name: javascript
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy

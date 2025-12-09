@@ -1,5 +1,5 @@
 {
-  "version": "142",
+  "version": "143",
   "channel": "stable",
   "languages": [
     "en",
@@ -7,78 +7,94 @@
   ],
   "areas": [
     "css",
+    "devices",
     "graphics-webgpu",
+    "html-dom",
+    "isolated-web-apps",
     "javascript",
     "multimedia",
-    "navigation-loading",
     "network",
     "origin-trials",
-    "other",
-    "security-privacy",
-    "webapi"
+    "performance",
+    "storage"
   ],
-  "total_areas": 10,
-  "completed_areas": 10,
+  "total_areas": 11,
+  "completed_areas": 11,
   "per_area": {
     "css": {
       "en": "done",
+      "zh": "error",
+      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/css/chrome-143-stable-en.md",
+      "zh_error": "Legacy sampling timeout after 60s",
+      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/css/chrome-143-stable-zh.md"
+    },
+    "devices": {
+      "en": "done",
       "zh": "done",
-      "en_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/css/chrome-142-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/css/chrome-142-stable-zh.md"
+      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/devices/chrome-143-stable-en.md",
+      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/devices/chrome-143-stable-zh.md"
     },
     "graphics-webgpu": {
       "en": "done",
+      "zh": "error",
+      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/graphics-webgpu/chrome-143-stable-en.md",
+      "zh_error": "Legacy sampling timeout after 60s",
+      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/graphics-webgpu/chrome-143-stable-zh.md"
+    },
+    "html-dom": {
+      "en": "done",
+      "zh": "error",
+      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/html-dom/chrome-143-stable-en.md",
+      "zh_error": "Legacy sampling failed: Unknown error: Error: Server error: 502\n\tat Qk._provideLanguageModelResponse (/Users/lyzh/.vscode/extensions/github.copilot-chat-0.33.5/dist/extension.js:1122:9566)\n\tat process.processTicksAndRejections (node:internal/process/task_queues:105:5)",
+      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/html-dom/chrome-143-stable-zh.md"
+    },
+    "isolated-web-apps": {
+      "en": "done",
       "zh": "done",
-      "en_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/graphics-webgpu/chrome-142-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/graphics-webgpu/chrome-142-stable-zh.md"
+      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/isolated-web-apps/chrome-143-stable-en.md",
+      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/isolated-web-apps/chrome-143-stable-zh.md"
     },
     "javascript": {
       "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/javascript/chrome-142-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/javascript/chrome-142-stable-zh.md"
+      "zh": "error",
+      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/javascript/chrome-143-stable-en.md",
+      "zh_error": "Legacy sampling timeout after 60s",
+      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/javascript/chrome-143-stable-zh.md"
     },
     "multimedia": {
       "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/multimedia/chrome-142-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/multimedia/chrome-142-stable-zh.md"
-    },
-    "navigation-loading": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/navigation-loading/chrome-142-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/navigation-loading/chrome-142-stable-zh.md"
+      "zh": "error",
+      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/multimedia/chrome-143-stable-en.md",
+      "zh_error": "Legacy sampling timeout after 60s",
+      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/multimedia/chrome-143-stable-zh.md"
     },
     "network": {
       "en": "done",
       "zh": "done",
-      "en_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/network/chrome-142-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/network/chrome-142-stable-zh.md"
+      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/network/chrome-143-stable-en.md",
+      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/network/chrome-143-stable-zh.md"
     },
     "origin-trials": {
       "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/origin-trials/chrome-142-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/origin-trials/chrome-142-stable-zh.md"
+      "zh": "error",
+      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/origin-trials/chrome-143-stable-en.md",
+      "zh_error": "Legacy sampling timeout after 60s",
+      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/origin-trials/chrome-143-stable-zh.md"
     },
-    "other": {
-      "en": "fallback",
-      "zh": "fallback"
+    "performance": {
+      "en": "done",
+      "zh": "error",
+      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/performance/chrome-143-stable-en.md",
+      "zh_error": "Legacy sampling timeout after 60s",
+      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/performance/chrome-143-stable-zh.md"
     },
-    "security-privacy": {
+    "storage": {
       "en": "done",
       "zh": "done",
-      "en_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/security-privacy/chrome-142-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/security-privacy/chrome-142-stable-zh.md"
-    },
-    "webapi": {
-      "en": "done",
-      "zh": "done",
-      "en_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/webapi/chrome-142-stable-en.md",
-      "zh_path": "/Users/lyzh/Documents/EMSCodingTool/chrome-update-digest/digest_markdown/webplatform/webapi/chrome-142-stable-zh.md"
+      "en_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/storage/chrome-143-stable-en.md",
+      "zh_path": "/Users/lyzh/Documents/Nova_Projects/chrome-update-digest/digest_markdown/webplatform/storage/chrome-143-stable-zh.md"
     }
   },
-  "started_at": "2025-10-30T10:37:18.686712",
-  "updated_at": "2025-10-30T10:43:13.582494"
+  "started_at": "2025-12-09T22:36:08.435454",
+  "updated_at": "2025-12-09T22:53:57.742188"
 }

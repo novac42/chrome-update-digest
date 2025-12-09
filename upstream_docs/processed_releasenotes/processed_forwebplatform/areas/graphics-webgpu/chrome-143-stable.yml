@@ -1,0 +1,95 @@
+version: '143'
+channel: stable
+area: graphics-webgpu
+extraction_timestamp: '2025-12-09T22:36:08.319351'
+extraction_method: deterministic
+statistics:
+  total_features: 3
+  total_links: 5
+  primary_tags:
+    webgpu: 3
+    storage: 1
+  cross_cutting:
+    webgpu: 3
+features:
+- title: Texture component swizzle
+  content: "It's now possible to rearrange or replace the color components from texture's red, green, blue, and alpha channels\
+    \ when accessed by a shader.\n\nWhen the [`\"texture-component-swizzle\"`](https://gpuweb.github.io/gpuweb/#dom-gpufeaturename-texture-component-swizzle)\
+    \ feature is available in a GPUAdapter, request a GPUDevice with this feature, and create a GPUTextureView by calling\
+    \ `createView()` with a new `swizzle` option. This value is a string of length four, with each character mapping to the\
+    \ view's red, green, blue, and alpha components, respectively. Each character can be either:\n\n  * `\"r\"`: Take its\
+    \ value from the red channel of the texture.\n  * `\"g\"`: Take its value from the green channel of the texture.\n  *\
+    \ `\"b\"`: Take its value from the blue channel of the texture.\n  * `\"a\"`: Take its value from the alpha channel of\
+    \ the texture.\n  * `\"0\"`: Force its value to 0.\n  * `\"1\"`: Force its value to 1.\n\nSee the following snippet and\
+    \ [chromestatus entry](https://chromestatus.com/feature/5110223547269120).\n    \n    \n    const adapter = await navigator.gpu.requestAdapter();\n\
+    \    if (!adapter.features.has(\"texture-component-swizzle\")) {\n      throw new Error(\"Texture component swizzle support\
+    \ is not available\");\n    }\n    // Explicitly request texture component swizzle support.\n    const device = await\
+    \ adapter.requestDevice({\n      requiredFeatures: [\"texture-component-swizzle\"],\n    });\n    \n    // ... Assuming\
+    \ myTexture is a GPUTexture with a single red channel.\n    \n    // Map the view's red, green, blue components to myTexture's\
+    \ red channel\n    // and force the view's alpha component to 1 so that the shader sees it as\n    // a grayscale image.\n\
+    \    const view = myTexture.createView({ swizzle: \"rrr1\" });\n    \n    // Send the appropriate commands to the GPU..."
+  heading_path:
+  - Graphics and WebGPU - Chrome 143
+  - Texture component swizzle
+  links:
+  - url: https://gpuweb.github.io/gpuweb/#dom-gpufeaturename-texture-component-swizzle
+    link_type: github
+    title: '`"texture-component-swizzle"`'
+  - url: https://chromestatus.com/feature/5110223547269120
+    link_type: chromestatus
+    title: chromestatus entry
+  line_number: 5
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Remove bgra8unorm read-only storage texture usage
+  content: As previously [announced](/blog/new-in-webgpu-140#deprecate_bgra8unorm_read-only_storage_texture_usage), using
+    `"bgra8unorm"` format with read-only storage textures is now removed. The WebGPU specification explicitly disallows this,
+    and its prior allowance in Chrome was a bug, as this format is intended for write-only access and is not portable. See
+    [issue 427681156](https://issues.chromium.org/issues/427681156).
+  heading_path:
+  - Graphics and WebGPU - Chrome 143
+  - Remove bgra8unorm read-only storage texture usage
+  links:
+  - url: https://issues.chromium.org/issues/427681156
+    link_type: other
+    title: issue 427681156
+  line_number: 41
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: storage
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Dawn updates
+  content: 'A validation error raised when clearing a 3D texture in Vulkan has been fixed. See issue [443950688](https://issues.chromium.org/issues/443950688)
+
+
+    This covers only some of the key highlights. Check out the exhaustive [list of commits](https://dawn.googlesource.com/dawn/+log/chromium/7444..chromium/7499?n=1000).'
+  heading_path:
+  - Graphics and WebGPU - Chrome 143
+  - Dawn updates
+  links:
+  - url: https://issues.chromium.org/issues/443950688
+    link_type: other
+    title: '443950688'
+  - url: https://dawn.googlesource.com/dawn/+log/chromium/7444..chromium/7499?n=1000
+    link_type: other
+    title: list of commits
+  line_number: 46
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
