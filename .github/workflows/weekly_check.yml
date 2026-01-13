@@ -1,0 +1,50 @@
+name: Check Upstream Releases
+
+on:
+  schedule:
+    # 每周三 03:00 UTC (北京时间 11:00)
+    - cron: '0 3 * * 3'
+  workflow_dispatch: # 允许手动触发测试
+
+jobs:
+  check-and-notify:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          # 安装当前包以便脚本可以引用
+          pip install .
+
+      - name: Run Check Script
+        id: check
+        run: python scripts/check_upstream.py
+
+      - name: Create Status Report
+        run: |
+          echo "Run Date: $(date)" > status_report.txt
+          echo "New Release Found: ${{ steps.check.outputs.new_release_found }}" >> status_report.txt
+          if [ "${{ steps.check.outputs.new_release_found }}" == "true" ]; then
+            echo "Missing Releases:" >> status_report.txt
+            echo "${{ steps.check.outputs.release_list }}" >> status_report.txt
+          else
+            echo "All releases are up to date." >> status_report.txt
+          fi
+
+      - name: Upload Status Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: check-status-report
+          path: status_report.txt

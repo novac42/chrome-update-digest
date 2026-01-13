@@ -62,7 +62,7 @@ node_modules/
 
 # Temporary folders
 tmp/
-temp/
+**/temp/
 temp-save/
 
 # Python
