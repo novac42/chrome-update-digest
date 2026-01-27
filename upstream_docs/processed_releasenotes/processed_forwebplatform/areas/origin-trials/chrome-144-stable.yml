@@ -1,0 +1,98 @@
+version: '144'
+channel: stable
+area: origin-trials
+extraction_timestamp: '2026-01-27T22:41:05.859493'
+extraction_method: deterministic
+statistics:
+  total_features: 2
+  total_links: 8
+  primary_tags:
+    origin-trials: 2
+    multimedia: 1
+  cross_cutting:
+    privacy: 2
+    security: 1
+features:
+- title: Enhanced Canvas API `TextMetrics`
+  content: 'Expands the `TextMetrics` Canvas API to support selection rectangles, bounding box queries, and glyph cluster-based
+    operations.
+
+
+    This new functionality enables complex text editing applications with accurate selection, caret positioning, and hit testing.
+    Additionally, cluster-based rendering facilitates sophisticated text effects, for example, independent character animations
+    and styling.
+
+
+    [Origin Trial](https://developer.chrome.com/origintrials/#/view_trial/1646628613757337601) | [Tracking bug #341213359](https://issues.chromium.org/issues/341213359)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/5075532483657728) | [Spec](https://github.com/whatwg/html/pull/11000)'
+  heading_path:
+  - Origin trials
+  - Enhanced Canvas API `TextMetrics`
+  links:
+  - url: https://developer.chrome.com/origintrials/#/view_trial/1646628613757337601
+    link_type: other
+    title: Origin Trial
+  - url: https://issues.chromium.org/issues/341213359
+    link_type: other
+    title: 'Tracking bug #341213359'
+  - url: https://chromestatus.com/feature/5075532483657728
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://github.com/whatwg/html/pull/11000
+    link_type: github
+    title: Spec
+  line_number: 3
+  primary_tags:
+  - name: origin-trials
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
+- title: Context-aware media elements
+  content: 'Context-aware media elements, are a declarative, user-activated control for accessing the starting and interacting
+    with media streams.
+
+
+    This addresses the long-standing problem of permission prompts being triggered directly from JavaScript without a strong
+    signal of user intent. By embedding a browser-controlled element in the page, the user''s click provides a clear, intentional
+    signal. This enables a much better prompt UX and, crucially, provides a recovery path for users who have previously denied
+    the permission.
+
+
+    **Note:** This feature was previously developed and tested in an Origin Trial as the more generic `<permission>` element.
+    Based on feedback from developers and other browser vendors, it has evolved into capability-specific elements to provide
+    a more tailored and powerful developer experience.
+
+
+    [Origin Trial](https://developer.chrome.com/origintrials/#/view_trial/3736298840857247745) | [Tracking bug #443013457](https://issues.chromium.org/issues/443013457)
+    | [ChromeStatus.com entry](https://chromestatus.com/feature/4926233538330624) | [Spec](https://wicg.github.io/PEPC/permission-elements.html)'
+  heading_path:
+  - Origin trials
+  - Context-aware media elements
+  links:
+  - url: https://developer.chrome.com/origintrials/#/view_trial/3736298840857247745
+    link_type: other
+    title: Origin Trial
+  - url: https://issues.chromium.org/issues/443013457
+    link_type: other
+    title: 'Tracking bug #443013457'
+  - url: https://chromestatus.com/feature/4926233538330624
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://wicg.github.io/PEPC/permission-elements.html
+    link_type: spec
+    title: Spec
+  line_number: 11
+  primary_tags:
+  - name: origin-trials
+    priority: primary
+    source: heading
+    confidence: 1.0
+  - name: multimedia
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - security
+  - privacy

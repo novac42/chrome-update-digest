@@ -1,0 +1,146 @@
+version: '144'
+channel: stable
+area: graphics-webgpu
+extraction_timestamp: '2026-01-27T22:41:05.879942'
+extraction_method: deterministic
+statistics:
+  total_features: 5
+  total_links: 8
+  primary_tags:
+    webgpu: 5
+  cross_cutting:
+    webgpu: 5
+features:
+- title: WGSL subgroup_id extension
+  content: "The WGSL language extension `subgroup_id` lets you use the following new built-in values in workgroups when the\
+    \ `subgroups` extension is enabled:\n\n  * `subgroup_id`: Provides the ID of an invocation's subgroup within the current\
+    \ workgroup.\n  * `num_subgroups`: Reports the number of subgroups present in the workgroup.\n\nPreviously, to index memory\
+    \ using subgroup invocation IDs, you had to reconstruct a subgroup ID (typically through[ atomic operations](https://gpuweb.github.io/gpuweb/wgsl/#atomic-types))\
+    \ to avoid overlapping memory accesses. You can now use `subgroup_id` to fill the other half of that equation. Because\
+    \ this functionality is not available on the D3D backend yet, it's emulated there. It should be safe to create an equivalence\
+    \ to `local_invocation_index` as `subgroup_invocation_id + subgroup_size * subgroup_id`. Note that there might be cases\
+    \ where subgroups are not full.\n\nThis language extension can be feature-detected using `navigator.gpu.wgslLanguageFeatures`.\
+    \ It's recommended to use a requires-directive to signal the potential for non-portability with `requires subgroup_id;`\
+    \ at the top of your WGSL shader code. See the following example and the [intent to ship](https://groups.google.com/a/chromium.org/g/blink-dev/c/SV75BHCUJz0/m/_Ihj4GRCBQAJ).\n\
+    \    \n    \n    if (!navigator.gpu.wgslLanguageFeatures.has(\"subgroup_id\")) {\n      throw new Error(`WGSL subgroup_id\
+    \ and num_subgroups built-in values are not available`);\n    }\n    \n    const adapter = await navigator.gpu.requestAdapter();\n\
+    \    if (!adapter.features.has(\"subgroups\")) {\n      throw new Error(\"Subgroups support is not available\");\n   \
+    \ }\n    const device = await adapter.requestDevice({ requiredFeatures: [\"subgroups\"] });\n    \n    const shaderModule\
+    \ = device.createShaderModule({ code: `\n      enable subgroups;\n      requires subgroup_id;\n    \n      @compute @workgroup_size(64,\
+    \ 1, 1)\n      fn main(@builtin(subgroup_id) subgroup_id : u32,\n              @builtin(num_subgroups) num_subgroups :\
+    \ u32) {\n        // TODO: Use subgroup_id and num_subgroups values.\n      }`,\n    });"
+  heading_path:
+  - Graphics and WebGPU - Chrome 144
+  - WGSL subgroup_id extension
+  links:
+  - url: https://gpuweb.github.io/gpuweb/wgsl/#atomic-types
+    link_type: github
+    title: atomic operations
+  - url: https://groups.google.com/a/chromium.org/g/blink-dev/c/SV75BHCUJz0/m/_Ihj4GRCBQAJ
+    link_type: other
+    title: intent to ship
+  line_number: 5
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: WGSL uniform_buffer_standard_layout extension
+  content: "The WGSL language extension `uniform_buffer_standard_layout` lets uniform buffers use the same memory layout constraints\
+    \ as storage buffers, which makes it easier to share data structures in both kinds of buffers. This means uniform buffers\
+    \ are no longer required to have 16-byte alignment on array elements, or to pad nested structure offsets to a multiple\
+    \ of 16 bytes.\n\nThis language extension can be feature-detected using `navigator.gpu.wgslLanguageFeatures`. It's recommended\
+    \ to use a requires-directive to signal the potential for non-portability with `requires uniform_buffer_standard_layout;`\
+    \ at the top of your WGSL shader code. See the following example and the [intent to ship](https://groups.google.com/a/chromium.org/g/blink-dev/c/Ww2eL6b74V0/m/D8AT9DWlAQAJ).\n\
+    \    \n    \n    if (!navigator.gpu.wgslLanguageFeatures.has(\"uniform_buffer_standard_layout\")) {\n      throw new Error(`WGSL\
+    \ uniform buffer standard layout is not available`);\n    }\n    \n    const adapter = await navigator.gpu.requestAdapter();\n\
+    \    const device = await adapter.requestDevice();\n    \n    const shaderModule = device.createShaderModule({ code: `\n\
+    \      requires uniform_buffer_standard_layout;\n    \n      struct S {\n          x: f32\n      }\n      struct Uniforms\
+    \ {\n          a: S,\n          b: f32\n          // b is at offset 4. Without standard layout, alignment rules would\n\
+    \          // force b to be at offset 16 (or a multiple of 16), and you would have\n          // to add extra fields or\
+    \ use an @align attribute.\n      }\n    \n      @group(0) @binding(0) var<uniform> u: Uniforms;\n    \n      @fragment\
+    \ fn fs_main() -> @location(0) vec4<f32> {\n          return vec4<f32>(u.a.x);\n      }`,\n    });"
+  heading_path:
+  - Graphics and WebGPU - Chrome 144
+  - WGSL uniform_buffer_standard_layout extension
+  links:
+  - url: https://groups.google.com/a/chromium.org/g/blink-dev/c/Ww2eL6b74V0/m/D8AT9DWlAQAJ
+    link_type: other
+    title: intent to ship
+  line_number: 40
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: WebGPU on Linux
+  content: The Chrome team is carefully rolling out WebGPU for Linux, starting with support for Intel Gen12+ GPUs but with
+    a tentative plan to expand it to more devices (AMD, NVIDIA). This implementation uses an architecture where WebGPU uses
+    Vulkan and the rest of Chromium stays on OpenGL, exercising existing well known good code paths. See [issue 442791440](https://issues.chromium.org/issues/442791440).
+  heading_path:
+  - Graphics and WebGPU - Chrome 144
+  - WebGPU on Linux
+  links:
+  - url: https://issues.chromium.org/issues/442791440
+    link_type: other
+    title: issue 442791440
+  line_number: 77
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Faster writeBuffer and writeTexture
+  content: '`writeBuffer()` and `writeTexture()` have been optimized in Chrome, resulting in performance gains up to 2X better
+    than the previous version, depending on the size of the data being transferred. This change affects all users of the [Dawn
+    Wire](https://dawn.googlesource.com/dawn/+/HEAD/docs/dawn/overview.md#dawn-wire) implementation as well. See [issue 441900745](https://issues.chromium.org/issues/441900745).'
+  heading_path:
+  - Graphics and WebGPU - Chrome 144
+  - Faster writeBuffer and writeTexture
+  links:
+  - url: https://dawn.googlesource.com/dawn/+/HEAD/docs/dawn/overview.md#dawn-wire
+    link_type: other
+    title: Dawn Wire
+  - url: https://issues.chromium.org/issues/441900745
+    link_type: other
+    title: issue 441900745
+  line_number: 82
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu
+- title: Dawn updates
+  content: 'The Android GPU team has published the [first alpha release](https://developer.android.com/jetpack/androidx/releases/webgpu)
+    of Kotlin bindings for WebGPU on Android available using Jetpack. The `androidx.webgpu` package gives Android developers
+    access to a modern GPU API using Kotlin, bypassing the legacy issues of OpenGL or the complexity of Vulkan—an exciting
+    development for the ecosystem!
+
+
+    This covers only some of the key highlights. Check out the exhaustive [list of commits](https://dawn.googlesource.com/dawn/+log/chromium/7499..chromium/7559?n=1000).'
+  heading_path:
+  - Graphics and WebGPU - Chrome 144
+  - Dawn updates
+  links:
+  - url: https://developer.android.com/jetpack/androidx/releases/webgpu
+    link_type: other
+    title: first alpha release
+  - url: https://dawn.googlesource.com/dawn/+log/chromium/7499..chromium/7559?n=1000
+    link_type: other
+    title: list of commits
+  line_number: 87
+  primary_tags:
+  - name: webgpu
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - webgpu

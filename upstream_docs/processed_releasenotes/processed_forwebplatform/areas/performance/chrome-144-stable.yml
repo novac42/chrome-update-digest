@@ -1,0 +1,52 @@
+version: '144'
+channel: stable
+area: performance
+extraction_timestamp: '2026-01-27T22:41:05.870508'
+extraction_method: deterministic
+statistics:
+  total_features: 1
+  total_links: 2
+  primary_tags:
+    performance: 1
+  cross_cutting: {}
+features:
+- title: 'Performance and Event Timing: `interactionCount`'
+  content: 'The Event Timing API is part of the Performance Timeline and measures the performance of user interactions. Certain
+    events have an `interactionId` value assigned to them. This is useful for grouping related interactions based on common
+    physical user inputs or gestures.
+
+
+    This feature adds a `performance.interactionCount` property, which is the total number of interactions that occurred on
+    the page.
+
+
+    In particular, this feature is useful for computing the Interaction to Next Paint (INP) metric value. This requires knowing
+    the total number of interactions to compute a high percentile score (p98 for pages with more than 50 total interactions).
+
+
+    This feature has been specified for a long time, was prototyped in Chromium a long time ago but never shipped, is part
+    of Interop 2025, and is available in other browsers.
+
+
+    **Note:** A more powerful `performance.eventCounts` map for specific events exists, but you can''t accurately map event
+    counts to interaction counts.
+
+
+    [ChromeStatus.com entry](https://chromestatus.com/feature/5153386492198912) | [Spec](https://www.w3.org/TR/event-timing/#dom-performance-interactioncount)'
+  heading_path:
+  - Performance
+  - 'Performance and Event Timing: `interactionCount`'
+  links:
+  - url: https://chromestatus.com/feature/5153386492198912
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://www.w3.org/TR/event-timing/#dom-performance-interactioncount
+    link_type: spec
+    title: Spec
+  line_number: 3
+  primary_tags:
+  - name: performance
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns: []

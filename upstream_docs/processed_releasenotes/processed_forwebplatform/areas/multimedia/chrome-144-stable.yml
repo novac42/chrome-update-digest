@@ -1,0 +1,49 @@
+version: '144'
+channel: stable
+area: multimedia
+extraction_timestamp: '2026-01-27T22:41:05.868588'
+extraction_method: deterministic
+statistics:
+  total_features: 1
+  total_links: 3
+  primary_tags:
+    multimedia: 1
+  cross_cutting:
+    privacy: 1
+features:
+- title: '`RTCDegradationPreference` enum value `maintain-framerate-and-resolution`'
+  content: '`maintain-framerate-and-resolution` disables WebRTC''s internal video adaptation. This lets the application implement
+    its own adaptation logic and prevents interference from the internal adaptation.
+
+
+    From the WebRTC MediaStreamTrack Content Hints specification:
+
+
+    Maintain framerate and resolution regardless of video quality. The user agent shouldn''t prefer reducing the framerate
+    or resolution for quality and performance reasons, but might drop frames before encoding if necessary not to overuse network
+    and encoder resources.
+
+
+    [Tracking bug #450044904](https://issues.chromium.org/issues/450044904) | [ChromeStatus.com entry](https://chromestatus.com/feature/5156290162720768)
+    | [Spec](https://www.w3.org/TR/mst-content-hint/#dom-rtcdegradationpreference-maintain-framerate-and-resolution)'
+  heading_path:
+  - WebRTC
+  - '`RTCDegradationPreference` enum value `maintain-framerate-and-resolution`'
+  links:
+  - url: https://issues.chromium.org/issues/450044904
+    link_type: other
+    title: 'Tracking bug #450044904'
+  - url: https://chromestatus.com/feature/5156290162720768
+    link_type: chromestatus
+    title: ChromeStatus.com entry
+  - url: https://www.w3.org/TR/mst-content-hint/#dom-rtcdegradationpreference-maintain-framerate-and-resolution
+    link_type: spec
+    title: Spec
+  line_number: 3
+  primary_tags:
+  - name: multimedia
+    priority: primary
+    source: heading
+    confidence: 1.0
+  cross_cutting_concerns:
+  - privacy
