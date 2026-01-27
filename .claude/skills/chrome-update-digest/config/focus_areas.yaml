@@ -1,0 +1,219 @@
+# Focus Areas Configuration for Chrome Release Notes Digest
+# Updated based on comprehensive analysis of Chrome 124-139
+# Simplified keyword matching with heading-first priority
+version: "2.0"
+last_updated: "2025-08-13"
+
+# Fixed focus areas with simplified keywords
+# Matching is case-insensitive
+# Priority: heading match > keyword match (except for Web API)
+focus_areas:
+  css:
+    name: "CSS"
+    description: "CSS styling, layout, and UI features"
+    priority: 1
+    heading_patterns:
+      - "CSS"
+      - "CSS and UI"
+      - "Styling"
+    
+  html-dom:
+    name: "HTML-DOM"
+    description: "HTML elements and DOM manipulation"
+    priority: 2
+    heading_patterns:
+      - "HTML"
+      - "DOM"
+      - "HTML and DOM"
+    
+  graphics-webgpu:
+    name: "Graphics and WebGPU"
+    description: "Graphics rendering and WebGPU features"
+    priority: 1
+    heading_patterns:
+      - "WebGPU"
+      - "Graphics"
+    
+  on-device-ai:
+    name: "On-device AI"
+    description: "On-device AI and LLM features"
+    priority: 1
+    keywords:
+      - "on-device ai"
+      - "language model"
+    heading_patterns:
+      - "On-device AI"
+    # Special flag: this area also searches keywords in feature content
+    search_content_keywords: true
+    
+  webapi:
+    name: "Web API"
+    description: "Web APIs and browser interfaces"
+    priority: 1
+    heading_patterns:
+      - "Web APIs"
+      - "Web API"
+    # Note: Web API can have multiple tags since it contains APIs from many areas
+    allow_multiple_tags: true
+    
+  origin-trials:
+    name: "Origin trials"
+    description: "Experimental features in origin trials"
+    priority: 2
+    heading_patterns:
+      - "Origin trials"
+    
+  deprecations:
+    name: "Deprecations"
+    description: "Deprecated and removed features"
+    priority: 2
+    heading_patterns:
+      - "Deprecations"
+      - "Deprecations and removals"
+      - "Removals"
+    
+  security-privacy:
+    name: "Security-Privacy"
+    description: "Security and privacy features"
+    priority: 1
+    heading_patterns:
+      - "Security"
+      - "Privacy"
+      - "Privacy and security"
+    
+  navigation-loading:
+    name: "Navigation-Loading"
+    description: "Navigation and resource loading features"
+    priority: 3
+    heading_patterns:
+      - "Loading"
+      - "Navigation"
+    
+  multimedia:
+    name: "Multimedia"
+    description: "Media, audio, and video features"
+    priority: 2
+    heading_patterns:
+      - "Multimedia"
+      - "audio and video"
+      - "video and audio"
+      - "Images and media"
+      - "WebRTC"
+
+    
+  performance:
+    name: "Performance"
+    description: "Performance optimizations and improvements"
+    priority: 2
+    heading_patterns:
+      - "Performance"
+    
+  devices:
+    name: "Devices"
+    description: "Device APIs and sensor features"
+    priority: 3
+    heading_patterns:
+      - "Device"
+      - "Devices"
+      - "Sensors"
+
+    
+  pwa-service-worker:
+    name: "PWA and service worker"
+    description: "Progressive Web Apps and service worker features"
+    priority: 3
+    heading_patterns:
+      - "PWA"
+      - "Service Worker"
+      - "Progressive Web Apps"
+
+  isolated-web-apps:
+    name: "Isolated Web Apps"
+    description: "Isolated Web Apps (IWAs) and related features"
+    priority: 2
+    heading_patterns:
+      - "Isolated Web Apps"
+      - "IWAs"
+      - "Isolated Web Apps (IWAs)"
+    
+  javascript:
+    name: "JavaScript"
+    description: "JavaScript language features and runtime updates"
+    priority: 2
+    heading_patterns:
+      - "JavaScript"
+      - "JS"
+    
+  webassembly:
+    name: "WebAssembly"
+    description: "WebAssembly runtime and tooling updates"
+    priority: 2
+    heading_patterns:
+      - "WebAssembly"
+      - "Wasm"
+    
+  enterprise:
+    name: "Enterprise"
+    description: "Enterprise policies and admin features"
+    priority: 3
+    heading_patterns:
+      - "Enterprise"
+    
+  network:
+    name: "Network"
+    description: "Networking and connectivity features"
+    priority: 3
+    heading_patterns:
+      - "Network"
+    
+  identity:
+    name: "Identity"
+    description: "Identity, sign-in, and account features"
+    priority: 3
+    heading_patterns:
+      - "Identity"
+    
+  browser-changes:
+    name: "Browser changes"
+    description: "Platform-level browser behavior updates"
+    priority: 2
+    heading_patterns:
+      - "Browser changes"
+    
+  payment:
+    name: "Payment"
+    description: "Payment and payment-related features"
+    priority: 2
+    heading_patterns:
+      - "Payment"
+      - "Payments"
+      - "Secure Payment Confirmation"
+    
+  devtools:
+    name: "DevTools"
+    description: "Developer Tools and debugging features"
+    priority: 2
+    heading_patterns:
+      - "Developer Tools"
+      - "DevTools"
+    
+
+# Metadata configuration for the matching system
+metadata:
+  matching_strategy:
+    case_sensitive: false  # Case-insensitive matching
+    heading_only: true     # Most areas only match by heading patterns
+    content_keywords_exception: ["on-device-ai"]  # Only these areas search content
+  
+  matching_rules:
+    # Standard areas: only match h2 headings by heading_patterns
+    # Special areas (on-device-ai): also search keywords in feature content
+    # on-device-ai can identify AI features scattered in other sections
+    heading_patterns_required: true
+    content_search_selective: true
+  
+  excluded_sections:
+    # Sections to exclude from feature extraction
+    - "Further reading"
+    - "Download Google Chrome"
+    - "Chrome release summary"

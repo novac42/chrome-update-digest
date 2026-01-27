@@ -20,26 +20,24 @@ Uses: stable channel, bilingual (en+zh), all 23 areas
 Process Chrome 143 beta in English for CSS and WebAPI
 ```
 
-**✨ Phase 2 Complete**: Full bilingual digest generation now supported!
-- ✓ Extracts structured YAML data from release notes
-- ✓ Generates English digests using LLM
-- ✓ Translates to Chinese with structure preservation
+**Core Features**:
+- ✓ Extracts structured data from release notes into 23+ focus areas
+- ✓ Generates GitHub Pages navigation (dual structure: by-version & by-area)
+- ✓ Integrates with MCP server for AI-powered digest generation (optional)
 
 ## Workflow
 
 The skill executes these steps automatically:
 
 1. **Validate**: Check version format and input files exist
-2. **Clean Pipeline**: Run clean data pipeline to extract area-specific YAML
-3. **Generate**: Create English digests using LLM for each area
-4. **Translate**: Convert to Chinese (if bilingual/Chinese mode)
-5. **Write**: Save outputs to `upstream_docs/processed_releasenotes/`
+2. **Clean Pipeline**: Extract area-specific YAML and markdown from raw release notes
+3. **Generate Navigation**: Create GitHub Pages navigation structure (by-version & by-area)
+4. **Output**: Save processed files and navigation to respective directories
 
 ## Processing Options
 
 **Channel**: stable (default) or beta
-**Language**: bilingual (default), en, or zh
-**Areas**: all (default) or specific subset
+**Output**: Area-specific markdown + YAML files + GitHub Pages navigation
 
 For area details, see [references/focus_areas.md](references/focus_areas.md).
 
@@ -64,14 +62,11 @@ When the user triggers this skill with a request like "Process Chrome 139", you 
 
 3. **Execute the processing script**:
    ```bash
-   uv run python .claude/skills/chrome-update-digest/scripts/process_chrome.py \
+   python .claude/skills/chrome-update-digest/scripts/process_chrome.py \
      --version {version} \
      --channel {channel} \
-     --language {language} \
      --verbose
    ```
-
-   If specific areas requested, add: `--areas {area1} {area2} ...`
 
 4. **Report progress and results**:
    - Stream progress updates from the script
@@ -82,38 +77,40 @@ When the user triggers this skill with a request like "Process Chrome 139", you 
 
 ### Example 1: Simple request with defaults
 ```
-User: "Process Chrome 139"
+User: "Process Chrome 143"
 Assistant:
-  Parsing request: version=139, channel=stable, language=bilingual, areas=all
+  Parsing request: version=143, channel=stable
   Validating inputs... ✓
 
-  Running: uv run python .claude/skills/chrome-update-digest/scripts/process_chrome.py --version 139 --channel stable --language bilingual --verbose
+  🚀 Processing Chrome 143 (stable)
 
-  [1/4] Running clean data pipeline...
-  [2/4] Generating English digests (23 areas)...
-  [3/4] Translating to Chinese...
-  [4/4] Complete!
+  [1/3] Running clean data pipeline...
+    ✓ Extracted 23 focus areas
+    ✓ Generated YAML and markdown files
 
-  ✓ Generated digests: upstream_docs/processed_releasenotes/processed_forwebplatform/areas/
+  [2/3] Note: AI digests available via MCP server
+
+  [3/3] Generating GitHub Pages navigation...
+    ✓ Created version-centric pages
+    ✓ Created area-centric pages
+
+  ✅ Processing complete!
+     Processed areas: upstream_docs/processed_releasenotes/processed_forwebplatform/areas/
+     Navigation: digest_markdown/areas/ and digest_markdown/versions/
+
+  💡 Next steps:
+     1. (Optional) Generate AI digests via MCP server
+     2. Commit changes to trigger GitHub Pages deployment
 ```
 
-### Example 2: Custom parameters
+### Example 2: Beta channel
 ```
-User: "Process Chrome 139 beta in English for CSS and WebAPI"
+User: "Process Chrome 143 beta"
 Assistant:
-  Parsing request: version=139, channel=beta, language=en, areas=[css, webapi]
+  Parsing request: version=143, channel=beta
   Validating inputs... ✓
 
-  Running: uv run python .claude/skills/chrome-update-digest/scripts/process_chrome.py --version 139 --channel beta --language en --areas css webapi --verbose
-
-  [1/4] Running clean data pipeline...
-  [2/4] Generating English digests (2 areas)...
-    1/2 complete: css
-    2/2 complete: webapi
-  [3/4] Skipping translation (English only mode)
-  [4/4] Complete!
-
-  ✓ Generated digests for 2 areas
+  [Processing output similar to Example 1, but for beta channel...]
 ```
 
 ### Example 3: Error handling
@@ -134,9 +131,21 @@ Assistant:
 
 ## Technical Notes
 
-- The skill calls the processing pipeline directly via Python imports
+- The skill orchestrates existing CLI tools (chrome-update-digest-cli)
 - Uses `uv run` to ensure correct environment and dependencies
-- Progress is streamed in real-time via print statements
-- All outputs written to `upstream_docs/processed_releasenotes/processed_forwebplatform/areas/`
+- Progress is streamed in real-time
+- Outputs:
+  * Processed files: `upstream_docs/processed_releasenotes/processed_forwebplatform/areas/`
+  * Navigation: `digest_markdown/areas/` and `digest_markdown/versions/`
 - Supports both stable and beta channels
-- Handles 23 predefined focus areas (see config/focus_areas.yaml)
+- Handles 23+ predefined focus areas (see config/focus_areas.yaml)
+- Bundles configuration and prompts for portability
+- Integrates with GitHub Actions for automatic deployment
+
+## AI-Powered Digests (Optional)
+
+For AI-generated summaries and translations, use the MCP server separately:
+```bash
+uv run chrome-update-digest-mcp
+```
+Then use MCP tools (`digest_prepare_yaml`, `digest_generate_area`, `digest_translate_area`, `digest_write_outputs`)

@@ -43,14 +43,9 @@ include = [
   "upstream_docs/**/*",
 ]
 
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
   "pytest>=7.0.0",
   "pytest-cov>=4.0.0",
   "unittest-xml-reporting>=3.0.0",
 ]
-
-[tool.uv.scripts]
-test = "pytest"
-lint = "pytest -q"
-mcp = "chrome-update-digest-mcp --base-path ."

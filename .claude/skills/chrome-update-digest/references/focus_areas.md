@@ -1,266 +1,200 @@
-# Chrome Release Notes Focus Areas
+# Chrome Update Digest - Focus Areas Reference
 
-This document describes the 23 focus areas used to organize Chrome release notes.
+This document describes the 23+ focus areas that the Chrome Update Digest processes.
 
-## Overview
+## Core Web Platform
 
-Chrome release notes are automatically parsed and categorized into these focus areas based on heading patterns and keywords defined in [config/focus_areas.yaml](../../../../config/focus_areas.yaml).
+### CSS
+- **Description**: CSS features, properties, selectors, and styling capabilities
+- **Heading Patterns**: "CSS", "CSS and UI"
+- **Example Features**: Container queries, cascade layers, new color functions
 
-## Core Web Platform Areas
+### HTML & DOM
+- **Description**: HTML elements, DOM APIs, and document structure
+- **Heading Patterns**: "HTML", "DOM"
+- **Example Features**: New HTML elements, DOM manipulation APIs
 
-### css
-**CSS styling, layout, and UI features**
-- Heading patterns: "CSS", "CSS and UI", "Styling"
-- Priority: High
-- Examples: CSS Grid, Flexbox, CSS animations, color features
+### JavaScript
+- **Description**: ECMAScript features, language improvements
+- **Heading Patterns**: "JavaScript", "JS", "ECMAScript"
+- **Example Features**: New syntax, standard library additions
 
-### html-dom
-**HTML elements and DOM manipulation**
-- Heading patterns: "HTML", "DOM", "HTML and DOM"
-- Priority: Medium
-- Examples: HTML elements, DOM APIs, element properties
+## Web APIs
 
-### webapi
-**Web APIs and browser interfaces**
-- Heading patterns: "Web APIs", "Web API"
-- Priority: High
-- Special: Can have multiple tags (APIs span many areas)
-- Examples: Fetch API, Storage API, Web APIs
+### Web APIs
+- **Description**: General web platform APIs
+- **Heading Patterns**: "Web APIs", "APIs"
+- **Example Features**: Fetch, Streams, File System Access, etc.
 
-### javascript
-**JavaScript language features and runtime updates**
-- Heading patterns: "JavaScript", "JS"
-- Priority: Medium
-- Examples: ECMAScript features, runtime improvements
+### PWA & Service Worker
+- **Description**: Progressive Web App capabilities and Service Worker features
+- **Heading Patterns**: "PWA", "Progressive Web Apps", "Service Workers"
+- **Example Features**: Install prompts, offline capabilities, background sync
 
-### webassembly
-**WebAssembly runtime and tooling updates**
-- Heading patterns: "WebAssembly", "Wasm"
-- Priority: Medium
-- Examples: WebAssembly features, Wasm tooling
+### WebRTC
+- **Description**: Real-time communication APIs
+- **Heading Patterns**: "WebRTC", "RTC"
+- **Example Features**: Video/audio calling, peer-to-peer data transfer
 
-## Graphics and Media
+### WebAssembly
+- **Description**: WebAssembly features and tooling
+- **Heading Patterns**: "WebAssembly", "Wasm"
+- **Example Features**: SIMD, threading, exception handling
 
-### graphics-webgpu
-**Graphics rendering and WebGPU features**
-- Heading patterns: "WebGPU", "Graphics"
-- Priority: High
-- Special: Merges content from Chrome Graphics and dedicated WebGPU release notes
-- Examples: WebGPU APIs, Canvas2D, rendering features
+## Graphics & Multimedia
 
-### multimedia
-**Media, audio, and video features**
-- Heading patterns: "Multimedia", "audio and video", "WebRTC"
-- Priority: Medium
-- Examples: Video playback, audio APIs, WebRTC
+### Graphics & WebGPU
+- **Description**: Graphics APIs including WebGPU, Canvas, and rendering
+- **Heading Patterns**: "Graphics", "WebGPU", "Rendering"
+- **Example Features**: WebGPU shaders, compute pipelines, graphics performance
+- **Special**: Merges Chrome Graphics section with dedicated WebGPU release notes
+
+### Multimedia
+- **Description**: Audio and video APIs
+- **Heading Patterns**: "Media", "Audio", "Video"
+- **Example Features**: Media capture, codecs, streaming
+
+## Platform & Performance
+
+### Performance
+- **Description**: Performance APIs and optimizations
+- **Heading Patterns**: "Performance"
+- **Example Features**: Performance monitoring, resource timing, optimization hints
+
+### Network
+- **Description**: Networking APIs and protocols
+- **Heading Patterns**: "Network", "Networking"
+- **Example Features**: HTTP/3, connection management, fetch improvements
+
+### Navigation & Loading
+- **Description**: Page navigation and resource loading
+- **Heading Patterns**: "Navigation", "Loading"
+- **Example Features**: Navigation API, prerendering, resource hints
+
+## Device & System
+
+### Devices
+- **Description**: Device APIs for hardware access
+- **Heading Patterns**: "Devices", "Hardware"
+- **Example Features**: USB, Bluetooth, sensors, geolocation
+
+## Security & Privacy
+
+### Security & Privacy
+- **Description**: Security features and privacy enhancements
+- **Heading Patterns**: "Security", "Privacy"
+- **Example Features**: Permissions, HTTPS, secure contexts, privacy sandbox
+
+### Identity
+- **Description**: Authentication and identity management
+- **Heading Patterns**: "Identity", "Authentication", "FedCM"
+- **Example Features**: Federated Credential Management, WebAuthn
+
+### Payment
+- **Description**: Web payments and related APIs
+- **Heading Patterns**: "Payment" (substring match)
+- **Example Features**: Payment Request API, payment handlers
 
 ## Emerging Technologies
 
-### on-device-ai
-**On-device AI and LLM features**
-- Keywords: "on-device ai", "language model"
-- Heading patterns: "On-device AI"
-- Priority: High
-- Special: Also searches feature content for AI keywords (not just headings)
-- Examples: Gemini Nano, Prompt API, AI-powered features
+### On-Device AI
+- **Description**: Machine learning and AI capabilities running locally
+- **Heading Patterns**: Content-based keyword search
+- **Keywords**: "AI", "machine learning", "ML", "neural network", "on-device", "Gemini Nano"
+- **Special**: Searches content keywords across all sections, not just headings
+- **Example Features**: Prompt API, translation API, summarization
 
-### isolated-web-apps
-**Isolated Web Apps (IWAs) and related features**
-- Heading patterns: "Isolated Web Apps", "IWAs"
-- Priority: Medium
-- Examples: IWA installation, permissions, capabilities
+### Origin Trials
+- **Description**: Experimental features available for testing
+- **Heading Patterns**: "Origin Trials", "Origin Trial"
+- **Example Features**: Features in experimental phase requiring opt-in
 
-### pwa-service-worker
-**Progressive Web Apps and service worker features**
-- Heading patterns: "PWA", "Service Worker", "Progressive Web Apps"
-- Priority: Low
-- Examples: Service worker updates, PWA installation, offline capabilities
+## Browser & Developer
 
-## Security and Privacy
+### Browser Changes
+- **Description**: Changes to browser behavior, UI, and capabilities
+- **Heading Patterns**: "Browser", "Chrome"
+- **Example Features**: UI updates, policy changes, feature flags
 
-### security-privacy
-**Security and privacy features**
-- Heading patterns: "Security", "Privacy", "Privacy and security"
-- Priority: High
-- Examples: HTTPS, cookies, permissions, encryption
+### Deprecations
+- **Description**: Features being deprecated or removed
+- **Heading Patterns**: "Deprecations", "Removals", "Deprecated"
+- **Example Features**: Deprecated APIs, removed features, migration paths
 
-### identity
-**Identity, sign-in, and account features**
-- Heading patterns: "Identity"
-- Priority: Low
-- Examples: FedCM, sign-in APIs
+### DevTools
+- **Description**: Chrome DevTools improvements
+- **Heading Patterns**: "DevTools", "Developer Tools" (substring match)
+- **Example Features**: New panels, debugging capabilities, performance tools
 
-## Performance and Lifecycle
+## Other
 
-### performance
-**Performance optimizations and improvements**
-- Heading patterns: "Performance"
-- Priority: Medium
-- Examples: Loading speed, rendering performance, memory optimization
+### Other
+- **Description**: Features that don't fit into predefined categories
+- **Usage**: Catchall for unclassified content
 
-### navigation-loading
-**Navigation and resource loading features**
-- Heading patterns: "Loading", "Navigation"
-- Priority: Low
-- Examples: Navigation API, resource loading, prefetch
+---
 
-### network
-**Networking and connectivity features**
-- Heading patterns: "Network"
-- Priority: Low
-- Examples: HTTP features, network protocols, fetch
+## Area Classification Logic
 
-## Device Integration
+### Heading-Based Classification
+Most areas are classified by matching section headings in the release notes:
+- Exact match: `"CSS" heading → css area`
+- Partial match: `"CSS and UI" heading → css area`
+- Case-insensitive matching
 
-### devices
-**Device APIs and sensor features**
-- Heading patterns: "Device", "Devices", "Sensors"
-- Priority: Low
-- Examples: Geolocation, sensors, device orientation
+### Content-Based Classification
+Some areas (like on-device-ai) search content keywords:
+- Keywords defined in `config/focus_areas.yaml`
+- Searches feature title and content body
+- Used when `search_content_keywords: true`
 
-### payment
-**Payment and payment-related features**
-- Heading patterns: "Payment", "Payments", "Secure Payment Confirmation"
-- Priority: Medium
-- Examples: Payment Request API, payment methods
+### Multi-Source Classification
+Graphics-WebGPU area merges content from:
+1. Chrome release notes (Graphics/WebGPU sections)
+2. Dedicated WebGPU release notes (`webgpu-{version}.md`)
+3. Deduplication applied to avoid duplicate features
 
-## Developer Experience
+### Cross-Cutting Concerns
+Features can appear in multiple areas:
+- AI features: both `origin-trials` and `on-device-ai`
+- Security features: both primary area and `security-privacy`
+- Tagged for discoverability across areas
 
-### devtools
-**Developer Tools and debugging features**
-- Heading patterns: "Developer Tools", "DevTools"
-- Priority: Medium
-- Examples: DevTools panels, debugging features, performance profiling
+---
 
-### browser-changes
-**Platform-level browser behavior updates**
-- Heading patterns: "Browser changes"
-- Priority: Medium
-- Examples: Browser UI changes, behavior updates
+## Configuration
 
-## Enterprise and Beta
+All area definitions live in `.claude/skills/chrome-update-digest/config/focus_areas.yaml`.
 
-### enterprise
-**Enterprise policies and admin features**
-- Heading patterns: "Enterprise"
-- Priority: Low
-- Examples: Group policies, admin controls, enterprise features
-
-### origin-trials
-**Experimental features in origin trials**
-- Heading patterns: "Origin trials"
-- Priority: Medium
-- Examples: New APIs in trial phase, experimental features
-
-### deprecations
-**Deprecated and removed features**
-- Heading patterns: "Deprecations", "Deprecations and removals", "Removals"
-- Priority: Medium
-- Examples: Deprecated APIs, removed features, breaking changes
-
-## Area Priority Levels
-
-Areas are assigned priority levels to guide digest generation:
-
-- **Priority 1 (High)**: Core web platform features most relevant to developers
-  - css, webapi, graphics-webgpu, on-device-ai, security-privacy
-
-- **Priority 2 (Medium)**: Important but more specialized features
-  - html-dom, javascript, webassembly, multimedia, performance, etc.
-
-- **Priority 3 (Low)**: Specialized or less frequently updated areas
-  - devices, pwa-service-worker, navigation-loading, network, identity, enterprise
-
-## Extraction Strategy
-
-### Standard Areas
-Most areas use **heading-only matching**:
-1. Parse h2 headings in release notes
-2. Match against heading_patterns (case-insensitive)
-3. Extract all content under matching headings
-
-### Special Cases
-
-**on-device-ai**:
-- Also searches feature **content** for keywords ("on-device ai", "language model")
-- Identifies AI features scattered across other sections
-
-**graphics-webgpu**:
-- Merges content from two sources:
-  1. Chrome release notes "Graphics" section
-  2. Dedicated WebGPU release notes (webgpu-{version}.md)
-- Deduplicates features with WebGPU-specific content taking priority
-
-**webapi**:
-- Can have multiple tags (one feature may belong to multiple areas)
-- Broad catch-all for Web APIs
-
-## Common Patterns
-
-### Heading Variations
-Many areas support multiple heading patterns to handle variations:
-- "CSS" vs "CSS and UI"
-- "Web APIs" vs "Web API" (singular/plural)
-- "Deprecations" vs "Deprecations and removals"
-
-### Channel Differences
-- **Stable**: Final release, comprehensive feature list
-- **Beta**: Earlier release, may have fewer features or different focus
-
-### Version Consistency
-- Not all areas appear in every version
-- Some areas (like "on-device-ai") are relatively new
-- Core areas (CSS, Web APIs, Security) appear in most versions
-
-## Using Areas in Processing
-
-### Process all areas:
-```bash
-uv run python .claude/skills/chrome-update-digest/scripts/process_chrome.py \
-  --version 139 --verbose
-```
-
-### Process specific areas:
-```bash
-uv run python .claude/skills/chrome-update-digest/scripts/process_chrome.py \
-  --version 139 --areas css webapi graphics-webgpu --verbose
-```
-
-### Common subsets:
-```bash
-# Core web platform (5 areas)
---areas css webapi html-dom javascript graphics-webgpu
-
-# AI and emerging tech (3 areas)
---areas on-device-ai isolated-web-apps pwa-service-worker
-
-# Security and privacy (2 areas)
---areas security-privacy identity
-
-# Developer experience (2 areas)
---areas devtools browser-changes
-```
+Each area includes:
+- `heading_patterns`: List of heading text to match
+- `keywords`: Content keywords (if `search_content_keywords: true`)
+- `description`: Human-readable description
+- `search_content_keywords`: Whether to search content (default: false)
 
 ## Output Structure
 
-Each area produces two files:
-- **YAML**: Structured data (`chrome-{version}-{channel}.yml`)
-- **Markdown**: Human-readable content (`chrome-{version}-{channel}.md`)
-
-Output location:
+For each area and version, the pipeline generates:
 ```
-upstream_docs/processed_releasenotes/processed_forwebplatform/areas/
-├── css/
-│   ├── chrome-139-stable.yml
-│   └── chrome-139-stable.md
-├── webapi/
-│   ├── chrome-139-stable.yml
-│   └── chrome-139-stable.md
-└── ... (21 more areas)
+upstream_docs/processed_releasenotes/processed_forwebplatform/areas/{area}/
+├── chrome-{version}-{channel}.md      # Human-readable extracted content
+└── chrome-{version}-{channel}.yml     # Structured data with links and metadata
 ```
 
-## References
+Example:
+```
+areas/css/
+├── chrome-143-stable.md
+└── chrome-143-stable.yml
+```
 
-- Full configuration: [config/focus_areas.yaml](../../../../config/focus_areas.yaml)
-- Processing pipeline: [src/chrome_update_digest/processors/clean_data_pipeline.py](../../../../src/chrome_update_digest/processors/clean_data_pipeline.py)
-- Area extractors: [src/chrome_update_digest/processors/area_extractors.py](../../../../src/chrome_update_digest/processors/area_extractors.py)
+The YAML file includes:
+- Feature titles and content
+- Extracted links (spec links, demo links, doc links)
+- Tags and cross-cutting concerns
+- Heading hierarchy preservation
+- Statistics (feature count, link count)
+
+---
+
+*This reference describes the focus area system as of January 2025. Areas may be added or modified over time to reflect Chrome's evolving platform.*

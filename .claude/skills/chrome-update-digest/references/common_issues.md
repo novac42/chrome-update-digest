@@ -1,371 +1,337 @@
-# Common Issues and Troubleshooting
+# Chrome Update Digest - Common Issues & Troubleshooting
 
-This guide covers common issues when processing Chrome release notes and their solutions.
+This guide covers common issues you might encounter when using the Chrome Update Digest skill.
+
+## Installation Issues
+
+### "uv command not found"
+**Problem**: The `uv` package manager is not installed.
+
+**Solutions**:
+```bash
+# Install uv
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Restart your shell or source the profile
+source ~/.bashrc  # or ~/.zshrc
+```
+
+### "chrome-update-digest-cli: command not found"
+**Problem**: The CLI tool is not installed in the project.
+
+**Solutions**:
+```bash
+# Navigate to project root
+cd /path/to/chrome-update-digest
+
+# Sync dependencies
+uv sync
+
+# Verify installation
+uv run chrome-update-digest-cli --help
+```
+
+### "ModuleNotFoundError: No module named 'chrome_update_digest'"
+**Problem**: Python package not installed or wrong environment.
+
+**Solutions**:
+```bash
+# Ensure you're in project root
+cd /path/to/chrome-update-digest
+
+# Install in development mode
+uv pip install -e .
+
+# Or use uv sync
+uv sync
+```
 
 ## Input File Issues
 
-### Issue: Release notes file not found
+### "Release notes not found"
+**Problem**: Raw release notes file doesn't exist for the specified version.
 
-**Error:**
+**Diagnosis**:
+```bash
+# Check if file exists
+ls upstream_docs/release_notes/WebPlatform/chrome-{version}.md
 ```
-Chrome {version} ({channel}) release notes not found.
-Expected location: upstream_docs/release_notes/WebPlatform/
-```
 
-**Solutions:**
+**Solutions**:
+1. **Download release notes manually**:
+   - Visit https://developer.chrome.com/release-notes/{version}
+   - Save as `upstream_docs/release_notes/WebPlatform/chrome-{version}.md`
 
-1. **Check if the version is released yet**
-   ```bash
-   # Check latest available releases
-   uv run chrome-update-digest-cli check-upstream
+2. **Check version number**:
+   - Verify the version is released
+   - Latest stable is usually 2-3 versions ahead of current
+
+3. **Try beta channel**:
+   ```
+   Process Chrome {version} beta
    ```
 
-2. **Download the release notes manually**
-   - Visit: https://developer.chrome.com/release-notes/{version}
-   - Save markdown file to: `upstream_docs/release_notes/WebPlatform/chrome-{version}.md`
+4. **Check file naming**:
+   - File might be named `chrome-{version}-stable.md`
+   - Skill handles both naming patterns
 
-3. **Try a different channel**
-   - Stable channel may not be available yet, try beta:
-   ```bash
-   uv run python .claude/skills/chrome-update-digest/scripts/process_chrome.py \
-     --version {version} --channel beta --verbose
-   ```
+### "WebGPU file not found" (Warning, not error)
+**Problem**: Optional WebGPU-specific release notes missing.
 
-4. **Use the crawl script to fetch missing releases**
-   ```bash
-   uv run chrome-update-digest-cli crawl --version {version}
-   ```
+**Note**: This is usually fine - WebGPU content may be in main release notes.
 
-### Issue: Invalid version format
-
-**Error:**
+**Solution** (optional):
+```bash
+# Download WebGPU release notes if available
+# Save as upstream_docs/release_notes/WebPlatform/webgpu-{version}.md
 ```
-Invalid version format: 'latest'
-Version must be a number (e.g., 139, 140)
-```
-
-**Solution:**
-- Use numeric version numbers only (e.g., 139, 140, 141)
-- To find the latest version, use: `uv run chrome-update-digest-cli check-upstream`
 
 ## Processing Issues
 
-### Issue: No features extracted for an area
+### "Clean pipeline failed"
+**Problem**: The data extraction pipeline encountered an error.
 
-**Behavior:**
-- Processing completes but an area has 0 features
-- YAML file exists but features list is empty
+**Diagnosis**:
+```bash
+# Run with verbose output
+python .claude/skills/chrome-update-digest/scripts/process_chrome.py \
+  --version {version} --verbose
+```
 
-**Common causes:**
+**Common causes**:
+1. **Malformed markdown**: Release notes have unexpected structure
+   - Solution: Check the raw markdown file for syntax issues
 
-1. **Heading pattern mismatch**
-   - Chrome changed the heading format in release notes
-   - Solution: Check the actual heading in the release notes and update `config/focus_areas.yaml`
+2. **Missing dependencies**: Required packages not installed
+   - Solution: Run `uv sync` to install all dependencies
 
-2. **Version doesn't include that area**
-   - Not all areas appear in every Chrome version
-   - Solution: This is normal; some areas are only present in certain versions
+3. **Permission errors**: Can't write to output directories
+   - Solution: Check directory permissions
+   ```bash
+   chmod -R u+w upstream_docs/processed_releasenotes/
+   ```
 
-3. **Beta vs Stable differences**
-   - Beta releases may have fewer features
-   - Solution: Try processing stable channel or wait for stable release
+### "Navigation generation failed"
+**Problem**: GitHub Pages navigation could not be generated.
 
-### Issue: WebGPU features missing
+**Diagnosis**:
+```bash
+# Check if processed files exist
+ls -R upstream_docs/processed_releasenotes/processed_forwebplatform/areas/
+```
 
-**Behavior:**
-- WebGPU area has fewer features than expected
-- Known WebGPU features not appearing
+**Solutions**:
+1. **Processed files missing**: Run clean pipeline first
+2. **Output directory doesn't exist**: Create it
+   ```bash
+   mkdir -p digest_markdown/{areas,versions}
+   ```
+3. **Permission errors**: Fix permissions
+   ```bash
+   chmod -R u+w digest_markdown/
+   ```
 
-**Common causes:**
+## Path Resolution Issues
 
-1. **Missing dedicated WebGPU release notes**
-   - WebGPU has two sources: Chrome Graphics + dedicated WebGPU file
-   - Check for: `upstream_docs/release_notes/WebPlatform/webgpu-{version}.md`
-   - Solution: Download from https://developer.chrome.com/docs/web-platform/webgpu-release-notes
+### "Project root not found"
+**Problem**: Skill can't locate the chrome-update-digest project root.
 
-2. **Deduplication removing features**
-   - WebGPU-specific content takes priority over Chrome Graphics
-   - Solution: This is expected behavior; check both source files
+**Diagnosis**:
+- Check if you're in the project directory
+- Check if `upstream_docs/` and `digest_markdown/` exist
 
-### Issue: On-device AI features not found
+**Solutions**:
+1. **Run from project root**:
+   ```bash
+   cd /path/to/chrome-update-digest
+   # Then invoke skill
+   ```
 
-**Behavior:**
-- on-device-ai area empty despite AI features in release notes
+2. **Set environment variable**:
+   ```bash
+   export CHROME_UPDATE_DIGEST_BASE_PATH=/path/to/chrome-update-digest
+   ```
 
-**Common causes:**
-
-1. **AI features scattered across sections**
-   - AI features may be in Origin Trials, Web APIs, etc.
-   - Solution: The pipeline searches content keywords automatically; ensure keywords match in `config/focus_areas.yaml`
-
-2. **New AI terminology**
-   - Chrome may use new terms not in keyword list
-   - Solution: Update keywords in `config/focus_areas.yaml`:
-   ```yaml
-   on-device-ai:
-     keywords:
-       - "on-device ai"
-       - "language model"
-       - "gemini nano"  # Add new terms
+3. **Check marker directories exist**:
+   ```bash
+   ls -ld upstream_docs/ digest_markdown/
    ```
 
 ## Output Issues
 
-### Issue: Output directory not found
+### "No files generated"
+**Problem**: Processing completes but no output files found.
 
-**Error:**
+**Diagnosis**:
+```bash
+# Check expected output locations
+ls upstream_docs/processed_releasenotes/processed_forwebplatform/areas/*/chrome-{version}-*.md
+ls digest_markdown/areas/*/chrome-{version}.md
 ```
-FileNotFoundError: .../processed_forwebplatform/areas/ does not exist
+
+**Solutions**:
+1. Check for errors in the processing output
+2. Verify input files were processed correctly
+3. Check disk space: `df -h`
+
+### "Old files not updated"
+**Problem**: Changes not reflected in output files.
+
+**Solution**: The pipeline regenerates files, so they should update. If not:
+```bash
+# Remove old files and regenerate
+rm -rf upstream_docs/processed_releasenotes/processed_forwebplatform/areas/*/chrome-{version}-*
+rm -rf digest_markdown/areas/*/chrome-{version}.md
+rm -rf digest_markdown/versions/chrome-{version}/
+
+# Rerun processing
+python .claude/skills/chrome-update-digest/scripts/process_chrome.py \
+  --version {version} --verbose
 ```
 
-**Solution:**
-- The script creates directories automatically
-- If you see this error, check filesystem permissions:
-  ```bash
-  mkdir -p upstream_docs/processed_releasenotes/processed_forwebplatform/areas
-  chmod 755 upstream_docs/processed_releasenotes/processed_forwebplatform/areas
-  ```
+## GitHub Pages Issues
 
-### Issue: YAML file malformed
+### "GitHub Pages not updating"
+**Problem**: Site not reflecting new content after commit.
 
-**Behavior:**
-- YAML file exists but can't be parsed
-- Error when reading YAML: "invalid YAML syntax"
+**Diagnosis**:
+```bash
+# Check if changes were committed
+git status
 
-**Solution:**
-1. **Validate YAML syntax**
+# Check GitHub Actions
+# Visit https://github.com/{user}/{repo}/actions
+```
+
+**Solutions**:
+1. **Commit and push changes**:
    ```bash
-   python -c "import yaml; yaml.safe_load(open('path/to/file.yml'))"
+   git add digest_markdown/
+   git commit -m "Update Chrome {version} digest"
+   git push origin main
    ```
 
-2. **Regenerate the file**
-   - Delete the malformed YAML file
-   - Rerun processing for that version/channel
+2. **Check GitHub Actions workflow**:
+   - Visit repo → Actions tab
+   - Look for failed builds
+   - Check workflow logs
+
+3. **Verify workflow file**:
+   ```bash
+   cat .github/workflows/pages.yml
+   ```
+
+4. **Check Pages settings**:
+   - Repo → Settings → Pages
+   - Ensure Source is "GitHub Actions"
+
+### "Jekyll build failed"
+**Problem**: Jekyll can't build the site.
+
+**Common causes**:
+1. **Invalid front matter**: Check markdown files have proper YAML front matter
+2. **Invalid markdown**: Syntax errors in generated files
+3. **Missing _config.yml**: Navigation generator should create this
+
+**Solution**:
+```bash
+# Regenerate navigation (creates _config.yml)
+python src/chrome_update_digest/tools/generate_github_pages_navigation.py
+```
+
+## Permission Issues
+
+### "Permission denied" when running script
+**Problem**: Script is not executable.
+
+**Solution**:
+```bash
+chmod +x .claude/skills/chrome-update-digest/scripts/process_chrome.py
+```
+
+### "Permission denied" writing files
+**Problem**: Can't write to output directories.
+
+**Solution**:
+```bash
+# Fix permissions
+chmod -R u+w upstream_docs/processed_releasenotes/
+chmod -R u+w digest_markdown/
+```
 
 ## Performance Issues
 
-### Issue: Processing is very slow
+### "Processing takes too long"
+**Problem**: Pipeline runs very slowly.
 
-**Behavior:**
-- Full workflow takes >10 minutes
-- Individual areas take >30 seconds each
+**Factors**:
+- Number of features in release (Chrome releases vary in size)
+- System resources
+- Network latency (if downloading resources)
 
-**Common causes:**
+**Solutions**:
+1. **Use faster storage**: SSD recommended
+2. **Close other applications**: Free up RAM
+3. **Check system load**: `top` or `htop`
 
-1. **Network issues**
-   - If using external resources or APIs
-   - Solution: Check network connectivity, use local cache
-
-2. **Large release notes**
-   - Some versions have 100+ features
-   - Solution: Process specific areas instead of all 23:
-   ```bash
-   --areas css webapi graphics-webgpu  # Only 3 areas
-   ```
-
-3. **Debug mode enabled**
-   - Verbose logging adds overhead
-   - Solution: Remove `--verbose` flag for production runs
-
-### Issue: Out of memory errors
-
-**Behavior:**
-- Process crashes with "MemoryError" or system freeze
-
-**Solution:**
-1. **Process areas in smaller batches**
-   ```bash
-   # Process 5 areas at a time
-   --areas css webapi html-dom javascript graphics-webgpu
-   # Then process next 5
-   --areas on-device-ai security-privacy origin-trials deprecations multimedia
-   ```
-
-2. **Increase system resources**
-   - Close other applications
-   - Increase swap space (Linux/macOS)
-
-## Validation Issues
-
-### Issue: Links in output are broken
-
-**Behavior:**
-- Generated markdown contains broken links
-- Links return 404 errors
-
-**Common causes:**
-
-1. **Chrome documentation URLs changed**
-   - Chrome.com restructured documentation
-   - Solution: Validate links after generation:
-   ```bash
-   uv run chrome-update-digest-cli validate-links --version {version}
-   ```
-
-2. **Relative vs absolute links**
-   - Links may be relative in source but need to be absolute
-   - Solution: Check link extraction logic in pipeline
-
-## Environment Issues
-
-### Issue: Import errors
-
-**Error:**
-```
-ModuleNotFoundError: No module named 'chrome_update_digest'
-```
-
-**Solution:**
-1. **Ensure dependencies are installed**
-   ```bash
-   uv sync
-   ```
-
-2. **Use uv run to execute scripts**
-   ```bash
-   # Correct
-   uv run python .claude/skills/chrome-update-digest/scripts/process_chrome.py
-
-   # Incorrect (missing uv run)
-   python .claude/skills/chrome-update-digest/scripts/process_chrome.py
-   ```
-
-3. **Check PYTHONPATH** (if not using uv run)
-   ```bash
-   export PYTHONPATH=/path/to/chrome-update-digest:$PYTHONPATH
-   python .claude/skills/chrome-update-digest/scripts/process_chrome.py
-   ```
-
-### Issue: Wrong Python version
-
-**Error:**
-```
-SyntaxError: invalid syntax (type hints, match statements, etc.)
-```
-
-**Solution:**
-- Requires Python 3.10+
-- Check version:
-  ```bash
-  uv run python --version
-  ```
-- If version is too old, update Python or use uv's managed Python
-
-### Issue: CHROME_UPDATE_DIGEST_BASE_PATH not set
-
-**Behavior:**
-- Script can't find config files or release notes
-- FileNotFoundError for config/focus_areas.yaml
-
-**Solution:**
-- The script auto-detects base path, but you can override:
-  ```bash
-  export CHROME_UPDATE_DIGEST_BASE_PATH=/path/to/chrome-update-digest
-  ```
-- Or use --base-path flag:
-  ```bash
-  --base-path /path/to/chrome-update-digest
-  ```
-
-## Channel-Specific Issues
-
-### Issue: Beta channel has different structure
-
-**Behavior:**
-- Beta processing fails or produces unexpected results
-- Features missing or misclassified
-
-**Common causes:**
-
-1. **Beta uses different headings**
-   - Beta may have preliminary headings
-   - Solution: Check actual beta release notes structure
-
-2. **Beta has fewer features**
-   - This is expected; beta is an earlier snapshot
-   - Solution: No action needed; wait for stable release for complete features
-
-3. **Beta filename different**
-   - Looking for `chrome-139-beta.md` but file is `chrome-139.md`
-   - Solution: Script handles this automatically with fallback logic
+Note: Normal processing time is 30-60 seconds for extraction + navigation.
 
 ## Debugging Tips
 
 ### Enable verbose output
 ```bash
---verbose
-```
-Shows detailed progress, helpful for identifying where processing fails.
-
-### Check intermediate outputs
-```bash
-# Inspect YAML files generated by clean pipeline
-ls -la upstream_docs/processed_releasenotes/processed_forwebplatform/areas/css/
-
-# View YAML content
-cat upstream_docs/processed_releasenotes/processed_forwebplatform/areas/css/chrome-139-stable.yml
+python .claude/skills/chrome-update-digest/scripts/process_chrome.py \
+  --version {version} --verbose
 ```
 
-### Test with a single area
+### Check Python environment
 ```bash
-# Faster testing with just one area
---areas css --verbose
+# Which Python is being used?
+uv run python --version
+
+# Which packages are installed?
+uv pip list | grep chrome-update-digest
 ```
 
-### Compare stable vs beta
+### Inspect intermediate files
 ```bash
-# Process both channels
---version 139 --channel stable --verbose
---version 139 --channel beta --verbose
+# Check YAML files were generated
+cat upstream_docs/processed_releasenotes/processed_forwebplatform/areas/css/chrome-{version}-stable.yml
 
-# Compare outputs
-diff upstream_docs/processed_releasenotes/processed_forwebplatform/areas/css/chrome-139-stable.md \
-     upstream_docs/processed_releasenotes/processed_forwebplatform/areas/css/chrome-139-beta.md
+# Check markdown files have content
+wc -l upstream_docs/processed_releasenotes/processed_forwebplatform/areas/*/chrome-{version}-*.md
+```
+
+### Test components separately
+
+**Test clean pipeline**:
+```bash
+uv run chrome-update-digest-cli process -- --version {version} --with-yaml
+```
+
+**Test navigation generator**:
+```bash
+uv run python src/chrome_update_digest/tools/generate_github_pages_navigation.py
 ```
 
 ## Getting Help
 
-If you encounter an issue not covered here:
+If none of these solutions work:
 
-1. **Check the logs** with `--verbose` flag
-2. **Inspect intermediate files** (YAML, markdown)
-3. **Verify input files** exist and are well-formed
-4. **Check focus_areas.yaml** configuration matches release notes structure
-5. **Review recent commits** in case of regressions
+1. **Check project documentation**: `CLAUDE.md` and `README.md` in project root
+2. **Review logs**: Look for error messages in output
+3. **Check GitHub issues**: https://github.com/{user}/{repo}/issues
+4. **Verify environment**: Ensure all prerequisites are met
 
-## Common Workflows
+## Reporting Issues
 
-### Full processing (production)
-```bash
-uv run python .claude/skills/chrome-update-digest/scripts/process_chrome.py \
-  --version 139 \
-  --channel stable \
-  --language bilingual \
-  --verbose
-```
+When reporting issues, include:
+- Chrome version being processed
+- Full error message
+- Output of `uv run chrome-update-digest-cli --version`
+- Operating system and Python version
+- Steps to reproduce
 
-### Quick test (single area)
-```bash
-uv run python .claude/skills/chrome-update-digest/scripts/process_chrome.py \
-  --version 139 \
-  --areas css \
-  --language en \
-  --verbose
-```
+---
 
-### Beta preview
-```bash
-uv run python .claude/skills/chrome-update-digest/scripts/process_chrome.py \
-  --version 139 \
-  --channel beta \
-  --language en \
-  --verbose
-```
-
-### Core areas only
-```bash
-uv run python .claude/skills/chrome-update-digest/scripts/process_chrome.py \
-  --version 139 \
-  --areas css webapi html-dom javascript graphics-webgpu \
-  --verbose
-```
+*Last updated: January 2025*
