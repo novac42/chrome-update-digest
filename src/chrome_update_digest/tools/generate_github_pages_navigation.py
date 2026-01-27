@@ -15,7 +15,10 @@ import yaml
 class GitHubPagesNavigationGenerator:
     def __init__(self, base_path: str = "."):
         self.base_path = Path(base_path)
-        self.source_dir = self.base_path / "upstream_docs/processed_releasenotes/processed_forwebplatform/areas"
+        # Use LLM-generated digests from webplatform directory as source
+        self.source_dir = self.base_path / "digest_markdown/webplatform"
+        # Fallback to processed release notes if digest not available
+        self.fallback_source_dir = self.base_path / "upstream_docs/processed_releasenotes/processed_forwebplatform/areas"
         self.digest_dir = self.base_path / "digest_markdown"
         self.versions_dir = self.digest_dir / "versions"
         self.areas_dir = self.digest_dir / "areas"
@@ -48,29 +51,31 @@ class GitHubPagesNavigationGenerator:
         """Scan source directory to find all versions and areas."""
         version_areas = defaultdict(set)  # version -> set of areas
         area_versions = defaultdict(set)  # area -> set of versions
-        
+
         if not self.source_dir.exists():
             print(f"Source directory {self.source_dir} does not exist")
             return version_areas, area_versions
-            
+
         for area_dir in self.source_dir.iterdir():
             if not area_dir.is_dir():
                 continue
-                
+
             area_name = area_dir.name
-            
-            for md_file in area_dir.glob("chrome-*.md"):
-                # Parse version from filename (chrome-139-stable.md)
-                match = re.match(r'chrome-(\d+)-(\w+)\.md', md_file.name)
+
+            # Scan for LLM digest files (chrome-{version}-stable-en.md and chrome-{version}-stable-zh.md)
+            for md_file in area_dir.glob("chrome-*-stable-*.md"):
+                # Parse version from filename (chrome-139-stable-en.md or chrome-139-stable-zh.md)
+                match = re.match(r'chrome-(\d+)-(\w+)-(\w+)\.md', md_file.name)
                 if match:
                     version = match.group(1)
                     channel = match.group(2)
-                    
+                    lang = match.group(3)
+
                     # For now, focus on stable channel
                     if channel == 'stable':
                         version_areas[version].add(area_name)
                         area_versions[area_name].add(version)
-                        
+
         return dict(version_areas), dict(area_versions)
     
     def ensure_directories(self):
@@ -155,12 +160,19 @@ title: Chrome {version} Release Notes
             
             for area in sorted(version_areas[version]):
                 display_name = self.area_display_names.get(area, area.replace('-', ' ').title())
-                overview_content += f"- [{display_name}](./{area}.html)\n"
-                
-                # Copy area content to version directory
-                source_file = self.source_dir / area / f"chrome-{version}-stable.md"
-                dest_file = version_dir / f"{area}.md"
-                self.copy_content_file(source_file, dest_file)
+                overview_content += f"- [{display_name}](./{area}.html) - [English](./{area}-en.html) / [中文](./{area}-zh.html)\n"
+
+                # Copy both English and Chinese digests to version directory
+                for lang in ['en', 'zh']:
+                    source_file = self.source_dir / area / f"chrome-{version}-stable-{lang}.md"
+                    dest_file = version_dir / f"{area}-{lang}.md"
+                    if source_file.exists():
+                        self.copy_content_file(source_file, dest_file)
+                    else:
+                        # Fallback to processed release notes if digest not available
+                        fallback_file = self.fallback_source_dir / area / f"chrome-{version}-stable.md"
+                        if fallback_file.exists() and lang == 'en':  # Only use fallback for English
+                            self.copy_content_file(fallback_file, dest_file)
                 
             # Add navigation links
             overview_content += "\n## Navigation\n\n"
@@ -235,12 +247,19 @@ Track the evolution of {display_name} features across Chrome releases.
             for version in versions:
                 is_latest = version == versions[0]
                 latest_badge = " **(Latest)**" if is_latest else ""
-                hub_content += f"- [Chrome {version}{latest_badge}](./chrome-{version}.html)\n"
-                
-                # Copy version content to area directory
-                source_file = self.source_dir / area / f"chrome-{version}-stable.md"
-                dest_file = area_dir / f"chrome-{version}.md"
-                self.copy_content_file(source_file, dest_file)
+                hub_content += f"- [Chrome {version}{latest_badge}](./chrome-{version}.html) - [English](./chrome-{version}-en.html) / [中文](./chrome-{version}-zh.html)\n"
+
+                # Copy both English and Chinese digests to area directory
+                for lang in ['en', 'zh']:
+                    source_file = self.source_dir / area / f"chrome-{version}-stable-{lang}.md"
+                    dest_file = area_dir / f"chrome-{version}-{lang}.md"
+                    if source_file.exists():
+                        self.copy_content_file(source_file, dest_file)
+                    else:
+                        # Fallback to processed release notes if digest not available
+                        fallback_file = self.fallback_source_dir / area / f"chrome-{version}-stable.md"
+                        if fallback_file.exists() and lang == 'en':  # Only use fallback for English
+                            self.copy_content_file(fallback_file, dest_file)
                 
             # Add navigation
             hub_content += "\n## Navigation\n\n"
@@ -354,11 +373,14 @@ New Chrome stable releases are typically published every 4 weeks. This site is u
             yaml.dump(config, f, default_flow_style=False)
             
     def clean_old_structure(self):
-        """Clean up old webplatform directory if it exists."""
-        old_dir = self.digest_dir / "webplatform"
-        if old_dir.exists():
-            print(f"Removing old webplatform directory: {old_dir}")
-            shutil.rmtree(old_dir)
+        """
+        Clean up old structure - DISABLED.
+
+        The webplatform directory contains LLM-generated digests that are used
+        as the source for navigation pages. Do not delete it.
+        """
+        # Do nothing - keep webplatform directory as source
+        pass
             
     def run(self):
         """Execute the complete migration."""
