@@ -22,8 +22,8 @@ Process Chrome 143 beta in English for CSS and WebAPI
 
 **Core Features**:
 - ✓ Extracts structured data from release notes into 23+ focus areas
-- ✓ Generates GitHub Pages navigation (dual structure: by-version & by-area)
-- ✓ Integrates with MCP server for AI-powered digest generation (optional)
+- ✓ Generates AI-powered bilingual digests (English + Chinese)
+- ✓ Creates GitHub Pages navigation (dual structure: by-version & by-area)
 
 ## Workflow
 
@@ -31,8 +31,11 @@ The skill executes these steps automatically:
 
 1. **Validate**: Check version format and input files exist
 2. **Clean Pipeline**: Extract area-specific YAML and markdown from raw release notes
-3. **Generate Navigation**: Create GitHub Pages navigation structure (by-version & by-area)
-4. **Output**: Save processed files and navigation to respective directories
+3. **Generate AI Digests**: Use agent with bundled prompts to create bilingual summaries
+   - English digest: Use agent with `prompts/webplatform-prompt-en.md`
+   - Chinese translation: Use agent with `prompts/webplatform-translation-prompt-zh.md`
+4. **Generate Navigation**: Create GitHub Pages navigation structure (by-version & by-area)
+5. **Output**: Save digest files and navigation to respective directories
 
 ## Processing Options
 
@@ -62,13 +65,32 @@ When the user triggers this skill with a request like "Process Chrome 139", you 
 
 3. **Execute the processing script**:
    ```bash
-   python .claude/skills/chrome-update-digest/scripts/process_chrome.py \
+   uv run python .claude/skills/chrome-update-digest/scripts/process_chrome.py \
      --version {version} \
      --channel {channel} \
      --verbose
    ```
+   This extracts area-specific YAML and markdown from raw release notes.
 
-4. **Report progress and results**:
+4. **Generate AI digests for each area** (bilingual: English + Chinese):
+   - For each area found in step 3, launch agents to generate digests
+   - **English digest**: Use Task tool with general-purpose agent
+     - Provide the area's YAML file content
+     - Use the bundled English prompt: `.claude/skills/chrome-update-digest/prompts/webplatform-prompt-en.md`
+     - Save output to: `digest_markdown/webplatform/{area}/chrome-{version}-{channel}-en.md`
+   - **Chinese translation**: Use Task tool with general-purpose agent
+     - Provide the English digest content
+     - Use the bundled Chinese prompt: `.claude/skills/chrome-update-digest/prompts/webplatform-translation-prompt-zh.md`
+     - Save output to: `digest_markdown/webplatform/{area}/chrome-{version}-{channel}-zh.md`
+   - Process all areas in parallel for efficiency
+
+5. **Generate GitHub Pages navigation**:
+   ```bash
+   uv run python .claude/skills/chrome-update-digest/scripts/generate_navigation.py
+   ```
+   This creates the dual navigation structure (by-version and by-area).
+
+6. **Report progress and results**:
    - Stream progress updates from the script
    - Show completion status with output paths
    - If errors occur, provide troubleshooting guidance
@@ -84,22 +106,38 @@ Assistant:
 
   🚀 Processing Chrome 143 (stable)
 
-  [1/3] Running clean data pipeline...
+  [1/4] Running clean data pipeline...
     ✓ Extracted 23 focus areas
     ✓ Generated YAML and markdown files
 
-  [2/3] Note: AI digests available via MCP server
+  [2/4] Generating AI digests for 23 areas...
+    Launching agents in parallel for English digests...
+    ✓ css (English)
+    ✓ webapi (English)
+    ✓ graphics-webgpu (English)
+    ... (20 more areas)
 
-  [3/3] Generating GitHub Pages navigation...
+    Launching agents in parallel for Chinese translations...
+    ✓ css (Chinese)
+    ✓ webapi (Chinese)
+    ✓ graphics-webgpu (Chinese)
+    ... (20 more areas)
+
+  [3/4] Generating GitHub Pages navigation...
     ✓ Created version-centric pages
     ✓ Created area-centric pages
 
+  [4/4] Validation...
+    ✓ All digest files generated
+    ✓ Navigation includes Chrome 143
+
   ✅ Processing complete!
      Processed areas: upstream_docs/processed_releasenotes/processed_forwebplatform/areas/
+     AI Digests: digest_markdown/webplatform/
      Navigation: digest_markdown/areas/ and digest_markdown/versions/
 
   💡 Next steps:
-     1. (Optional) Generate AI digests via MCP server
+     1. Review generated digests in digest_markdown/webplatform/
      2. Commit changes to trigger GitHub Pages deployment
 ```
 
@@ -134,18 +172,30 @@ Assistant:
 - The skill orchestrates existing CLI tools (chrome-update-digest-cli)
 - Uses `uv run` to ensure correct environment and dependencies
 - Progress is streamed in real-time
+- **AI Digest Generation**:
+  * Uses Task tool with general-purpose agents
+  * Processes all areas in parallel for efficiency
+  * Bundled prompts: English digest + Chinese translation
+  * Each agent receives YAML content and produces markdown digest
 - Outputs:
   * Processed files: `upstream_docs/processed_releasenotes/processed_forwebplatform/areas/`
+  * AI Digests: `digest_markdown/webplatform/{area}/chrome-{version}-{channel}-{lang}.md`
   * Navigation: `digest_markdown/areas/` and `digest_markdown/versions/`
 - Supports both stable and beta channels
 - Handles 23+ predefined focus areas (see config/focus_areas.yaml)
 - Bundles configuration and prompts for portability
 - Integrates with GitHub Actions for automatic deployment
 
-## AI-Powered Digests (Optional)
+## Prompt Details
 
-For AI-generated summaries and translations, use the MCP server separately:
-```bash
-uv run chrome-update-digest-mcp
-```
-Then use MCP tools (`digest_prepare_yaml`, `digest_generate_area`, `digest_translate_area`, `digest_write_outputs`)
+The skill includes two bundled prompts for AI digest generation:
+
+1. **English Digest Prompt** ([prompts/webplatform-prompt-en.md](prompts/webplatform-prompt-en.md))
+   - Input: Area-specific YAML file
+   - Output: Structured English digest with feature descriptions
+   - Format: Markdown with consistent structure
+
+2. **Chinese Translation Prompt** ([prompts/webplatform-translation-prompt-zh.md](prompts/webplatform-translation-prompt-zh.md))
+   - Input: English digest content
+   - Output: Chinese translation maintaining technical accuracy
+   - Format: Preserves markdown structure and links
