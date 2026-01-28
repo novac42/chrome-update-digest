@@ -1,7 +1,7 @@
 version: '143'
 channel: stable
 area: graphics-webgpu
-extraction_timestamp: '2025-12-09T22:36:08.319351'
+extraction_timestamp: '2026-01-28T18:09:26.912590'
 extraction_method: deterministic
 statistics:
   total_features: 3

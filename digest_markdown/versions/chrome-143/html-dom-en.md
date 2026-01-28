@@ -3,6 +3,10 @@ layout: default
 title: html-dom-en
 ---
 
+```text
+digest_markdown/webplatform/HTML-DOM/chrome-143-stable-en.md
+```
+
 ## Area Summary
 
 Chrome 143 relaxes JavaScript DOM API validation so element and attribute names accepted by the HTML parser are also accepted when created from scripts. This reduces surprising mismatches between parsed HTML and DOM-created nodes, making DOM APIs more permissive and consistent. For developers, the change lowers friction when programmatically creating elements/attributes that previously failed strict validation. Overall, it advances platform consistency and interoperability between parsing and scripting paths.
