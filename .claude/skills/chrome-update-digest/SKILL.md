@@ -1,11 +1,34 @@
 ---
 name: chrome-update-digest
-description: Process Chrome release notes into multilingual, area-specific digests. Use when the user wants to (1) Process Chrome release notes for a specific version, (2) Generate digests for Web Platform updates, (3) Translate Chrome features to Chinese, (4) Prepare area-specific summaries (CSS, WebAPI, WebGPU, AI, etc.). Trigger phrases "process Chrome X", "digest Chrome release notes", "translate Chrome X features".
+description: Transform Chrome and WebGPU release notes into multilingual digests for 23 focus areas. Trigger phrases "process Chrome X", "what's the latest Chrome version".
 ---
 
 # Chrome Update Digest
 
 Process Chrome release notes into structured, multilingual digests for 23 focus areas.
+
+## Design Principles
+
+**Stateless Processing**:
+- No version history tracking - each run is independent
+- Only processes the specified version (e.g., "Process Chrome 143")
+- Does not track what versions have been processed before
+
+**Self-contained & Portable**:
+- Vendored dependencies - no external package dependencies
+- Bundled prompts for AI digest generation
+- No dependencies on repo files outside the skill directory
+- Works independently after MCP separation
+
+**Dual-source Release Notes**:
+- **Chrome release notes** (required): `chrome-{version}-{channel}.md`
+- **WebGPU release notes** (optional): `webgpu-{version}.md`
+- WebGPU enhances the `graphics-webgpu` area when available but is not required
+
+**Agent Delegation**:
+- Skill orchestrates the workflow (download → extract → generate navigation)
+- AI digest generation delegated to agents with bundled prompts
+- Agents process all 23 areas in parallel for efficiency
 
 ## Quick Start
 
@@ -25,6 +48,53 @@ Process Chrome 143 beta in English for CSS and WebAPI
 - ✓ Generates AI-powered bilingual digests (English + Chinese)
 - ✓ Creates GitHub Pages navigation (dual structure: by-version & by-area)
 
+## Quick Reference (For Claude Agent)
+
+### Workflow Overview
+
+When user says **"Process Chrome 143"**:
+
+```bash
+# Step 1: Extract areas (automatic download if missing)
+uv run python .claude/skills/chrome-update-digest/scripts/process_chrome.py --version 143
+
+# Step 2: Get area list
+uv run python .claude/skills/chrome-update-digest/scripts/process_chrome.py --version 143 --list-areas
+# Output: 23 areas (css, webapi, graphics-webgpu, etc.)
+
+# Step 3: Generate digests (spawn agents in parallel)
+# For each area:
+#   - English: Read prompts/webplatform-prompt-en.md → Generate EN digest
+#   - Chinese: Read prompts/webplatform-translation-prompt-zh.md → Generate ZH digest
+
+# Step 4: Done! Navigation auto-generated in step 1
+```
+
+### Commands Cheat Sheet
+
+| Command | Purpose |
+|---------|---------|
+| `--check-latest` | Check latest Chrome stable/beta versions |
+| `--version 143` | Process Chrome version 143 |
+| `--channel beta` | Process beta channel (default: stable) |
+| `--list-areas` | List extracted areas for a version |
+
+### Agent Integration
+
+**Generate English Digest**:
+1. Read: `prompts/webplatform-prompt-en.md`
+2. Replace: `[AREA]` → area name, `[version]` → 143, `[channel]` → stable
+3. Input: `upstream_docs/.../areas/{area}/chrome-143-stable.yml`
+4. Output: `digest_markdown/webplatform/{area}/chrome-143-stable-en.md`
+
+**Generate Chinese Translation**:
+1. Read: `prompts/webplatform-translation-prompt-zh.md`
+2. Replace: `[AREA]`, `[version]`, `[channel]` with actual values
+3. Input: English digest from previous step
+4. Output: `digest_markdown/webplatform/{area}/chrome-143-stable-zh.md`
+
+Process all 23 areas in parallel for efficiency.
+
 ## Workflow
 
 The skill executes these steps automatically:
@@ -42,58 +112,14 @@ The skill executes these steps automatically:
 **Channel**: stable (default) or beta
 **Output**: Area-specific markdown + YAML files + GitHub Pages navigation
 
-For area details, see [references/focus_areas.md](references/focus_areas.md).
+## Reference Documentation
 
-## Common Issues
-
-See [references/common_issues.md](references/common_issues.md) for troubleshooting.
-
-## Implementation
-
-When the user triggers this skill with a request like "Process Chrome 139", you should:
-
-1. **Parse the request** to extract:
-   - Version number (required)
-   - Channel (stable or beta, default: stable)
-   - Language (bilingual, en, or zh, default: bilingual)
-   - Areas (list of specific areas or None for all)
-
-2. **Validate inputs**:
-   - Check version format is valid (e.g., 139, 140)
-   - Verify input files exist in `upstream_docs/release_notes/WebPlatform/`
-   - If files missing, provide helpful error with download instructions
-
-3. **Execute the processing script**:
-   ```bash
-   uv run python .claude/skills/chrome-update-digest/scripts/process_chrome.py \
-     --version {version} \
-     --channel {channel} \
-     --verbose
-   ```
-   This extracts area-specific YAML and markdown from raw release notes.
-
-4. **Generate AI digests for each area** (bilingual: English + Chinese):
-   - For each area found in step 3, launch agents to generate digests
-   - **English digest**: Use Task tool with general-purpose agent
-     - Provide the area's YAML file content
-     - Use the bundled English prompt: `.claude/skills/chrome-update-digest/prompts/webplatform-prompt-en.md`
-     - Save output to: `digest_markdown/webplatform/{area}/chrome-{version}-{channel}-en.md`
-   - **Chinese translation**: Use Task tool with general-purpose agent
-     - Provide the English digest content
-     - Use the bundled Chinese prompt: `.claude/skills/chrome-update-digest/prompts/webplatform-translation-prompt-zh.md`
-     - Save output to: `digest_markdown/webplatform/{area}/chrome-{version}-{channel}-zh.md`
-   - Process all areas in parallel for efficiency
-
-5. **Generate GitHub Pages navigation**:
-   ```bash
-   uv run python .claude/skills/chrome-update-digest/scripts/generate_navigation.py
-   ```
-   This creates the dual navigation structure (by-version and by-area).
-
-6. **Report progress and results**:
-   - Stream progress updates from the script
-   - Show completion status with output paths
-   - If errors occur, provide troubleshooting guidance
+- **[Focus Areas](references/focus_areas.md)** - 23 focus areas definition
+- **[Implementation Guide](references/implementation_guide.md)** - Detailed step-by-step implementation
+- **[Error Handling](references/error_handling.md)** - Comprehensive error scenarios and solutions
+- **[Testing & Validation](references/testing_validation.md)** - Post-processing validation checklist
+- **[Common Issues](references/common_issues.md)** - Troubleshooting guide
+- **[Prompts Usage](prompts/README.md)** - Prompt template documentation
 
 ## Examples
 
@@ -141,7 +167,20 @@ Assistant:
      2. Commit changes to trigger GitHub Pages deployment
 ```
 
-### Example 2: Beta channel
+### Example 2: Check latest version
+```
+User: "What's the latest Chrome version?"
+Assistant:
+  Checking latest Chrome versions...
+
+  Latest Chrome versions:
+    Stable: 143 (2026-01-15)
+    Beta:   144 (2026-01-10)
+
+  To process: "Process Chrome 143" or "Process Chrome 144 beta"
+```
+
+### Example 3: Beta channel
 ```
 User: "Process Chrome 143 beta"
 Assistant:
@@ -151,7 +190,7 @@ Assistant:
   [Processing output similar to Example 1, but for beta channel...]
 ```
 
-### Example 3: Error handling
+### Example 4: Error handling
 ```
 User: "Process Chrome 999"
 Assistant:
@@ -169,14 +208,23 @@ Assistant:
 
 ## Technical Notes
 
-- The skill orchestrates existing CLI tools (chrome-update-digest-cli)
+- **Stateless Design**: No version history tracking - each run is independent
+- **Self-contained**: Vendored dependencies, no external package requirements
+- **Dual-source Release Notes**:
+  * Chrome WebPlatform (required): Main release notes
+  * WebGPU (optional): Enhances graphics-webgpu area when available
+- The skill orchestrates processing workflow via `process_chrome.py`
 - Uses `uv run` to ensure correct environment and dependencies
 - Progress is streamed in real-time
 - **AI Digest Generation**:
   * Uses Task tool with general-purpose agents
   * Processes all areas in parallel for efficiency
-  * Bundled prompts: English digest + Chinese translation
+  * Bundled prompts: English digest + Chinese translation (see [prompts/README.md](prompts/README.md))
   * Each agent receives YAML content and produces markdown digest
+- **Helper Functions**:
+  * `--check-latest`: Query latest Chrome stable/beta versions (stateless)
+  * `--list-areas`: List areas extracted for a specific version
+  * `get_areas_to_process()`: Python helper for agent integration
 - Outputs:
   * Processed files: `upstream_docs/processed_releasenotes/processed_forwebplatform/areas/`
   * AI Digests: `digest_markdown/webplatform/{area}/chrome-{version}-{channel}-{lang}.md`

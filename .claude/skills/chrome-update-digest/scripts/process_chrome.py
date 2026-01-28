@@ -5,8 +5,11 @@ Chrome Update Digest Processing - Skill Orchestration Script
 This script orchestrates the Chrome release note processing workflow.
 It's self-contained with vendored dependencies.
 
+DESIGN: Stateless processing - no version history tracking.
+Each run is independent and only processes the specified version.
+
 WORKFLOW:
-1. Download missing release notes (Chrome + WebGPU)
+1. Download missing release notes (Chrome required, WebGPU optional)
 2. Run clean pipeline to extract area-specific content
 3. Generate GitHub Pages navigation structure
 
@@ -34,10 +37,10 @@ def check_and_download_release_notes(version: str, channel: str) -> None:
     """Check if release notes exist, download if missing.
 
     Chrome releases have two sources:
-    1. Chrome WebPlatform release notes (chrome-{version}.md)
-    2. WebGPU release notes (webgpu-{version}.md)
+    1. Chrome WebPlatform release notes (chrome-{version}.md) - REQUIRED
+    2. WebGPU release notes (webgpu-{version}.md) - OPTIONAL
 
-    Both need to be downloaded for complete coverage.
+    WebGPU enhances the graphics-webgpu area when available but is not required.
     """
     release_notes_dir = get_release_notes_dir()
 
@@ -89,13 +92,104 @@ def check_and_download_release_notes(version: str, channel: str) -> None:
     print(f"✓ Download complete")
 
 
+def check_latest_chrome_version() -> dict:
+    """Check latest Chrome stable and beta versions.
+
+    Returns:
+        dict: {'stable': str, 'beta': str} with version numbers
+
+    Note: This is a stateless query - no version history tracking.
+    """
+    monitor = ReleaseMonitorCore(base_path=get_project_root())
+    try:
+        # Detect latest Chrome version from web probing
+        stable_version = monitor.detect_latest_webplatform_version()
+
+        # Scan existing versions to estimate beta
+        existing = monitor.scan_existing_versions("beta")
+        beta_versions = existing.get("webplatform", set())
+        beta_version = max(beta_versions) if beta_versions else None
+
+        return {
+            'stable': str(stable_version) if stable_version else 'unknown',
+            'beta': str(beta_version) if beta_version else 'unknown'
+        }
+    except Exception as e:
+        print(f"X Failed to check latest versions: {e}")
+        return {'stable': 'unknown', 'beta': 'unknown'}
+
+
+def get_areas_to_process(version: str, channel: str) -> list:
+    """Get list of areas that have been extracted for this version.
+
+    Args:
+        version: Chrome version number (e.g., "143")
+        channel: Release channel ("stable" or "beta")
+
+    Returns:
+        List of area names that have YAML files
+
+    Note: This checks what was extracted by the clean pipeline.
+    Used by agents to know which areas need digest generation.
+    """
+    processed_dir = get_project_root() / "upstream_docs/processed_releasenotes/processed_forwebplatform/areas"
+
+    if not processed_dir.exists():
+        return []
+
+    areas = []
+    for area_dir in processed_dir.iterdir():
+        if area_dir.is_dir():
+            yaml_file = area_dir / f"chrome-{version}-{channel}.yml"
+            if yaml_file.exists():
+                areas.append(area_dir.name)
+
+    return sorted(areas)
+
+
 def main():
-    parser = argparse.ArgumentParser(description="Process Chrome release notes")
-    parser.add_argument("--version", required=True, help="Chrome version (e.g., 143)")
+    parser = argparse.ArgumentParser(
+        description="Process Chrome release notes (stateless, no version history)"
+    )
+    parser.add_argument("--version", help="Chrome version (e.g., 143)")
     parser.add_argument("--channel", default="stable", choices=["stable", "beta"])
     parser.add_argument("--verbose", action="store_true")
+    parser.add_argument("--check-latest", action="store_true",
+                       help="Check latest Chrome versions and exit")
+    parser.add_argument("--list-areas", action="store_true",
+                       help="List areas extracted for this version and exit")
 
     args = parser.parse_args()
+
+    # Handle --check-latest
+    if args.check_latest:
+        print("Checking latest Chrome versions...")
+        versions = check_latest_chrome_version()
+        print(f"\nLatest Chrome versions:")
+        print(f"  Stable: {versions['stable']}")
+        print(f"  Beta:   {versions['beta']}")
+        return
+
+    # Handle --list-areas
+    if args.list_areas:
+        if not args.version:
+            print("Error: --list-areas requires --version")
+            sys.exit(1)
+        print(f"Checking areas for Chrome {args.version} ({args.channel})...")
+        areas = get_areas_to_process(args.version, args.channel)
+        if areas:
+            print(f"\nFound {len(areas)} areas:")
+            for area in areas:
+                print(f"  - {area}")
+        else:
+            print(f"\nNo areas found. Run without --list-areas to process first.")
+        return
+
+    # Require version for normal processing
+    if not args.version:
+        print("Error: --version is required for processing")
+        parser.print_help()
+        sys.exit(1)
 
     print(f"🚀 Processing Chrome {args.version} ({args.channel})")
 
@@ -126,6 +220,7 @@ def main():
     print("💡 Next: Generate AI digests using bundled prompts")
     print(f"   - English prompt: {SKILL_ROOT}/prompts/webplatform-prompt-en.md")
     print(f"   - Chinese prompt: {SKILL_ROOT}/prompts/webplatform-translation-prompt-zh.md")
+    print(f"\n💡 To see extracted areas: python {__file__} --version {args.version} --channel {args.channel} --list-areas")
 
 if __name__ == "__main__":
     main()
