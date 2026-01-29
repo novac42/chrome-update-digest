@@ -678,7 +678,7 @@ class CleanDataPipeline:
         # Step 1: Generate markdown files
         print("  Step 1: Generating markdown files...")
         markdown_files = self.process_version(version, markdown_output_dir, channel)
-        print(f"  ✓ Generated {len(markdown_files)} markdown files")
+        print(f"  [OK] Generated {len(markdown_files)} markdown files")
         
         # Step 2: Convert to YAML
         print("\n  Step 2: Converting to YAML...")
@@ -718,12 +718,12 @@ class CleanDataPipeline:
                 features = result.get('features', [])
                 if features:
                     features_count = len(features)
-                    print(f"    ✓ {area:20s}: {features_count:2d} features → YAML")
+                    print(f"    [OK] {area:20s}: {features_count:2d} features -> YAML")
                 else:
-                    print(f"    ❌ {area:20s}: YAML conversion failed - no features extracted")
-                    
+                    print(f"    [ERROR] {area:20s}: YAML conversion failed - no features extracted")
+
             except Exception as e:
-                print(f"    ❌ {area:20s}: Error - {e}")
+                print(f"    [ERROR] {area:20s}: Error - {e}")
         
         return {
             'markdown': markdown_files,
@@ -767,12 +767,12 @@ class CleanDataPipeline:
             print(f"  {warning}")
         
         if not is_valid:
-            print("  ⚠️  Structure validation failed, but continuing...")
-        
+            print("  [WARN] Structure validation failed, but continuing...")
+
         # Extract areas from Chrome
         print("\n  Extracting areas from Chrome release notes...")
         areas = self.extract_areas(chrome_content)
-        print(f"  ✓ Found {len(areas)} areas")
+        print(f"  [OK] Found {len(areas)} areas")
         
         # Process WebGPU if exists
         if webgpu_file and webgpu_file.exists():
@@ -785,7 +785,7 @@ class CleanDataPipeline:
             # Calculate cleaning stats
             original_lines = len(webgpu_raw.split('\n'))
             cleaned_lines = len(webgpu_cleaned.split('\n'))
-            print(f"  ✓ Cleaned WebGPU: {original_lines} → {cleaned_lines} lines "
+            print(f"  [OK] Cleaned WebGPU: {original_lines} -> {cleaned_lines} lines "
                   f"(removed {original_lines - cleaned_lines} lines)")
             
             # Merge with Graphics-WebGPU area
@@ -813,7 +813,7 @@ class CleanDataPipeline:
             # Stats
             lines = len(content.split('\n'))
             features = len(re.findall(r'^###\s+', content, re.MULTILINE))
-            print(f"    ✓ {area:20s}: {lines:4d} lines, {features:2d} features")
+            print(f"    [OK] {area:20s}: {lines:4d} lines, {features:2d} features")
         
         return output_files
 
@@ -867,7 +867,7 @@ def main():
             chrome_file = Path(f'upstream_docs/release_notes/WebPlatform/chrome-{args.version}-{args.channel}.md')
         
         if not chrome_file.exists():
-            print(f"❌ File not found: {chrome_file}")
+            print(f"[ERROR] File not found: {chrome_file}")
             return 1
         
         content = chrome_file.read_text(encoding='utf-8')
@@ -878,10 +878,10 @@ def main():
             print(f"  {warning}")
         
         if is_valid:
-            print("✅ Structure is valid")
+            print("[OK] Structure is valid")
             return 0
         else:
-            print("❌ Structure validation failed")
+            print("[ERROR] Structure validation failed")
             return 1
     
     try:
@@ -892,21 +892,21 @@ def main():
             yaml_files = result['yaml']
             
             print(f"\n{'='*60}")
-            print(f"✅ Successfully processed Chrome {args.version} ({args.channel})")
+            print(f"[DONE] Successfully processed Chrome {args.version} ({args.channel})")
             print(f"   Generated {len(markdown_files)} markdown files")
             print(f"   Generated {len(yaml_files)} YAML files")
             print(f"{'='*60}")
         else:
             # Markdown only
             output_files = pipeline.process_version(args.version, args.output_dir, args.channel)
-            
+
             print(f"\n{'='*60}")
-            print(f"✅ Successfully processed Chrome {args.version} ({args.channel})")
+            print(f"[DONE] Successfully processed Chrome {args.version} ({args.channel})")
             print(f"   Generated {len(output_files)} area files")
             print(f"{'='*60}")
-        
+
     except Exception as e:
-        print(f"\n❌ Error processing Chrome {args.version}: {e}")
+        print(f"\n[ERROR] Error processing Chrome {args.version}: {e}")
         return 1
     
     return 0

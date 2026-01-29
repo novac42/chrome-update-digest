@@ -118,6 +118,7 @@ digest_converter.log
 
 # Claude AI configuration - exclude skill-creator utility
 .claude/skills/skill-creator/
+.claude/settings.local.json
 
 # Archive folders
 archive/

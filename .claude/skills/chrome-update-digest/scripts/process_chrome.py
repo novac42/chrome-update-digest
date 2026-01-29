@@ -61,16 +61,16 @@ def check_and_download_release_notes(version: str, channel: str) -> None:
 
     # Report what exists
     if chrome_exists and webgpu_exists:
-        print(f"✓ Chrome and WebGPU release notes found")
+        print(f"[OK] Chrome and WebGPU release notes found")
         return
     elif chrome_exists:
-        print(f"✓ Chrome release notes found")
-        print(f"⬇️  WebGPU release notes missing, downloading...")
+        print(f"[OK] Chrome release notes found")
+        print(f"[DOWNLOAD] WebGPU release notes missing, downloading...")
     elif webgpu_exists:
-        print(f"✓ WebGPU release notes found")
-        print(f"⬇️  Chrome release notes missing, downloading...")
+        print(f"[OK] WebGPU release notes found")
+        print(f"[DOWNLOAD] Chrome release notes missing, downloading...")
     else:
-        print(f"⬇️  Release notes not found, downloading both Chrome and WebGPU...")
+        print(f"[DOWNLOAD] Release notes not found, downloading both Chrome and WebGPU...")
 
     # Download missing files using vendored ReleaseMonitorCore
     monitor = ReleaseMonitorCore(base_path=get_project_root())
@@ -78,18 +78,18 @@ def check_and_download_release_notes(version: str, channel: str) -> None:
     if not chrome_exists:
         try:
             result = monitor.download_chrome_release(version, channel)
-            print(f"  ✓ Chrome: {result['file_path']}")
+            print(f"  [OK] Chrome: {result['file_path']}")
         except Exception as e:
-            print(f"  ✗ Chrome download failed: {e}")
+            print(f"  [ERROR] Chrome download failed: {e}")
 
     if not webgpu_exists:
         try:
             result = monitor.download_webgpu_release(version)
-            print(f"  ✓ WebGPU: {result['file_path']}")
+            print(f"  [OK] WebGPU: {result['file_path']}")
         except Exception as e:
-            print(f"  ✗ WebGPU download failed: {e}")
+            print(f"  [ERROR] WebGPU download failed: {e}")
 
-    print(f"✓ Download complete")
+    print(f"[OK] Download complete")
 
 
 def check_latest_chrome_version() -> dict:
@@ -191,7 +191,7 @@ def main():
         parser.print_help()
         sys.exit(1)
 
-    print(f"🚀 Processing Chrome {args.version} ({args.channel})")
+    print(f"Processing Chrome {args.version} ({args.channel})")
 
     # Step 0: Check and download release notes if needed
     check_and_download_release_notes(args.version, args.channel)
@@ -216,11 +216,11 @@ def main():
     generator = GitHubPagesNavigationGenerator(base_path=str(get_project_root()))
     generator.run()
 
-    print("\n✅ Processing complete!")
-    print("💡 Next: Generate AI digests using bundled prompts")
+    print("\n[DONE] Processing complete!")
+    print("[INFO] Next: Generate AI digests using bundled prompts")
     print(f"   - English prompt: {SKILL_ROOT}/prompts/webplatform-prompt-en.md")
     print(f"   - Chinese prompt: {SKILL_ROOT}/prompts/webplatform-translation-prompt-zh.md")
-    print(f"\n💡 To see extracted areas: python {__file__} --version {args.version} --channel {args.channel} --list-areas")
+    print(f"\n[INFO] To see extracted areas: python {__file__} --version {args.version} --channel {args.channel} --list-areas")
 
 if __name__ == "__main__":
     main()
