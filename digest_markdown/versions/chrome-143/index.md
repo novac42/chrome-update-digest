@@ -5,24 +5,24 @@ title: Chrome 143 Release Notes
 
 # Chrome 143 Release Notes
 
-[← Back to all versions](../)
+[← Back to all versions](../index.html)
 
 ## Areas with Updates
 
-- [CSS](./css.html) - [English](./css-en.html) / [中文](./css-zh.html)
-- [Devices](./devices.html) - [English](./devices-en.html) / [中文](./devices-zh.html)
-- [Graphics & WebGPU](./graphics-webgpu.html) - [English](./graphics-webgpu-en.html) / [中文](./graphics-webgpu-zh.html)
-- [HTML & DOM](./html-dom.html) - [English](./html-dom-en.html) / [中文](./html-dom-zh.html)
-- [Isolated Web Apps](./isolated-web-apps.html) - [English](./isolated-web-apps-en.html) / [中文](./isolated-web-apps-zh.html)
-- [JavaScript](./javascript.html) - [English](./javascript-en.html) / [中文](./javascript-zh.html)
-- [Multimedia](./multimedia.html) - [English](./multimedia-en.html) / [中文](./multimedia-zh.html)
-- [Network](./network.html) - [English](./network-en.html) / [中文](./network-zh.html)
-- [Origin Trials](./origin-trials.html) - [English](./origin-trials-en.html) / [中文](./origin-trials-zh.html)
-- [Performance](./performance.html) - [English](./performance-en.html) / [中文](./performance-zh.html)
-- [Storage](./storage.html) - [English](./storage-en.html) / [中文](./storage-zh.html)
+- CSS: [English](./css-en.html) / [Chinese](./css-zh.html) — CSS styling, layout, and UI features
+- HTML-DOM: [English](./html-dom-en.html) / [Chinese](./html-dom-zh.html) — HTML elements and DOM manipulation
+- Graphics and WebGPU: [English](./graphics-webgpu-en.html) / [Chinese](./graphics-webgpu-zh.html) — Graphics rendering and WebGPU features
+- Origin trials: [English](./origin-trials-en.html) / [Chinese](./origin-trials-zh.html) — Experimental features in origin trials
+- Multimedia: [English](./multimedia-en.html) / [Chinese](./multimedia-zh.html) — Media, audio, and video features
+- Performance: [English](./performance-en.html) / [Chinese](./performance-zh.html) — Performance optimizations and improvements
+- Devices: [English](./devices-en.html) / [Chinese](./devices-zh.html) — Device APIs and sensor features
+- Isolated Web Apps: [English](./isolated-web-apps-en.html) / [Chinese](./isolated-web-apps-zh.html) — Isolated Web Apps (IWAs) and related features
+- JavaScript: [English](./javascript-en.html) / [Chinese](./javascript-zh.html) — JavaScript language features and runtime updates
+- Network: [English](./network-en.html) / [Chinese](./network-zh.html) — Networking and connectivity features
+- Storage: [English](./storage-en.html) / [Chinese](./storage-zh.html)
 
 ## Navigation
 
-- [Chrome 142 (Older) →](../chrome-142/)
-- [View all versions](../)
-- [Browse by feature area](../../areas/)
+- [Chrome 142 (Older) →](../chrome-142/index.html)
+- [View all versions](../index.html)
+- [Browse by feature area](../../areas/index.html)

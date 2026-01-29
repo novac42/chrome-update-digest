@@ -1,31 +1,40 @@
 ---
 layout: default
-title: chrome-143-en
+title: Chrome 143 Origin Trials
 ---
+
+# Chrome 143 Origin Trials
 
 ## Area Summary
 
-Chrome 143's Origin Trials focus on testing platform integrations that let websites perform privileged actions with stronger user intent and secure interactions. The two trials here enable credential issuance into mobile wallets and a flexible Web Install API for installing web apps (including cross-origin installs). These experiments advance the web platform by bridging web apps with native credential stores and by simplifying app distribution flows, while requiring careful attention to security and user consent. Developers should register for the trials and evaluate UX, platform compatibility, and threat models before shipping.
+Chrome 143 introduces two significant origin trials that expand the web platform's capabilities in credential management and application installation. The Digital Credentials API gains issuance support, enabling secure provisioning of digital credentials from issuing authorities directly into user wallets through native credential management systems. The Web Install API debuts, providing websites with the ability to programmatically install web applications either from their own origin or cross-origin, advancing the installation experience beyond traditional manual flows. Both features represent important steps in bridging web and native platform capabilities while maintaining security and privacy standards through the origin trial program.
 
 ## Detailed Updates
 
-Below are the origin-trial features in Chrome 143 that developers should evaluate and prototype against.
+These origin trials enable new patterns for credential issuance and application installation that were previously unavailable on the web platform.
 
 ### Digital Credentials API (issuance support)
 
 #### What's New
-This origin trial lets issuing websites (for example, a university, government agency, or bank) securely initiate the provisioning (issuance) process of digital credentials directly into a user's mobile wallet application. On Android, this capability uses the Android `IdentityCredential` CredMan system.
+
+This feature enables issuing websites such as universities, government agencies, or banks to securely initiate the provisioning process of digital credentials directly into a user's mobile wallet application. The API provides a standardized way to issue credentials from the web to native credential storage systems.
 
 #### Technical Details
-- Issuers can start the issuance/provisioning flow from the web to a mobile wallet-backed credential store.
-- Platform integration on Android leverages the IdentityCredential/CredMan subsystem.
-- Importance: medium — intended for controlled testing and feedback via the origin trial.
+
+The implementation leverages platform-specific credential management systems for secure storage. On Android, it uses the Android `IdentityCredential` CredMan system (Credential Manager), which provides system-level credential storage and management. On Desktop platforms, the feature uses cross-device approaches through the CTAP (Client to Authenticator Protocol), similar to how Digital Credentials presentation works. This architecture ensures that credentials are issued securely while maintaining compatibility across different device types and operating systems.
 
 #### Use Cases
-- Universities, governments, or banks issuing verifiable credentials to users' mobile wallets.
-- Web workflows that need to enroll users into platform-backed credentials without separate native apps.
+
+This API enables critical use cases for digital identity and credentials:
+- Universities can issue digital student IDs and diplomas directly to student devices
+- Government agencies can provision digital driver's licenses, national IDs, and other official documents
+- Banks and financial institutions can issue digital payment credentials, account access tokens, and verification credentials
+- Healthcare providers can distribute digital health cards and vaccination records
+
+The API standardizes what was previously a fragmented landscape of proprietary credential issuance mechanisms, making it easier for developers to build cross-platform credential solutions.
 
 #### References
+
 - [Origin Trial](https://developer.chrome.com/origintrials/#/register_trial/385620718093598721)
 - [Tracking bug #378330032](https://issues.chromium.org/issues/378330032)
 - [ChromeStatus.com entry](https://chromestatus.com/feature/5099333963874304)
@@ -34,21 +43,26 @@ This origin trial lets issuing websites (for example, a university, government a
 ### Web Install API
 
 #### What's New
-Provides the ability to install a web app. When invoked, the website installs either itself, or another site from a different origin, as a web app (depending on the provided parameters).
+
+The Web Install API provides websites with the ability to programmatically install web applications. When invoked, the API can install either the calling website itself or another site from a different origin as a web app, depending on the provided parameters. This represents a significant advancement in web app installation capabilities.
 
 #### Technical Details
-- The API exposes an installation flow callable from web contexts, with parameters that can target the current origin or a different origin for installation.
-- Designed for experimentation under an origin trial to validate security, UX, and cross-origin installation semantics.
-- Importance: medium — allows testing of new install UX and distribution models.
+
+The API extends the existing web app manifest specification with new installation capabilities. The feature supports both same-origin and cross-origin installation scenarios, allowing for flexible installation patterns. When a website invokes the API, it triggers the browser's web app installation flow programmatically rather than requiring users to manually discover and use browser-specific installation UI. The API respects all existing web app manifest configurations and security policies, ensuring that programmatic installation maintains the same security guarantees as manual installation.
 
 #### Use Cases
-- Simplifying PWA installation prompts from the originating site or a partner origin.
-- Enterprise or curated stores initiating installs of third-party web apps with user consent.
+
+This API enables several important installation patterns:
+- App stores and catalog sites can install web apps from other origins, creating web-native app distribution platforms
+- Websites can provide prominent "Install App" buttons that directly trigger installation without requiring users to find browser menus
+- Progressive Web App onboarding flows can programmatically install the app at optimal moments in the user journey
+- Cross-promotion between related web apps becomes possible, where one app can recommend and install another
+
+The API is particularly valuable for improving web app discoverability and reducing friction in the installation process, which has been a key challenge for PWA adoption.
 
 #### References
+
 - [Origin Trial](https://developer.chrome.com/origintrials/#/view_trial/2367204554136616961)
 - [Tracking bug #333795265](https://issues.chromium.org/issues/333795265)
 - [ChromeStatus.com entry](https://chromestatus.com/feature/5183481574850560)
 - [Spec](https://github.com/w3c/manifest/pull/1175)
-
-Saved file: digest_markdown/webplatform/Origin trials/chrome-143-stable-en.md
