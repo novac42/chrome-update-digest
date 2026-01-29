@@ -5,23 +5,22 @@ title: Deprecations Updates
 
 # Deprecations Updates
 
-[← Back to all areas](../index.html)
+[← Back to all areas](../)
 
 ## Version History
 
 Track the evolution of Deprecations features across Chrome releases.
 
-Deprecated and removed features
-
 ### Available Versions
 
-- Chrome 140 **(Latest)**: [English](./chrome-140-en.html) / [Chinese](./chrome-140-zh.html)
-- Chrome 139: [English](./chrome-139-en.html) / [Chinese](./chrome-139-zh.html)
-- Chrome 138: [English](./chrome-138-en.html) / [Chinese](./chrome-138-zh.html)
-- Chrome 134: [English](./chrome-134-en.html) / [Chinese](./chrome-134-zh.html)
-- Chrome 133: [English](./chrome-133-en.html) / [Chinese](./chrome-133-zh.html)
+- [Chrome 144 **(Latest)**](./chrome-144.html) - [English](./chrome-144-en.html) / [中文](./chrome-144-zh.html)
+- [Chrome 140](./chrome-140.html) - [English](./chrome-140-en.html) / [中文](./chrome-140-zh.html)
+- [Chrome 139](./chrome-139.html) - [English](./chrome-139-en.html) / [中文](./chrome-139-zh.html)
+- [Chrome 138](./chrome-138.html) - [English](./chrome-138-en.html) / [中文](./chrome-138-zh.html)
+- [Chrome 134](./chrome-134.html) - [English](./chrome-134-en.html) / [中文](./chrome-134-zh.html)
+- [Chrome 133](./chrome-133.html) - [English](./chrome-133-en.html) / [中文](./chrome-133-zh.html)
 
 ## Navigation
 
-- [View all feature areas](../index.html)
-- [Browse by Chrome version](../../versions/index.html)
+- [View all feature areas](../)
+- [Browse by Chrome version](../../versions/)

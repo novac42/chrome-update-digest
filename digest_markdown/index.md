@@ -11,28 +11,29 @@ Comprehensive release notes for Chrome web platform features, organized for easy
 
 Explore what's new in each Chrome release:
 
-- [Chrome 143 **(Latest Stable)**](./versions/chrome-143/index.html) - 11 areas with updates
-- [Chrome 142](./versions/chrome-142/index.html) - 10 areas with updates
-- [Chrome 141](./versions/chrome-141/index.html) - 12 areas with updates
-- [View all 11 versions →](./versions/index.html)
+- [Chrome 144 **(Latest Stable)**](./versions/chrome-144/) - 9 areas with updates
+- [Chrome 143](./versions/chrome-143/) - 11 areas with updates
+- [Chrome 142](./versions/chrome-142/) - 10 areas with updates
+- [View all 12 versions →](./versions/)
+
 
 ## Browse by Feature Area
 
 Track the evolution of specific features across Chrome versions:
 
-- [CSS](./areas/css/index.html) - Updates in 11 versions
-- [Graphics and WebGPU](./areas/graphics-webgpu/index.html) - Updates in 11 versions
-- [Origin trials](./areas/origin-trials/index.html) - Updates in 10 versions
-- [HTML-DOM](./areas/html-dom/index.html) - Updates in 9 versions
-- [Multimedia](./areas/multimedia/index.html) - Updates in 9 versions
-- [View all 24 feature areas →](./areas/index.html)
+- [CSS](./areas/css/) - Updates in 12 versions
+- [Graphics & WebGPU](./areas/graphics-webgpu/) - Updates in 12 versions
+- [Origin Trials](./areas/origin-trials/) - Updates in 11 versions
+- [HTML & DOM](./areas/html-dom/) - Updates in 10 versions
+- [Multimedia](./areas/multimedia/) - Updates in 10 versions
+- [View all 24 feature areas →](./areas/)
+
 
 ## Quick Links
 
-- **Latest Release**: [Chrome 143](./versions/chrome-143/index.html)
-- **Most Active Areas**: CSS, Graphics and WebGPU, Origin trials
-- **All Versions**: [Browse every release](./versions/index.html)
-- **All Areas**: [Explore feature areas](./areas/index.html)
+- **Latest Release**: [Chrome 144](./versions/chrome-144/)
+- **Most Active Areas**: CSS, Web APIs, Graphics & WebGPU
+- **Version Comparison**: Compare changes between releases
 - **Search**: Use browser search (Ctrl+F) on any page
 
 ## About
